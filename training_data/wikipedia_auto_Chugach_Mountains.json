@@ -1,0 +1,36 @@
+{
+  "title": "Chugach Mountains",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Chugach_Mountains",
+  "content": "The Chugach Mountains of southern Alaska are the northernmost of the several mountain ranges that make up the Pacific Coast Ranges of the western edge of North America. The range is about 250 miles (402 km) long and 60 miles (97 km) wide, and extends from the Knik and Turnagain Arms of the Cook Inlet on the west to Bering Glacier, Tana Glacier, and the Tana River on the east. It is bounded on the north by the Matanuska, Copper, and Chitina rivers. The highest point of the Chugach Mountains is Mount Marcus Baker, at 13,094 feet (3,991 m), but with an average elevation of 4,006 feet (1,221 m), most of its summits are not especially high.[1] Even so, its position along the Gulf of Alaska ensures more snowfall in the Chugach than anywhere else in the world, an annual average of over 1500 cm (800 in).[2]\n\nThe mountains are protected in the Chugach State Park and the Chugach National Forest. Near to Anchorage, they are a popular destination for outdoor activities.\n\nThe Richardson Highway, Seward Highway, Portage Glacier Highway, and the Glenn Highway run through the Chugach Mountains. The Anton Anderson Memorial Tunnel of the Portage Glacier Highway provides railroad and automobile access underneath Maynard Mountain between Portage Lake and the city of Whittier on Prince William Sound.\n\nOn Mount Gordon Lyon, at about the 4,000 feet (1,200 m) level, is a 300 feet (91 m) five-pointed star using around 350 light globes. This faces Anchorage to be visible from the city at night. It is illuminated to commemorate Christmas, being lit from Thanksgiving until Christmas Day; and, on 9/11. Maintenance is undertaken by the US Air Force’s Joint Base Elmendorf-Richardson, although it was established in around 1960 and formerly maintained by the US Army having been near the former Army (Nike missile Site Summit) in the mountains.[3]\n\nThe name \"Chugach\" comes from Chugach Sugpiaq \"Cuungaaciiq,\" Alaska Natives inhabiting the Kenai Peninsula and Prince William Sound on the south coast of Alaska. The Chugach people are an Alutiiq (Pacific Eskimo) people who speak the Chugach dialect of the Alutiiq language. In 1898 United States Army Captain William R. Abercrombie spelled the name \"Chugatch\" and applied it to the mountains.[1] It is possible that the Koniagmiut (Sugpiat or Alutiit of the Kodiak Archipelago and the Alaska Peninsula) may also have called these northern Sugpiat \"Cuungaaciirmiut\" in ancient times but it is also possible that this was a neologism during Russian times.\n\nThe twelve highest peaks in the Chugach Mountains are listed below:\n\nOther important peaks in the Chugach Mountains include:\n",
+  "concepts": [
+    "Chugach Mountains",
+    "chugach",
+    "mountains",
+    "highway",
+    "chugach mountains",
+    "alaska",
+    "glacier",
+    "feet",
+    "william",
+    "portage",
+    "army"
+  ],
+  "findings": [
+    "History",
+    "Mountains",
+    "Gallery",
+    "See also",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Chugach Mountains",
+      "relationship": "are",
+      "object": "listed below",
+      "sentence": "The twelve highest peaks in the Chugach Mountains are listed below:\n\nOther important peaks in the Chugach Mountains include:"
+    }
+  ],
+  "timestamp": "2025-04-11T13:28:34.688860"
+}

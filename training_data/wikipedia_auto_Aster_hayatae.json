@@ -1,0 +1,40 @@
+{
+  "title": "Aster hayatae",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Aster_hayatae",
+  "content": "Aster hayatae is a species of flowering plant in the family Asteraceae. It is native to South Korea.[1]\n\nAster hayatae is a herbaceous perennial, growing from 15 to 25 cm in height. Stems are branching and erect, with basal leaves spatulate, toothed and lightly pubescent, and upper leaves linear and close together. Flowers are purple or violet in colour, and bloom between June and October. Fruit is an achene, ovoid, brown, measuring 3mm – 2mm.[citation needed]\n\nAster hayatae grows in dry soil and sunny slopes as well as in rocky crevices. It is unique to Korea.[citation needed]\n\nLike other Aster species, A. hayatae has antioxidant properties, and has been used in traditional medicines.[2]\n",
+  "concepts": [
+    "Aster hayatae",
+    "hayatae",
+    "aster",
+    "aster hayatae",
+    "species",
+    "needed",
+    "leaves",
+    "korea",
+    "citation needed",
+    "citation",
+    "used traditional"
+  ],
+  "findings": [
+    "Description",
+    "Habitat",
+    "Medicinal usage",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Aster hayatae",
+      "relationship": "is a",
+      "object": "species of flowering plant in the family asteraceae",
+      "sentence": "Aster hayatae is a species of flowering plant in the family Asteraceae."
+    },
+    {
+      "subject": "Aster hayatae",
+      "relationship": "is a",
+      "object": "herbaceous perennial",
+      "sentence": "[1]\n\nAster hayatae is a herbaceous perennial, growing from 15 to 25 cm in height."
+    }
+  ],
+  "timestamp": "2025-04-11T13:26:46.413036"
+}

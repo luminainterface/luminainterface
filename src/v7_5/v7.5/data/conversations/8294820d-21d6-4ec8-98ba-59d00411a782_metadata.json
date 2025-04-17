@@ -1,0 +1,31 @@
+{
+  "id": "8294820d-21d6-4ec8-98ba-59d00411a782",
+  "created_at": 1744797991.9303243,
+  "topic_history": [
+    {
+      "topic": "don't",
+      "first_occurrence": 1744798169.5865812,
+      "latest_occurrence": 1744798169.5865815,
+      "occurrences": 1,
+      "initial_relevance": 0.3191489361702127
+    },
+    {
+      "topic": "have",
+      "first_occurrence": 1744798169.5865874,
+      "latest_occurrence": 1744798169.586588,
+      "occurrences": 1,
+      "initial_relevance": 0.3191489361702127
+    },
+    {
+      "topic": "that",
+      "first_occurrence": 1744798169.586589,
+      "latest_occurrence": 1744798169.586589,
+      "occurrences": 1,
+      "initial_relevance": 0.3191489361702127
+    }
+  ],
+  "thought_process_count": 0,
+  "exchange_count": 4,
+  "updated_at": 1744798169.5877883,
+  "topic_count": 3
+}

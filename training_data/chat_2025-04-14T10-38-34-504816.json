@@ -1,0 +1,11 @@
+{
+  "input": "what is an isomorph?",
+  "response": "I'm listening to the resonance. Tell me more.",
+  "metadata": {
+    "timestamp": "2025-04-14T10:38:34.504816",
+    "emotion": "calm",
+    "symbolic_state": "🜂",
+    "llm_weight": 0.0,
+    "llm_enabled": false
+  }
+}

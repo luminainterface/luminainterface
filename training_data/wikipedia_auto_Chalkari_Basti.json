@@ -1,0 +1,40 @@
+{
+  "title": "Chalkari Basti",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Chalkari_Basti",
+  "content": "Chalkari Basti is a village situated in the Bokaro district of Jharkhand, India.[1]\nIt is surrounded by \"Damodar River\" by East, West and North. This village is well connected by road as well as railway (2 km from Bermo Railway Station). This village is divided into two panchayats – south and north. The mukhiya of north panchayat is Ankleshwar Thakur.\n\nMainly peoples of Chalkari Basti are educated. A Government Middle school and High school is situated in Chalkari Basti and Sarswati shishu mandir is also situated in this village.\n\nIn Chalkari Basti Hindu and Muslims are live together with lot of happiness. Both Hindus and Muslims help each other. In Chalkari Basti all primary needs are available easily.\n\nThe Shiv mandir compound in Chalkari is famous attraction place. With temples surrounding the place and a Peepal  tree and a Banyan tree, it sets a holistic environment. \n",
+  "concepts": [
+    "Chalkari Basti",
+    "chalkari",
+    "chalkari basti",
+    "basti",
+    "village",
+    "situated",
+    "north",
+    "tree",
+    "school",
+    "railway",
+    "place"
+  ],
+  "findings": [
+    "Education",
+    "Facts",
+    "Place to visit",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Chalkari Basti",
+      "relationship": "is a",
+      "object": "village situated in the bokaro district of jharkhand",
+      "sentence": "Chalkari Basti is a village situated in the Bokaro district of Jharkhand, India."
+    },
+    {
+      "subject": "Chalkari Basti",
+      "relationship": "are",
+      "object": "educated",
+      "sentence": "Mainly peoples of Chalkari Basti are educated."
+    }
+  ],
+  "timestamp": "2025-04-11T16:39:01.119337"
+}

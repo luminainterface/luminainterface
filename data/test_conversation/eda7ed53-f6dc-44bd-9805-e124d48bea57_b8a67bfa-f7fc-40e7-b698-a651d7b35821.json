@@ -1,0 +1,15 @@
+{
+  "id": "b8a67bfa-f7fc-40e7-b698-a651d7b35821",
+  "timestamp": 1744754474.894574,
+  "user_message": "What's the difference between classification and regression?",
+  "system_response": "Classification predicts discrete categories (like spam/not spam), while regression predicts continuous values (like house prices).",
+  "metadata": {},
+  "active_topics": [
+    "supervised",
+    "learning",
+    "model",
+    "machine",
+    "that"
+  ],
+  "thought_process_id": "211c92f7-8248-48a1-aa79-483928301f28"
+}

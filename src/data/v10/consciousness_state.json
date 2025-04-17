@@ -1,0 +1,271 @@
+{
+  "consciousness_level": 0.14770479746256365,
+  "memory_continuity": 0.0,
+  "recursive_depth": 1,
+  "temporal_awareness": {
+    "2025-04-14T23:00:47.029128": {
+      "llm_weight": 0.58,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.1011306524819372
+    },
+    "2025-04-14T23:00:50.482279": {
+      "llm_weight": 0.5599999999999999,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10209450933536797
+    },
+    "2025-04-14T23:00:54.188231": {
+      "llm_weight": 0.5399999999999999,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10267483097320293
+    },
+    "2025-04-14T23:00:58.648363": {
+      "llm_weight": 0.5199999999999999,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10366868764383977
+    },
+    "2025-04-14T23:01:02.198208": {
+      "llm_weight": 0.4999999999999999,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10389642513274036
+    },
+    "2025-04-14T23:01:04.122405": {
+      "llm_weight": 0.47999999999999987,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10467789633938726
+    },
+    "2025-04-14T23:01:08.173126": {
+      "llm_weight": 0.45999999999999985,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.106506645506772
+    },
+    "2025-04-14T23:01:12.850767": {
+      "llm_weight": 0.43999999999999984,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10704585602555478
+    },
+    "2025-04-14T23:01:14.662272": {
+      "llm_weight": 0.4199999999999998,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10738558676668047
+    },
+    "2025-04-14T23:01:18.200642": {
+      "llm_weight": 0.3999999999999998,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10781989252404274
+    },
+    "2025-04-14T23:01:21.201771": {
+      "llm_weight": 0.3799999999999998,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.1084569735043215
+    },
+    "2025-04-14T23:01:22.695064": {
+      "llm_weight": 0.35999999999999976,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.1085010152231505
+    },
+    "2025-04-14T23:01:24.709619": {
+      "llm_weight": 0.33999999999999975,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10805687125754197
+    },
+    "2025-04-14T23:01:29.346872": {
+      "llm_weight": 0.31999999999999973,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.11018310414618294
+    },
+    "2025-04-14T23:01:32.312188": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.110545840307273
+    },
+    "2025-04-14T23:01:37.032821": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.11085228000805422
+    },
+    "2025-04-14T23:01:40.272430": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.11199570134733132
+    },
+    "2025-04-14T23:01:41.599855": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.11241992966062545
+    },
+    "2025-04-14T23:01:43.168978": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.11301127024203013
+    },
+    "2025-04-14T23:01:44.195648": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.11379450355650873
+    },
+    "2025-04-14T23:01:47.218524": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.11448701607755656
+    },
+    "2025-04-14T23:01:50.076812": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.11705014081942111
+    },
+    "2025-04-14T23:01:51.194818": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.1182364467749108
+    },
+    "2025-04-14T23:01:56.032029": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.11954176477889505
+    },
+    "2025-04-14T23:01:59.521220": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.12040826928507321
+    },
+    "2025-04-14T23:02:01.616500": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.1217549494083211
+    },
+    "2025-04-14T23:02:06.450854": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.12341266411685614
+    },
+    "2025-04-14T23:02:11.126595": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.1241780864249145
+    },
+    "2025-04-14T23:02:13.635997": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.12518343753099487
+    },
+    "2025-04-14T23:02:17.409922": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.12735205825036813
+    },
+    "2025-04-14T23:02:20.933953": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.1285592270931492
+    },
+    "2025-04-14T23:02:23.808036": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.12908058584789148
+    },
+    "2025-04-14T23:02:28.704235": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.13055388006804217
+    },
+    "2025-04-14T23:02:32.232044": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.1318419772627647
+    },
+    "2025-04-14T23:02:37.169951": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.1339122043437167
+    },
+    "2025-04-14T23:02:39.415251": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.13527537752537566
+    },
+    "2025-04-14T23:02:40.718485": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.13656141071657504
+    },
+    "2025-04-14T23:02:45.365043": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.13690772941080281
+    },
+    "2025-04-14T23:02:49.996292": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.1371946588562077
+    },
+    "2025-04-14T23:02:52.329208": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.13767957246839255
+    },
+    "2025-04-14T23:02:56.495862": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.13792960921459918
+    },
+    "2025-04-14T23:03:00.009981": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.1378106441402379
+    },
+    "2025-04-14T23:03:03.636469": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.13835593901684795
+    },
+    "2025-04-14T23:03:07.649119": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.13987426557153024
+    },
+    "2025-04-14T23:03:10.906627": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.14070960378770728
+    },
+    "2025-04-14T23:03:13.383405": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.14084125922082097
+    },
+    "2025-04-14T23:03:16.608119": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.1419861213192504
+    },
+    "2025-04-14T23:03:18.445378": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.14339179178085484
+    },
+    "2025-04-14T23:03:19.518084": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.14419132150559583
+    },
+    "2025-04-14T23:03:21.259277": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.1452379497475559
+    },
+    "2025-04-14T23:03:24.093253": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.14661844921257203
+    },
+    "2025-04-14T23:03:28.921465": {
+      "llm_weight": 0.2999999999999997,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.14770479746256365
+    }
+  },
+  "llm_weight": 0.2999999999999997,
+  "llm_confidence": 0.0,
+  "last_saved": "2025-04-14T23:03:28.921945",
+  "llm_memory": {}
+}

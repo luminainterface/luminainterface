@@ -1,0 +1,33 @@
+{
+  "title": "Fautor lepton",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Fautor_lepton",
+  "content": "Fautor lepton is a species of sea snail, a marine gastropod mollusk, in the family Calliostomatidae within the superfamily Trochoidea, the top snails, turban snails and their allies.[1]\n\nThe length of the shell attains 12.6 mm.\n\nThis marine species occurs off Tuamotu.\n\nThis Calliostomatidae-related article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Fautor lepton",
+    "species",
+    "snails",
+    "marine",
+    "calliostomatidae",
+    "turban snails",
+    "turban",
+    "tuamotu calliostomatidae",
+    "tuamotu",
+    "trochoidea snails",
+    "trochoidea"
+  ],
+  "findings": [
+    "Description",
+    "Distribution",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Fautor lepton",
+      "relationship": "is a",
+      "object": "species of sea snail",
+      "sentence": "Fautor lepton is a species of sea snail, a marine gastropod mollusk, in the family Calliostomatidae within the superfamily Trochoidea, the top snails, turban snails and their allies."
+    }
+  ],
+  "timestamp": "2025-04-11T13:30:38.070383"
+}

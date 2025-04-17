@@ -1,0 +1,1739 @@
+{
+  "cat": {
+    "count": 26,
+    "last_seen": "2025-04-15T10:43:19.639306",
+    "contexts": {
+      "animals": 24,
+      "animal_emotion": 2
+    }
+  },
+  "dog": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.635545",
+    "contexts": {
+      "animals": 24
+    }
+  },
+  "bird": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.635550",
+    "contexts": {
+      "animals": 24
+    }
+  },
+  "fish": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.635555",
+    "contexts": {
+      "animals": 24
+    }
+  },
+  "elephant": {
+    "count": 26,
+    "last_seen": "2025-04-15T10:43:19.639325",
+    "contexts": {
+      "animals": 24,
+      "nature_animal": 2
+    }
+  },
+  "tiger": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.635564",
+    "contexts": {
+      "animals": 24
+    }
+  },
+  "lion": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.635563",
+    "contexts": {
+      "animals": 24
+    }
+  },
+  "red": {
+    "count": 26,
+    "last_seen": "2025-04-15T10:43:19.639251",
+    "contexts": {
+      "colors": 24,
+      "color_emotion": 2
+    }
+  },
+  "blue": {
+    "count": 28,
+    "last_seen": "2025-04-15T10:43:19.639316",
+    "contexts": {
+      "colors": 24,
+      "color_emotion": 2,
+      "nature_color": 2
+    }
+  },
+  "green": {
+    "count": 26,
+    "last_seen": "2025-04-15T10:43:19.639280",
+    "contexts": {
+      "colors": 24,
+      "color_context": 2
+    }
+  },
+  "yellow": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.635876",
+    "contexts": {
+      "colors": 24
+    }
+  },
+  "purple": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.635881",
+    "contexts": {
+      "colors": 24
+    }
+  },
+  "orange": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.635886",
+    "contexts": {
+      "colors": 24
+    }
+  },
+  "brown": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.635885",
+    "contexts": {
+      "colors": 24
+    }
+  },
+  "happy": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.637155",
+    "contexts": {
+      "emotions": 24
+    }
+  },
+  "sad": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.637169",
+    "contexts": {
+      "emotions": 24
+    }
+  },
+  "angry": {
+    "count": 26,
+    "last_seen": "2025-04-15T10:43:19.639253",
+    "contexts": {
+      "emotions": 24,
+      "color_emotion": 2
+    }
+  },
+  "excited": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.637193",
+    "contexts": {
+      "emotions": 24
+    }
+  },
+  "calm": {
+    "count": 26,
+    "last_seen": "2025-04-15T10:43:19.639266",
+    "contexts": {
+      "emotions": 24,
+      "color_emotion": 2
+    }
+  },
+  "nervous": {
+    "count": 26,
+    "last_seen": "2025-04-15T10:43:19.639304",
+    "contexts": {
+      "emotions": 24,
+      "animal_emotion": 2
+    }
+  },
+  "relaxed": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.637213",
+    "contexts": {
+      "emotions": 24
+    }
+  },
+  "computer": {
+    "count": 26,
+    "last_seen": "2025-04-15T10:43:19.639292",
+    "contexts": {
+      "technology": 24,
+      "tech_related": 2
+    }
+  },
+  "phone": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.637866",
+    "contexts": {
+      "technology": 24
+    }
+  },
+  "internet": {
+    "count": 26,
+    "last_seen": "2025-04-15T10:43:19.639340",
+    "contexts": {
+      "technology": 24,
+      "tech_connection": 2
+    }
+  },
+  "software": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.637887",
+    "contexts": {
+      "technology": 24
+    }
+  },
+  "network": {
+    "count": 26,
+    "last_seen": "2025-04-15T10:43:19.639337",
+    "contexts": {
+      "technology": 24,
+      "tech_connection": 2
+    }
+  },
+  "database": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.637911",
+    "contexts": {
+      "technology": 24
+    }
+  },
+  "algorithm": {
+    "count": 26,
+    "last_seen": "2025-04-15T10:43:19.639294",
+    "contexts": {
+      "technology": 24,
+      "tech_related": 2
+    }
+  },
+  "tree": {
+    "count": 26,
+    "last_seen": "2025-04-15T10:43:19.639327",
+    "contexts": {
+      "nature": 24,
+      "nature_animal": 2
+    }
+  },
+  "mountain": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.639199",
+    "contexts": {
+      "nature": 24
+    }
+  },
+  "river": {
+    "count": 26,
+    "last_seen": "2025-04-15T10:43:19.639314",
+    "contexts": {
+      "nature": 24,
+      "nature_color": 2
+    }
+  },
+  "ocean": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.639218",
+    "contexts": {
+      "nature": 24
+    }
+  },
+  "forest": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.639228",
+    "contexts": {
+      "nature": 24
+    }
+  },
+  "plant": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.639238",
+    "contexts": {
+      "nature": 24
+    }
+  },
+  "flower": {
+    "count": 24,
+    "last_seen": "2025-04-15T10:43:19.639236",
+    "contexts": {
+      "nature": 24
+    }
+  },
+  "nature": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639282",
+    "contexts": {
+      "color_context": 2
+    }
+  },
+  "batch_source_0": {
+    "count": 40,
+    "last_seen": "2025-04-15T10:43:19.641519",
+    "contexts": {
+      "batch_context_0": 40
+    }
+  },
+  "batch_target_0": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639811",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_source_1": {
+    "count": 40,
+    "last_seen": "2025-04-15T10:43:19.641525",
+    "contexts": {
+      "batch_context_1": 40
+    }
+  },
+  "batch_target_1": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639820",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_source_2": {
+    "count": 40,
+    "last_seen": "2025-04-15T10:43:19.641531",
+    "contexts": {
+      "batch_context_2": 40
+    }
+  },
+  "batch_target_2": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639827",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_source_3": {
+    "count": 40,
+    "last_seen": "2025-04-15T10:43:19.641536",
+    "contexts": {
+      "batch_context_3": 40
+    }
+  },
+  "batch_target_3": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639835",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_source_4": {
+    "count": 40,
+    "last_seen": "2025-04-15T10:43:19.641543",
+    "contexts": {
+      "batch_context_4": 40
+    }
+  },
+  "batch_target_4": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639841",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_source_5": {
+    "count": 40,
+    "last_seen": "2025-04-15T10:43:19.641548",
+    "contexts": {
+      "batch_context_0": 40
+    }
+  },
+  "batch_target_5": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639846",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_source_6": {
+    "count": 40,
+    "last_seen": "2025-04-15T10:43:19.641553",
+    "contexts": {
+      "batch_context_1": 40
+    }
+  },
+  "batch_target_6": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639852",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_source_7": {
+    "count": 40,
+    "last_seen": "2025-04-15T10:43:19.641558",
+    "contexts": {
+      "batch_context_2": 40
+    }
+  },
+  "batch_target_7": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639858",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_source_8": {
+    "count": 40,
+    "last_seen": "2025-04-15T10:43:19.641563",
+    "contexts": {
+      "batch_context_3": 40
+    }
+  },
+  "batch_target_8": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639864",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_source_9": {
+    "count": 40,
+    "last_seen": "2025-04-15T10:43:19.641568",
+    "contexts": {
+      "batch_context_4": 40
+    }
+  },
+  "batch_target_9": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639871",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_10": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639877",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_11": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639883",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_12": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639888",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_13": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639892",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_14": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639899",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_15": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639904",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_16": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639909",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_17": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639914",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_18": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639921",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_19": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639926",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_20": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639931",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_21": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639935",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_22": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639940",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_23": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639946",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_24": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639951",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_25": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639956",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_26": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639962",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_27": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639967",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_28": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639973",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_29": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639980",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_30": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639985",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_31": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639990",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_32": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.639997",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_33": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640003",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_34": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640009",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_35": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640014",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_36": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640018",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_37": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640023",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_38": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640028",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_39": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640036",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_40": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640042",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_41": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640048",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_42": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640054",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_43": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640060",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_44": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640066",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_45": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640071",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_46": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640077",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_47": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640082",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_48": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640089",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_49": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640095",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_50": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640103",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_51": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640108",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_52": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640112",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_53": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640120",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_54": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640125",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_55": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640130",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_56": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640135",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_57": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640139",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_58": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640145",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_59": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640150",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_60": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640155",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_61": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640160",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_62": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640164",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_63": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640172",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_64": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640176",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_65": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640181",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_66": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640186",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_67": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640190",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_68": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640197",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_69": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640202",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_70": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640207",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_71": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640213",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_72": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640218",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_73": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640223",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_74": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640229",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_75": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640234",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_76": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640238",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_77": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640243",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_78": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640248",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_79": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640254",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_80": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640260",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_81": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640265",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_82": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640271",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_83": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640276",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_84": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640281",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_85": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640287",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_86": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640293",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_87": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640298",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_88": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640304",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_89": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640309",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_90": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640315",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_91": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640320",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_92": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640326",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_93": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640332",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_94": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640337",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_95": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640341",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_96": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640346",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_97": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640352",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_98": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640358",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_99": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640363",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_100": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640370",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_101": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640375",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_102": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640381",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_103": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640387",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_104": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640393",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_105": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640398",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_106": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640404",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_107": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640410",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_108": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640418",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_109": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640423",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_110": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640428",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_111": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640435",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_112": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640440",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_113": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640445",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_114": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640450",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_115": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640455",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_116": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640461",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_117": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640465",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_118": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640471",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_119": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640477",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_120": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640482",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_121": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640487",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_122": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640493",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_123": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640498",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_124": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640525",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_125": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640530",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_126": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640535",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_127": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640540",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_128": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640545",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_129": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640551",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_130": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640557",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_131": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640562",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_132": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640569",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_133": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640575",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_134": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640585",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_135": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640590",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_136": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640595",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_137": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640599",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_138": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640604",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_139": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640611",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_140": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640618",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_141": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640622",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_142": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640627",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_143": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640632",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_144": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640638",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_145": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640642",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_146": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640647",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_147": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640652",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_148": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640658",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_149": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640663",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_150": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640669",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_151": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640674",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_152": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640679",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_153": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640683",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_154": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640693",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_155": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640698",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_156": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640704",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_157": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640710",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_158": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640716",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_159": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640721",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_160": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640727",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_161": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640733",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_162": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640737",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_163": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640742",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_164": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640746",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_165": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640752",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_166": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640757",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_167": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640762",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_168": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640768",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_169": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640772",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_170": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640777",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_171": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640783",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_172": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640788",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_173": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640793",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_174": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640798",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_175": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640804",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_176": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640810",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_177": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640815",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_178": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640820",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_179": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640825",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_180": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.640830",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_181": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641449",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_182": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641464",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_183": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641472",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_184": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641478",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_185": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641484",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_186": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641491",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_187": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641500",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_188": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641506",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_189": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641513",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_190": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641520",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_191": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641526",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_192": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641532",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_193": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641537",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_194": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641544",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  },
+  "batch_target_195": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641549",
+    "contexts": {
+      "batch_context_0": 2
+    }
+  },
+  "batch_target_196": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641554",
+    "contexts": {
+      "batch_context_1": 2
+    }
+  },
+  "batch_target_197": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641559",
+    "contexts": {
+      "batch_context_2": 2
+    }
+  },
+  "batch_target_198": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641564",
+    "contexts": {
+      "batch_context_3": 2
+    }
+  },
+  "batch_target_199": {
+    "count": 2,
+    "last_seen": "2025-04-15T10:43:19.641569",
+    "contexts": {
+      "batch_context_4": 2
+    }
+  }
+}

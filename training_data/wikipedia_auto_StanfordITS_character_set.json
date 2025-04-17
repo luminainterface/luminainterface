@@ -1,0 +1,29 @@
+{
+  "title": "Stanford/ITS character set",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Stanford/ITS_character_set",
+  "content": "Stanford/ITS character set is an extended ASCII character set based on SEASCII with modifications allowing compatibility with 1968 ASCII.[2]\n\nIt is used as an alternate character set of the SUPDUP protocol for terminals with %TOSAI and %TOFCI bits set.[2] It is also recommended for TeX implementations on systems with large character sets.[1] The default plain TeX macro package sets values B16 (↑) and 116 (↓) as alternative character codes for superscripts and subscripts, respectively (the default being ^ and _).[3]\n\nThe Knight keyboard is an example of a keyboard capable of inputting all of the defined characters excluding ⋅γδ±⊕◊∫, as they are mapped to ASCII commands NUL, HT, LF, FF, CR, ESC and DEL, respectively.\n\nEach character is encoded as a single seven-bit code value. It contains all 95 printable ASCII characters along with 27 mathematical symbols and 6 Greek letters.\n",
+  "concepts": [
+    "Stanford/ITS character set",
+    "character",
+    "set",
+    "ascii",
+    "character set",
+    "tex",
+    "sets",
+    "respectively",
+    "keyboard",
+    "default",
+    "characters"
+  ],
+  "findings": [
+    "Usage",
+    "Coverage",
+    "Code page layout",
+    "See also",
+    "References",
+    "Further reading"
+  ],
+  "relationships": [],
+  "timestamp": "2025-04-11T13:27:19.182356"
+}

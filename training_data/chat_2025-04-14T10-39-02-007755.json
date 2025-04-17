@@ -1,0 +1,11 @@
+{
+  "input": "what is an isomorph?",
+  "response": "LLM integration is disabled.",
+  "metadata": {
+    "timestamp": "2025-04-14T10:39:02.007755",
+    "emotion": "calm",
+    "symbolic_state": "🜂",
+    "llm_weight": 1.0,
+    "llm_enabled": true
+  }
+}

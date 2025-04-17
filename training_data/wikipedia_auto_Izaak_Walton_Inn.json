@@ -1,0 +1,34 @@
+{
+  "title": "Izaak Walton Inn",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Izaak_Walton_Inn",
+  "content": "The Izaak Walton Inn is a historic inn in Essex, Montana, United States. It was originally built as the Izaak Walton Hotel in 1939 by the Great Northern Railway as a soup kitchen and lodgings for railway workers.[2] The hotel was also originally envisioned as a potential official southern gateway to Glacier National Park, hence its size, but World War II intervened and that plan never materialized.[3][4] Today, the inn is served by Essex station, the only request stop on Amtrak's Empire Builder route. A van from the inn meets both the morning eastbound and the evening westbound Empire Builders to convey passengers between the station and the inn.\n\nThe Tudor Revival-style inn is named after Sir Izaak Walton, the English writer and fisherman. Its location, Essex, was originally named Walton.[5] The structure was listed on the National Register of Historic Places in 1985.[6] At Essex, the railway workers asked for some kind of accommodation.[7] About 400 people lived in the town of Essex in the 1920s, and some workers were able to obtain houses there.[7] However, many intermittent workers were forced to seek shelter in wall tents, abandoned railroad cars and other improvised structures, even during the winter.[7] Before the inn was built, there was only a \"beanery\", a restaurant with no lodging facilities (built in 1910 and 1920s; both structures were destroyed by fire).[7]\n\nThe inn has 33 rooms for rent within the inn itself, with some other space available in refurbished cabooses, EMD F45 Diesel Locomotive 441, etc. It has been privately owned since the 1950s.[8] The Izaak Walton Inn is open year-round, except for several weeks during the off-season.\n\nIn December 2022, the inn was purchased for US$13.5 million by Washington-based hospitality company LOGE Camps (pronounced \"lodge\"), who updated the rooms and cafe.[2022 sale 1][2022 sale 2][2022 sale 3] The Inn reopened on September 1st, 2024. \n",
+  "concepts": [
+    "Izaak Walton Inn",
+    "inn",
+    "walton",
+    "essex",
+    "workers",
+    "izaak walton",
+    "izaak",
+    "2022",
+    "sale",
+    "railway",
+    "originally"
+  ],
+  "findings": [
+    "Gallery",
+    "References",
+    "Further reading",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Izaak Walton Inn",
+      "relationship": "is a",
+      "object": "historic inn in essex",
+      "sentence": "The Izaak Walton Inn is a historic inn in Essex, Montana, United States."
+    }
+  ],
+  "timestamp": "2025-04-11T16:07:28.900093"
+}

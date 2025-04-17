@@ -1,0 +1,11 @@
+2025-04-15 17:52:16,630 - v8.tests - INFO - Starting Lumina v8 test suite
+Traceback (most recent call last):
+  File "C:\Users\jtran\neural_network_project\src\tests\run_all_tests.py", line 81, in <module>
+    sys.exit(run_tests())
+             ~~~~~~~~~^^
+  File "C:\Users\jtran\neural_network_project\src\tests\run_all_tests.py", line 70, in run_tests
+    test_suite.addTest(unittest.makeSuite(SpatialTempleBasicTest))
+                       ^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.1008.0_x64__qbz5n2kfra8p0\Lib\unittest\__init__.py", line 80, in __getattr__
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+AttributeError: module 'unittest' has no attribute 'makeSuite'

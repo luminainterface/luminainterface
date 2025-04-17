@@ -1,0 +1,31 @@
+{
+  "title": "Pachydellus latior",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Pachydellus_latior",
+  "content": "Pachydellus latior is a species of mite in the family Pachylaelapidae.[1]\n\nThis Mesostigmata article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Pachydellus latior",
+    "wikipedia expanding",
+    "wikipedia",
+    "stub help",
+    "stub",
+    "species mite",
+    "species",
+    "pachylaelapidae mesostigmata",
+    "pachylaelapidae",
+    "pachydellus latior",
+    "pachydellus"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Pachydellus latior",
+      "relationship": "is a",
+      "object": "species of mite in the family pachylaelapidae",
+      "sentence": "Pachydellus latior is a species of mite in the family Pachylaelapidae."
+    }
+  ],
+  "timestamp": "2025-04-11T16:53:19.691366"
+}

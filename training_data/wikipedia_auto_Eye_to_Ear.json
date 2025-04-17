@@ -1,0 +1,35 @@
+{
+  "title": "Eye to Ear",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Eye_to_Ear",
+  "content": "Eye to Ear is a studio album by English guitarist, composer and improvisor Fred Frith. It is a collection of film and theatre music composed and performed by Frith, and was recorded in Germany and the United States between 1992 and 1995. Eye to Ear was Frith's first solo album to be released on John Zorn's Tzadik label.\n\nTwo more collections of film and theatre music by Frith in this series, Eye to Ear II and Eye to Ear III were released by Tzadik Records in 2004 and 2010 respectively.\n\nAll tracks composed by Fred Frith.\n",
+  "concepts": [
+    "Eye to Ear",
+    "frith",
+    "eye ear",
+    "eye",
+    "ear",
+    "tzadik",
+    "theatre music",
+    "theatre",
+    "released",
+    "music",
+    "fred frith"
+  ],
+  "findings": [
+    "Track listing",
+    "Personnel",
+    "Sound",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Eye to Ear",
+      "relationship": "is a",
+      "object": "studio album by english guitarist",
+      "sentence": "Eye to Ear is a studio album by English guitarist, composer and improvisor Fred Frith."
+    }
+  ],
+  "timestamp": "2025-04-11T13:30:40.573962"
+}

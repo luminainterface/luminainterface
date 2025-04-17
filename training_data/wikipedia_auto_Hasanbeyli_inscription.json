@@ -1,0 +1,33 @@
+{
+  "title": "Hasanbeyli inscription",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Hasanbeyli_inscription",
+  "content": "The Hasanbeyli inscription is a Phoenician inscription on a basalt stone discovered in the village of Hasanbeyli, on the western slopes of the Amanus Mountains, in 1894.[1]\n\nIt was discovered by Felix von Luschan, who had been excavating at nearby Zincirli.\n\nThe Phoenician inscription is 5 lines long, and mentions the \"king of the city of Adana\", the \"king of Assur\" and \"Awariku\" (also on the Karatepe inscription). A short Greek inscription with two crosses has been overlaid; it is thought that it was used as a boundary marker during Byzantine times.\n\nIt has been dated to the 8th century BC. The stele measures 42 x 34 x 23 cm. It is currently in the Vorderasiatisches Museum Berlin. The inscription is known as KAI 23.\n",
+  "concepts": [
+    "Hasanbeyli inscription",
+    "inscription",
+    "phoenician inscription",
+    "phoenician",
+    "king",
+    "hasanbeyli",
+    "discovered",
+    "23",
+    "western slopes",
+    "western",
+    "vorderasiatisches museum"
+  ],
+  "findings": [
+    "Bibliography",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Hasanbeyli inscription",
+      "relationship": "is a",
+      "object": "phoenician inscription on a basalt stone discovered in the village of hasanbeyli",
+      "sentence": "The Hasanbeyli inscription is a Phoenician inscription on a basalt stone discovered in the village of Hasanbeyli, on the western slopes of the Amanus Mountains, in 1894."
+    }
+  ],
+  "timestamp": "2025-04-11T16:28:34.519854"
+}

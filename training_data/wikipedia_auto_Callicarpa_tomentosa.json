@@ -1,0 +1,32 @@
+{
+  "title": "Callicarpa tomentosa",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Callicarpa_tomentosa",
+  "content": "Callicarpa tomentosa is a species of beautyberry plant in the family Lamiaceae. It is found in Western Ghats of India and Sri Lanka. It is a small tree with about 5m tall. Leaves simple, opposite; elliptic to broadly elliptic; apex acute or acuminate. Purplish flowers show branched axillary cymes. Fruit is 3-4 seeded globose drupe.[2] Fruits provide food for wildlife. They are sometimes used to make herbal medicine. The leaves are also food for wildlife.[3]\n\nThe leaf is known being used as a wick to light an oil lamp.[4]\n\nIn Hinduism, it is said in the legends that when the pandavas went to exile, they lit the tree by applying oil to the leaves and burning them.[5][better source needed]\n\nThis Lamiaceae article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Callicarpa tomentosa",
+    "leaves",
+    "wildlife",
+    "used",
+    "tree",
+    "oil",
+    "lamiaceae",
+    "food wildlife",
+    "food",
+    "elliptic",
+    "wikipedia expanding"
+  ],
+  "findings": [
+    "Common Names",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Callicarpa tomentosa",
+      "relationship": "is a",
+      "object": "species of beautyberry plant in the family lamiaceae",
+      "sentence": "Callicarpa tomentosa is a species of beautyberry plant in the family Lamiaceae."
+    }
+  ],
+  "timestamp": "2025-04-11T13:34:42.633655"
+}

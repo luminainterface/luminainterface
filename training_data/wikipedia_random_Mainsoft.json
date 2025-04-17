@@ -1,0 +1,18 @@
+{
+  "title": "Mainsoft",
+  "source": "Wikipedia (Random Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Mainsoft",
+  "content": "Mainsoft is a software company, founded in 1993, that develops interoperability software products for Microsoft Windows and Linux/Unix platforms.[1]\n\nMainsoft was founded in 1993, mainly to propose integration products between Windows and other systems.[2]\n\nMainsoft was one of the main providers for the Microsoft Windows Interface Source Environment (WISE) program, a licensing program from Microsoft that allowed developers to recompile and run Windows-based applications on Unix and Macintosh platforms.[3] Its first product, MainWin, was an implementation of the Windows API for Unix systems such as Sun Solaris, AIX, HP-UX and UnixWare, offering \"most of 600 Windows calls\" and reportedly allowing Windows 3.0, and later 3.1, applications recompiled for target platforms to run natively at acceptable performance without recourse to emulation.[4]\n\nWISE software development kits (SDKs) were not directly provided by Microsoft. Instead Microsoft established partnerships to several software providers which in turn sold WISE SDKs to end-users.[5]\n\nAfter the WISE program, Microsoft extended its agreements with Mainsoft to port Windows Media Player 6.3 and Internet Explorer to Unix.[6]\n\nSince then, Mainsoft activity shifted to integration of Microsoft SharePoint into IBM products[7][8][9] (IBM Lotus Notes, IBM WebSphere, Rational Jazz) and products focusing on .NET Framework and JavaEE.\n\nTo be able to develop WISE SDKs, software providers needed to have access to Windows internals source code. In 2004, more than 30000 source files from Windows 2000 and Windows NT 4.0 were leaked to the internet. It was later discovered that the source of the leak originated from Mainsoft.[10][11]\n",
+  "concepts": [
+    "Mainsoft"
+  ],
+  "findings": [
+    "History",
+    "Founding",
+    "Microsoft integration",
+    "See also",
+    "References",
+    "External links"
+  ],
+  "timestamp": "2025-04-11T10:18:41.418767"
+}

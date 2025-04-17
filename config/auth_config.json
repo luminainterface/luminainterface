@@ -1,0 +1,145 @@
+{
+  "auth_enabled": false,
+  "auth_method": "basic",
+  "session_timeout_minutes": 60,
+  "max_failed_attempts": 5,
+  "lockout_minutes": 15,
+  "require_https": false,
+  "cookie_secure": true,
+  "cookie_httponly": true,
+  "cors_enabled": true,
+  "cors_domains": ["http://localhost:3000"],
+  
+  "users": [
+    {
+      "username": "admin",
+      "password_hash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8", 
+      "role": "admin",
+      "email": "admin@example.com",
+      "full_name": "Administrator",
+      "created": "2023-07-15T10:30:00Z",
+      "last_login": "2023-08-20T14:22:37Z"
+    },
+    {
+      "username": "viewer",
+      "password_hash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3", 
+      "role": "viewer",
+      "email": "viewer@example.com",
+      "full_name": "Dashboard Viewer",
+      "created": "2023-07-15T11:45:00Z",
+      "last_login": "2023-08-19T09:12:15Z"
+    },
+    {
+      "username": "researcher",
+      "password_hash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92", 
+      "role": "researcher",
+      "email": "researcher@example.com",
+      "full_name": "Neural Researcher",
+      "created": "2023-07-16T08:20:00Z",
+      "last_login": "2023-08-20T16:04:22Z"
+    }
+  ],
+  
+  "roles": {
+    "admin": {
+      "display_name": "Administrator",
+      "description": "Full access to all dashboard features",
+      "permissions": [
+        "read:all",
+        "write:all",
+        "configure:all",
+        "manage:users",
+        "export:data",
+        "access:api"
+      ]
+    },
+    "viewer": {
+      "display_name": "Viewer",
+      "description": "Read-only access to dashboard panels",
+      "permissions": [
+        "read:overview",
+        "read:neural",
+        "read:language",
+        "read:system",
+        "read:memory",
+        "read:dream"
+      ]
+    },
+    "researcher": {
+      "display_name": "Researcher",
+      "description": "Access to view and export research data",
+      "permissions": [
+        "read:all",
+        "export:data",
+        "write:notes"
+      ]
+    }
+  },
+  
+  "permission_descriptions": {
+    "read:all": "View all dashboard panels and data",
+    "write:all": "Modify configuration and parameters",
+    "configure:all": "Change system settings and configuration",
+    "manage:users": "Add, remove, and modify user accounts",
+    "export:data": "Export data from the dashboard",
+    "access:api": "Access the REST API endpoints",
+    "read:overview": "View the overview dashboard",
+    "read:neural": "View neural activity panels",
+    "read:language": "View language processing panels",
+    "read:system": "View system metrics panels",
+    "read:memory": "View memory system panels",
+    "read:dream": "View dream mode panels",
+    "write:notes": "Add research notes to visualizations"
+  },
+  
+  "api_auth": {
+    "enabled": false,
+    "method": "token",
+    "tokens": [
+      {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImlzcyI6Imx1bWluYS1kYXNoYm9hcmQiLCJleHAiOjE2OTM0OTY0MDB9.ZDg3Y2Q3ZmVjMjVhOWVkZjAxNWVkMGIyNWFiZGVmYTEyZGZhYmNkZQ",
+        "name": "admin-api",
+        "owner": "admin",
+        "created": "2023-08-01T09:00:00Z",
+        "expires": "2023-09-01T09:00:00Z",
+        "permissions": ["read:all", "write:all"]
+      },
+      {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXNlYXJjaGVyIiwiaXNzIjoibHVtaW5hLWRhc2hib2FyZCIsImV4cCI6MTY5MzQ5NjQwMH0.ZDg3Y2Q3ZmVjMjVhOWVkZjAxNWVkMGIyNWFiZGVmYTEyZGZhYmNkZQ",
+        "name": "research-api",
+        "owner": "researcher",
+        "created": "2023-08-10T14:30:00Z",
+        "expires": "2023-09-10T14:30:00Z",
+        "permissions": ["read:all", "export:data"]
+      }
+    ]
+  },
+  
+  "login_ui": {
+    "title": "LUMINA V7 Dashboard",
+    "subtitle": "Neural Network Monitoring System",
+    "logo_path": "assets/lumina_logo.png",
+    "background_color": "#2d3436",
+    "text_color": "#ecf0f1",
+    "accent_color": "#3498db",
+    "show_version": true,
+    "enable_password_reset": true,
+    "enable_remember_me": true
+  },
+  
+  "security_notices": [
+    "All access attempts are logged and monitored",
+    "Multiple failed login attempts will result in account lockout",
+    "For security assistance, contact system administrator"
+  ],
+  
+  "password_policy": {
+    "min_length": 8,
+    "require_uppercase": true,
+    "require_lowercase": true,
+    "require_numbers": true,
+    "require_special": true,
+    "password_history": 5,
+    "max_age_days": 90
+  }
+} 

@@ -1,0 +1,25 @@
+{
+  "version": 1.0000000900029025,
+  "growth_stage": "root",
+  "creation_time": "2025-04-16T06:06:22.669248",
+  "last_growth_time": "2025-04-16T06:15:22.687558",
+  "last_input_time": "2025-04-16T06:06:22.669248",
+  "metrics": {
+    "growth_cycles": 10,
+    "growth_points": 0.0,
+    "inputs_processed": 0,
+    "consciousness_level": 0.060240005400174136,
+    "complexity": 0.0,
+    "stability": 1.0,
+    "integration_level": 0.1
+  },
+  "components": [],
+  "component_versions": {},
+  "neural_network": {
+    "root_nodes": [],
+    "trunk_nodes": [],
+    "branch_nodes": [],
+    "canopy_nodes": [],
+    "flower_nodes": []
+  }
+}

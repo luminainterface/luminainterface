@@ -1,0 +1,18 @@
+{
+    "max_depth": 3,
+    "adaptation_threshold": 0.01,
+    "performance_window": 5,
+    "specialization_strategies": {
+        "high_variance": [10, 256, 128, 64, 32, 1],
+        "low_variance": [10, 512, 256, 1],
+        "default": [10, 128, 64, 32, 1]
+    },
+    "monitoring_interval": 10,
+    "weight_transfer": true,
+    "logging_level": "INFO",
+    "v2_bridge": {
+        "enabled": true,
+        "migration_threshold": 0.9,
+        "compatibility_check": true
+    }
+} 

@@ -1,0 +1,35 @@
+{
+  "title": "Locus Solus",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Locus_Solus",
+  "content": "Locus Solus is a 1914 French novel by Raymond Roussel.\n\nJohn Ashbery summarizes Locus Solus thus in his introduction to Michel Foucault's Death and the Labyrinth:\n\n\"A prominent scientist and inventor, Martial Canterel, has invited a group of colleagues to visit the park of his country estate, Locus Solus. As the group tours the estate, Canterel shows them inventions of ever-increasing complexity and strangeness. Again, exposition is invariably followed by explanation, the cold hysteria of the former giving way to the innumerable ramifications of the latter. After an aerial pile driver which is constructing a mosaic of teeth and a huge glass diamond filled with water in which float a dancing girl, a hairless cat named Khóng-dek-lèn, and the preserved head of Danton, we come to the central and longest passage: a description of eight curious tableaux vivants taking place inside an enormous glass cage. We learn that the actors are actually dead people whom Canterel has revived with 'resurrectine', a fluid of his invention which if injected into a fresh corpse causes it continually to act out the most important incident of its life.\"\n\nIt was translated into English by Rupert Copeland Cunningham, in addition to translations into Czech, Dutch, Italian, Polish, Turkish, Russian, Spanish, and other[1] languages.\n",
+  "concepts": [
+    "Locus Solus",
+    "solus",
+    "locus solus",
+    "locus",
+    "canterel",
+    "group",
+    "glass",
+    "estate",
+    "people canterel",
+    "people",
+    "passage description"
+  ],
+  "findings": [
+    "Plot summary",
+    "References in other media",
+    "English translation editions",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Locus Solus",
+      "relationship": "is a",
+      "object": "1914 french novel by raymond roussel",
+      "sentence": "Locus Solus is a 1914 French novel by Raymond Roussel."
+    }
+  ],
+  "timestamp": "2025-04-11T13:30:45.197513"
+}

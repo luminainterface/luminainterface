@@ -1,0 +1,38 @@
+{
+    "port": 5678,
+    "max_connections": 100,
+    "version": "7.5",
+    "database": {
+        "type": "sqlite",
+        "path": "data/central_node.db"
+    },
+    "nodes": {
+        "allowed_versions": ["1", "2", "5", "6", "7", "7.5", "8", "9", "10"],
+        "max_retries": 3,
+        "timeout": 30
+    },
+    "logging": {
+        "level": "INFO",
+        "file": "logs/central_node.log",
+        "max_size": 10485760,
+        "backup_count": 5
+    },
+    "security": {
+        "require_authentication": true,
+        "allowed_ips": ["127.0.0.1", "0.0.0.0"],
+        "max_failed_attempts": 5,
+        "lockout_duration": 300
+    },
+    "performance": {
+        "max_threads": 100,
+        "queue_size": 1000,
+        "heartbeat_interval": 30,
+        "cleanup_interval": 3600
+    },
+    "backup": {
+        "enabled": true,
+        "interval": 86400,
+        "path": "backups",
+        "retention_days": 7
+    }
+} 

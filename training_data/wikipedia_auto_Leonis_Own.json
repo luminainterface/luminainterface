@@ -1,0 +1,34 @@
+{
+  "title": "Leoni's Own",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Leoni's_Own",
+  "content": "Leoni's Own is a 19th century American card solitaire played with two decks of playing cards shuffled together.[1][2][3] This game may have come from Austria, takes approximately 20 minutes and is described as medium regarding difficulty and also uses an ingenious method called weaving.[4][5] It is often confused by card game book writers with Weaver's which has a similar mode of play but different rules and terminology.\n\nFirst, an ace and a king of each suit is removed from the deck and placed on the layout as the bases for the foundations. Aces are built up to Kings while Kings are built down to Aces, all by suit. A reversal, or moving of cards (except the bases, or the original Aces and Kings) from one foundation to another of the same suit, is allowed.\n\nThe rest of the deck is dealt into thirteen piles. During the deal, when a card is about to be dealt into a pile corresponding to its rank (such as a seven on the seventh pile or a jack on the eleventh pile), it becomes an \"exile\" and placed face down on a fourteenth pile. A pile should not be skipped, so when a card is \"exiled,\" another card is dealt on a pile in place of the exiled one.\n\nTo start the game, the thirteenth pile is spread out, and any card from this pile, as well as the top cards of the other twelve piles, are available for play to the foundations.[1]\n\nIf play goes to a standstill, the player picks out an exiled card and looks to see if it can be placed on the foundations. If it doesn't, then a process called weaving is used: The unplayable exiled card is placed under the pile corresponding to its rank. The top card of that pile is then picked up and placed under the pile corresponding to its rank. This continues until a playable card is uncovered with the last card picked up placed under the appropriate pile. Play resumes as normal.\n\nIf the exiled card made available or the last card picked up happens to be a king, it is placed on the thirteenth pile along with those already there and another exiled card is drawn.\n\nIf there are no more exiled cards or if play goes to a stalemate in any pile, the deal has ended. The player is then entitled to two redeals. To do a redeal, the piles are picked up in reverse order, i.e. a pile over its right-hand neighbor (e.g. Pile 1 over Pile 2, and the two piles are placed over Pile 3), until all piles are stacked over the thirteenth pile, making it the top pile of the new stock. Normal play resumes from that point, starting from the redealing of the cards, removing of exiled cards and building on the foundations.\n\nThe game ends after the third deal (i.e. the one after the second redeal) ends. The game is won when all cards end up in the foundations.\n\nThe game is often confused with the early 20th century English game of Weaver's or Weavers even though the foundations are different (eight Kings), the number of tableau piles is twelve, not thirteen, and the terminology is that of a weaver's workshop: the tableau is the 'loom' and the exile is a 'shuttle'.\n",
+  "concepts": [
+    "Leoni's Own",
+    "pile",
+    "card",
+    "placed",
+    "exiled",
+    "game",
+    "cards",
+    "play",
+    "piles",
+    "foundations",
+    "exiled card"
+  ],
+  "findings": [
+    "Rules",
+    "Weaver's",
+    "References",
+    "See also"
+  ],
+  "relationships": [
+    {
+      "subject": "Leoni's Own",
+      "relationship": "is a",
+      "object": "19th century american card solitaire played with two decks of playing cards shuffled together",
+      "sentence": "Leoni's Own is a 19th century American card solitaire played with two decks of playing cards shuffled together."
+    }
+  ],
+  "timestamp": "2025-04-11T13:36:03.932835"
+}

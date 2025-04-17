@@ -1,0 +1,31 @@
+{
+  "title": "Pipizella virens",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Pipizella_virens",
+  "content": "Pipizella virens is a species of hoverfly, from the family Syrphidae, in the order Diptera.[1][2]\n\nThis hoverfly article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Pipizella virens",
+    "hoverfly",
+    "wikipedia expanding",
+    "wikipedia",
+    "virens species",
+    "virens",
+    "syrphidae order",
+    "syrphidae",
+    "stub help",
+    "stub",
+    "species hoverfly"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Pipizella virens",
+      "relationship": "is a",
+      "object": "species of hoverfly",
+      "sentence": "Pipizella virens is a species of hoverfly, from the family Syrphidae, in the order Diptera."
+    }
+  ],
+  "timestamp": "2025-04-11T13:26:08.886073"
+}

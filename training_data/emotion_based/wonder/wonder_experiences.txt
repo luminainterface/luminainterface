@@ -1,0 +1,8 @@
+symbol:star emotion:wonder breath:gentle paradox:vastness
+Looking up at the night sky filled with countless stars evokes a sense of wonder at the immense scale of the universe.
+
+symbol:child emotion:wonder breath:quick paradox:simplicity
+The child's eyes widen with wonder at the butterfly, reminding us how the simplest things contain profound beauty.
+
+symbol:fractal emotion:wonder breath:recursive paradox:complexity
+Each level of the fractal pattern reveals new intricacies, creating endless wonder at how complexity emerges from simple rules. 

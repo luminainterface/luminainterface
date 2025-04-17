@@ -1,0 +1,29 @@
+{
+  "title": "Narayawali",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Narayawali",
+  "content": "Narayawali is a town near Khurai City and Sagar on main Bina–Katni rail route. It is located in Sagar district of Madhya Pradesh, India.\n\nIt is a town located between two hills and at center there is a lake.\n\nTown has a old fort, locally known as \"gadi(गढ़ी)\".\n\nThis article related to a location in Madhya Pradesh is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Narayawali",
+    "town",
+    "sagar",
+    "pradesh",
+    "madhya pradesh",
+    "madhya",
+    "located",
+    "wikipedia expanding",
+    "wikipedia",
+    "town old",
+    "town near"
+  ],
+  "findings": [],
+  "relationships": [
+    {
+      "subject": "Narayawali",
+      "relationship": "is a",
+      "object": "town near khurai city and sagar on main bina",
+      "sentence": "Narayawali is a town near Khurai City and Sagar on main Bina–Katni rail route."
+    }
+  ],
+  "timestamp": "2025-04-11T13:34:55.165326"
+}

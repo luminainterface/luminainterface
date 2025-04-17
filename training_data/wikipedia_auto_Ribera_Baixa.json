@@ -1,0 +1,32 @@
+{
+  "title": "Ribera Baixa",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Ribera_Baixa",
+  "content": "Ribera Baixa (Valencian: [riˈbeɾa ˈbajʃa]; Spanish: Ribera Baja [riˈβeɾa ˈβaxa]) is a comarca in the province of Valencia, Valencian Community, Spain.[1]\n\nRibera Baixa contains the following 12 municipalities:[1]\n\n39°12′57″N 0°20′51″W﻿ / ﻿39.2158°N 0.347442°W﻿ / 39.2158; -0.347442\n\nThis article about a location in the Valencian Community, Spain, is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Ribera Baixa",
+    "valencian",
+    "ribera",
+    "39",
+    "valencian community",
+    "spain",
+    "ribera baixa",
+    "community spain",
+    "community",
+    "baixa",
+    "39 2158"
+  ],
+  "findings": [
+    "Municipalities",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Ribera Baixa",
+      "relationship": "contains",
+      "object": "the following 12 municipalities",
+      "sentence": "[1]\n\nRibera Baixa contains the following 12 municipalities:[1]\n\n39°12′57″N 0°20′51″W﻿ / ﻿39.2158°N 0.347442°W﻿ / 39.2158; -0.347442\n\nThis article about a location in the Valencian Community, Spain, is a stub."
+    }
+  ],
+  "timestamp": "2025-04-11T13:35:42.842189"
+}

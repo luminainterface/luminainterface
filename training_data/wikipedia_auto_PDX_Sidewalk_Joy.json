@@ -1,0 +1,24 @@
+{
+  "title": "PDX Sidewalk Joy",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/PDX_Sidewalk_Joy",
+  "content": "PDX Sidewalk Joy is a project to create and map neighborhood sidewalk displays such as little libraries,[1] art installations, exchanges, and other forms of community engagement. The project was co-created by Rachael Harms Mahlandt and Grant Brady of PDXFLAG (Portland Free Little Art Gallery).[2][3]\n\nThere are approximately 100 sites, including:  \n\nIn addition to Lego Minifig Exchange, there is another Lego minifigure exchange in southeast Portland's Sellwood-Moreland neighborhood.[5]\n",
+  "concepts": [
+    "PDX Sidewalk Joy"
+  ],
+  "findings": [
+    "Installations",
+    "See also",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "PDX Sidewalk Joy",
+      "relationship": "is a",
+      "object": "project to create and map neighborhood sidewalk displays such as little libraries",
+      "sentence": "PDX Sidewalk Joy is a project to create and map neighborhood sidewalk displays such as little libraries,[1] art installations, exchanges, and other forms of community engagement."
+    }
+  ],
+  "timestamp": "2025-04-11T13:23:01.045380"
+}

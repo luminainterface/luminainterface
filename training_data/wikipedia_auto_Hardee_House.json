@@ -1,0 +1,31 @@
+{
+  "title": "Hardee House",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Hardee_House",
+  "content": "Hardee House is a historic home located near Ormondsville, Greene County, North Carolina.  It was built between about 1842 and 1844, and is a two-story, single pile, three bay, Greek Revival style I-house dwelling.  It has an early-20th century Queen Anne style front porch with turned posts and decorative sawnwork brackets.  Also on the property is a contributing 2+1⁄2-story gable-roof tobacco pack house.[2]\n\nIt was listed on the National Register of Historic Places in 2014.[1]\n\nThis article about a property in Granville County, North Carolina on the National Register of Historic Places is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Hardee House",
+    "house",
+    "historic",
+    "style",
+    "story",
+    "register historic",
+    "register",
+    "property",
+    "places",
+    "north carolina",
+    "north"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Hardee House",
+      "relationship": "is a",
+      "object": "historic home located near ormondsville",
+      "sentence": "Hardee House is a historic home located near Ormondsville, Greene County, North Carolina."
+    }
+  ],
+  "timestamp": "2025-04-11T13:26:29.034784"
+}

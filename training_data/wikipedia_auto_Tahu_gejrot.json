@@ -1,0 +1,32 @@
+{
+  "title": "Tahu gejrot",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Tahu_gejrot",
+  "content": "Tahu Gejrot is an Indonesian fried tofu in sweet spicy sauce from Cirebon,[1] a port city in West Java, Indonesia.[2] Tahu gejrot consists of tahu pong, a type of hollow tahu goreng (fried tofu) cut into small pieces. It is served with a thin and watery dressing that is made by blending palm sugar, vinegar and sweet soy sauce. It is usually served in a small earthenware bowl or layah, with ground garlic, pounded shallot and hot bird's eye chili cut into pieces to add spiciness. Tahu gejrot is usually served in a clay plate.\n",
+  "concepts": [
+    "Tahu gejrot",
+    "tahu",
+    "tahu gejrot",
+    "served",
+    "gejrot",
+    "usually served",
+    "usually",
+    "tofu",
+    "sweet",
+    "small",
+    "sauce"
+  ],
+  "findings": [
+    "See also",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Tahu gejrot",
+      "relationship": "consists of",
+      "object": "tahu pong",
+      "sentence": "[2] Tahu gejrot consists of tahu pong, a type of hollow tahu goreng (fried tofu) cut into small pieces."
+    }
+  ],
+  "timestamp": "2025-04-11T13:26:26.599124"
+}

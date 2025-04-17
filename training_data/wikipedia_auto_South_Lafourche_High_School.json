@@ -1,0 +1,36 @@
+{
+  "title": "South Lafourche High School",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/South_Lafourche_High_School",
+  "content": "South Lafourche High School is a public secondary school in the Galliano census-designated place, an unincorporated area in Lafourche Parish, Louisiana, United States.[3] It has a Cut Off postal address.[4]\n\nA part of Lafourche Parish Public Schools, South Lafourche High currently serves the coastal towns and communities of:[5] Larose,[6] Cut Off,[7] Galliano,[3] and Golden Meadow.[8] It is the result of the 1966 consolidation of the former Golden Meadow and Larose-Cut Off High Schools.[9] As a result, both former high schools were designated junior high schools and, in 2002, middle schools. South Lafourche High School was founded in 1966.\n\nOriginally South Lafourche only provided 10th to 12th grade. During the 2002–2003 school year the 9th grade was added and removed from the middle schools.\n\nIn 1968 the high school for black students, C.M. Washington High School, was dissolved due to racial integration.[10] Therefore, black students now attended the previously all-white school.\n\nBetween 2015 and 2016, according to the Louisiana State Department of Education rankings, this school's rank increased from a \"B\" to an \"A\".[11]\n\nSouth Lafourche High athletics competes in the LHSAA.\n\nSouth Lafourche High School sports include football, baseball, basketball, softball, soccer, swimming, tennis, track and field, cross country, golf, and volleyball.\n\nFootball\nThe South Lafourche football team won two state championships in 1971 and 1977.[12]\n\nBoys' basketball\nThe South Lafourche boys' basketball team won one Class 5A state championship in 1998 and was the 1999 Class 5A runner-up.\n",
+  "concepts": [
+    "South Lafourche High School",
+    "lafourche",
+    "high",
+    "school",
+    "south lafourche",
+    "south",
+    "schools",
+    "lafourche high",
+    "high school",
+    "state",
+    "high schools"
+  ],
+  "findings": [
+    "History",
+    "Athletics",
+    "State championships",
+    "Notable alumni",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "South Lafourche High School",
+      "relationship": "is a",
+      "object": "public secondary school in the galliano census",
+      "sentence": "South Lafourche High School is a public secondary school in the Galliano census-designated place, an unincorporated area in Lafourche Parish, Louisiana, United States."
+    }
+  ],
+  "timestamp": "2025-04-11T16:57:20.643622"
+}

@@ -1,0 +1,210 @@
+name: Lumina v8 CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'development'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov flake8 mypy
+          
+      - name: Run static analysis
+        run: |
+          flake8 src/v8
+          mypy src/v8
+          
+      - name: Run unit tests
+        run: |
+          pytest src/v8 src/tests/v8 --cov=src/v8 --cov-report=xml
+          
+      - name: Build documentation
+        run: |
+          pip install sphinx sphinx_rtd_theme
+          cd docs && make html
+          
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: |
+            dist/
+            docs/_build/
+          
+      - name: Check DNA compatibility
+        run: |
+          python -m src.tests.verify_v8_compatibility
+
+  integration_tests:
+    name: Integration Tests
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+          
+      - name: Test v1-v7 integration
+        run: |
+          pytest src/tests/integration/test_v8_dna_integration.py
+          
+      - name: Test spatial temple visualization
+        run: |
+          pytest src/tests/integration/test_spatial_temple.py
+          
+      - name: Test seed dispersal system
+        run: |
+          pytest src/tests/integration/test_seed_dispersal.py
+          
+      - name: Generate integration report
+        run: |
+          python scripts/generate_integration_report.py
+          
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: test-results/
+
+  deploy_development:
+    name: Deploy to Development
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'development')
+    needs: integration_tests
+    runs-on: ubuntu-latest
+    environment:
+      name: development
+      url: https://dev.lumina-v8.example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: Deploy to development
+        run: |
+          python scripts/deploy.py --env development
+          
+      - name: Run post-deployment tests
+        run: |
+          python scripts/verify_deployment.py --env development
+
+  deploy_staging:
+    name: Deploy to Staging
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+    needs: deploy_development
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://staging.lumina-v8.example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: Deploy to staging
+        run: |
+          python scripts/deploy.py --env staging
+          
+      - name: Monitor seed growth metrics
+        run: |
+          python scripts/monitor_seed_metrics.py --duration 300
+          
+      - name: Run staging validation tests
+        run: |
+          python scripts/verify_deployment.py --env staging
+
+  deploy_production:
+    name: Deploy to Production
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production'
+    needs: deploy_staging
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://lumina-v8.example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: Deploy to production
+        run: |
+          python scripts/deploy.py --env production
+          
+      - name: Run smoke tests
+        run: |
+          python scripts/smoke_tests.py
+          
+      - name: Setup monitoring
+        run: |
+          python scripts/setup_monitoring.py --env production
+          
+      - name: Verify seed dispersal capabilities
+        run: |
+          python scripts/verify_seed_dispersal.py
+          
+      - name: Generate deployment report
+        run: |
+          python scripts/generate_deployment_report.py --env production 

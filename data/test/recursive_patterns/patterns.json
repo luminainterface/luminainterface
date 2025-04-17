@@ -1,0 +1,166 @@
+{
+  "pattern_history": [
+    {
+      "timestamp": 1744683694.0262756,
+      "pattern_count": 2,
+      "pattern_types": [
+        "meta_linguistic",
+        "self_reference"
+      ],
+      "avg_depth": 2.5,
+      "confidence": 0.53
+    },
+    {
+      "timestamp": 1744683697.0871158,
+      "pattern_count": 2,
+      "pattern_types": [
+        "meta_linguistic",
+        "self_reference"
+      ],
+      "avg_depth": 2.5,
+      "confidence": 0.5574061598508735
+    },
+    {
+      "timestamp": 1744683700.135109,
+      "pattern_count": 2,
+      "pattern_types": [
+        "meta_linguistic",
+        "self_reference"
+      ],
+      "avg_depth": 2.5,
+      "confidence": 0.6601123876949544
+    },
+    {
+      "timestamp": 1744683703.1836205,
+      "pattern_count": 2,
+      "pattern_types": [
+        "meta_linguistic",
+        "self_reference"
+      ],
+      "avg_depth": 2.5,
+      "confidence": 0.657764797381099
+    },
+    {
+      "timestamp": 1744683706.2547588,
+      "pattern_count": 3,
+      "pattern_types": [
+        "meta_linguistic",
+        "self_reference"
+      ],
+      "avg_depth": 2.0,
+      "confidence": 0.859190608721634
+    }
+  ],
+  "recent_patterns": [
+    {
+      "type": "self_reference",
+      "text": "This sentence contains neural patterns that are self-referential and demonstrate recursive language capabilities.",
+      "confidence": 0.8,
+      "matches": [
+        "this sentence"
+      ],
+      "depth": 2
+    },
+    {
+      "type": "meta_linguistic",
+      "text": "This sentence contains neural patterns that are self-referential and demonstrate recursive language capabilities.",
+      "confidence": 0.7,
+      "matches": [
+        "language",
+        "sentence"
+      ],
+      "depth": 3
+    },
+    {
+      "type": "self_reference",
+      "text": "This sentence contains neural patterns that are self-referential and demonstrate recursive language capabilities.",
+      "confidence": 0.8,
+      "matches": [
+        "this sentence"
+      ],
+      "depth": 2
+    },
+    {
+      "type": "meta_linguistic",
+      "text": "This sentence contains neural patterns that are self-referential and demonstrate recursive language capabilities.",
+      "confidence": 0.7,
+      "matches": [
+        "language",
+        "sentence"
+      ],
+      "depth": 3
+    },
+    {
+      "type": "self_reference",
+      "text": "This sentence contains neural patterns that are self-referential and demonstrate recursive language capabilities.",
+      "confidence": 0.8,
+      "matches": [
+        "this sentence"
+      ],
+      "depth": 2
+    },
+    {
+      "type": "meta_linguistic",
+      "text": "This sentence contains neural patterns that are self-referential and demonstrate recursive language capabilities.",
+      "confidence": 0.7,
+      "matches": [
+        "language",
+        "sentence"
+      ],
+      "depth": 3
+    },
+    {
+      "type": "self_reference",
+      "text": "This sentence contains neural patterns that are self-referential and demonstrate recursive language capabilities.",
+      "confidence": 0.8,
+      "matches": [
+        "this sentence"
+      ],
+      "depth": 2
+    },
+    {
+      "type": "meta_linguistic",
+      "text": "This sentence contains neural patterns that are self-referential and demonstrate recursive language capabilities.",
+      "confidence": 0.7,
+      "matches": [
+        "language",
+        "sentence"
+      ],
+      "depth": 3
+    },
+    {
+      "type": "self_reference",
+      "text": "This sentence contains neural patterns that are self-referential and demonstrate recursive language capabilities.",
+      "confidence": 0.8,
+      "matches": [
+        "this sentence"
+      ],
+      "depth": 2
+    },
+    {
+      "type": "meta_linguistic",
+      "text": "This sentence contains neural patterns that are self-referential and demonstrate recursive language capabilities.",
+      "confidence": 0.7,
+      "matches": [
+        "language",
+        "sentence"
+      ],
+      "depth": 3
+    },
+    {
+      "type": "self_reference",
+      "text": "This sentence contains neural patterns that are self-referential and demonstrate recursive language capabilities.",
+      "confidence": 0.6,
+      "llm_generated": true,
+      "depth": 1
+    }
+  ],
+  "pattern_counts": {
+    "self_reference": 2,
+    "meta_linguistic": 1,
+    "linguistic_loop": 0,
+    "recursive_structure": 0,
+    "consciousness_assertion": 0
+  },
+  "avg_depth": 2.4
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Moses and the Messengers from Canaan",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Moses_and_the_Messengers_from_Canaan",
+  "content": "Moses and the Messengers from Canaan is a painting by the Italian Baroque painter Giovanni Lanfranco. It is housed in the J. Paul Getty Museum in Los Angeles, California. \n\nThe painting was part of a series developed for the Chapel of the Holy Sacrament in the church of San Paolo fuori le Mura in Rome. The painting depicts an old testament event described in Numbers 13:1-33,  where messengers or \"spies\" returning to Moses from the lands of Canaan, bring forth evidence of the agricultural bounty of the lands. Moses stands tallest with the horns of light emerging from the forehead.[1] The messengers bring pomegranates, figs, but most prominently grapes. The grapes evoke the sacramental wine of the Eucharist. In the chapel, this painting accompanied canvas depictions of the Last Supper[2] and Elijah receiving bread from the Widow of Zarephath (also displayed at the Getty museum). The latter painting evokes the sacramental bread of the Eucharist. The painting was likely displayed high on the walls of the chapel, and the point of view appears to begin below the canvas. It was removed from the church in 1856, and resold to a few owners until reaching the Getty Museum.[3]\n",
+  "concepts": [
+    "Moses and the Messengers from Canaan"
+  ],
+  "findings": [
+    "Description",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Moses and the Messengers from Canaan",
+      "relationship": "is a",
+      "object": "painting by the italian baroque painter giovanni lanfranco",
+      "sentence": "Moses and the Messengers from Canaan is a painting by the Italian Baroque painter Giovanni Lanfranco."
+    }
+  ],
+  "timestamp": "2025-04-11T13:23:43.325554"
+}

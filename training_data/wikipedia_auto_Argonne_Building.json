@@ -1,0 +1,31 @@
+{
+  "title": "Argonne Building",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Argonne_Building",
+  "content": "The Argonne Building is a historic building located in Des Moines, Iowa, United States. It was built in 1919 and it was used as a  showroom for the Ford automobile plant that was located across the street and for employee housing. In later years it served as a long-term hotel and as an apartment building for low-income renters. There are plans to convert most of the building into market-rate apartments and to maintain the commercial space on the main level.[2] The building was listed on the National Register of Historic Places in 2020.[1]\n\nThis article about a property in Polk County, Iowa on the National Register of Historic Places is a stub. You can help Wikipedia by expanding it.\nThis article about a building or structure in Iowa is a stub. You can help Wikipedia by expanding it.\nThis Des Moines, Iowa-related article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Argonne Building",
+    "building",
+    "iowa",
+    "wikipedia expanding",
+    "wikipedia",
+    "stub help",
+    "stub",
+    "historic",
+    "help wikipedia",
+    "help",
+    "expanding"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Argonne Building",
+      "relationship": "is a",
+      "object": "historic building located in des moines",
+      "sentence": "The Argonne Building is a historic building located in Des Moines, Iowa, United States."
+    }
+  ],
+  "timestamp": "2025-04-11T13:35:07.976345"
+}

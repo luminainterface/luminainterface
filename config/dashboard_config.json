@@ -1,0 +1,245 @@
+{
+  "dashboard": {
+    "version": "7.0.0.3",
+    "title": "LUMINA V7 Unified Dashboard",
+    "refresh_rate": 1000,
+    "max_history": 3600,
+    "mock_mode": {
+      "enabled": true,
+      "randomization_factor": 0.2,
+      "data_generation_mode": "realistic"
+    }
+  },
+  
+  "connection": {
+    "v7_host": "localhost",
+    "v7_port": 5678,
+    "reconnect_attempts": 3,
+    "reconnect_delay": 5000,
+    "socket_timeout": 10000,
+    "auto_reconnect": true,
+    "fallback_to_mock": true
+  },
+  
+  "persistence": {
+    "storage_type": "sqlite",
+    "db_path": "data/neural_metrics.db",
+    "retention_days": 30,
+    "auto_cleanup": true,
+    "backup_enabled": false,
+    "backup_interval_hours": 24,
+    "backup_location": "data/backups/"
+  },
+  
+  "ui": {
+    "color_theme": "dark",
+    "font_family": "Segoe UI",
+    "layout_type": "tabbed",
+    "startup_panel": "overview",
+    "window_size": {
+      "width": 1200,
+      "height": 800,
+      "min_width": 800,
+      "min_height": 600
+    },
+    "custom_colors": {
+      "neural_activity": "#3498db",
+      "language_processing": "#2ecc71",
+      "system_metrics": "#e74c3c",
+      "dream_patterns": "#9b59b6"
+    },
+    "plot_styles": {
+      "line_width": 1.5,
+      "symbol_size": 5,
+      "grid_alpha": 0.3
+    },
+    "fonts": {
+      "title": "Segoe UI, 12pt, bold",
+      "axis": "Segoe UI, 10pt",
+      "legend": "Segoe UI, 9pt"
+    }
+  },
+  
+  "panels": {
+    "overview": {
+      "enabled": true,
+      "position": "top-left",
+      "refresh_rate": 5000,
+      "auto_refresh": true
+    },
+    "neural_activity": {
+      "enabled": true,
+      "position": "top-right",
+      "refresh_rate": 1000,
+      "auto_refresh": true,
+      "visualization": {
+        "renderer": "pyqtgraph",
+        "fallback_renderer": "matplotlib",
+        "display_mode": "realtime",
+        "max_points": 1000,
+        "auto_scale": true
+      },
+      "metrics": {
+        "learning_rate": true,
+        "connection_strength": true,
+        "pattern_formation": true,
+        "consciousness_level": true
+      }
+    },
+    "language_processing": {
+      "enabled": true,
+      "position": "bottom-left",
+      "refresh_rate": 2000,
+      "auto_refresh": true,
+      "visualization": {
+        "renderer": "pyqtgraph",
+        "fallback_renderer": "matplotlib",
+        "display_mode": "realtime",
+        "max_points": 500
+      },
+      "metrics": {
+        "semantic_understanding": true,
+        "vocabulary_growth": true,
+        "conversation_flow": true,
+        "integration_level": true
+      }
+    },
+    "system_metrics": {
+      "enabled": true,
+      "position": "bottom-right",
+      "refresh_rate": 2000,
+      "auto_refresh": true,
+      "visualization": {
+        "renderer": "pyqtgraph",
+        "fallback_renderer": "custom",
+        "display_mode": "realtime",
+        "time_window": 60,
+        "max_points": 300
+      },
+      "metrics": {
+        "cpu_usage": true,
+        "memory_usage": true,
+        "gpu_usage": true,
+        "disk_usage": true
+      },
+      "thresholds": {
+        "cpu_warning": 70,
+        "cpu_critical": 90,
+        "memory_warning": 70,
+        "memory_critical": 90,
+        "gpu_warning": 70,
+        "gpu_critical": 90
+      }
+    },
+    "dream_mode": {
+      "enabled": true,
+      "position": "floating",
+      "refresh_rate": 3000,
+      "auto_refresh": true,
+      "visualization": {
+        "renderer": "pyqtgraph",
+        "display_mode": "accumulate",
+        "max_patterns": 100
+      },
+      "metrics": {
+        "creativity_index": true,
+        "pattern_novelty": true,
+        "neural_weight_shifts": true
+      }
+    },
+    "memory_system": {
+      "enabled": true,
+      "position": "floating",
+      "refresh_rate": 5000,
+      "auto_refresh": true,
+      "visualization": {
+        "renderer": "pyqtgraph",
+        "display_mode": "interactive",
+        "max_nodes": 200
+      },
+      "metrics": {
+        "retrieval_speed": true,
+        "storage_efficiency": true,
+        "connection_density": true,
+        "auto_wiki_integration": true
+      }
+    }
+  },
+  
+  "neural_parameters": {
+    "nn_weight": 0.6,
+    "llm_weight": 0.7,
+    "creativity_factor": 0.5,
+    "randomness": 0.2,
+    "learning_rate": 0.01,
+    "decay_rate": 0.001,
+    "activation_threshold": 0.3
+  },
+  
+  "api": {
+    "enabled": false,
+    "port": 5679,
+    "host": "localhost",
+    "rate_limit": 100,
+    "authentication": {
+      "required": true,
+      "method": "token",
+      "tokens": ["dashboard_api_token_12345"],
+      "expire_days": 30
+    },
+    "cors": {
+      "enabled": true,
+      "allowed_origins": ["http://localhost:3000"]
+    }
+  },
+  
+  "websocket": {
+    "enabled": false,
+    "port": 5680,
+    "host": "localhost",
+    "max_connections": 10
+  },
+  
+  "security": {
+    "auth_enabled": false,
+    "auth_method": "basic",
+    "users": [
+      {"username": "admin", "password_hash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8", "role": "admin"},
+      {"username": "viewer", "password_hash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3", "role": "viewer"}
+    ],
+    "roles": {
+      "admin": ["read", "write", "configure"],
+      "viewer": ["read"]
+    },
+    "data_protection": {
+      "encrypt_db": false,
+      "encryption_key_file": "config/encryption_key.bin",
+      "anonymize_patterns": false
+    },
+    "api_security": {
+      "rate_limit_enabled": true,
+      "max_requests_per_minute": 60,
+      "block_threshold": 100
+    }
+  },
+  
+  "logging": {
+    "level": "INFO",
+    "file_path": "logs/dashboard.log",
+    "max_size_mb": 10,
+    "backup_count": 5,
+    "log_startup": true,
+    "log_shutdown": true,
+    "log_connections": true,
+    "log_errors": true
+  },
+  
+  "advanced": {
+    "gpu_acceleration": true,
+    "multi_threading": true,
+    "thread_count": 4,
+    "memory_limit_mb": 512,
+    "development_mode": false,
+    "debug_mode": false
+  }
+} 

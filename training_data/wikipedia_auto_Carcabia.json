@@ -1,0 +1,31 @@
+{
+  "title": "Carcabia",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Carcabia",
+  "content": "The Diocese of Carcabia is a titular see of the Roman Catholic Church.[1][2]\n\nHistorically, three bishops are mentioned being from Carcabia:\n\nToday Carcabia survives as titular bishopric;[3] the current bishop is Manuel Nin,[4] Apostolic Exarch of Greece.[5]\n",
+  "concepts": [
+    "Carcabia",
+    "carcabia",
+    "titular",
+    "today carcabia",
+    "today",
+    "titular roman",
+    "titular bishopric",
+    "survives titular",
+    "survives",
+    "roman catholic",
+    "roman"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Carcabia",
+      "relationship": "is a",
+      "object": "titular see of the roman catholic church",
+      "sentence": "The Diocese of Carcabia is a titular see of the Roman Catholic Church."
+    }
+  ],
+  "timestamp": "2025-04-11T17:29:37.896861"
+}

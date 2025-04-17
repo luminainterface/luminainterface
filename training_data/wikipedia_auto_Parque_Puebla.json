@@ -1,0 +1,31 @@
+{
+  "title": "Parque Puebla",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Parque_Puebla",
+  "content": "Parque Puebla is a shopping mall in the La Cienega area of Puebla City, Mexico, located between the Stadium District and the Instituto Tecnológico de Puebla near the Mexico City–Puebla tollway (150D).[1] It was developed by Fibra Danhos at a cost of 4.5 billion pesos (240 million U.S. dollars).[2] Governor Rafael Moreno of the State of Puebla inaugurated the center in January 2017.[1]\n\nParque Puebla is anchored by Sears and Liverpool department stores and a Cinepolis multi-cinema complex.\n\nA Fiesta Inn hotel will be built at the complex,[3] and he 500-million-peso (28-million-dollar) \"Michin\" aquarium is set to be added to the complex in 2019.[4]\n\n19°04′12″N 98°10′32″W﻿ / ﻿19.0699906°N 98.1756913°W﻿ / 19.0699906; -98.1756913\n",
+  "concepts": [
+    "Parque Puebla",
+    "puebla",
+    "million",
+    "complex",
+    "98",
+    "19",
+    "parque puebla",
+    "parque",
+    "mexico",
+    "city",
+    "98 1756913"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Parque Puebla",
+      "relationship": "is a",
+      "object": "shopping mall in the la cienega area of puebla city",
+      "sentence": "Parque Puebla is a shopping mall in the La Cienega area of Puebla City, Mexico, located between the Stadium District and the Instituto Tecnológico de Puebla near the Mexico City–Puebla tollway (150D)."
+    }
+  ],
+  "timestamp": "2025-04-11T15:16:49.073031"
+}

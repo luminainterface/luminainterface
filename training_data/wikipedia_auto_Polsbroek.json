@@ -1,0 +1,46 @@
+{
+  "title": "Polsbroek",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Polsbroek",
+  "content": "Polsbroek is a village in the Dutch province of Utrecht. It is a part of the municipality of Lopik, and lies about 10 km southeast of Gouda.\n\nThe village of Polsbroek consists of a ribbon of farms on both sides of the Benschopse Wetering, with a small centre on the west side of the village. In 2001, the village centre of Polsbroek had 421 inhabitants. The built-up area of the town was 0.06 km2 (0.023 sq mi), and contained 143 residences.[1] The wider statistical area of Polsbroek, which covers the complete former municipality, including the ribbon of farms and the hamlet of Polsbroekerdam, has a population of 1190, and an area of about 11 km2 (4.2 sq mi).[2]\n\n(*): includes Cabauw, Vliet, Vlist, Zevender, Hoenkoop.\n\nIn the early 12th century Polsbroek itself was called first Pulzabruch,[5] changing into Pulsebroch in 1155, to Pusbruch (from 1228 to 1229), Polsbroic, about 1296 and 1317, and then to Polsbroek. Since 1155 the (local) lords of Polsbroek are able to speak the high (blood court) [6] middle and low justice over their territory.\n\nUntil the end of the 18th century, Noord-Polsbroek was a lage heerlijkheid or schoutambt,[7] the lowest category of local jurisdictions, while Zuid-Polsbroek was a vrije en hoge heerlijkheid (Free and high fief of Zuid-Polsbroek), during the Golden Age owned by the De Graeff family from Amsterdam.[8] As a free a high fief, Zuid-Polsbroek was an independent (semisouverain fief) of the provinces Holland or Utrecht, like the larger Barony of IJsselstein to the east. Noord-Polsbroek was itself a part of that Barony.\n\nIn 1812, a single municipality \"Polsbroek\" was created, covering both Noord-Polsbroek and Zuid-Polsbroek, and several surrounding villages (Cabauw, Vliet, Vlist, Zevender, and Hoenkoop). Between 1814 and 1817, half of the municipality lay in the province Holland, while the other half was in Utrecht. In 1817, Polsbroek was divided into 7 separate municipalities again. Until 1857, Polsbroek was divided along the Benschopse Wetering into two parts: Noord-Polsbroek and Zuid-Polsbroek. On September 8, 1857 Noord-Polsbroek and Zuid-Polsbroek again merged to a single municipality. In 1989 the municipality Polsbroek became a part of Lopik.[9]\n",
+  "concepts": [
+    "Polsbroek",
+    "polsbroek",
+    "zuid polsbroek",
+    "zuid",
+    "municipality",
+    "noord polsbroek",
+    "noord",
+    "village",
+    "utrecht",
+    "polsbroek zuid",
+    "high"
+  ],
+  "findings": [
+    "Overview",
+    "History",
+    "See also",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Polsbroek",
+      "relationship": "is a",
+      "object": "village in the dutch province of utrecht",
+      "sentence": "Polsbroek is a village in the Dutch province of Utrecht."
+    },
+    {
+      "subject": "Polsbroek",
+      "relationship": "consists of",
+      "object": "a ribbon of farms on both sides of the benschopse wetering",
+      "sentence": "The village of Polsbroek consists of a ribbon of farms on both sides of the Benschopse Wetering, with a small centre on the west side of the village."
+    },
+    {
+      "subject": "Polsbroek",
+      "relationship": "are",
+      "object": "able to speak the high",
+      "sentence": "Since 1155 the (local) lords of Polsbroek are able to speak the high (blood court) [6] middle and low justice over their territory."
+    }
+  ],
+  "timestamp": "2025-04-11T13:35:48.325712"
+}

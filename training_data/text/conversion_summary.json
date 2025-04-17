@@ -1,0 +1,72 @@
+{
+  "lumina_essence.pdf": {
+    "status": "success",
+    "text_path": "trainingdata/text\\lumina_essence.txt",
+    "line_count": 27
+  },
+  "lumina_symbolic_equations.pdf": {
+    "status": "success",
+    "text_path": "trainingdata/text\\lumina_symbolic_equations.txt",
+    "line_count": 30
+  },
+  "mathematical_frameworks.pdf": {
+    "status": "success",
+    "text_path": "trainingdata/text\\mathematical_frameworks.txt",
+    "line_count": 54
+  },
+  "MBQSP_Complexity_Simplicity_Integration_with_Visualizations.pdf": {
+    "status": "success",
+    "text_path": "trainingdata/text\\MBQSP_Complexity_Simplicity_Integration_with_Visualizations.txt",
+    "line_count": 399
+  },
+  "MBQSP_Comprehensive_Documentation.pdf": {
+    "status": "success",
+    "text_path": "trainingdata/text\\MBQSP_Comprehensive_Documentation.txt",
+    "line_count": 1070
+  },
+  "MBQSP_Final_Synthesis.pdf": {
+    "status": "success",
+    "text_path": "trainingdata/text\\MBQSP_Final_Synthesis.txt",
+    "line_count": 437
+  },
+  "MBQSP_Philosophical_Implications.pdf": {
+    "status": "success",
+    "text_path": "trainingdata/text\\MBQSP_Philosophical_Implications.txt",
+    "line_count": 570
+  },
+  "MBQSP_Research_Directions.pdf": {
+    "status": "success",
+    "text_path": "trainingdata/text\\MBQSP_Research_Directions.txt",
+    "line_count": 945
+  },
+  "neural_network_interfacing.pdf": {
+    "status": "success",
+    "text_path": "trainingdata/text\\neural_network_interfacing.txt",
+    "line_count": 58
+  },
+  "Number_Systems_Languages_Quantum_Phenomena.pdf": {
+    "status": "success",
+    "text_path": "trainingdata/text\\Number_Systems_Languages_Quantum_Phenomena.txt",
+    "line_count": 1100
+  },
+  "public_sharing_strategy.pdf": {
+    "status": "success",
+    "text_path": "trainingdata/text\\public_sharing_strategy.txt",
+    "line_count": 195
+  },
+  "README.pdf": {
+    "status": "success",
+    "text_path": "trainingdata/text\\README.txt",
+    "line_count": 67
+  },
+  "scientific_applications.pdf": {
+    "status": "success",
+    "text_path": "trainingdata/text\\scientific_applications.txt",
+    "line_count": 87
+  },
+  "unified_field_symbolic_framework.pdf": {
+    "status": "success",
+    "text_path": "trainingdata/text\\unified_field_symbolic_framework.txt",
+    "line_count": 66
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "id": "9699b4a0-3056-4a28-8a16-008a78b57f59",
+  "created_at": 1744767262.2568457,
+  "topic_history": [
+    {
+      "topic": "that's",
+      "first_occurrence": 1744767269.7138276,
+      "latest_occurrence": 1744767269.7138276,
+      "occurrences": 1,
+      "initial_relevance": 0.41666666666666663
+    },
+    {
+      "topic": "interesting",
+      "first_occurrence": 1744767269.7138276,
+      "latest_occurrence": 1744767269.7138276,
+      "occurrences": 1,
+      "initial_relevance": 0.41666666666666663
+    },
+    {
+      "topic": "point",
+      "first_occurrence": 1744767269.7138276,
+      "latest_occurrence": 1744767269.7138276,
+      "occurrences": 1,
+      "initial_relevance": 0.41666666666666663
+    },
+    {
+      "topic": "about",
+      "first_occurrence": 1744767269.7138276,
+      "latest_occurrence": 1744767269.7138276,
+      "occurrences": 1,
+      "initial_relevance": 0.41666666666666663
+    },
+    {
+      "topic": "bud.",
+      "first_occurrence": 1744767269.7138276,
+      "latest_occurrence": 1744767269.7138276,
+      "occurrences": 1,
+      "initial_relevance": 0.41666666666666663
+    },
+    {
+      "topic": "have",
+      "first_occurrence": 1744767269.7138276,
+      "latest_occurrence": 1744767269.7138276,
+      "occurrences": 1,
+      "initial_relevance": 0.41666666666666663
+    },
+    {
+      "topic": "considered",
+      "first_occurrence": 1744767269.7138276,
+      "latest_occurrence": 1744767269.7138276,
+      "occurrences": 1,
+      "initial_relevance": 0.41666666666666663
+    },
+    {
+      "topic": "relationship",
+      "first_occurrence": 1744767269.7138276,
+      "latest_occurrence": 1744767280.8069732,
+      "occurrences": 2,
+      "initial_relevance": 0.41666666666666663
+    },
+    {
+      "topic": "between",
+      "first_occurrence": 1744767269.7138276,
+      "latest_occurrence": 1744767280.8069732,
+      "occurrences": 2,
+      "initial_relevance": 0.41666666666666663
+    },
+    {
+      "topic": "topic",
+      "first_occurrence": 1744767269.7138276,
+      "latest_occurrence": 1744767269.7138276,
+      "occurrences": 1,
+      "initial_relevance": 0.41666666666666663
+    },
+    {
+      "topic": "many",
+      "first_occurrence": 1744767269.7138276,
+      "latest_occurrence": 1744767280.8069732,
+      "occurrences": 2,
+      "initial_relevance": 0.41666666666666663
+    },
+    {
+      "topic": "dimensions?",
+      "first_occurrence": 1744767269.7138276,
+      "latest_occurrence": 1744767269.7138276,
+      "occurrences": 1,
+      "initial_relevance": 0.41666666666666663
+    },
+    {
+      "topic": "haven't",
+      "first_occurrence": 1744767280.8069732,
+      "latest_occurrence": 1744767280.8069732,
+      "occurrences": 1,
+      "initial_relevance": 1.0
+    },
+    {
+      "topic": "understand",
+      "first_occurrence": 1744767280.8069732,
+      "latest_occurrence": 1744767280.8069732,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "your",
+      "first_occurrence": 1744767280.8069732,
+      "latest_occurrence": 1744767280.8069732,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "interest",
+      "first_occurrence": 1744767280.8069732,
+      "latest_occurrence": 1744767280.8069732,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "haven't.",
+      "first_occurrence": 1744767280.8069732,
+      "latest_occurrence": 1744767280.8069732,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "from",
+      "first_occurrence": 1744767280.8069732,
+      "latest_occurrence": 1744767280.8069732,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "perspective,",
+      "first_occurrence": 1744767280.8069732,
+      "latest_occurrence": 1744767280.8069732,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "dimensions.",
+      "first_occurrence": 1744767280.8069732,
+      "latest_occurrence": 1744767280.8069732,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    }
+  ],
+  "thought_process_count": 0,
+  "exchange_count": 2,
+  "updated_at": 1744767280.8083408,
+  "topic_count": 20
+}

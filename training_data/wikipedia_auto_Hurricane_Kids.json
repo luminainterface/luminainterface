@@ -1,0 +1,36 @@
+{
+  "title": "Hurricane Kids",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Hurricane_Kids",
+  "content": "Hurricane Kids is a New Zealand pop band from Auckland, which formed in 2012.[1][2] Since their formation the band has consisted of vocalist and guitarist Olly Green, lead guitarist and backing vocalist Rich Bryan, bassist Cameron Dick, synths player Willy Henderson and drummer Karl Woodhams.[3] Hurricane Kids were the opening act for All Time Low's \"Somewhere in New Zealand\" tour.[4]\n\nHurricane Kids first single \"Tonight\" made it onto The Edge and was played on ZM’s NZ on Air feature, before it landed a spot in the Top 10 on Life FM.[5] The band spent time interacting with the children at Starship Children's Hospital and performed on their Radio Lollipop Show.[6]\n\nIn 2013, Hurricane Kids received funding from NZ On Air for their new single \"O.V.E.R\", the video was directed by Captain Hook of 48May.[7] The band's E.P was released May 10, 2013 on iTunes through Shock Entertainment.\n",
+  "concepts": [
+    "Hurricane Kids",
+    "kids",
+    "hurricane kids",
+    "hurricane",
+    "band",
+    "new",
+    "zealand",
+    "vocalist",
+    "time",
+    "single",
+    "nz air"
+  ],
+  "findings": [
+    "2012 - 2014",
+    "Discography",
+    "Live It Up E.P",
+    "Singles",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Hurricane Kids",
+      "relationship": "is a",
+      "object": "new zealand pop band from auckland",
+      "sentence": "Hurricane Kids is a New Zealand pop band from Auckland, which formed in 2012."
+    }
+  ],
+  "timestamp": "2025-04-11T13:27:42.871206"
+}

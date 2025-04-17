@@ -1,0 +1,32 @@
+{
+  "title": "Old Washington County Library",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Old_Washington_County_Library",
+  "content": "Old Washington County Library is a historic library building located at 21 Summit Avenue in Hagerstown, Washington County, Maryland, United States. It is a two-story Neo-Georgian stone masonry structure of monumental proportions, built 1900–01. The building appears to be one huge story from the façade.  The building was designed by the noted late 19th-century American architect Bruce Price (1845–1903) and erected  for the Washington County Free Library. It was used by the library until 1965.[2]\n\nIt was listed on the National Register of Historic Places in 1978.[1]\n\nThis article about a Registered Historic Place in Washington County, Maryland is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Old Washington County Library",
+    "washington county",
+    "washington",
+    "library",
+    "county",
+    "historic",
+    "building",
+    "story",
+    "maryland",
+    "county maryland",
+    "used library"
+  ],
+  "findings": [
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Old Washington County Library",
+      "relationship": "is a",
+      "object": "historic library building located at 21 summit avenue in hagerstown",
+      "sentence": "Old Washington County Library is a historic library building located at 21 Summit Avenue in Hagerstown, Washington County, Maryland, United States."
+    }
+  ],
+  "timestamp": "2025-04-11T13:26:54.181834"
+}

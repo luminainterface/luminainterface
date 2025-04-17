@@ -1,0 +1,35 @@
+{
+  "title": "Bordeleau Bridge",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Bordeleau_Bridge",
+  "content": "The Bordeleau Bridge is a covered bridge of farm type, located in Saint-Severin, in Quebec, Canada. It has a single span of 32 metres (105 ft) long and has a vertical clearance of 3.5 metres (11 ft).\n\nThe first bridge built at this location dates back to 1875. The bridge was rebuilt twice, in 1895 and 1915 and was equipped with a roof in 1932 by the Department of Colonization. Metal templates were installed in 1988 and the paneling and the deck repaired in 1997. In October 2001, it was closed to traffic by the Ministry of Transportation to repair extensive damage to its structure which allowed it reopened the following year.[1]\n\nThe name comes from the Bordeleau family that was present in the vicinity of the bridge during construction.\n\nThe bridge is now red with white trim but was formerly white with green trim.\n\nThis article about a specific bridge in Quebec is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Bordeleau Bridge",
+    "bridge",
+    "white",
+    "trim",
+    "quebec",
+    "metres",
+    "ft",
+    "bordeleau",
+    "vicinity",
+    "vertical",
+    "type located"
+  ],
+  "findings": [
+    "History",
+    "Name",
+    "Color",
+    "References",
+    "See also"
+  ],
+  "relationships": [
+    {
+      "subject": "Bordeleau Bridge",
+      "relationship": "is a",
+      "object": "covered bridge of farm type",
+      "sentence": "The Bordeleau Bridge is a covered bridge of farm type, located in Saint-Severin, in Quebec, Canada."
+    }
+  ],
+  "timestamp": "2025-04-11T13:31:05.065774"
+}

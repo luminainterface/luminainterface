@@ -1,0 +1,31 @@
+{
+  "title": "Vasszilvágy",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Vasszilvágy",
+  "content": "Vasszilvágy is a village in Vas County, Hungary.[1]\n\n47°18′N 16°45′E﻿ / ﻿47.300°N 16.750°E﻿ / 47.300; 16.750\n\nThis Vas location article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Vasszilvágy",
+    "47",
+    "16",
+    "vas",
+    "750",
+    "47 300",
+    "300 16",
+    "300",
+    "16 750",
+    "wikipedia expanding",
+    "wikipedia"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Vasszilvágy",
+      "relationship": "is a",
+      "object": "village in vas county",
+      "sentence": "Vasszilvágy is a village in Vas County, Hungary."
+    }
+  ],
+  "timestamp": "2025-04-11T16:09:29.393576"
+}

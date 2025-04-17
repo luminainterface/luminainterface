@@ -1,0 +1,27 @@
+{
+  "title": "Bowled",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Bowled",
+  "content": "In cricket, the term bowled has several meanings. First, it is the act of propelling the ball towards the wicket defended by a batter.[1][2]\n\nSecond, it is a method of dismissing a batter, by hitting the wicket with a ball delivered by the bowler. (The term \"bowled out\" is sometimes used instead.)\n\nThird, it is used in scoring to indicate which bowler is credited with dismissing a batter, when the batter is dismissed by being bowled, leg before wicket (LBW), caught, stumped, or hit wicket.\n\nThis method of dismissal is covered by Law 32 (Bowled) of the Laws of Cricket.[3]\n\nA batter is out Bowled if his or her wicket is put down by a ball delivered by the bowler. It is irrelevant whether the ball has touched the bat, glove, or any part of the batter before going on to put down the wicket, though it may not touch another player or an umpire before doing so. Such rules mean that out Bowled is the most obvious of dismissals: almost never requiring an appeal to the umpire; a bowled batter will usually acknowledge the dismissal voluntarily.\n\nIf the delivered ball deflects off the bat, and bowls the batter, then the informal term is known as played on, knocked on, chopped on, or dragged on. If the wicket is put down without the batter making any contact with the ball, then it is known as clean bowled, with variations of this being bowled through the gate, where the ball travels between the bat and pad, or bowled around the legs, where the ball goes behind (to the leg side of) the batter and hits the stumps.\n\nA batter cannot be bowled from a no-ball, wide or dead ball.\n\nA batter is out Bowled even if he/she could be given out by another method of dismissal instead.[4] For example, if a batter edges the ball onto the stumps (such that the bails are removed) and the ball is then caught by a fielder, the batter would be given out Bowled instead of caught.\n\nOut Bowled is the second most common method of dismissal after caught, accounting for 21.4% of all Test match dismissals between 1877 and 2012.[5]\n\nThe bowler is credited with the wicket if the batter is bowled.\n\nMuttiah Muralitharan holds the Test record for dismissing most batters (167) through the method of out Bowled.[6]\n\nFor example, a scorecard may say that a batter was 'c Smith b Jones', which reads as 'caught Smith, bowled Jones', and means he was out caught by Smith, when the bowler was Jones.\n\nOr it might say 'lbw b Jones', which reads as 'lbw bowled Jones', and means he was out LBW when the bowler was Jones.\n",
+  "concepts": [
+    "Bowled",
+    "bowled",
+    "batter",
+    "ball",
+    "wicket",
+    "jones",
+    "caught",
+    "bowler",
+    "method",
+    "lbw",
+    "dismissal"
+  ],
+  "findings": [
+    "Delivery of a ball",
+    "Dismissal of a batter",
+    "Scoring",
+    "References"
+  ],
+  "relationships": [],
+  "timestamp": "2025-04-11T13:27:24.059524"
+}

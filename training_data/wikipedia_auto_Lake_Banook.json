@@ -1,0 +1,35 @@
+{
+  "title": "Lake Banook",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Lake_Banook",
+  "content": "Lake Banook is a freshwater lake located in Dartmouth within the Halifax Regional Municipality in Nova Scotia, Canada.  It is home to three sprint canoe and kayak clubs, two rowing clubs, and a dragon boat club. It also has a claim to be the birthplace of ice hockey.\n\nLake Banook's eastern shore is bordered by Prince Albert Road (part of Trunk 7) and its western shore fronts Crichton Park, a residential neighbourhood.  At the south end of the lake is a lock mechanism leading to Sullivan's Pond.  At the north end of the lake a bridge carries the Highway 111 expressway, informally known as the Dartmouth Circumferential Highway over its waters.  The bridge also serves as a dividing line between Lake Micmac, also referred to as Second Lake.\n\nBirch Cove Beach is the only beach on the lake that is currently supervised.   Another beach, Graham's Grove, was closed in the early-1990s, as a result of poor water quality stemming from the construction of the nearby \"Mic Mac Par-clo\" (partial clover-leaf), a large interchange connecting Highway 111, Trunk 7, and Route 318, which replaced the rotary previously on the site.\n\nLake Banook has undergone many modifications. It was originally approximately two meters shallower than its current depth, after being dammed during the construction of the Shubenacadie Canal in the early 19th century. When the water rose, it submerged a small island.  During improvements for the 1989 Junior World Championships, the top section of the paddling course was dredged to meet depth standards. The fill was used to expand nearby Graham's Grove Park, and the former access road still remains underwater.  There have been shoreline modifications for recreational beaches, private waterfront, boat docks, and municipal pipelines. Some natural shoreline remains at the north end of Brookdale Crescent Park, the north end of Birch Cove, and parts of Grahams Grove.\n\nLake Banook is named for the Mi'kmaq phrase for \"first lake\", as it is the first lake in the system that later became the Shubenacadie Canal.  The Mi'kmaq people were the first to navigate the waters of Lake Banook, which contributed to the naming of Lake Micmac, Mic Mac Mall, and Mic Mac AAC.\n\nHockey was played on Lake Banook as early as 1827, and certainly by 1850, though the game was then known as both rickets and wicket.  Dartmouth is one of several locales around the world that claim the title of \"Birthplace of Hockey.\" In 1864 Starr manufacturing of Dartmouth, located less than a kilometer from Lake Banook, began producing the world's first modern iceskates.  Starr skates, first used on the lakes of Dartmouth including Lake Banook, later became a popular choice for elite ice hockey players, being worn by 6 out of 7 members of the 1902 Stanley Cup Champions Montreal Hockey Club.[1] The Starr company produced ice skates into the 1930s.[2] In the days before refrigerators, the lake was a source of ice for the residents of both Halifax and Dartmouth.\n\nSince 1903, with the formation of the Banook Canoe Club, Lake Banook has been home to many competitive and recreational canoeists, kayakers, and rowers.  Dartmouth has more paddlers per capita than anywhere else in Canada.[citation needed]\n\nLake Banook is home to three sprint canoe/kayak clubs, clustered at the south end of the lake: Banook Canoe Club, Senobe Aquatic Club, and Mic Mac Amateur Aquatic Club. This arrangement is unique in Canada, and has led to a longstanding and healthy competitive rivalry between clubs. All three clubs have developed multiple Olympians, National Champions, and World Championship team members.\n\nThe lake is outfitted with an international-calibre 1000-metre sprint canoe and kayak race course during the summer months. The course spans nine racing lanes of nine metres in width, with the 1000-metre start line at the north end of the lake, and the finish line at the south end. On the western shore, a three-story judges tower is elevated above the lake at the finish line, allowing officials to judge the finishes of races. The course is used for numerous local and national competitions every year. Lake Banook has also hosted many world-class competitions, including the canoe/kayak and rowing events at the inaugural Canada Summer Games in 1969, the World Junior Canoe Sprint Championships in 1989, the Senior World Canoe Sprint Championship in 1997, the World Canoe Marathon Championship in 2000, and the Senior World Sprint Championships in 2009. Lake Banook played host to the Senior World Sprint Championships for the third time in 2022. No other venue outside of Europe has hosted the Senior World Sprint Championship on more occasions.\n\nThe lake is also used for local rowing competitions, and hosts both the Mic Mac AAC rowing club and the independent North Star Rowing club. The course is not ideal for national or international competitions in rowing, as its restricted length does not enable 2000-metre races.\n\nAs dragon boat paddling exploded in popularity, a fifth boat club was founded in the northeast corner of Lake Banook. Dragon Boat East offers year-round training programs for members and other dragon boat services. Lake Banook is the site of Halifax's annual dragon boat competition and festival.\n",
+  "concepts": [
+    "Lake Banook",
+    "lake",
+    "banook",
+    "lake banook",
+    "world",
+    "club",
+    "canoe",
+    "sprint",
+    "end",
+    "dartmouth",
+    "boat"
+  ],
+  "findings": [
+    "Location",
+    "History",
+    "Sport",
+    "Notes",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Lake Banook",
+      "relationship": "is a",
+      "object": "freshwater lake located in dartmouth within the halifax regional municipality in nova scotia",
+      "sentence": "Lake Banook is a freshwater lake located in Dartmouth within the Halifax Regional Municipality in Nova Scotia, Canada."
+    }
+  ],
+  "timestamp": "2025-04-11T13:31:07.696972"
+}

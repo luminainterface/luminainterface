@@ -1,0 +1,35 @@
+{
+  "title": "Tyrannobdella",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Tyrannobdella",
+  "content": "Tyrannobdella is a monotypic genus of leech, of family Praobdellidae, found in South America in the upper reaches of the Amazon.  This newly found genus of leech takes sustenance from the mucous membranes of the mammalian upper respiratory tract, and is known to feed upon humans. It has eight teeth. Tyrannobdella rex was discovered feeding upon the mucous membrane of a girl who had recently bathed in the upper Amazon in Peru.\n\nGenetic studies show that it is closely related to Dinobdella ferox, a similar species found in Taiwan.\n\nUnlike related leeches, Tyrannobdella rex has a single jaw with one row of teeth. Its eight teeth are disproportionately large, with a length that can reach up to 130 μm, https://doi.org/10.1371/journal.pone.0010057; Which inspired discoverers of the species to use a name reminiscent of Tyrannosaurus rex.[2] These teeth are about five times as long as those in the related genus Limnatis; most often one will only see six teeth of T. rex with a microscope as the others are subcutaneous. The closely related leech Pintobdella chiapasensis features a likewise reduced number of teeth, namely six per jaw, but in turn it has three jaws.[citation needed]\n\nAs a juvenile, T. rex will bite into the mucous membranes (mucosae) of its host and feed on their blood. In contrast to other leeches, T. rex does not drop off its host after feeding but can remain attached at the site of its bite for days and weeks. After a time it can reach a length of up to 7 cm.[2]\n\nTyrannobdella rex favours the mucosae of mouth, nose and throat in humans. Other leeches that also settle in mucosae have been found in noses but as well near the eyes and in the genitourinary system of mammals.\n\nWhen Tyrannobdella rex inhabits the nasal cavity it can cause strong headaches.[2] Because of its small size the leech is most often not discovered immediately.\n\nThe characteristical single jaw in this leech has led to the establishment of a new genus Tyrannobdella, of which only T. rex is known so far. A genus with only one species is called monotypic. The finding of Tyrannobdella rex and genetic comparisons of its genome to other leeches that infest the mucosae of mammals has brought new insight to their taxonomy. T. rex was put into the family Praobdellidae, which also includes the genera Praobdella, Pintobdella, Myxobdella, Dinobdella, Limnatis, and Limnobdella. Most of these are found in Africa and Asia, Tyrannobdella rex being the only one from South America. Its closest relative, Pintobdella chiapasensis, is native to Mexico, where it infests tapirs.[2] The sister group to Praobdellidae is made up of the two South American families Semiscolescidae (genera Semiscolex and Patagoniobdella) and Macrobdellidae (genera Macrobdella, Philobdella and Oxyptychus).\n",
+  "concepts": [
+    "Tyrannobdella",
+    "rex",
+    "tyrannobdella",
+    "tyrannobdella rex",
+    "teeth",
+    "leech",
+    "genus",
+    "related",
+    "mucosae",
+    "leeches",
+    "upper"
+  ],
+  "findings": [
+    "Characteristics",
+    "Life and diet",
+    "Symptoms",
+    "Taxonomy",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Tyrannobdella",
+      "relationship": "is a",
+      "object": "monotypic genus of leech",
+      "sentence": "Tyrannobdella is a monotypic genus of leech, of family Praobdellidae, found in South America in the upper reaches of the Amazon."
+    }
+  ],
+  "timestamp": "2025-04-11T13:27:24.156968"
+}

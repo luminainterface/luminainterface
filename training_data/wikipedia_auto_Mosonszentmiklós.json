@@ -1,0 +1,32 @@
+{
+  "title": "Mosonszentmiklós",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Mosonszentmiklós",
+  "content": "Mosonszentmiklós is a village in Győr-Moson-Sopron county, Hungary.\n\nThis Győr-Moson-Sopron location article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Mosonszentmiklós",
+    "sopron",
+    "moson sopron",
+    "moson",
+    "győr moson",
+    "győr",
+    "wikipedia expanding",
+    "wikipedia",
+    "village győr",
+    "village",
+    "stub help"
+  ],
+  "findings": [
+    "People",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Mosonszentmiklós",
+      "relationship": "is a",
+      "object": "village in győr",
+      "sentence": "Mosonszentmiklós is a village in Győr-Moson-Sopron county, Hungary."
+    }
+  ],
+  "timestamp": "2025-04-11T16:53:19.644562"
+}

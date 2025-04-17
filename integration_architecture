@@ -1,0 +1,53 @@
+// Integration Architecture Diagram
+digraph System_Integration {
+	bgcolor=white compound=true dpi=300 fontname=Arial rankdir=TB size="11,8"
+	node [fontname=Arial fontsize=12 height=0.6 shape=box style="filled,rounded" width=1.5]
+	edge [fontname=Arial fontsize=10]
+	subgraph cluster_v5 {
+		color=lightblue fontname="Arial Bold" fontsize=14 label="V5 Fractal Echo Visualization System" style=filled
+		v5_core [label="V5 Core Engine" fillcolor="#ADD8E6"]
+		fractal_processor [label="Fractal Pattern Processor" fillcolor="#ADD8E6"]
+		node_metrics [label="Node Consciousness Metrics" fillcolor="#ADD8E6"]
+		v5_socket_mgr [label="Socket Manager" fillcolor="#ADD8E6"]
+		v5_plugins [label="Plugin System" fillcolor="#ADD8E6"]
+		v5_core -> fractal_processor
+		v5_core -> node_metrics
+		v5_core -> v5_socket_mgr
+		v5_socket_mgr -> v5_plugins
+	}
+	subgraph cluster_memory {
+		color="#D8BFD8" fontname="Arial Bold" fontsize=14 label="Language Memory System" style=filled
+		lang_core [label="Language Memory Core" fillcolor="#E6E6FA"]
+		memory_db [label="Memory Database" fillcolor="#E6E6FA"]
+		topic_synth [label="Topic Synthesis Engine" fillcolor="#E6E6FA"]
+		api_provider [label="Memory API Provider" fillcolor="#E6E6FA"]
+		lang_core -> memory_db
+		lang_core -> topic_synth
+		lang_core -> api_provider
+	}
+	bridge [label="Language Memory V5 Bridge" fillcolor="#FFFACD" fontname="Arial Bold" fontsize=14 height=0.8 shape=box style=filled width=2.5]
+	api_provider -> bridge [label="Memory Data
+Topics
+Associations"]
+	bridge -> v5_socket_mgr [label="Fractal Params
+Node Metrics
+Visualization Data"]
+	neural_core [label="Neural Network Core" fillcolor="#98FB98" fontsize=14 shape=hexagon style=filled]
+	neural_core -> lang_core [label="Neural State"]
+	neural_core -> v5_core [label="Neural State"]
+	data_flow [label="Message Queue System" fillcolor="#F0E68C" fontsize=12 shape=cylinder style=filled]
+	bridge -> data_flow [label="Bidirectional
+Message Flow" dir=both]
+	v5_socket_mgr -> data_flow [dir=both style=dashed]
+	api_provider -> data_flow [dir=both style=dashed]
+	subgraph cluster_transition {
+		color="#FFE4B5" fontname="Arial Bold" fontsize=14 label="Version Transition Layer" style=filled
+		v1_adapter [label="V1-V2 Interface Adapter" fillcolor="#FFF8DC"]
+		v3_adapter [label="V3-V4 Interface Adapter" fillcolor="#FFF8DC"]
+		compat_layer [label="Compatibility Layer" fillcolor="#FFF8DC"]
+		v1_adapter -> compat_layer
+		v3_adapter -> compat_layer
+	}
+	compat_layer -> bridge [label="Version
+Compatibility" style=dashed]
+}

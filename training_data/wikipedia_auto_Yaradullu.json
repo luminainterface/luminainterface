@@ -1,0 +1,31 @@
+{
+  "title": "Yaradullu",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Yaradullu",
+  "content": "41°01′N 45°26′E﻿ / ﻿41.017°N 45.433°E﻿ / 41.017; 45.433\n\nYaradullu is a village in the Agstafa Rayon of Azerbaijan. The village forms part of the municipality of Tatlı.[1]\n\nThis Aghstafa District location article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Yaradullu",
+    "45",
+    "41",
+    "village",
+    "45 433",
+    "433",
+    "41 017",
+    "017 45",
+    "017",
+    "yaradullu village",
+    "yaradullu"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Yaradullu",
+      "relationship": "is a",
+      "object": "village in the agstafa rayon of azerbaijan",
+      "sentence": "41°01′N 45°26′E﻿ / ﻿41.017°N 45.433°E﻿ / 41.017; 45.433\n\nYaradullu is a village in the Agstafa Rayon of Azerbaijan."
+    }
+  ],
+  "timestamp": "2025-04-11T13:35:17.821324"
+}

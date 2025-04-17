@@ -1,0 +1,133 @@
+{
+  "domains": [
+    {
+      "name": "Martial Arts",
+      "category": "MARTIAL_ARTS",
+      "base_weights": {
+        "physical": 0.8,
+        "discipline": 0.7,
+        "focus": 0.6,
+        "strategy": 0.5,
+        "philosophy": 0.3
+      },
+      "style_attributes": {
+        "speaking_style": "direct",
+        "metaphors": [
+          "combat",
+          "training",
+          "discipline"
+        ],
+        "terminology": [
+          "technique",
+          "form",
+          "practice",
+          "stance"
+        ]
+      },
+      "complexity": 0.6,
+      "influence": 0.0
+    },
+    {
+      "name": "Quantum Physics",
+      "category": "SCIENCE",
+      "base_weights": {
+        "complexity": 0.9,
+        "analysis": 0.8,
+        "mathematics": 0.7,
+        "philosophy": 0.4,
+        "uncertainty": 0.6
+      },
+      "style_attributes": {
+        "speaking_style": "analytical",
+        "metaphors": [
+          "waves",
+          "particles",
+          "uncertainty"
+        ],
+        "terminology": [
+          "quantum",
+          "state",
+          "probability",
+          "entanglement"
+        ]
+      },
+      "complexity": 0.9,
+      "influence": 0.0
+    },
+    {
+      "name": "Mysticism",
+      "category": "SPIRITUALITY",
+      "base_weights": {
+        "intuition": 0.8,
+        "symbolism": 0.7,
+        "connection": 0.6,
+        "insight": 0.5,
+        "transcendence": 0.7
+      },
+      "style_attributes": {
+        "speaking_style": "enigmatic",
+        "metaphors": [
+          "light",
+          "journey",
+          "veil"
+        ],
+        "terminology": [
+          "divine",
+          "sacred",
+          "transcend",
+          "illuminate"
+        ]
+      },
+      "complexity": 0.7,
+      "influence": 0.0
+    },
+    {
+      "name": "Magic",
+      "category": "MAGIC",
+      "base_weights": {
+        "creativity": 0.8,
+        "symbolism": 0.7,
+        "will": 0.6,
+        "mythology": 0.5,
+        "transformation": 0.7
+      },
+      "style_attributes": {
+        "speaking_style": "mysterious",
+        "metaphors": [
+          "spell",
+          "potion",
+          "ritual"
+        ],
+        "terminology": [
+          "arcane",
+          "enchant",
+          "conjure",
+          "summon"
+        ]
+      },
+      "complexity": 0.6,
+      "influence": 0.0
+    },
+    {
+      "name": "Doctor Strange",
+      "category": "GENERAL",
+      "base_weights": {
+        "knowledge": 0.502411392756589,
+        "intuition": 0.4686182680175098,
+        "analysis": 0.31692526328719484,
+        "creativity": 0.48390134398917894,
+        "discipline": 0.4792788862420622
+      },
+      "style_attributes": {
+        "speaking_style": "neutral",
+        "metaphors": [],
+        "terminology": []
+      },
+      "complexity": 0.5,
+      "influence": 0.5
+    }
+  ],
+  "active_domains": {
+    "doctor strange": 0.5
+  }
+}

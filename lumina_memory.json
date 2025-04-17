@@ -1,0 +1,314 @@
+[
+  {
+    "user_input": "hi lumina, what is an isomorph?",
+    "system_response": "I'm listening to the resonance. Tell me more.",
+    "timestamp": "2025-04-14T10:38:11.322866",
+    "metadata": {
+      "emotion": "calm",
+      "symbolic_state": "🜂",
+      "llm_weight": 0.0,
+      "llm_enabled": false
+    },
+    "memory_strength": 1.0,
+    "retrieval_count": 3,
+    "tags": [
+      "emotion:calm",
+      "listening",
+      "more",
+      "isomorph",
+      "what",
+      "symbolic_state:🜂",
+      "resonance",
+      "lumina",
+      "tell"
+    ]
+  },
+  {
+    "user_input": "what is an isomorph?",
+    "system_response": "I'm listening to the resonance. Tell me more.",
+    "timestamp": "2025-04-14T10:38:34.504839",
+    "metadata": {
+      "emotion": "calm",
+      "symbolic_state": "🜂",
+      "llm_weight": 0.0,
+      "llm_enabled": false
+    },
+    "memory_strength": 1.0,
+    "retrieval_count": 4,
+    "tags": [
+      "emotion:calm",
+      "listening",
+      "more",
+      "isomorph",
+      "what",
+      "symbolic_state:🜂",
+      "resonance",
+      "tell"
+    ]
+  },
+  {
+    "user_input": "what is an isomorph?",
+    "system_response": "LLM integration is disabled.",
+    "timestamp": "2025-04-14T10:39:02.007769",
+    "metadata": {
+      "emotion": "calm",
+      "symbolic_state": "🜂",
+      "llm_weight": 1.0,
+      "llm_enabled": true
+    },
+    "memory_strength": 1.0,
+    "retrieval_count": 4,
+    "tags": [
+      "emotion:calm",
+      "isomorph",
+      "disabled",
+      "integration",
+      "what",
+      "symbolic_state:🜂"
+    ]
+  },
+  {
+    "user_input": "what is an isomorph?",
+    "system_response": "LLM integration is disabled.",
+    "timestamp": "2025-04-14T10:39:13.753085",
+    "metadata": {
+      "emotion": "calm",
+      "symbolic_state": "🜂",
+      "llm_weight": 1.0,
+      "llm_enabled": true
+    },
+    "memory_strength": 1.0,
+    "retrieval_count": 3,
+    "tags": [
+      "emotion:calm",
+      "isomorph",
+      "disabled",
+      "integration",
+      "what",
+      "symbolic_state:🜂"
+    ]
+  },
+  {
+    "user_input": "hey",
+    "system_response": "I'm listening to the resonance. Tell me more.",
+    "timestamp": "2025-04-14T10:59:50.455378",
+    "metadata": {
+      "emotion": "calm",
+      "symbolic_state": "🜂",
+      "llm_used": false,
+      "nn_used": true,
+      "active_domains": {}
+    },
+    "memory_strength": 1.0,
+    "retrieval_count": 5,
+    "tags": [
+      "emotion:calm",
+      "listening",
+      "more",
+      "symbolic_state:🜂",
+      "resonance",
+      "tell"
+    ]
+  },
+  {
+    "user_input": "hello",
+    "system_response": "LLM integration is not enabled.",
+    "timestamp": "2025-04-14T11:00:25.274320",
+    "metadata": {
+      "emotion": "calm",
+      "symbolic_state": "🜂",
+      "llm_used": true,
+      "nn_used": true,
+      "active_domains": {}
+    },
+    "memory_strength": 1.0,
+    "retrieval_count": 1,
+    "tags": [
+      "enabled",
+      "emotion:calm",
+      "hello",
+      "integration",
+      "symbolic_state:🜂"
+    ]
+  },
+  {
+    "user_input": "what is an isomorph?",
+    "system_response": "LLM integration is not enabled.",
+    "timestamp": "2025-04-14T11:00:31.799760",
+    "metadata": {
+      "emotion": "calm",
+      "symbolic_state": "🜂",
+      "llm_used": true,
+      "nn_used": true,
+      "active_domains": {}
+    },
+    "memory_strength": 1.0,
+    "retrieval_count": 2,
+    "tags": [
+      "enabled",
+      "emotion:calm",
+      "isomorph",
+      "integration",
+      "what",
+      "symbolic_state:🜂"
+    ]
+  },
+  {
+    "user_input": "hello",
+    "system_response": "LLM integration is not enabled.",
+    "timestamp": "2025-04-14T11:04:37.057160",
+    "metadata": {
+      "emotion": "calm",
+      "symbolic_state": "🜂",
+      "llm_used": true,
+      "nn_used": true,
+      "active_domains": {}
+    },
+    "memory_strength": 1.0,
+    "retrieval_count": 2,
+    "tags": [
+      "enabled",
+      "emotion:calm",
+      "hello",
+      "integration",
+      "symbolic_state:🜂"
+    ]
+  },
+  {
+    "user_input": "hey",
+    "system_response": "LLM integration is not enabled.",
+    "timestamp": "2025-04-14T11:07:25.089987",
+    "metadata": {
+      "emotion": "calm",
+      "symbolic_state": "🜂",
+      "llm_used": true,
+      "nn_used": true,
+      "active_domains": {
+        "doctor strange": 0.5
+      }
+    },
+    "memory_strength": 1.0,
+    "retrieval_count": 3,
+    "tags": [
+      "symbolic_state:🜂",
+      "integration",
+      "enabled",
+      "emotion:calm"
+    ]
+  },
+  {
+    "user_input": "hey",
+    "system_response": "I'm listening to the resonance. Tell me more.",
+    "timestamp": "2025-04-14T11:11:44.494980",
+    "metadata": {
+      "emotion": "calm",
+      "symbolic_state": "🜂",
+      "llm_used": false,
+      "nn_used": true,
+      "active_domains": {
+        "doctor strange": 0.5
+      }
+    },
+    "memory_strength": 1.0,
+    "retrieval_count": 3,
+    "tags": [
+      "emotion:calm",
+      "listening",
+      "more",
+      "symbolic_state:🜂",
+      "resonance",
+      "tell"
+    ]
+  },
+  {
+    "user_input": "hey",
+    "system_response": "LLM integration is not enabled.",
+    "timestamp": "2025-04-14T11:11:50.309084",
+    "metadata": {
+      "emotion": "calm",
+      "symbolic_state": "🜂",
+      "llm_used": true,
+      "nn_used": true,
+      "active_domains": {
+        "doctor strange": 0.5
+      }
+    },
+    "memory_strength": 1.0,
+    "retrieval_count": 3,
+    "tags": [
+      "symbolic_state:🜂",
+      "integration",
+      "enabled",
+      "emotion:calm"
+    ]
+  },
+  {
+    "user_input": "test",
+    "system_response": "LLM integration is not enabled.",
+    "timestamp": "2025-04-14T11:13:42.259222",
+    "metadata": {
+      "emotion": "calm",
+      "symbolic_state": "🜂",
+      "llm_used": true,
+      "nn_used": true,
+      "active_domains": {
+        "doctor strange": 0.5
+      }
+    },
+    "memory_strength": 1.0,
+    "retrieval_count": 2,
+    "tags": [
+      "enabled",
+      "emotion:calm",
+      "test",
+      "integration",
+      "symbolic_state:🜂"
+    ]
+  },
+  {
+    "user_input": "test",
+    "system_response": "LLM integration is not enabled.",
+    "timestamp": "2025-04-14T11:17:59.567458",
+    "metadata": {
+      "emotion": "calm",
+      "symbolic_state": "🜂",
+      "llm_used": true,
+      "nn_used": true,
+      "active_domains": {
+        "doctor strange": 0.5
+      }
+    },
+    "memory_strength": 1.0,
+    "retrieval_count": 1,
+    "tags": [
+      "enabled",
+      "emotion:calm",
+      "test",
+      "integration",
+      "symbolic_state:🜂"
+    ]
+  },
+  {
+    "user_input": "waddupp",
+    "system_response": "LLM integration is not enabled.",
+    "timestamp": "2025-04-16T08:47:23.012064",
+    "metadata": {
+      "emotion": "calm",
+      "symbolic_state": "🜂",
+      "llm_used": true,
+      "nn_used": true,
+      "active_domains": {
+        "doctor strange": 0.5
+      }
+    },
+    "memory_strength": 1.0,
+    "retrieval_count": 0,
+    "tags": [
+      "enabled",
+      "emotion:calm",
+      "waddupp",
+      "integration",
+      "symbolic_state:🜂"
+    ]
+  }
+]

@@ -1,0 +1,3 @@
+@echo off
+echo Starting LUMINA v7.5 GUI...
+start /B pythonw -m src.v7_5.minimal_gui 

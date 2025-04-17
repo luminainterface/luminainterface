@@ -1,0 +1,38 @@
+{
+  "id": "f13fa9a2-6033-4b7a-bf9d-6e95cba31564",
+  "created_at": 1744801285.5684133,
+  "topic_history": [
+    {
+      "topic": "how's,",
+      "first_occurrence": 1744801298.999627,
+      "latest_occurrence": 1744801298.999627,
+      "occurrences": 1,
+      "initial_relevance": 0.4
+    },
+    {
+      "topic": "been?.",
+      "first_occurrence": 1744801298.999627,
+      "latest_occurrence": 1744801298.999627,
+      "occurrences": 1,
+      "initial_relevance": 0.4
+    },
+    {
+      "topic": "where,",
+      "first_occurrence": 1744801324.6702518,
+      "latest_occurrence": 1744801324.6702518,
+      "occurrences": 1,
+      "initial_relevance": 0.4347826086956521
+    },
+    {
+      "topic": "manners.",
+      "first_occurrence": 1744801324.6702518,
+      "latest_occurrence": 1744801324.6702518,
+      "occurrences": 1,
+      "initial_relevance": 0.4347826086956521
+    }
+  ],
+  "thought_process_count": 0,
+  "exchange_count": 2,
+  "updated_at": 1744801324.6712594,
+  "topic_count": 4
+}

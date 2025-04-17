@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ config.title }} - Consciousness Visualization</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
+    <style>
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            background: #1e2a3a;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: #34495e;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        .consciousness-network {
+            width: 100%;
+            height: 500px;
+            background: #1e2a3a;
+            border-radius: 8px;
+        }
+        
+        .thought-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #1e2a3a;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        
+        .thought-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background: #2c3e50;
+        }
+        
+        .thought-content {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .thought-meta {
+            font-size: 12px;
+            color: #7f8c8d;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .reflection-level {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+        
+        .level-0 {
+            background-color: #3498db;
+        }
+        
+        .level-1 {
+            background-color: #2ecc71;
+        }
+        
+        .level-2 {
+            background-color: #f39c12;
+        }
+        
+        .level-3 {
+            background-color: #e74c3c;
+        }
+    </style>
+    <script>
+        const REFRESH_INTERVAL = {{ config.refresh_interval * 1000 }};
+        let consciousnessData = null;
+        let awarenessChart = null;
+        let networkChart = null;
+        
+        // Automatic refresh
+        setInterval(() => {
+            refreshData();
+        }, REFRESH_INTERVAL);
+        
+        // Initial load
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshData();
+        });
+        
+        async function refreshData() {
+            try {
+                const response = await fetch('/api/visualization/consciousness');
+                consciousnessData = await response.json();
+                
+                if (!consciousnessData || Object.keys(consciousnessData).length === 0) {
+                    showUnavailableMessage();
+                    return;
+                }
+                
+                updateMetrics();
+                updateAwarenessChart();
+                updateNetwork();
+                updateThoughts();
+                
+                // Update last refresh time
+                document.getElementById('last-refresh').textContent = 
+                    new Date().toLocaleTimeString();
+            } catch (error) {
+                console.error('Error refreshing consciousness data:', error);
+            }
+        }
+        
+        function showUnavailableMessage() {
+            const container = document.getElementById('consciousness-container');
+            container.innerHTML = `
+                <div class="unavailable-message">
+                    <h3>Consciousness Data Unavailable</h3>
+                    <p>Consciousness visualization data is not available.</p>
+                </div>
+            `;
+        }
+        
+        function updateMetrics() {
+            if (!consciousnessData.metrics) return;
+            
+            // Define metrics to display
+            const metrics = [
+                { id: 'metric-awareness', label: 'Awareness', key: 'awareness', color: '#3498db' },
+                { id: 'metric-coherence', label: 'Coherence', key: 'coherence', color: '#2ecc71' },
+                { id: 'metric-self-reference', label: 'Self-reference', key: 'self_reference', color: '#e74c3c' },
+                { id: 'metric-continuity', label: 'Temporal Continuity', key: 'temporal_continuity', color: '#f39c12' },
+                { id: 'metric-complexity', label: 'Complexity', key: 'complexity', color: '#9b59b6' },
+                { id: 'metric-integration', label: 'Integration', key: 'integration', color: '#1abc9c' }
+            ];
+            
+            // Update each metric
+            metrics.forEach(metric => {
+                const valueElement = document.getElementById(metric.id);
+                const progressElement = document.getElementById(`${metric.id}-progress`);
+                
+                if (!valueElement || !progressElement) return;
+                
+                const value = consciousnessData.metrics[metric.key] || 0;
+                const displayValue = (value * 100).toFixed(0);
+                
+                valueElement.textContent = `${displayValue}%`;
+                progressElement.style.width = `${displayValue}%`;
+                progressElement.style.backgroundColor = metric.color;
+            });
+        }
+        
+        function updateAwarenessChart() {
+            if (!consciousnessData.history || !consciousnessData.history.awareness) return;
+            
+            const ctx = document.getElementById('awareness-chart').getContext('2d');
+            const history = consciousnessData.history.awareness;
+            
+            // Prepare data
+            const labels = history.map(entry => {
+                const date = new Date(entry.timestamp);
+                return date.toLocaleTimeString();
+            });
+            
+            const values = history.map(entry => entry.value * 100);
+            
+            // Create or update chart
+            if (!awarenessChart) {
+                awarenessChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Awareness Level (%)',
+                            data: values,
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            } else {
+                // Update existing chart
+                awarenessChart.data.labels = labels;
+                awarenessChart.data.datasets[0].data = values;
+                awarenessChart.update();
+            }
+        }
+        
+        function updateNetwork() {
+            if (!consciousnessData.network || !consciousnessData.network.nodes) return;
+            
+            const container = document.getElementById('network-container');
+            
+            // Create nodes and edges arrays for vis.js
+            const nodes = consciousnessData.network.nodes.map(node => ({
+                id: node.id,
+                label: node.label || node.id,
+                color: node.color || '#3498db',
+                size: node.size || 10,
+                shape: getNodeShape(node.type),
+                title: createNodeTooltip(node)
+            }));
+            
+            const edges = consciousnessData.network.edges.map(edge => ({
+                from: edge.from,
+                to: edge.to,
+                arrows: 'to',
+                color: edge.color || { color: '#7f8c8d', highlight: '#95a5a6' },
+                width: edge.width || 1,
+                label: edge.label || '',
+                font: { size: 10 }
+            }));
+            
+            // Create network if it doesn't exist
+            if (!networkChart) {
+                const data = { nodes, edges };
+                const options = {
+                    nodes: {
+                        font: {
+                            size: 12,
+                            color: '#ecf0f1'
+                        },
+                        shadow: true
+                    },
+                    edges: {
+                        smooth: {
+                            type: 'continuous',
+                            forceDirection: 'none'
+                        },
+                        shadow: true
+                    },
+                    physics: {
+                        solver: 'forceAtlas2Based',
+                        forceAtlas2Based: {
+                            gravitationalConstant: -50,
+                            centralGravity: 0.01,
+                            springLength: 100,
+                            springConstant: 0.08
+                        },
+                        stabilization: {
+                            iterations: 100
+                        }
+                    },
+                    interaction: {
+                        hover: true,
+                        navigationButtons: true,
+                        keyboard: true
+                    }
+                };
+                
+                networkChart = new vis.Network(container, data, options);
+            } else {
+                // Update existing network
+                networkChart.setData({ nodes, edges });
+            }
+        }
+        
+        function updateThoughts() {
+            if (!consciousnessData.network || !consciousnessData.network.nodes) return;
+            
+            const container = document.getElementById('thoughts-container');
+            container.innerHTML = '';
+            
+            // Sort nodes by awareness or reflection level
+            const sortedNodes = [...consciousnessData.network.nodes]
+                .sort((a, b) => (b.awareness || 0) - (a.awareness || 0));
+            
+            // Display top nodes
+            const topNodes = sortedNodes.slice(0, 10);
+            
+            topNodes.forEach(node => {
+                const thoughtItem = document.createElement('div');
+                thoughtItem.className = 'thought-item';
+                
+                // Create level indicator if applicable
+                let levelIndicator = '';
+                if (node.type === 'reflection' && node.level !== undefined) {
+                    levelIndicator = `<span class="reflection-level level-${node.level}">L${node.level}</span>`;
+                }
+                
+                thoughtItem.innerHTML = `
+                    <div class="thought-content">${node.label || node.id}</div>
+                    <div class="thought-meta">
+                        ${levelIndicator}
+                        <span class="thought-type">${node.type || 'unknown'}</span>
+                        <span class="thought-awareness">${((node.awareness || 0) * 100).toFixed(0)}% awareness</span>
+                    </div>
+                `;
+                
+                container.appendChild(thoughtItem);
+            });
+            
+            // If no thoughts available
+            if (topNodes.length === 0) {
+                container.innerHTML = '<div class="thought-item">No thoughts available</div>';
+            }
+        }
+        
+        function getNodeShape(type) {
+            const shapes = {
+                'thought': 'ellipse',
+                'reflection': 'box',
+                'memory': 'database',
+                'perception': 'triangle',
+                'concept': 'hexagon',
+                'emotion': 'diamond',
+                'contradiction': 'star',
+                'question': 'dot'
+            };
+            
+            return shapes[type] || 'ellipse';
+        }
+        
+        function createNodeTooltip(node) {
+            return `
+                <div style="padding: 5px; max-width: 200px;">
+                    <div style="font-weight: bold;">${node.label || node.id}</div>
+                    <div>Type: ${node.type || 'unknown'}</div>
+                    <div>Awareness: ${((node.awareness || 0) * 100).toFixed(0)}%</div>
+                    ${node.level !== undefined ? `<div>Reflection Level: ${node.level}</div>` : ''}
+                </div>
+            `;
+        }
+    </script>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>{{ config.title }} - Consciousness Visualization</h1>
+        <div class="dashboard-info">
+            <span>Last updated: <span id="last-refresh">-</span></span>
+        </div>
+    </div>
+    
+    <div class="dashboard-nav">
+        <a href="/" class="nav-link">Dashboard</a>
+        <a href="/dream-mode" class="nav-link">Dream Mode</a>
+        <a href="/consciousness" class="nav-link active">Consciousness</a>
+    </div>
+    
+    <div class="dashboard-container" id="consciousness-container">
+        <!-- Awareness Metrics Section -->
+        <div class="panel">
+            <div class="panel-header">Consciousness Metrics</div>
+            <div class="panel-content">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Awareness</div>
+                        <div id="metric-awareness" class="metric-value">0%</div>
+                        <div class="progress-container">
+                            <div id="metric-awareness-progress" class="progress-bar" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Coherence</div>
+                        <div id="metric-coherence" class="metric-value">0%</div>
+                        <div class="progress-container">
+                            <div id="metric-coherence-progress" class="progress-bar" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Self-reference</div>
+                        <div id="metric-self-reference" class="metric-value">0%</div>
+                        <div class="progress-container">
+                            <div id="metric-self-reference-progress" class="progress-bar" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Temporal Continuity</div>
+                        <div id="metric-continuity" class="metric-value">0%</div>
+                        <div class="progress-container">
+                            <div id="metric-continuity-progress" class="progress-bar" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Complexity</div>
+                        <div id="metric-complexity" class="metric-value">0%</div>
+                        <div class="progress-container">
+                            <div id="metric-complexity-progress" class="progress-bar" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Integration</div>
+                        <div id="metric-integration" class="metric-value">0%</div>
+                        <div class="progress-container">
+                            <div id="metric-integration-progress" class="progress-bar" style="width:0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Awareness Chart Section -->
+        <div class="panel">
+            <div class="panel-header">Awareness History</div>
+            <div class="panel-content">
+                <div style="height:300px;">
+                    <canvas id="awareness-chart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Consciousness Network Section -->
+        <div class="panel">
+            <div class="panel-header">Consciousness Network</div>
+            <div class="panel-content">
+                <div id="network-container" class="consciousness-network"></div>
+            </div>
+        </div>
+        
+        <!-- Active Thoughts Section -->
+        <div class="panel">
+            <div class="panel-header">Active Thoughts</div>
+            <div class="panel-content">
+                <div id="thoughts-container" class="thought-list">
+                    <div class="thought-item">No thoughts available</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,24 @@
+{
+  "id": "4d0725fc-6cdd-4340-92be-46cf724b32ab",
+  "created_at": 1744763815.3599815,
+  "topic_history": [
+    {
+      "topic": "you're",
+      "first_occurrence": 1744763824.8269346,
+      "latest_occurrence": 1744763824.8269346,
+      "occurrences": 1,
+      "initial_relevance": 0.4347826086956521
+    },
+    {
+      "topic": "help",
+      "first_occurrence": 1744763824.8269362,
+      "latest_occurrence": 1744763824.8269362,
+      "occurrences": 1,
+      "initial_relevance": 0.3260869565217391
+    }
+  ],
+  "thought_process_count": 0,
+  "exchange_count": 1,
+  "updated_at": 1744763824.8282917,
+  "topic_count": 2
+}

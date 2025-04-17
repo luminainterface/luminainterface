@@ -1,0 +1,31 @@
+{
+  "title": "Chelonobacter",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Chelonobacter",
+  "content": "C. oris[1]\n\nChelonobacter is a genus of bacteria from the family of Pasteurellaceae with one known species (Chelonobacter oris).[1][2][3] Chelonobacter oris is associated with diseases  of the respiratory tract of Hermann's tortoise (Testudo hermanni).[4][5]\n\nThis Gammaproteobacteria-related article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Chelonobacter",
+    "oris",
+    "chelonobacter",
+    "oris chelonobacter",
+    "chelonobacter oris",
+    "wikipedia expanding",
+    "wikipedia",
+    "tract hermann",
+    "tract",
+    "tortoise testudo",
+    "tortoise"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Chelonobacter",
+      "relationship": "is a",
+      "object": "genus of bacteria from the family of pasteurellaceae with one known species",
+      "sentence": "C. oris[1]\n\nChelonobacter is a genus of bacteria from the family of Pasteurellaceae with one known species (Chelonobacter oris)."
+    }
+  ],
+  "timestamp": "2025-04-11T13:30:35.338064"
+}

@@ -1,0 +1,87 @@
+{
+  "id": "9ee5a753-3af2-46cd-a9c3-57586aaf18c6",
+  "created_at": 1744767360.2166967,
+  "topic_history": [
+    {
+      "topic": "hey\\",
+      "first_occurrence": 1744767371.2863302,
+      "latest_occurrence": 1744767371.2863302,
+      "occurrences": 1,
+      "initial_relevance": 1.0
+    },
+    {
+      "topic": "when",
+      "first_occurrence": 1744767371.2863302,
+      "latest_occurrence": 1744767371.2863302,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "comes",
+      "first_occurrence": 1744767371.2863302,
+      "latest_occurrence": 1744767371.2863302,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "hey\\,",
+      "first_occurrence": 1744767371.2863302,
+      "latest_occurrence": 1744767371.2863302,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "think",
+      "first_occurrence": 1744767371.2863302,
+      "latest_occurrence": 1744767371.2863302,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "relationship",
+      "first_occurrence": 1744767371.2863302,
+      "latest_occurrence": 1744767371.2863302,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "between",
+      "first_occurrence": 1744767371.2863302,
+      "latest_occurrence": 1744767371.2863302,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "many",
+      "first_occurrence": 1744767371.2863302,
+      "latest_occurrence": 1744767371.2863302,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "dimensions",
+      "first_occurrence": 1744767371.2863302,
+      "latest_occurrence": 1744767371.2863302,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "important",
+      "first_occurrence": 1744767371.2863302,
+      "latest_occurrence": 1744767371.2863302,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "consider.",
+      "first_occurrence": 1744767371.2863302,
+      "latest_occurrence": 1744767371.2863302,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    }
+  ],
+  "thought_process_count": 0,
+  "exchange_count": 1,
+  "updated_at": 1744767371.2863302,
+  "topic_count": 11
+}

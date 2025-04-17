@@ -1,0 +1,33 @@
+{
+  "title": "Cerithium vulgatum",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Cerithium_vulgatum",
+  "content": "Cerithium rupestre Risso, 1826\n\nCerithium vulgatum is a species of sea snail, a marine gastropod mollusk in the family Cerithiidae.[1]\n\nThis species can be found in European waters and in the Mediterranean Sea.\n\nThis Cerithiidae-related article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Cerithium vulgatum",
+    "species",
+    "sea",
+    "cerithium",
+    "cerithiidae",
+    "wikipedia expanding",
+    "wikipedia",
+    "waters mediterranean",
+    "waters",
+    "vulgatum species",
+    "vulgatum"
+  ],
+  "findings": [
+    "Description",
+    "Distribution",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Cerithium vulgatum",
+      "relationship": "is a",
+      "object": "species of sea snail",
+      "sentence": "Cerithium rupestre Risso, 1826\n\nCerithium vulgatum is a species of sea snail, a marine gastropod mollusk in the family Cerithiidae."
+    }
+  ],
+  "timestamp": "2025-04-11T17:29:37.871861"
+}

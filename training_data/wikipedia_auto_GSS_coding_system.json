@@ -1,0 +1,20 @@
+{
+  "title": "GSS coding system",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/GSS_coding_system",
+  "content": "GSS codes are nine-character geocodes maintained by the United Kingdom's Office for National Statistics (ONS) to represent a wide range of geographical areas of the UK, for use in tabulating census and other statistical data. GSS refers to the Government Statistical Service of which ONS is part.\n\nGSS codes replaced a previous system called ONS codes from January 2011.[1][2] ONS codes were hierarchical whereas in GSS codes there is no relation between the code for a lower-tier area and the corresponding parent area.\n\nGSS codes have a fixed length code of nine characters. The first three characters indicate the level of geography, and the six digits following define the individual unit. For example, the Royal Borough of Greenwich is coded as E09000011, Middlesbrough is E06000002, Cambridge E07000008 and Fenland E07000010.\n\nAs of December 2022[update], the meanings of some common three character prefixes are as follows:[3][4][5]\n\nIn 2019, the House of Commons Library proposed names instead of numeric codes for MSOAs to make them easier to use.[citation needed] In 2021 the library created names for MSOAs for use within the house.[6]\n\nA full listing of GSS names and codes may be found by following the link to ONS Geography's Code History Database, below.\n\nInformation from the 2011 Census is published for a wide variety of geographical units.  These areas include:\n\nSuper Output Areas (SOAs) are a set of geographical areas developed following the 2001 Census, initially to facilitate the calculation of the Indices of Deprivation 2004 and subsequently for a range of additional Neighbourhood Statistics (NeSS). The aim was to produce a set of areas of consistent size, whose boundaries would not change (unlike electoral wards), suitable for the publication of data such as the Indices of Deprivation. They are an aggregation of adjacent Output Areas with similar social characteristics. Lower Layer Super Output Areas (LSOAs) typically contain 4 to 6 OAs with a population of around 1,500. Middle Layer Super Output Areas (MSOAs) on average have a population of 7,200.[8]  The hierarchy of Output Areas and the two tiers of Super Output Areas have become known as the Neighbourhood Statistics Geography.[citation needed]\n\nMSOAs use the name of the local or unitary authority followed by three digits, for example \"Tower Hamlets 022\" which is E02000885.[9] LSOAs use the name of the containing MSOA followed by a letter, for example \"Tower Hamlets 022C\" which is E01004304.[10]\n\nSome LSOAs and MSOAs were revised in alignment with the 2021 Census.[11]\n\nThe older ONS code was constructed top down: \n",
+  "concepts": [
+    "GSS coding system"
+  ],
+  "findings": [
+    "Code formulation",
+    "Geography of the UK Census",
+    "Neighbourhood Statistics Geography",
+    "Former hierarchical coding system",
+    "See also",
+    "References",
+    "External links"
+  ],
+  "relationships": [],
+  "timestamp": "2025-04-11T13:23:49.000287"
+}

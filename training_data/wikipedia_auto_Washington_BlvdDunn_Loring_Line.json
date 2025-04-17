@@ -1,0 +1,33 @@
+{
+  "title": "Washington Blvd.–Dunn Loring Line",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Washington_Blvd.–Dunn_Loring_Line",
+  "content": "The Washington Blvd.–Dunn Loring Line, designated as Route 2A, is a daily bus route operated by the Washington Metropolitan Area Transit Authority between Dunn Loring station of the Orange Line of the Washington Metro and Ballston–MU station of the Orange and Silver lines of the Washington Metro.\n\nThe line provides service within the neighborhoods of Merrifield, Falls Church and Ballston in Fairfax County, Falls Church, and Arlington County. Trips are roughly between 30 and 45 minutes on weekdays, and 45 minutes on weekends.\n\nThe 2A operates from Four Mile Run Division on a daily schedule. The 2A operates between Dunn Loring and Ballston stations via Lee Highway and Washington Boulevard. The 2A runs through the neighborhoods in Fairfax County, such as Merrifield and West Falls Church, within Lee Highway. The 2A also runs through the neighborhoods in Arlington County, such as East Falls Church, Westover, and Bluemont. Within the neighborhoods, the 2A runs through marketplaces, businesses and offices in Fairfax County, the City of Falls Church, and Arlington County.\n\nThe Washington Blvd.–Dunn Loring Line was introduced in 1925, as the route was part of the Alexandria & Suburban Motor Vehicle Company.[2] The Alexandria & Suburban Motor Vehicle Company operated the eastern segment of the line, until it was acquired by the Washington Virginia & Maryland Coach Company in 1927. The western segment of the line was introduced in 1937 by the Arlington & Fairfax Motor Transportation Company, known as the Lee Highway Line. The western segment of the line was later acquired by the Washington Virginia & Maryland Coach Company in 1947, merging the two segments into a single line to be part of the Washington Boulevard Line. It was later operated by WMATA in 1973, when it acquired all routes from the WV&M. Since 1973, the Washington Blvd.–Dunn Loring Line consists of all 2 line. The 2 line provides reliable service within Fairfax county, the City of Falls Church, and Arlington county to connect from neighborhoods, to marketplaces, to landmarks, and to business. Although, the Washington Blvd.–Dunn Loring Line has various names prior to the current name throughout the years.\n\nThe initial name of the Washington Blvd.–Dunn Loring Line was the Washington Boulevard Line which was the original name since the beginning of service. The Washington Boulevard Line consists of routes 2A, 2C, 2M, and 2W.[3] All 4 routes of the 2 line operated on various schedules, and on different roads. At some point in the 1980s, 2A used to operate between Ballston station and Tysons Corner Shopping Center, until it was replaced by route 2C north of Dunn Loring station. Alongside with these changes, route 2G was introduced, the 2M was discontinued, and the 2W was transferred to the Vienna–Oakton Line.\n\nThe entire 2 line serves in Ballston station, as it splits into different segments at the neighborhood of Merrifield. Route 2A operates between Ballston and Dunn Loring stations during early morning and late night. Routes 2B and 2G operates the same interval as the 2A, with the extension towards Fair Oaks in Fairfax County. The 2B operates from Monday to Saturday through Fair Oaks Mall, and the 2G operates on weekday peak hour schedules via Flint Hill Office Park and the Gateway Center in Fair Oaks. Route 2C operates in a similar interval as the 2A, by extending the line to Tysons Corner Center. The 2C operates everyday, unlike the other routes in the line.[4] These routes remains the same until December 29, 2013, when the entire 2 line was split to form three new lines. Route 2A became the sole route that operates the original interval, and was renamed the Washington Blvd.–Dunn Loring Line, while the 2B was truncated and transferred to the Fair Oaks–Jermantown Road Line, and the 2C was replaced by the 2T under the Tysons Corner–Dunn Loring Line.[5]\n\nOn June 29, 2008, route 2G no longer operates via the Gateway Center.[6] The 2G continues to operate via Flint Hill Office Park to Fair Oaks Mall.\n\nIn 2013, WMATA proposed to modify the Washington Boulevard Line.[7] It was proposed that the 2G to be converted into 2B trips, and the 2B to form a new line as the Fair Oaks–Jermantown Road Line. These changes was to reduce bus bunching on the entire line, as the 2G was a redundancy to the 2B.\n\nOn December 29, 2013, route 2B splits into two different segments. The eastern segment was replaced by route 2A. Following these changes, route 2A started daily service, while the 2B was truncated to operate between Dunn Loring station and Fair Oaks Mall.[5] Route 2G was discontinued, replaced by routes 2A, and 2B. Route 2C was replaced by the 2T, to operate between Dunn Loring station and Tysons Corner Center.\n\nDuring the COVID-19 pandemic, all route 2A service was reduced to operate on its Saturday supplemental schedule beginning on March 16, 2020.[8] However beginning on March 18, 2020, route 2A was further reduced to operate on its Sunday schedule.[9] Service on weekends were also suspended.[10] On August 23, 2020, most weekend service and all weekend service was restored.[11]\n\nOn September 10, 2020 as part of its FY2022 proposed budget, WMATA proposed to reduce all weekday frequency of route 2A in order to reduce costs and low federal funds.[12] Weekday and Saturday service was already cut in August 2020 due to Metro's COVID-19 response.\n\nAs part of WMATA's Better Bus Redesign taking place on June 29, 2025, Route 2A was partially combined with the 2B, operating on the 2A routing between Ballston and Dunn Loring stations, then operate along Merrilee Drive and Lee Highway to Vienna station. The route then operates to George Mason University via Blenheim Boulevard on weekdays. Service was renamed into the F50.[13]\n",
+  "concepts": [
+    "Washington Blvd.–Dunn Loring Line",
+    "line",
+    "route",
+    "2a",
+    "washington",
+    "loring",
+    "dunn loring",
+    "dunn",
+    "operates",
+    "service",
+    "2b"
+  ],
+  "findings": [
+    "Route and service",
+    "History",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Washington Blvd.–Dunn Loring Line",
+      "relationship": "consists of",
+      "object": "all 2 line",
+      "sentence": "Since 1973, the Washington Blvd.–Dunn Loring Line consists of all 2 line."
+    }
+  ],
+  "timestamp": "2025-04-11T13:28:39.747042"
+}

@@ -1,0 +1,56 @@
+{
+  "system_key": "v8_system_key_20208_26434",
+  "components": {
+    "spatial_temple": {
+      "port": 8005,
+      "host": "localhost"
+    },
+    "root_connection": {
+      "port": 8015,
+      "host": "localhost"
+    },
+    "auto_growth": {
+      "port": 8020,
+      "host": "localhost"
+    },
+    "seed_dispersal": {
+      "port": 8010,
+      "host": "localhost"
+    },
+    "temple_bridge": {
+      "port": 8025,
+      "host": "localhost"
+    },
+    "saveconcept": {
+      "port": 8030,
+      "host": "localhost"
+    }
+  },
+  "connections": {
+    "spatial_temple": [
+      "temple_bridge",
+      "root_connection"
+    ],
+    "temple_bridge": [
+      "spatial_temple",
+      "seed_dispersal",
+      "saveconcept"
+    ],
+    "seed_dispersal": [
+      "temple_bridge",
+      "auto_growth"
+    ],
+    "auto_growth": [
+      "seed_dispersal",
+      "root_connection"
+    ],
+    "root_connection": [
+      "spatial_temple",
+      "auto_growth"
+    ],
+    "saveconcept": [
+      "temple_bridge"
+    ]
+  },
+  "generated_at": "20251604_065454"
+}

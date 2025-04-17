@@ -1,0 +1,38 @@
+{
+  "title": "NGC 4478",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/NGC_4478",
+  "content": "NGC 4478 is an elliptical galaxy located about 50 million light-years away[3] in the constellation Virgo.[4] NGC 4478 was discovered by astronomer William Herschel on April 12, 1784.[5] NGC 4478 is a member of the Virgo Cluster.[6]\n\nHubble images indicate that NGC 4478 has a central nuclear disk.[7]\n\nIn NGC 4478, the central regions of the galaxy are high in metals while having less overabundance of the element iron than the main body. In contrast, the outer regions of the galaxy are low in metals while having a high overabundance in iron.[7]\n\nNGC 4478 has a typical sub-population of metal-poor globular clusters. However, it has a lack of metal-rich clusters. The lack of metal-rich clusters in other galaxies is usually attributed to accretion, or mergers with other galaxies. The only other known elliptical that has been shown to have a domination of metal-poor globular clusters is the giant galaxy NGC 4874 which is located in the center of the Coma Cluster.[2]\n\nDue to tidal truncation caused by Messier 87, a significant amount of globular clusters have been striped away from NGC 4478 and have become members of Messier 87's globular cluster system.[8]\n\nNGC 4478 is likely to be a companion of the giant elliptical Messier 87. The two galaxies are separated from each other by about 130,400 Light-years (40 kpc). NGC 4478 has been tidally truncated by Messier 87.[2]\n",
+  "concepts": [
+    "NGC 4478",
+    "ngc",
+    "ngc 4478",
+    "4478",
+    "clusters",
+    "metal",
+    "messier 87",
+    "messier",
+    "globular",
+    "galaxy",
+    "87"
+  ],
+  "findings": [
+    "Nuclear disk",
+    "Metallicity",
+    "Globular clusters",
+    "Reduced population",
+    "Interaction with Messier 87",
+    "See also",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "NGC 4478",
+      "relationship": "is a",
+      "object": "member of the virgo cluster",
+      "sentence": "[5] NGC 4478 is a member of the Virgo Cluster."
+    }
+  ],
+  "timestamp": "2025-04-11T13:28:32.362417"
+}

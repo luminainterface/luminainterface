@@ -1,0 +1,32 @@
+{
+  "title": "Vinotonus",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Vinotonus",
+  "content": "Vinotonus is a god from Celtic mythology of which little is known.[1] Only four altars dedicated to Vinotonus have been found all of which are located near the Roman fort at Bowes.[1] The ancient Romans found Vinotonus to be equivalent to Silvanus, the god of agriculture, and that he was a wilderness god.[1] It was common for the Romans to assign the names of popular Roman gods to local Celtic deities as Silvanus was also equated with the Celtic god Cocidius.[1]\n",
+  "concepts": [
+    "Vinotonus",
+    "god",
+    "vinotonus",
+    "celtic",
+    "silvanus",
+    "romans",
+    "roman",
+    "wilderness",
+    "vinotonus located",
+    "vinotonus god",
+    "vinotonus equivalent"
+  ],
+  "findings": [
+    "References",
+    "Sources"
+  ],
+  "relationships": [
+    {
+      "subject": "Vinotonus",
+      "relationship": "is a",
+      "object": "god from celtic mythology of which little is known",
+      "sentence": "Vinotonus is a god from Celtic mythology of which little is known."
+    }
+  ],
+  "timestamp": "2025-04-11T16:20:18.757422"
+}

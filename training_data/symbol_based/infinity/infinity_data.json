@@ -1,0 +1,32 @@
+[
+  {
+    "symbol": "infinity",
+    "emotion": "wonder",
+    "breath": "deep",
+    "paradox": "existence",
+    "action": "contemplate",
+    "glyph": "∞",
+    "story": "The infinite loop of creation and dissolution reveals the nature of reality.",
+    "signal": 0.97
+  },
+  {
+    "symbol": "infinity",
+    "emotion": "awe",
+    "breath": "expansive",
+    "paradox": "boundlessness",
+    "action": "witness",
+    "glyph": "∞",
+    "story": "Beyond the horizon of perception lies the eternal dance of stars and void.",
+    "signal": 0.93
+  },
+  {
+    "symbol": "infinity",
+    "emotion": "curiosity",
+    "breath": "circular",
+    "paradox": "recursion",
+    "action": "explore",
+    "glyph": "∞",
+    "story": "Each layer of reality contains perfect replicas of itself, infinitely nested.",
+    "signal": 0.89
+  }
+] 

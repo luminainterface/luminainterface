@@ -1,0 +1,32 @@
+{
+  "title": "Phaeogramma hispida",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Phaeogramma_hispida",
+  "content": "Phaeogramma hispida is a species of tephritid or fruit flies in the genus Phaeogramma of the family Tephritidae.[2]\n\nHawaiian Islands.\n\nThis article related to members of the fly sub-family Tephritinae is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Phaeogramma hispida",
+    "phaeogramma",
+    "family",
+    "wikipedia expanding",
+    "wikipedia",
+    "tephritinae stub",
+    "tephritinae",
+    "tephritidae hawaiian",
+    "tephritidae",
+    "tephritid fruit",
+    "tephritid"
+  ],
+  "findings": [
+    "Distribution",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Phaeogramma hispida",
+      "relationship": "is a",
+      "object": "species of tephritid or fruit flies in the genus phaeogramma of the family tephritidae",
+      "sentence": "Phaeogramma hispida is a species of tephritid or fruit flies in the genus Phaeogramma of the family Tephritidae."
+    }
+  ],
+  "timestamp": "2025-04-11T13:27:53.310435"
+}

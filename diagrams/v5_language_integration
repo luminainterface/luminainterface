@@ -1,0 +1,48 @@
+// V5-Language Memory Integration Architecture
+digraph {
+	fontname=Arial fontsize=20 label="V5-Language Memory Integration Architecture" labelloc=t rankdir=TB ratio=fill size="8,10"
+	node [fontname=Arial fontsize=12 margin="0.3,0.1" shape=box style="filled,rounded"]
+	subgraph cluster_v5 {
+		color="#e6f3ff" fontsize=16 label="V5 Fractal Echo Visualization System" style=filled
+		fractal_processor [label="Fractal Pattern Processor" fillcolor="#a6cee3"]
+		node_consciousness [label="Node Consciousness Metrics" fillcolor="#a6cee3"]
+		v5_ui [label="V5 Visualization Interface" fillcolor="#fdbf6f"]
+		pattern_storage [label="Pattern Storage" fillcolor="#ffff99" shape=cylinder]
+		fractal_processor -> node_consciousness
+		node_consciousness -> v5_ui
+		fractal_processor -> pattern_storage
+		pattern_storage -> v5_ui [style=dashed]
+	}
+	subgraph cluster_language {
+		color="#e6ffe6" fontsize=16 label="Language Memory System" style=filled
+		neural_linguistic [label="Neural Linguistic Processor" fillcolor="#b2df8a"]
+		memory_api [label="Memory API" fillcolor="#b2df8a"]
+		memory_storage [label="Memory Storage" fillcolor="#ffff99" shape=cylinder]
+		topic_extractor [label="Topic Extraction Engine" fillcolor="#b2df8a"]
+		neural_linguistic -> memory_api
+		memory_api -> memory_storage [dir=both]
+		topic_extractor -> memory_api
+		memory_storage -> topic_extractor [style=dashed]
+	}
+	subgraph cluster_bridge {
+		color="#fff2f2" fontsize=16 label="Integration Bridge Components" style=filled
+		memory_v5_bridge [label="Language Memory V5 Bridge" fillcolor="#fb9a99"]
+		chat_memory_interface [label="Chat Memory Interface" fillcolor="#fb9a99"]
+		node_socket [label="Node Socket Manager" fillcolor="#fb9a99"]
+		memory_v5_bridge -> node_socket
+		chat_memory_interface -> node_socket
+	}
+	subgraph cluster_ui {
+		color="#fff8e6" fontsize=16 label="User Interface Components" style=filled
+		conversation_panel [label="Weighted Conversation Panel" fillcolor="#fdbf6f"]
+		ui_controller [label="UI Controller" fillcolor="#fdbf6f"]
+		conversation_panel -> ui_controller
+	}
+	memory_v5_bridge -> memory_api [constraint=true]
+	memory_v5_bridge -> fractal_processor [constraint=true]
+	chat_memory_interface -> memory_api [constraint=true]
+	chat_memory_interface -> conversation_panel [constraint=true]
+	node_socket -> v5_ui [constraint=true]
+	fractal_processor -> neural_linguistic [label="pattern exchange" constraint=false style=dotted]
+	ui_controller -> v5_ui [constraint=true]
+}

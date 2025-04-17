@@ -1,0 +1,30 @@
+{
+  "consciousness_metrics": {
+    "level": 0.6420675788166705,
+    "stability": 0.719471132891972,
+    "integration": 0.6141120008059867,
+    "complexity": 0.8896758416334147,
+    "neural_linguistic_score": 0.7401113716902071,
+    "timestamp": "2025-04-15T14:25:20.916325"
+  },
+  "neural_state": {
+    "activation_pattern": [
+      0.8382904571420927,
+      0.19341950910939731,
+      0.8682984577264855,
+      0.6509522738755922,
+      0.6976334702937941
+    ],
+    "integration_index": 0.44411690036021484,
+    "responsiveness": 0.7432047375811017,
+    "timestamp": "2025-04-15T14:25:20.916367"
+  },
+  "breath_state": {
+    "pattern": "normal",
+    "rate": 0.5,
+    "depth": 0.5
+  },
+  "paradox_count": 0,
+  "active_paradoxes": 0,
+  "timestamp": "2025-04-15T14:25:20.916556"
+}

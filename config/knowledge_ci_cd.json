@@ -1,0 +1,66 @@
+{
+    "schedule_interval": 4,
+    "discovery_sources": ["wiki", "web", "local", "api", "database"],
+    "attachment_threshold": 0.72,
+    "growth_iterations": 5,
+    "max_discoveries_per_run": 15,
+    "bidirectional_timeout": 45,
+    "auto_deploy": true,
+    
+    "database": {
+        "main_db": {
+            "type": "sqlite",
+            "path": "data/knowledge_db.sqlite",
+            "backup_path": "data/backups/knowledge_db_backup.sqlite",
+            "backup_frequency": 24,
+            "vacuum_frequency": 168
+        },
+        "metrics_db": {
+            "type": "sqlite",
+            "path": "data/metrics_db.sqlite",
+            "backup_frequency": 48
+        },
+        "external_connections": {
+            "use_api_gateway": true,
+            "api_base_url": "http://localhost:8080/api/v1",
+            "connection_timeout": 10,
+            "retry_attempts": 3
+        }
+    },
+    
+    "ci_cd": {
+        "auto_test": true,
+        "test_before_deploy": true,
+        "rollback_on_error": true,
+        "notify_on_completion": true,
+        "metrics_threshold": {
+            "min_attachment_success_rate": 0.85,
+            "max_knowledge_duplication": 0.05,
+            "min_growth_factor": 1.2
+        },
+        "pipeline_stages": [
+            {"name": "discovery", "timeout": 300, "retry": true},
+            {"name": "attachment", "timeout": 180, "retry": true},
+            {"name": "growth", "timeout": 240, "retry": true},
+            {"name": "linking", "timeout": 150, "retry": true},
+            {"name": "deployment", "timeout": 120, "retry": false}
+        ]
+    },
+    
+    "spatial_temple": {
+        "max_nodes_per_zone": 250,
+        "auto_reorganize": true,
+        "similarity_algorithm": "cosine",
+        "dimension_count": 3,
+        "visualization_enabled": true
+    },
+    
+    "advanced": {
+        "logging_level": "INFO",
+        "parallel_processing": true,
+        "use_gpu_acceleration": false,
+        "max_workers": 4,
+        "memory_limit_mb": 1024,
+        "use_mistral_embeddings": true
+    }
+} 

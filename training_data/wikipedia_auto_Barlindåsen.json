@@ -1,0 +1,31 @@
+{
+  "title": "Barlindåsen",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Barlindåsen",
+  "content": " Barlindåsen is a mountain of Rælingen municipality, Akershus, Norway.\n\nThis article about a mountain, mountain range, or peak in Akershus is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Barlindåsen",
+    "mountain",
+    "akershus",
+    "wikipedia expanding",
+    "wikipedia",
+    "stub help",
+    "stub",
+    "rælingen municipality",
+    "rælingen",
+    "range peak",
+    "range"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Barlindåsen",
+      "relationship": "is a",
+      "object": "mountain of rælingen municipality",
+      "sentence": " Barlindåsen is a mountain of Rælingen municipality, Akershus, Norway."
+    }
+  ],
+  "timestamp": "2025-04-11T17:18:39.792303"
+}

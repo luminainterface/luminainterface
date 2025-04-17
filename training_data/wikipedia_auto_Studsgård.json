@@ -1,0 +1,33 @@
+{
+  "title": "Studsgård",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Studsgård",
+  "content": "Studsgård is a small railway town in Herning Municipality in central Jutland, Denmark. It is located 8 kilometres (5.0 mi) southwest of Herning. As of 1 January 2024, Studsgård has a population of 434.[1] Studsgård is located at the Skanderborg-Skjern railway line and is served by Studsgård railway station.[2]\n\n56°05′22″N 8°54′26″E﻿ / ﻿56.089444°N 8.907222°E﻿ / 56.089444; 8.907222\n\nThis article about a location in the Central Denmark Region is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Studsgård",
+    "studsgård",
+    "railway",
+    "56",
+    "located",
+    "herning",
+    "denmark",
+    "central",
+    "907222",
+    "56 089444",
+    "089444 907222"
+  ],
+  "findings": [
+    "Gallery",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Studsgård",
+      "relationship": "is a",
+      "object": "small railway town in herning municipality in central jutland",
+      "sentence": "Studsgård is a small railway town in Herning Municipality in central Jutland, Denmark."
+    }
+  ],
+  "timestamp": "2025-04-11T13:35:07.971345"
+}

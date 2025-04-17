@@ -1,0 +1,19 @@
+{
+  "title": "Tetrakis(1-norbornyl)cobalt(IV)",
+  "source": "Wikipedia (Random Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Tetrakis(1-norbornyl)cobalt(IV)",
+  "content": "Tetrakis(1-norbornyl)cobalt(IV) is an air-sensitive organometallic compound of cobalt. It was first synthesized by Barton K. Bower and Howard G. Tennent in 1972[1] and is one of few compounds in which cobalt has a formal oxidation state of +4.\n\nTetrakis(1-norbornyl)cobalt(IV) is formed the reaction of CoCl2•THF with 1-norbornyllithium (norLi) in n-pentane under an inert atmosphere.[1] The cobalt(II) chloride-THF adduct is prepared from Soxhlet extraction of anhydrous CoCl2 with THF, and the organolithium reagent is prepared from the reaction between 1-chloro-norbornane and lithium metal in a solvent such as pentane:\n\nThe compound can then be purified by recrystallization.\n\nThe complex is a thermally stable homoleptic tetraorganylcobalt(IV) complex with exclusively σ-bonding ligands. It was the first low-spin complex with tetrahedral geometry to be isolated.[2][3][4]\n\nThe exceptional stability of the complex is in large part due to its inability to undergo either α- or β-hydride elimination. The α-position of the metal (corresponding to the 1-position of the norbornyl ligand) has no more hydrogen atoms, while hydride elimination from the β-position would yield an energetically unfavorable double bond on a bridgehead atom (Bredt's rule). Moreover, the bulky norbornyl ligands sterically shield the central atom, hindering ligand substitutions as well as homolysis.[1][5]\n\nThe rare d5 low-spin configuration in a tetrahedral ligand field is possible because the ligand is so strongly σ-donating that the gap between the e und t2 orbitals is raised sufficiently to overcome the spin pairing energy. The resulting configuration is e4t21, with magnetic measurements showing paramagnetism consistent with only one unpaired electron.[1][3][4]\n\nThe reaction between CoCl2•THF and 1-norbornyllithium (norLi) also allows the formation of a cobalt(III) complex: if a mixture of diethyl ether and THF is used as the solvent in place of n-pentane, the resulting disproportionation reaction affords the complex tetrakis(1-norbornyl)cobaltate(III), which crystallizes out of solution with solvated lithium counterions, along with elemental cobalt.[4][6]\n\nThe compound is air-sensitive, has a green color and is paramagnetic, with two unpaired electrons, again indicating a low-spin tetrahedral configuration (d6, e4t22).[6][4]\n\nThe corresponding cobalt(V) complex is prepared by oxidizing tetrakis(1-norbornyl)cobalt(IV) with Ag[BF4] in THF and crystallizes with tetrafluoroborate as the counterion.[6][4]\n\nThis complex :[Co(nor)4]+ is the first cobalt(V) complex to be isolated. Again the configuration is low-spin (d4, e4t20).[2][4][6]\n",
+  "concepts": [
+    "Tetrakis(1-norbornyl)cobalt(IV)"
+  ],
+  "findings": [
+    "Preparation",
+    "Properties",
+    "Stability",
+    "Cobalt(III) and cobalt(V) derivatives",
+    "See also",
+    "References",
+    "External links"
+  ],
+  "timestamp": "2025-04-11T10:24:30.804275"
+}

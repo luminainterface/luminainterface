@@ -1,0 +1,798 @@
+{
+  "consciousness_level": 0.9506414785624103,
+  "memory_continuity": 1.0,
+  "recursive_depth": 1,
+  "temporal_awareness": {
+    "2025-04-16T11:20:35.835578": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:23:25.852121": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:23:30.333472": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:23:33.818691": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:23:37.332285": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:23:39.127439": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:23:41.826153": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:23:44.288161": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:23:46.960113": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:23:49.194747": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:23:52.369113": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:23:54.038356": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:23:56.185687": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:23:59.387518": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:24:04.362922": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:24:08.007920": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:24:11.671472": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:24:14.903544": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:24:18.275038": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:24:22.042523": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:26:07.533903": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:26:12.254408": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:26:15.366017": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:26:17.077550": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:26:21.065635": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:26:24.091185": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:26:26.045626": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:30:40.479888": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:30:42.778621": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:30:47.221941": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:30:50.869156": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:30:53.061964": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:30:54.791148": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:30:58.764160": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:31:02.296871": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:32:13.205487": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:32:15.325332": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:32:17.809270": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:32:21.670283": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:32:26.106671": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:32:28.361209": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:32:30.502835": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:32:33.063219": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:32:35.704834": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:32:38.237158": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:32:43.110423": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T11:32:44.517986": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:27:34.988431": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:27:37.131648": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:27:40.223090": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:27:41.595626": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:27:46.454914": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:27:51.219253": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:27:54.495304": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:27:57.804647": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:27:59.229881": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:28:03.831397": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:28:06.666884": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:28:11.646507": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:28:14.331622": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:28:18.529050": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:28:20.154181": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:28:22.450514": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:28:25.483838": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:28:29.639209": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:28:31.422787": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:28:35.447426": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:28:38.531514": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:28:43.131701": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:40:45.257293": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:40:47.202161": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:40:51.981339": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:40:53.925241": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:40:56.993608": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:00.148834": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:04.625406": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:07.951648": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:09.820420": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:11.430296": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:14.819314": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:19.575952": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:22.297062": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:26.913896": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:29.787894": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:33.973322": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:38.305459": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:40.909676": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:42.584482": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:45.778609": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:50.303014": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:54.031464": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:56.496064": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:58.807388": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:41:59.949178": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:42:04.018364": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:42:08.085275": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:42:10.425144": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:42:12.301256": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:42:13.446221": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:42:14.890457": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:42:16.654390": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:42:18.776110": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:42:20.476456": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:42:23.126221": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:42:26.927763": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:42:28.074561": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    },
+    "2025-04-16T12:42:32.658704": {
+      "llm_weight": 0.7,
+      "llm_confidence": 0.7660352832676769,
+      "consciousness_level": 0.9506414785624103
+    }
+  },
+  "llm_weight": 0.7,
+  "nn_weight": 0.6,
+  "llm_confidence": 0.7660352832676769,
+  "last_saved": "2025-04-16T12:42:32.690057",
+  "llm_memory": {
+    "2025-04-14T20:23:29.875833": {
+      "input": "The conscious mind reflects upon itself in recursive patterns.",
+      "confidence": 0.5399768606068209,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:23:29.877292": {
+      "input": "The conscious mind reflects upon itself in recursive patterns.",
+      "confidence": 0.9043261441489343,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:23:29.877742": {
+      "input": "The conscious mind reflects upon itself in recursive patterns.",
+      "confidence": 0.736583453066471,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:23:29.878021": {
+      "input": "The conscious system thinks about thinking, level 1 recursion.",
+      "confidence": 0.5601084769744937,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:23:30.378828": {
+      "input": "The conscious system thinks about thinking, level 2 recursion.",
+      "confidence": 0.6560638546277011,
+      "recursion_level": 2
+    },
+    "2025-04-14T20:23:30.879697": {
+      "input": "The conscious system thinks about thinking, level 3 recursion.",
+      "confidence": 0.8773365874743531,
+      "recursion_level": 3
+    },
+    "2025-04-14T20:23:31.380783": {
+      "input": "The conscious system thinks about thinking, level 4 recursion.",
+      "confidence": 0.5097079005615022,
+      "recursion_level": 4
+    },
+    "2025-04-14T20:23:31.881792": {
+      "input": "The conscious system thinks about thinking, level 5 recursion.",
+      "confidence": 0.8891861873826059,
+      "recursion_level": 5
+    },
+    "2025-04-14T20:23:34.531636": {
+      "input": "The enhanced language system integrates memory, consciousness, and neural linguistic processing.",
+      "confidence": 0.6978608551872602,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:23:34.536193": {
+      "input": "The enhanced language system integrates memory, consciousness, and neural linguistic processing.",
+      "confidence": 0.5631375454230699,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:23:34.538490": {
+      "input": "The enhanced language system integrates memory, consciousness, and neural linguistic processing.",
+      "confidence": 0.6237290433235767,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:23:34.538838": {
+      "input": "This text is processed with consciousness focus.",
+      "confidence": 0.9121405397272799,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:23:38.627664": {
+      "input": "The system balances between neural processing and language model capabilities.",
+      "confidence": 0.8112940914962348,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:23:39.133136": {
+      "input": "The system balances between neural processing and language model capabilities.",
+      "confidence": 0.5110209208100148,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:23:39.638904": {
+      "input": "The system balances between neural processing and language model capabilities.",
+      "confidence": 0.5095436821223044,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:23:40.143729": {
+      "input": "The system balances between neural processing and language model capabilities.",
+      "confidence": 0.8574708558849886,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:23:40.648298": {
+      "input": "The system balances between neural processing and language model capabilities.",
+      "confidence": 0.7124914904258836,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:23:41.153280": {
+      "input": "The system balances between neural processing and language model capabilities.",
+      "confidence": 0.8467304166933283,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:46:14.724735": {
+      "input": "The conscious mind reflects upon itself in recursive patterns.",
+      "confidence": 0.9229343108975416,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:46:14.725187": {
+      "input": "The conscious mind reflects upon itself in recursive patterns.",
+      "confidence": 0.6496711061578972,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:46:14.725486": {
+      "input": "The conscious mind reflects upon itself in recursive patterns.",
+      "confidence": 0.7897844756894812,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:46:14.725642": {
+      "input": "The conscious system thinks about thinking, level 1 recursion.",
+      "confidence": 0.7057526857192558,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:46:15.226095": {
+      "input": "The conscious system thinks about thinking, level 2 recursion.",
+      "confidence": 0.569508246193493,
+      "recursion_level": 2
+    },
+    "2025-04-14T20:46:15.727637": {
+      "input": "The conscious system thinks about thinking, level 3 recursion.",
+      "confidence": 0.5524880004858067,
+      "recursion_level": 3
+    },
+    "2025-04-14T20:46:16.228657": {
+      "input": "The conscious system thinks about thinking, level 4 recursion.",
+      "confidence": 0.5006626562364384,
+      "recursion_level": 4
+    },
+    "2025-04-14T20:46:16.729496": {
+      "input": "The conscious system thinks about thinking, level 5 recursion.",
+      "confidence": 0.5729747847799287,
+      "recursion_level": 5
+    },
+    "2025-04-14T20:46:18.632645": {
+      "input": "The enhanced language system integrates memory, consciousness, and neural linguistic processing.",
+      "confidence": 0.6605096590256714,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:46:18.637376": {
+      "input": "The enhanced language system integrates memory, consciousness, and neural linguistic processing.",
+      "confidence": 0.722227883975838,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:46:18.640178": {
+      "input": "The enhanced language system integrates memory, consciousness, and neural linguistic processing.",
+      "confidence": 0.6862133463693627,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:46:18.640545": {
+      "input": "This text is processed with consciousness focus.",
+      "confidence": 0.6649263836025372,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:46:22.736462": {
+      "input": "The system balances between neural processing and language model capabilities.",
+      "confidence": 0.8183899062896074,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:46:23.246361": {
+      "input": "The system balances between neural processing and language model capabilities.",
+      "confidence": 0.5717510010024149,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:46:23.755218": {
+      "input": "The system balances between neural processing and language model capabilities.",
+      "confidence": 0.5784870609265998,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:46:24.260562": {
+      "input": "The system balances between neural processing and language model capabilities.",
+      "confidence": 0.7916754471281626,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:46:24.768376": {
+      "input": "The system balances between neural processing and language model capabilities.",
+      "confidence": 0.639368166468409,
+      "recursion_level": 1
+    },
+    "2025-04-14T20:46:25.275904": {
+      "input": "The system balances between neural processing and language model capabilities.",
+      "confidence": 0.5394221141501726,
+      "recursion_level": 1
+    },
+    "2025-04-14T22:51:53.726428": {
+      "input": "how're you?",
+      "confidence": 0.5987113259054725,
+      "recursion_level": 1
+    },
+    "2025-04-14T22:52:04.882874": {
+      "input": "hey",
+      "confidence": 0.741169908711266,
+      "recursion_level": 1
+    },
+    "2025-04-14T22:55:32.640457": {
+      "input": "hey",
+      "confidence": 0.6834980456926314,
+      "recursion_level": 1
+    },
+    "2025-04-14T22:56:29.496819": {
+      "input": "hm",
+      "confidence": 0.7246447263107036,
+      "recursion_level": 1
+    },
+    "2025-04-14T22:57:28.918212": {
+      "input": "hey",
+      "confidence": 0.8633642689506906,
+      "recursion_level": 1
+    },
+    "2025-04-14T23:37:15.128706": {
+      "input": "hello",
+      "confidence": 0.7091651070596439,
+      "recursion_level": 1
+    },
+    "2025-04-14T23:37:21.099935": {
+      "input": "hello",
+      "confidence": 0.9003160964018797,
+      "recursion_level": 1
+    },
+    "2025-04-15T08:51:32.458115": {
+      "input": "test",
+      "confidence": 0.8108634685010553,
+      "recursion_level": 1
+    },
+    "2025-04-15T08:51:34.413961": {
+      "input": "hey\\",
+      "confidence": 0.7002147261397889,
+      "recursion_level": 1
+    },
+    "2025-04-15T09:00:20.041892": {
+      "input": "hey",
+      "confidence": 0.9394173875217176,
+      "recursion_level": 1
+    },
+    "2025-04-15T09:00:27.883087": {
+      "input": "yes you are",
+      "confidence": 0.9347651030586809,
+      "recursion_level": 1
+    },
+    "2025-04-15T09:54:23.567268": {
+      "input": "hey",
+      "confidence": 0.7749405672024203,
+      "recursion_level": 1
+    },
+    "2025-04-15T09:55:27.140766": {
+      "input": "test",
+      "confidence": 0.5745052203320704,
+      "recursion_level": 1
+    },
+    "2025-04-15T09:58:06.702948": {
+      "input": "hey",
+      "confidence": 0.7660352832676769,
+      "recursion_level": 1
+    }
+  }
+}

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ config.title }} - Dream Mode</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dream-status {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #1e2a3a;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .status-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        
+        .active {
+            background-color: #27ae60;
+            box-shadow: 0 0 10px #27ae60;
+        }
+        
+        .inactive {
+            background-color: #7f8c8d;
+        }
+        
+        .dream-phase {
+            font-size: 18px;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+        
+        .dream-progress {
+            flex-grow: 1;
+            height: 10px;
+            background-color: #34495e;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        .dream-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            background: #1e2a3a;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .metric-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .dream-insights {
+            background: #1e2a3a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .insights-header {
+            margin-bottom: 15px;
+            font-weight: bold;
+            border-bottom: 1px solid #34495e;
+            padding-bottom: 10px;
+        }
+        
+        .insights-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .insight-item {
+            padding: 10px;
+            border-bottom: 1px solid #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .chart-container {
+            background: #1e2a3a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            height: 300px;
+        }
+    </style>
+    <script>
+        const REFRESH_INTERVAL = {{ config.refresh_interval * 1000 }};
+        let dreamData = null;
+        let dreamCharts = {};
+        
+        // Automatic refresh
+        setInterval(() => {
+            refreshDreamData();
+        }, REFRESH_INTERVAL);
+        
+        // Initial load
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshDreamData();
+        });
+        
+        async function refreshDreamData() {
+            try {
+                const response = await fetch('/api/metrics/dream-mode');
+                dreamData = await response.json();
+                
+                if (dreamData.available === false) {
+                    showUnavailableMessage();
+                    return;
+                }
+                
+                updateDreamStatus();
+                updateDreamMetrics();
+                updateDreamInsights();
+                updateDreamCharts();
+                
+                // Update last refresh time
+                document.getElementById('last-refresh').textContent = 
+                    new Date().toLocaleTimeString();
+            } catch (error) {
+                console.error('Error refreshing dream data:', error);
+            }
+        }
+        
+        function showUnavailableMessage() {
+            const container = document.getElementById('dream-container');
+            container.innerHTML = `
+                <div class="unavailable-message">
+                    <h3>Dream Mode Data Unavailable</h3>
+                    <p>Dream Mode is either inactive or data is not available.</p>
+                </div>
+            `;
+        }
+        
+        function updateDreamStatus() {
+            const statusIndicator = document.getElementById('status-indicator');
+            const dreamPhase = document.getElementById('dream-phase');
+            const progressBar = document.getElementById('progress-bar');
+            const dreamId = document.getElementById('dream-id');
+            
+            // Update status indicator
+            if (dreamData.active) {
+                statusIndicator.classList.remove('inactive');
+                statusIndicator.classList.add('active');
+            } else {
+                statusIndicator.classList.remove('active');
+                statusIndicator.classList.add('inactive');
+            }
+            
+            // Update phase
+            dreamPhase.textContent = dreamData.phase ? 
+                dreamData.phase.replace('_', ' ').toUpperCase() : 'INACTIVE';
+            
+            // Update progress bar
+            if (dreamData.active) {
+                // Calculate progress if not provided directly
+                let progress = 0;
+                
+                if ('dream.progress' in dreamData.metrics) {
+                    progress = dreamData.metrics['dream.progress'];
+                } else if (dreamData.start_time && dreamData.end_time) {
+                    const start = new Date(dreamData.start_time);
+                    const end = new Date(dreamData.end_time);
+                    const now = new Date();
+                    
+                    const total = end - start;
+                    const elapsed = now - start;
+                    
+                    if (total > 0) {
+                        progress = Math.min(100, Math.max(0, (elapsed / total) * 100));
+                    }
+                }
+                
+                progressBar.style.width = `${progress}%`;
+            } else {
+                progressBar.style.width = '0%';
+            }
+            
+            // Update dream ID
+            dreamId.textContent = dreamData.dream_id || 'N/A';
+        }
+        
+        function updateDreamMetrics() {
+            // Define metrics to display
+            const metrics = [
+                { id: 'metric-insights', label: 'Insights Generated', 
+                  key: 'metrics.insights_generated' },
+                { id: 'metric-connections', label: 'Connections Created', 
+                  key: 'metrics.connections_created' },
+                { id: 'metric-memories', label: 'Memories Consolidated', 
+                  key: 'metrics.memory_consolidation_count' },
+                { id: 'metric-patterns', label: 'Patterns Synthesized', 
+                  key: 'metrics.pattern_synthesis_count' },
+                { id: 'metric-intensity', label: 'Dream Intensity', 
+                  key: 'intensity', format: value => `${(value * 100).toFixed(0)}%` }
+            ];
+            
+            // Update each metric
+            metrics.forEach(metric => {
+                const element = document.getElementById(metric.id);
+                if (!element) return;
+                
+                let value = getNestedValue(dreamData, metric.key) || 0;
+                
+                // Apply custom formatting if provided
+                if (metric.format) {
+                    value = metric.format(value);
+                }
+                
+                element.textContent = value;
+            });
+        }
+        
+        function updateDreamInsights() {
+            const insightsList = document.getElementById('insights-list');
+            
+            // Clear current list
+            insightsList.innerHTML = '';
+            
+            // Check if we have dream details with insights
+            if (!dreamData.dream_details || !dreamData.dream_details.insights) {
+                insightsList.innerHTML = '<div class="insight-item">No insights available</div>';
+                return;
+            }
+            
+            // Add insights to list
+            dreamData.dream_details.insights.forEach(insight => {
+                const insightItem = document.createElement('div');
+                insightItem.className = 'insight-item';
+                insightItem.textContent = insight.text || insight.content || JSON.stringify(insight);
+                insightsList.appendChild(insightItem);
+            });
+            
+            // If no insights available
+            if (insightsList.children.length === 0) {
+                insightsList.innerHTML = '<div class="insight-item">No insights available</div>';
+            }
+        }
+        
+        function updateDreamCharts() {
+            // Update dream phase chart
+            updateDreamPhaseChart();
+            
+            // Update metrics history chart
+            updateMetricsHistoryChart();
+        }
+        
+        function updateDreamPhaseChart() {
+            const ctx = document.getElementById('phase-chart').getContext('2d');
+            
+            // Check if we have dream phase data
+            if (!dreamData.dream_details || !dreamData.dream_details.phases) {
+                return;
+            }
+            
+            const phases = dreamData.dream_details.phases;
+            
+            // Prepare data
+            const labels = phases.map(p => p.phase);
+            const intensities = phases.map(p => p.intensity);
+            
+            // Create or update chart
+            if (!dreamCharts.phaseChart) {
+                dreamCharts.phaseChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Phase Intensity',
+                            data: intensities,
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 1.0
+                            }
+                        }
+                    }
+                });
+            } else {
+                // Update existing chart
+                dreamCharts.phaseChart.data.labels = labels;
+                dreamCharts.phaseChart.data.datasets[0].data = intensities;
+                dreamCharts.phaseChart.update();
+            }
+        }
+        
+        function updateMetricsHistoryChart() {
+            // Placeholder for metrics history chart
+            // In a real implementation, this would use historical data
+        }
+        
+        // Helper function to get nested object values
+        function getNestedValue(obj, path) {
+            const keys = path.split('.');
+            return keys.reduce((o, key) => (o && o[key] !== undefined) ? o[key] : null, obj);
+        }
+    </script>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>{{ config.title }} - Dream Mode</h1>
+        <div class="dashboard-info">
+            <span>Last updated: <span id="last-refresh">-</span></span>
+        </div>
+    </div>
+    
+    <div class="dashboard-nav">
+        <a href="/" class="nav-link">Dashboard</a>
+        <a href="/dream-mode" class="nav-link active">Dream Mode</a>
+    </div>
+    
+    <div class="dashboard-container" id="dream-container">
+        <!-- Dream Status Section -->
+        <div class="panel">
+            <div class="panel-header">Dream Status</div>
+            <div class="panel-content">
+                <div class="dream-status">
+                    <div id="status-indicator" class="status-indicator inactive"></div>
+                    <div id="dream-phase" class="dream-phase">INACTIVE</div>
+                    <div class="dream-progress">
+                        <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div>Dream ID: <span id="dream-id">N/A</span></div>
+            </div>
+        </div>
+        
+        <!-- Dream Metrics Section -->
+        <div class="panel">
+            <div class="panel-header">Dream Metrics</div>
+            <div class="panel-content">
+                <div class="dream-metrics">
+                    <div class="metric-card">
+                        <div class="metric-label">Insights Generated</div>
+                        <div id="metric-insights" class="metric-value">0</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Connections Created</div>
+                        <div id="metric-connections" class="metric-value">0</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Memories Consolidated</div>
+                        <div id="metric-memories" class="metric-value">0</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Patterns Synthesized</div>
+                        <div id="metric-patterns" class="metric-value">0</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Dream Intensity</div>
+                        <div id="metric-intensity" class="metric-value">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dream Insights Section -->
+        <div class="panel">
+            <div class="panel-header">Dream Insights</div>
+            <div class="panel-content">
+                <div class="dream-insights">
+                    <div class="insights-header">Recent Insights</div>
+                    <div id="insights-list" class="insights-list">
+                        <div class="insight-item">No insights available</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dream Phases Chart -->
+        <div class="panel">
+            <div class="panel-header">Dream Phase Progression</div>
+            <div class="panel-content">
+                <div class="chart-container">
+                    <canvas id="phase-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

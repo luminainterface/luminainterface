@@ -1,0 +1,40 @@
+{
+  "title": "Pseudorhabdosynochus shenzhenensis",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Pseudorhabdosynochus_shenzhenensis",
+  "content": "Pseudorhabdosynochus shenzhenensis is a species of diplectanid monogenean parasitic on the gills of the grouper Epinephelus coioides. It was described in 2005.[1]\n\nPseudorhabdosynochus shenzhenensis is a small monogenean, 0.3-0.5 mm in length.[1] The species has the general characteristics of other species of Pseudorhabdosynochus, with a flat body and a posterior haptor, which is the organ by which the monogenean attaches itself to the gill of is host. The haptor bears two squamodiscs, one ventral and one dorsal.\nThe sclerotized male copulatory organ, or \"quadriloculate organ\", has the shape of a bean with four internal chambers, as in other species of Pseudorhabdosynochus.[2]\nThe vagina includes a sclerotized part, which is a complex structure.\n\nThe name of the species, shenzhenensis, refers to \"the name of the city within which the type locality, Dapeng Bay, administratively belongs\".[1]\n\nThe type-locality is Dapeng Bay, South China Sea, off Nan’ao, Shenzhen, Guangdong Province, China (23°25'N, 11°82'E), and the type-host is Epinephelus coioides.[1]\n",
+  "concepts": [
+    "Pseudorhabdosynochus shenzhenensis",
+    "species",
+    "pseudorhabdosynochus",
+    "type",
+    "shenzhenensis",
+    "organ",
+    "monogenean",
+    "type locality",
+    "species pseudorhabdosynochus",
+    "sclerotized",
+    "pseudorhabdosynochus shenzhenensis"
+  ],
+  "findings": [
+    "Description",
+    "Etymology",
+    "Hosts and localities",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Pseudorhabdosynochus shenzhenensis",
+      "relationship": "is a",
+      "object": "species of diplectanid monogenean parasitic on the gills of the grouper epinephelus coioides",
+      "sentence": "Pseudorhabdosynochus shenzhenensis is a species of diplectanid monogenean parasitic on the gills of the grouper Epinephelus coioides."
+    },
+    {
+      "subject": "Pseudorhabdosynochus shenzhenensis",
+      "relationship": "is a",
+      "object": "small monogenean",
+      "sentence": "[1]\n\nPseudorhabdosynochus shenzhenensis is a small monogenean, 0.3-0.5 mm in length."
+    }
+  ],
+  "timestamp": "2025-04-11T13:35:20.324682"
+}

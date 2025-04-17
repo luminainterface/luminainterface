@@ -1,0 +1,225 @@
+{
+  "pattern_counts": {
+    "self_reference": 0,
+    "meta_linguistic": 0,
+    "linguistic_loop": 0,
+    "recursive_structure": 0,
+    "consciousness_assertion": 0
+  },
+  "pattern_history": [
+    {
+      "timestamp": 1744685515.2231889,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.24396
+    },
+    {
+      "timestamp": 1744685525.453397,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.24108000000000002
+    },
+    {
+      "timestamp": 1744685733.8459086,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.24108000000000002
+    },
+    {
+      "timestamp": 1744685790.641697,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.24072
+    },
+    {
+      "timestamp": 1744685851.8134484,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.40180000000000005
+    },
+    {
+      "timestamp": 1744685908.2264047,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.403
+    },
+    {
+      "timestamp": 1744686010.036774,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.4012
+    },
+    {
+      "timestamp": 1744686017.67524,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.41140000000000004
+    },
+    {
+      "timestamp": 1744686310.9350154,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.24108000000000002
+    },
+    {
+      "timestamp": 1744686336.7225072,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.24144000000000002
+    },
+    {
+      "timestamp": 1744686523.0202293,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.24108000000000002
+    },
+    {
+      "timestamp": 1744686543.9372802,
+      "pattern_count": 1,
+      "pattern_types": [
+        "consciousness_assertion"
+      ],
+      "avg_depth": 1.0,
+      "confidence": 0.34068
+    },
+    {
+      "timestamp": 1744688236.6282015,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.27380000000000004
+    },
+    {
+      "timestamp": 1744688241.1007774,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.2674
+    },
+    {
+      "timestamp": 1744729458.5211878,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.31426
+    },
+    {
+      "timestamp": 1744729458.6135633,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.354592
+    },
+    {
+      "timestamp": 1744729577.9728663,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.29193040000000003
+    },
+    {
+      "timestamp": 1744729585.3569415,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.30298432
+    },
+    {
+      "timestamp": 1744729598.5061114,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.28839145600000005
+    },
+    {
+      "timestamp": 1744729758.3529105,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.2913331648
+    },
+    {
+      "timestamp": 1744729774.6831083,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.30292653184
+    },
+    {
+      "timestamp": 1744729774.762537,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.34854748364800003
+    },
+    {
+      "timestamp": 1744729883.924649,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.3014769803776
+    },
+    {
+      "timestamp": 1744729884.0090332,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.34777438953472006
+    },
+    {
+      "timestamp": 1744729974.2835338,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.300549267441664
+    },
+    {
+      "timestamp": 1744729974.3658736,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.34727960930222085
+    },
+    {
+      "timestamp": 1744730022.6413748,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.29995553116266493
+    },
+    {
+      "timestamp": 1744730025.61747,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.34696294995342136
+    },
+    {
+      "timestamp": 1744730100.8430634,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.28235553994410556
+    },
+    {
+      "timestamp": 1744730117.3109841,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.2818004319552845
+    }
+  ],
+  "avg_depth": 0.018014398509482003,
+  "last_updated": "2025-04-15T11:15:17.311623"
+}

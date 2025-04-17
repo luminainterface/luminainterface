@@ -1,0 +1,94 @@
+{
+  "id": "1f7422eb-f1f7-4916-915d-a62d7d27f16e",
+  "created_at": 1744800622.2187932,
+  "topic_history": [
+    {
+      "topic": "working?",
+      "first_occurrence": 1744800644.8176003,
+      "latest_occurrence": 1744800644.8176005,
+      "occurrences": 1,
+      "initial_relevance": 0.7692307692307692
+    },
+    {
+      "topic": "weighting",
+      "first_occurrence": 1744800644.817605,
+      "latest_occurrence": 1744800644.8176053,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "that's",
+      "first_occurrence": 1744800644.817607,
+      "latest_occurrence": 1744800644.8176072,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "interesting",
+      "first_occurrence": 1744800644.817608,
+      "latest_occurrence": 1744800644.817608,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "point",
+      "first_occurrence": 1744800644.8176093,
+      "latest_occurrence": 1744800644.8176093,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "about",
+      "first_occurrence": 1744800644.81761,
+      "latest_occurrence": 1744800644.8176103,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "have",
+      "first_occurrence": 1744800644.8176107,
+      "latest_occurrence": 1744800644.817611,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "considered",
+      "first_occurrence": 1744800644.8176115,
+      "latest_occurrence": 1744800644.8176115,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "relationship",
+      "first_occurrence": 1744800644.8176117,
+      "latest_occurrence": 1744800644.817612,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "between",
+      "first_occurrence": 1744800644.817613,
+      "latest_occurrence": 1744800644.8176131,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "many",
+      "first_occurrence": 1744800644.8176138,
+      "latest_occurrence": 1744800644.8176138,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    },
+    {
+      "topic": "dimensions?",
+      "first_occurrence": 1744800644.8176146,
+      "latest_occurrence": 1744800644.8176146,
+      "occurrences": 1,
+      "initial_relevance": 0.3846153846153846
+    }
+  ],
+  "thought_process_count": 0,
+  "exchange_count": 1,
+  "updated_at": 1744800644.8192325,
+  "topic_count": 12
+}

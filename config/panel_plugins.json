@@ -1,0 +1,110 @@
+{
+  "enabled": true,
+  "auto_discover": true,
+  "discovery_paths": [
+    "src/visualization/panels",
+    "plugins/dashboard"
+  ],
+  "load_order": [
+    "overview_panel",
+    "neural_activity_panel",
+    "language_processing_panel",
+    "system_metrics_panel",
+    "memory_system_panel",
+    "dream_mode_panel",
+    "configuration_panel"
+  ],
+  "plugins": [
+    {
+      "name": "OverviewPanel",
+      "module": "src.visualization.panels.overview_panel",
+      "class": "OverviewPanel",
+      "enabled": true,
+      "tab_order": 0,
+      "tab_title": "Overview",
+      "description": "Main dashboard overview with key metrics and status"
+    },
+    {
+      "name": "NeuralActivityPanel",
+      "module": "src.visualization.panels.neural_activity_panel",
+      "class": "NeuralActivityPanel",
+      "enabled": true,
+      "tab_order": 1,
+      "tab_title": "Neural Activity",
+      "description": "Visualization of neural network activity and patterns"
+    },
+    {
+      "name": "LanguageProcessingPanel",
+      "module": "src.visualization.panels.language_processing_panel",
+      "class": "LanguageProcessingPanel", 
+      "enabled": true,
+      "tab_order": 2,
+      "tab_title": "Language",
+      "description": "Tracking language processing metrics and integration"
+    },
+    {
+      "name": "SystemMetricsPanel",
+      "module": "src.visualization.panels.system_metrics_panel",
+      "class": "SystemMetricsPanel",
+      "enabled": true,
+      "tab_order": 3,
+      "tab_title": "System",
+      "description": "System resource monitoring and performance metrics"
+    },
+    {
+      "name": "MemorySystemPanel",
+      "module": "src.visualization.panels.memory_system_panel",
+      "class": "MemorySystemPanel",
+      "enabled": true,
+      "tab_order": 4,
+      "tab_title": "Memory",
+      "description": "Memory retrieval and storage visualization"
+    },
+    {
+      "name": "DreamModePanel",
+      "module": "src.visualization.panels.dream_mode_panel",
+      "class": "DreamModePanel",
+      "enabled": true,
+      "tab_order": 5,
+      "tab_title": "Dream Mode",
+      "description": "Visualization of dream pattern generation"
+    },
+    {
+      "name": "ConfigurationPanel",
+      "module": "src.visualization.panels.configuration_panel",
+      "class": "ConfigurationPanel",
+      "enabled": true,
+      "tab_order": 6,
+      "tab_title": "Config",
+      "description": "System configuration and parameter adjustment"
+    },
+    {
+      "name": "CustomVisualizer",
+      "module": "plugins.dashboard.custom_visualizer",
+      "class": "CustomVisualizerPanel",
+      "enabled": false,
+      "tab_order": 7,
+      "tab_title": "Custom",
+      "description": "Example of a custom visualization plugin"
+    }
+  ],
+  "panel_defaults": {
+    "refresh_rate": 2000,
+    "active_on_startup": true,
+    "auto_refresh": true,
+    "allow_dock": true,
+    "allow_float": true,
+    "remember_position": true
+  },
+  "compatibility": {
+    "minimum_version": "7.0.0.0",
+    "maximum_version": "7.9.9.9",
+    "check_compatibility": true
+  },
+  "dev_mode": {
+    "enabled": false,
+    "hot_reload": true,
+    "reload_interval": 2000,
+    "show_debug_info": true
+  }
+} 

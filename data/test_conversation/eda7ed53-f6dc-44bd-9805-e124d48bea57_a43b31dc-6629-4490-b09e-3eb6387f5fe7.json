@@ -1,0 +1,23 @@
+{
+  "id": "a43b31dc-6629-4490-b09e-3eb6387f5fe7",
+  "timestamp": 1744754474.9052854,
+  "user_message": "How are transformers used in NLP?",
+  "system_response": "Transformers are a type of neural network architecture that uses self-attention mechanisms to process sequential data like text. They've revolutionized NLP tasks like translation and text generation.",
+  "metadata": {},
+  "active_topics": [
+    "supervised",
+    "weather",
+    "learning",
+    "language",
+    "neural",
+    "model",
+    "machine",
+    "predicts",
+    "(like",
+    "backpropagation",
+    "classification",
+    "natural",
+    "that"
+  ],
+  "thought_process_id": "211c92f7-8248-48a1-aa79-483928301f28"
+}

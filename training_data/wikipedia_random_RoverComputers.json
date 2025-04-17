@@ -1,0 +1,16 @@
+{
+  "title": "RoverComputers",
+  "source": "Wikipedia (Random Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/RoverComputers",
+  "content": "The RoverComputers Group is an independent group of companies based in the Russian capital, Moscow. The group's principal activity is the manufacture and distribution of consumer and commercial electronics and technology under several brand names, including RoverBook, RoverMate, RoverPC, RoverShot, and RoverLight.\n\nRoverComputers dates back to the early 1990s. In 1991, RoverComputers was established as a PC service and repair facility. By 1995, RoverComputers had released its first laptop computer based on the Intel 486 CPU, establishing the RoverBook brand and producing Russia's first ever Russian-made line of notebooks.[1] During this process RoverComputers became OEM partner of the Intel Corporation in Russia. Today, it remains the only Laptop manufactured in Russia available on the Russian market.\n\nIn 2010, RoverComputers announced a line of tablet computers under the brand name RoverPad. The line includes five models: RoverPad Air G70, RoverPad Go G50, RoverPad Go G72, RoverPad TegA W70 and RoverPad 3WG70. RoverPad Air G70 runs Windows CE 6.0, while the others run Google Android.\n",
+  "concepts": [
+    "RoverComputers"
+  ],
+  "findings": [
+    "History",
+    "Products",
+    "References",
+    "External links"
+  ],
+  "timestamp": "2025-04-11T10:13:03.242789"
+}

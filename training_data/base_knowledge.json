@@ -1,0 +1,48 @@
+{
+    "quantum_mechanics": {
+        "concepts": [
+            "Wave-Particle Duality",
+            "Quantum Superposition",
+            "Quantum Entanglement",
+            "Uncertainty Principle",
+            "Wave Function"
+        ],
+        "isomorphisms": [
+            {
+                "source": "Wave-Particle Duality",
+                "target": "Mind-Body Duality",
+                "confidence": 0.8,
+                "explanation": "Both represent fundamental dualities in their respective domains"
+            },
+            {
+                "source": "Quantum Superposition",
+                "target": "Multiple Interpretations",
+                "confidence": 0.7,
+                "explanation": "Both involve simultaneous existence of multiple states/meanings"
+            }
+        ]
+    },
+    "linguistics": {
+        "concepts": [
+            "Syntax",
+            "Semantics",
+            "Morphology",
+            "Phonology",
+            "Pragmatics"
+        ],
+        "isomorphisms": [
+            {
+                "source": "Syntax",
+                "target": "Mathematical Structure",
+                "confidence": 0.9,
+                "explanation": "Both deal with formal rules governing valid combinations"
+            },
+            {
+                "source": "Semantics",
+                "target": "Physical Interpretation",
+                "confidence": 0.8,
+                "explanation": "Both concern meaning and interpretation of formal structures"
+            }
+        ]
+    }
+} 

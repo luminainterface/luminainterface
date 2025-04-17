@@ -1,0 +1,32 @@
+{
+  "title": "Anomalotinea",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Anomalotinea",
+  "content": "Anomalotinea is a genus of moths belonging to the family Tineidae.[2]\n\nThis Tineidae-related article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Anomalotinea",
+    "tineidae",
+    "wikipedia expanding",
+    "wikipedia",
+    "tineidae tineidae",
+    "tineidae related",
+    "stub help",
+    "stub",
+    "related article",
+    "related",
+    "moths belonging"
+  ],
+  "findings": [
+    "Species",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Anomalotinea",
+      "relationship": "is a",
+      "object": "genus of moths belonging to the family tineidae",
+      "sentence": "Anomalotinea is a genus of moths belonging to the family Tineidae."
+    }
+  ],
+  "timestamp": "2025-04-11T13:27:24.180737"
+}

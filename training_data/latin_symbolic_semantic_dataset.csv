@@ -1,0 +1,16 @@
+input,output,subject,verb,completion,english_translation,symbolic_roles,intent_tags
+Avem volare.,S-V,Avis,volat,(none),Avis flies.,"{'agent': 'Avis', 'action': 'volat'}",{'intent': 'action'}
+Puer librum legit.,S-V-O,Puer,legit,librum,The boy reads a book.,"{'agent': 'Puer', 'action': 'legit', 'target': 'librum'}",{'intent': 'interaction'}
+Caelum caeruleum est.,S-V-Adj,Caelum,est,caeruleum,The sky is blue.,"{'agent': 'Caelum', 'action': 'est', 'attribute': 'caeruleum'}",{'intent': 'description'}
+Puer celeriter currit.,S-V-Adv,Puer,currit,celeriter,The boy runs quickly.,"{'agent': 'Puer', 'action': 'currit', 'modality': 'celeriter'}",{'intent': 'movement'}
+Liber in mensa est.,S-V-PP,Liber,est,in mensa,The book is on the table.,"{'agent': 'Liber', 'action': 'est', 'location': 'in mensa'}",{'intent': 'existence'}
+Estne puella laeta?,Estne...?,puella,est,laeta,Unable to translate: Estne puella laeta?,{},{'intent': 'unknown'}
+Non est frigidum.,Non...,(none),est,frigidum,Unable to translate: Non est frigidum.,{},{'intent': 'unknown'}
+Claude ianuam.,V-(O/PP),(Tu - implied),claude,ianuam,Unable to translate: Claude ianuam.,{},{'intent': 'unknown'}
+I + I = II,I + I,I,+,I,Unable to translate: I + I = II,{},{'intent': 'unknown'}
+II * III = VI,II * III,II,*,III,Unable to translate: II * III = VI,{},{'intent': 'unknown'}
+X - V = V,X - V,X,-,V,Unable to translate: X - V = V,{},{'intent': 'unknown'}
+VI / II = III,VI / II,VI,/,II,Unable to translate: VI / II = III,{},{'intent': 'unknown'}
+Puer habet I + II libros.,S-V-O + Arithmetic,Puer,habet,I + II libros,Unable to translate: Puer habet I + II libros.,{},{'intent': 'unknown'}
+Sumus III + IV in numero.,S-V-Adj + Arithmetic,Nos,sumus,III + IV in numero,Unable to translate: Sumus III + IV in numero.,{},{'intent': 'unknown'}
+Est in via II + III.,S-V-PP + Arithmetic,(none),est,in via II + III,Unable to translate: Est in via II + III.,{},{'intent': 'unknown'}

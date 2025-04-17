@@ -1,0 +1,36 @@
+{
+  "title": "Sacred Wonders of Britain",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Sacred_Wonders_of_Britain",
+  "content": "Sacred Wonders of Britain is a British television documentary series that was first broadcast on BBC Two on 30 December 2013. The three-part series was presented by Neil Oliver. Computer-generated imagery was produced by Carbon Digital at MediaCityUK for the series, including the title sequence.[1]\n\nAccording to overnight figures, the first episode had 2.36 million viewers with 9.79% of the audience share.[3] The second and third episodes had audience shares of 7.3%.[4][5]\n\nLucy Mangan of The Guardian said the programme was \"equally unafraid to be informative and meditative, which made it rather wonderful\".[6] The Daily Mirror called it a \"towering spectacle of non-information\" and was unconvinced by the series.[7]\n",
+  "concepts": [
+    "Sacred Wonders of Britain",
+    "series",
+    "audience",
+    "wonderful daily",
+    "wonderful",
+    "viewers 79",
+    "viewers",
+    "unconvinced series",
+    "unconvinced",
+    "unafraid informative",
+    "unafraid"
+  ],
+  "findings": [
+    "Episode list",
+    "Reception",
+    "Ratings",
+    "Critical reception",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Sacred Wonders of Britain",
+      "relationship": "is a",
+      "object": "british television documentary series that was first broadcast on bbc two on 30 december 2013",
+      "sentence": "Sacred Wonders of Britain is a British television documentary series that was first broadcast on BBC Two on 30 December 2013."
+    }
+  ],
+  "timestamp": "2025-04-11T13:36:47.645492"
+}

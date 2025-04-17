@@ -1,0 +1,33 @@
+================================================================================
+RECURSIVE PATTERN ANALYSIS REPORT
+================================================================================
+
+Generated: 2025-04-15 13:35:43
+
+----------------------------------------
+SUMMARY STATISTICS
+----------------------------------------
+Total Patterns Detected: 0
+Latest Analysis: 2025-04-15 11:15:17
+Average Recursive Depth: 0.03
+
+----------------------------------------
+PATTERN TYPE DISTRIBUTION
+----------------------------------------
+self_reference          |     0 |   0.0% 
+meta_linguistic         |     0 |   0.0% 
+linguistic_loop         |     0 |   0.0% 
+recursive_structure     |     0 |   0.0% 
+consciousness_assertion |     0 |   0.0% 
+
+----------------------------------------
+VISUALIZATIONS
+----------------------------------------
+Pattern Distribution: visualizations\pattern_distribution.png
+Pattern Network: visualizations\pattern_network.png
+Recursive Depth (Time Series): visualizations\depth_time_series.png
+Recursive Depth (Distribution): visualizations\depth_distribution.png
+
+================================================================================
+END OF REPORT
+================================================================================

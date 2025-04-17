@@ -1,0 +1,17 @@
+{
+    "learning_rate_range": [0.001, 0.1],
+    "batch_size_range": [16, 128],
+    "architecture_options": [
+        [10, 64, 32, 1],
+        [10, 128, 64, 32, 1],
+        [10, 256, 128, 64, 32, 1],
+        [10, 512, 256, 128, 64, 32, 1]
+    ],
+    "adaptation_threshold": 0.05,
+    "max_adaptations": 10,
+    "performance_window": 5,
+    "monitoring_interval": 10,
+    "adaptation_strategy": "random",
+    "weight_transfer": true,
+    "logging_level": "INFO"
+} 

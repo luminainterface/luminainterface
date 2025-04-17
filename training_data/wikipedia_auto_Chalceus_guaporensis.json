@@ -1,0 +1,36 @@
+{
+  "title": "Chalceus guaporensis",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Chalceus_guaporensis",
+  "content": "Chalceus guaporensis is a species of freshwater fish in the family Chalceidae that inhabits northern South America. Alongside C. epakros and C. spilogyros, it was added to the genus Chalceus in the year 2004.\n\nVisually, C. guaporensis is similar to other Chalceus species, with metallic scales and a vivid caudal fin (often reddish or pinkish). It is also within the average size range of the genus, reaching 17.4 cm SL.[1] It has a darker stripe down each side that reaches the caudal peduncle;[2] C. guaporensis and C. epakros are the only two members of the genus Chalceus to sport this lateral stripe, differentiating them from the other three.[3] C. guaporensis also usually has humeral spots (a dark spot above each pectoral fin), but they are not as well-defined as those in C. spilogyros or C. epakros.[3] C. guaporensis and C. epakros share a more elongated and pointed snout than other Chalceus species, but it is more pronounced in C. epakros.[4]\n\nChalceus guaporensis and C. epakros also both lack a fontanel (soft, membranous spot) between the parietal and frontal bones of the head.[2] However, C. guaporensis has seven pelvic fin rays, as opposed to eight in other Chalceus species, which is the most certain method of visual identification.[5]\n\nThe specific name guaporensis is from the Guaporé River in Bolivia, one of C. guaporensis's habitats, with the Latin suffix \"-ensis\" denoting a place of origin;[6][7] compare Lynx canadensis, the Canada lynx, or Sotalia guianensis, the Guiana dolphin. It is the only member of the genus Chalceus to be named after a location.\n\nThe genus name Chalceus comes from the Greek word \"chalkos\", which means \"copper\".[1][8] This in turn is from the original description of the first Chalceus species, the pinktail chalceus (C. macrolepidotus), wherein Georges Cuvier noted that its scales were coppery (\"sometimes golden\") when preserved in alcohol.[6][9]\n\nChalceus guaporensis was named in the year 2004 by Brazilian biologists Mônica Toledo-Piza and Angela M. Zanata.[1] In the same revision of the genus Chalceus, its congeners C. epakros and C. spilogyros were also named.[2] In 2005, C. guaporensis and C. epakros were determined to make up a single clade.[4]\n\nThere are five accepted species of Chalceus; the other two are the pinktail chalceus (C. macrolepidotus) and the yellowfin chalceus (C. erythrurus).[10] The former of these is the type species of Chalceus.[11]\n\nLike the rest of the genus Chalceus,[12] C. guaporensis lives in northern South America. It gets its scientific name because it lives in the Guaporé River in Bolivia, but it also lives in the Madre de Dios River in Peru and the Madeira River in Brazil.[1] It is considered endemic to these areas.[5] The only other Chalceus species to occur in the Guaporé River is the pinktail.[3]\n\nDespite many similarities and a close genetic relationship to C. epakros, the habitat of C. guaporensis is more restricted, and the two are not found in the same places. This is thought to either be due to competition between the species, or due to slightly different environmental needs.[5] In contrast to how limited C. guaporensis is concerning where it lives, C. epakros is the most widespread member of the genus Chalceus.[2]\n\nChalceus guaporensis is largely a myrmecophagous insectivore, targeting ants and the aquatic larvae of moths and butterflies (Lepidoptera), though it also eats beetles, crickets, and some plant material.[5]\n",
+  "concepts": [
+    "Chalceus guaporensis",
+    "chalceus",
+    "guaporensis",
+    "epakros",
+    "species",
+    "genus",
+    "genus chalceus",
+    "river",
+    "chalceus species",
+    "lives",
+    "guaporensis epakros"
+  ],
+  "findings": [
+    "Description",
+    "Etymology",
+    "Taxonomy",
+    "Habitat",
+    "Diet and behavior",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Chalceus guaporensis",
+      "relationship": "is a",
+      "object": "species of freshwater fish in the family chalceidae that inhabits northern south america",
+      "sentence": "Chalceus guaporensis is a species of freshwater fish in the family Chalceidae that inhabits northern South America."
+    }
+  ],
+  "timestamp": "2025-04-11T13:27:06.795053"
+}

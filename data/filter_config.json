@@ -1,0 +1,20 @@
+{
+  "default_thresholds": {
+    "pattern_confidence": 0.7,
+    "association_strength": 0.5,
+    "concept_importance": 0.6,
+    "learning_value": 0.5
+  },
+  "pattern_types": {
+    "neural": 0.65,
+    "linguistic": 0.7,
+    "semantic": 0.75,
+    "recursive": 0.8
+  },
+  "enabled_filters": {
+    "pattern_filtering": true,
+    "association_filtering": true,
+    "concept_filtering": true,
+    "memory_filtering": true
+  }
+}

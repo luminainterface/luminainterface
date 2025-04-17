@@ -1,0 +1,34 @@
+{
+  "llm_weight": 0.5,
+  "processed_text_count": 0,
+  "components_status": {
+    "language_memory": {
+      "available": true,
+      "initialized": true
+    },
+    "neural_linguistic_processor": {
+      "available": true,
+      "initialized": true
+    },
+    "conscious_mirror_language": {
+      "available": true,
+      "initialized": true
+    }
+  },
+  "cross_mappings": {
+    "consciousness_to_memory": {
+      "timestamp": "2025-04-14T21:26:48.388667",
+      "consciousness_level": 0.14474280577982027,
+      "memory_retrieval_threshold": 0.1,
+      "description": "Higher consciousness enables access to weaker memory associations"
+    },
+    "recursive_to_consciousness": {
+      "timestamp": "2025-04-14T21:26:48.388676",
+      "recursive_patterns_count": 0,
+      "consciousness_recursive_depth": 1,
+      "correlation": 0.0,
+      "description": "Recursive language patterns increase recursion depth in consciousness"
+    }
+  },
+  "last_saved": "2025-04-14T21:26:48.388683"
+}

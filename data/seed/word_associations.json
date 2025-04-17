@@ -1,0 +1,38 @@
+{
+  "neural": {
+    "network": 0.9,
+    "pattern": 0.8,
+    "learning": 0.7,
+    "growth": 0.6
+  },
+  "grow": {
+    "develop": 0.8,
+    "expand": 0.7,
+    "increase": 0.6,
+    "evolve": 0.9
+  },
+  "conscious": {
+    "aware": 0.9,
+    "sentient": 0.8,
+    "cognizant": 0.7,
+    "mindful": 0.6
+  },
+  "system": {
+    "network": 0.8,
+    "framework": 0.7,
+    "structure": 0.6,
+    "platform": 0.5
+  },
+  "version": {
+    "release": 0.7,
+    "iteration": 0.6,
+    "update": 0.8,
+    "evolution": 0.9
+  },
+  "language": {
+    "communication": 0.8,
+    "expression": 0.7,
+    "words": 0.6,
+    "meaning": 0.9
+  }
+}

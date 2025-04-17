@@ -1,0 +1,33 @@
+{
+  "title": "Radio Parallax",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Radio_Parallax",
+  "content": "Radio Parallax is a weekly public affairs radio show created and hosted by physician Douglas Everett. Radio Parallax covers topics in the political and scientific arena. The show is noted for its prominent guests including national figures, authors, investigative journalists, documentary filmmakers, entertainers, and other people of interest. \n\nFrom 2003 to 2020, the show aired in the Sacramento Valley region of California as part of the freeform radio station KDVS, which is broadcast from the University of California at Davis (it was, and still is, one of the station's longest running programs). The show went on hiatus from 2015 to 2016, with edited reruns and occasional new interviews. It was also a part of the lineup at KZFR in Chico, California from 2008 to 2021, and has from time to time aired on other stations in California and Indiana. The show has been available as a podcast since 2005, and has returned to terrestrial broadcasting on KDVS as of 2022.\n\nDouglas Everett grew up in the San Francisco Bay Area. After receiving a BS degree in Biological Sciences from UC Davis, Doug went on to earn an MD from UC Irvine. In addition to hosting Radio Parallax, he was a practicing physician in the Central Valley of California for three decades. Doug served as the initial substitute host for Capital Public Radio's Insight program under Jeffrey Callison, hosting about 60 shows. A \"Telemarketers\" piece for CPR won a First Place (Division A) PRNDI Award (Public Radio News Directors Incorporated) in 2002.\n",
+  "concepts": [
+    "Radio Parallax",
+    "radio",
+    "california",
+    "radio parallax",
+    "public",
+    "parallax",
+    "went",
+    "valley",
+    "uc",
+    "time",
+    "station"
+  ],
+  "findings": [
+    "History",
+    "Creator",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Radio Parallax",
+      "relationship": "is a",
+      "object": "weekly public affairs radio show created and hosted by physician douglas everett",
+      "sentence": "Radio Parallax is a weekly public affairs radio show created and hosted by physician Douglas Everett."
+    }
+  ],
+  "timestamp": "2025-04-11T16:39:01.090815"
+}

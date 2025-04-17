@@ -1,0 +1,34 @@
+{
+  "title": "Lisburn's 98FM",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Lisburn's_98FM",
+  "content": "Lisburn's 98FM is a local radio station based in the Lisburn, located between County Down and County Antrim, and broadcasting to the greater Lisburn area. It features a mixture of music, entertainment news, sport and local information.[1]\n\nThe station was issued a licence to operate on 30 September 2011, and shortly after commenced broadcasting under the name Lisburn City Radio.\n\nIt was renamed and officially launched as Lisburn's 98FM on 28 June 2012 during a ceremony which included Mayor William Leathem, local dignitaries and various community groups.[2]\n\nLisburn's 98FM is affiliated with sister stations Bangor FM and FM105. It is also supported by the South Eastern Regional College, which provides studio and production space. SERC provides a route of access to the station for students interested in the media field.[3]\n\nThe station holds a community radio licence, issued by Ofcom.[4]\n",
+  "concepts": [
+    "Lisburn's 98FM",
+    "lisburn",
+    "station",
+    "radio",
+    "local",
+    "lisburn 98fm",
+    "98fm",
+    "provides",
+    "licence",
+    "issued",
+    "county"
+  ],
+  "findings": [
+    "History",
+    "Affiliation",
+    "Licence",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Lisburn's 98FM",
+      "relationship": "is a",
+      "object": "local radio station based in the lisburn",
+      "sentence": "Lisburn's 98FM is a local radio station based in the Lisburn, located between County Down and County Antrim, and broadcasting to the greater Lisburn area."
+    }
+  ],
+  "timestamp": "2025-04-11T15:16:49.035031"
+}

@@ -1,0 +1,33 @@
+{
+  "title": "ChemPhysChem",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/ChemPhysChem",
+  "content": "ChemPhysChem is a biweekly peer-reviewed scientific journal published by Wiley-VCH on behalf of Chemistry Europe. It was established in 2000 and covers all aspects of chemical physics and physical chemistry. Initially published monthly, the journal moved to 18 issues per year in 2007, and further to biweekly in 2016.\n\nThe journal is abstracted and indexed by:\n\nAccording to the Journal Citation Reports, the journal has a 2021 impact factor of 3.520.[1]\n\nThis article about a physical chemistry journal is a stub. You can help Wikipedia by expanding it.\nSee tips for writing articles about academic journals. Further suggestions might be found on the article's talk page.",
+  "concepts": [
+    "ChemPhysChem",
+    "journal",
+    "chemistry",
+    "published",
+    "physical chemistry",
+    "physical",
+    "biweekly",
+    "article",
+    "writing articles",
+    "writing",
+    "wiley vch"
+  ],
+  "findings": [
+    "Abstracting and indexing",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "ChemPhysChem",
+      "relationship": "is a",
+      "object": "biweekly peer",
+      "sentence": "ChemPhysChem is a biweekly peer-reviewed scientific journal published by Wiley-VCH on behalf of Chemistry Europe."
+    }
+  ],
+  "timestamp": "2025-04-11T13:27:56.434356"
+}

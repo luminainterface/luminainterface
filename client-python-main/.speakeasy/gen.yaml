@@ -1,0 +1,51 @@
+configVersion: 2.0.0
+generation:
+  sdkClassName: Mistral
+  maintainOpenAPIOrder: true
+  usageSnippets:
+    optionalPropertyRendering: withExample
+  useClassNamesForArrayFields: true
+  fixes:
+    nameResolutionDec2023: true
+    nameResolutionFeb2025: false
+    parameterOrderingFeb2024: true
+    requestResponseComponentNamesFeb2024: true
+    securityFeb2025: false
+  auth:
+    oAuth2ClientCredentialsEnabled: true
+    oAuth2PasswordEnabled: false
+python:
+  version: 1.6.0
+  additionalDependencies:
+    dev:
+      pytest: ^8.2.2
+      pytest-asyncio: ^0.23.7
+  authors:
+    - Mistral
+  clientServerStatusCodesAsErrors: true
+  defaultErrorName: SDKError
+  description: Python Client SDK for the Mistral AI API.
+  enableCustomCodeRegions: true
+  enumFormat: union
+  envVarPrefix: MISTRAL
+  fixFlags:
+    responseRequiredSep2024: true
+  flattenGlobalSecurity: true
+  flattenRequests: true
+  flatteningOrder: parameters-first
+  imports:
+    option: openapi
+    paths:
+      callbacks: ""
+      errors: ""
+      operations: ""
+      shared: ""
+      webhooks: ""
+  inputModelSuffix: input
+  maxMethodParams: 15
+  methodArguments: infer-optional-args
+  outputModelSuffix: output
+  packageName: mistralai
+  pytestTimeout: 0
+  responseFormat: flat
+  templateVersion: v2

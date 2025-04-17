@@ -1,0 +1,158 @@
+{
+  "log_level": "INFO",
+  "mock_mode": false,
+  
+  "v1v2_config": {
+    "mock_mode": false,
+    "log_level": "INFO",
+    "default_connection_type": "bidirectional",
+    "text_interface_host": "localhost",
+    "text_interface_port": 8765,
+    "gui_interface_host": "localhost", 
+    "gui_interface_port": 8766,
+    "message_queue_size": 100,
+    "reconnect_attempts": 5,
+    "reconnect_delay": 3
+  },
+  
+  "v3v4_config": {
+    "mock_mode": false,
+    "log_level": "INFO",
+    "host": "localhost",
+    "port": 8767,
+    "connection_timeout": 10,
+    "message_queue_size": 100,
+    "breath_update_interval": 0.5,
+    "glyph_update_interval": 1.0,
+    "neural_update_interval": 0.25,
+    "auto_reconnect": true,
+    "reconnect_attempts": 5,
+    "reconnect_delay": 3
+  },
+  
+  "v5_language_config": {
+    "mock_mode": false,
+    "log_level": "INFO",
+    "api_host": "localhost",
+    "api_port": 8768,
+    "connection_timeout": 10,
+    "max_cache_size": 500,
+    "cache_expiry": 300,
+    "topic_refresh_interval": 60,
+    "batch_size": 50,
+    "fractal_generation": {
+      "max_depth": 5,
+      "resolution": [800, 800],
+      "color_scheme": "neural_resonance",
+      "animation_frames": 120,
+      "use_gpu": true
+    }
+  },
+  
+  "v5_system_module": "v5_system",
+  "v5_system_class": "V5System",
+  "v5_config": {
+    "log_level": "INFO",
+    "plugin_dir": "src/v5/plugins",
+    "data_dir": "data/v5",
+    "visualization": {
+      "width": 1200,
+      "height": 800,
+      "fps": 60,
+      "fullscreen": false,
+      "renderer": "opengl"
+    },
+    "socket": {
+      "host": "localhost",
+      "port": 9000,
+      "max_connections": 10
+    }
+  },
+  
+  "language_memory_module": "language_memory",
+  "language_memory_class": "LanguageMemorySystem",
+  "language_memory_config": {
+    "log_level": "INFO",
+    "data_dir": "data/memory",
+    "embeddings_model": "sentence-transformers/all-mpnet-base-v2",
+    "topic_model": "top2vec",
+    "min_topic_size": 10,
+    "vector_dimensions": 768,
+    "index_type": "faiss",
+    "batch_size": 64,
+    "use_gpu": true,
+    "storage": {
+      "type": "sqlite",
+      "path": "data/memory/language_memory.db"
+    },
+    "api": {
+      "host": "localhost",
+      "port": 8768,
+      "workers": 4
+    }
+  },
+  
+  "socket_manager_module": "socket_manager",
+  "socket_manager_class": "SocketManager",
+  "socket_manager_config": {
+    "log_level": "INFO",
+    "host": "0.0.0.0",
+    "port": 9000,
+    "max_connections": 10,
+    "connection_timeout": 60,
+    "authentication": {
+      "enabled": false,
+      "token_expiry": 3600
+    },
+    "cors": {
+      "allowed_origins": ["*"],
+      "allowed_methods": ["GET", "POST"],
+      "allowed_headers": ["*"]
+    }
+  },
+  
+  "message_handlers": {
+    "v1v2": ["text_update", "resonance_update", "pattern_update", "memory_query"],
+    "v3v4": ["breath_state_update", "glyph_update", "neural_resonance"],
+    "v5_language": ["memory_update", "topic_update", "fractal_pattern"]
+  },
+  
+  "message_type_map": {
+    "v1v2": {
+      "to_v3v4": {
+        "text_update": "v1v2_text_to_v3v4",
+        "resonance_update": "v1v2_resonance_to_v3v4",
+        "pattern_update": "v1v2_pattern_to_v3v4"
+      },
+      "to_v5": {
+        "text_update": "v1v2_text_to_v5",
+        "memory_query": "v1v2_query_to_v5",
+        "pattern_update": "v1v2_pattern_to_v5"
+      }
+    },
+    "v3v4": {
+      "to_v1v2": {
+        "breath_state_update": "v3v4_breath_to_v1v2",
+        "glyph_update": "v3v4_glyph_to_v1v2",
+        "neural_resonance": "v3v4_resonance_to_v1v2"
+      },
+      "to_v5": {
+        "breath_state_update": "v3v4_breath_to_v5",
+        "glyph_update": "v3v4_glyph_to_v5",
+        "neural_resonance": "v3v4_resonance_to_v5"
+      }
+    },
+    "v5": {
+      "to_v1v2": {
+        "memory_update": "v5_memory_to_v1v2",
+        "topic_update": "v5_topic_to_v1v2",
+        "fractal_pattern": "v5_fractal_to_v1v2"
+      },
+      "to_v3v4": {
+        "memory_update": "v5_memory_to_v3v4",
+        "topic_update": "v5_topic_to_v3v4",
+        "fractal_pattern": "v5_fractal_to_v3v4"
+      }
+    }
+  }
+} 

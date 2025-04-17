@@ -1,0 +1,31 @@
+{
+  "title": "Gregopimpla",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Gregopimpla",
+  "content": "Gregopimpla is a genus of parasitoid wasps belonging to the family Ichneumonidae.[1]\n\nThe species of this genus are found in Europe and Northern America.[1]\n\nSpecies:[1]\n",
+  "concepts": [
+    "Gregopimpla",
+    "species",
+    "genus",
+    "wasps belonging",
+    "wasps",
+    "species genus",
+    "parasitoid wasps",
+    "parasitoid",
+    "northern america",
+    "northern",
+    "ichneumonidae species"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Gregopimpla",
+      "relationship": "is a",
+      "object": "genus of parasitoid wasps belonging to the family ichneumonidae",
+      "sentence": "Gregopimpla is a genus of parasitoid wasps belonging to the family Ichneumonidae."
+    }
+  ],
+  "timestamp": "2025-04-11T16:07:32.821406"
+}

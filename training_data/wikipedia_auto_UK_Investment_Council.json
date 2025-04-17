@@ -1,0 +1,31 @@
+{
+  "title": "UK Investment Council",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/UK_Investment_Council",
+  "content": "The UK Investment Council is a government council that brings together global investors to discuss investment into the UK. It aims to enhance inward investment into the UK and inform the trade policy of the UK by providing a forum for investors to advise officials at the Minister for Investment at the Department for Business and Trade (DBT) and the wider government.[1]\n\nThe council was established in April 2021 by Lord Grimstone[2] and typically meets 4 times a year. The council is chaired by the Minister of Investment at the DBT and the Investment Council consists of 31 members. The current members of the council are:\n",
+  "concepts": [
+    "UK Investment Council",
+    "investment",
+    "council",
+    "uk",
+    "trade",
+    "minister investment",
+    "minister",
+    "members",
+    "investors",
+    "investment uk",
+    "investment council"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "UK Investment Council",
+      "relationship": "is a",
+      "object": "government council that brings together global investors to discuss investment into the uk",
+      "sentence": "The UK Investment Council is a government council that brings together global investors to discuss investment into the UK."
+    }
+  ],
+  "timestamp": "2025-04-11T13:27:36.541343"
+}

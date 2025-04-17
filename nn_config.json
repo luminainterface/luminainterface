@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "last_upgrade_check": null,
+  "active_components": [
+    "RSEN",
+    "Aletheia",
+    "PhysicsSubNet"
+  ],
+  "training": {
+    "epochs": 10,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "last_trained": "2025-04-14T10:25:18.416753"
+  },
+  "pipeline": {
+    "input_format": "symbol,emotion,breath,paradox",
+    "output_format": "action,glyph,story,signal"
+  },
+  "component_paths": [
+    "language_memory.py",
+    "english_language_trainer.py",
+    "internal_language.py",
+    "conversation_memory.py",
+    "src/language/language_memory_integration.py",
+    "src/memory/conversation_language_bridge.py"
+  ],
+  "data_paths": [
+    "data/memory"
+  ]
+}

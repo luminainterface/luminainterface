@@ -1,0 +1,27 @@
+{
+  "title": "Out-flow radial turbine",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Out-flow_radial_turbine",
+  "content": "Radial means that the fluid is flowing in radial direction that is either from inward to outward or from outward to inward, with respect to the runner shaft axis. If the fluid is flowing from inward to outward then it is called outflow radial turbine.\n\nMost practical radial outflow turbines are Reaction-type turbines, whereas the converse, radial inflow turbines can be either reaction type, impulse type (in the case of a typical turbo-supercharger), or intermediate (in the case of Francis turbines for example.)\n\nThe Main Components of Reaction Turbine are :[2]\n\nSome of the advantages of radial outflow turbine are:\n\nRadial flow turbines are generally more preferred in small turbines because of simpler construction. Radial flow turbine rotor does not use aerofoil sections, as a result of which the rotor of radial flow turbine has a shape very similar to a centrifugal compressor and it uses 3D shape for energy extraction. They are more conducive to being produced from a single casting or round billet as a Bladed-disk or \"blisk.\"\n",
+  "concepts": [
+    "Out-flow radial turbine",
+    "radial",
+    "turbines",
+    "turbine",
+    "type",
+    "reaction",
+    "radial flow",
+    "outward",
+    "outflow",
+    "inward",
+    "flow"
+  ],
+  "findings": [
+    "Components of Out-flow Turbine",
+    "Comparison between inward and outward radial flow reaction turbine",
+    "Advantages",
+    "References"
+  ],
+  "relationships": [],
+  "timestamp": "2025-04-11T16:53:19.728417"
+}

@@ -1,0 +1,34 @@
+{
+  "title": "Sawtooth Mountains Wilderness",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Sawtooth_Mountains_Wilderness",
+  "content": "Sawtooth Mountains Wilderness is a federal wilderness area of 32,136 acres (130.0 km2) in the Sawtooth Mountains in eastern San Diego County, California. It is located in the Colorado Desert, 35 miles (56 km) south of Borrego Springs, near Anza-Borrego Desert State Park.[1]\n\nThis land was added to the National Wilderness Preservation System when the US Congress passed the California Desert Protection Act of 1994 (Public Law 103-433).  The Bureau of Land Management is the agency in charge of Sawtooth Mountains Wilderness.\n\nWilderness topography includes ridges, valleys, and canyons that support a wide array of plant and animal life.  Wildlife include raptors, such as the golden eagle and prairie falcon.  The spotted bat, San Diego horned lizard, and the willow flycatcher are also found here.\n\nVegetation consists of Sonoran Desert plants, including ocotillo, cholla cactus, and creosote bush.\n\nAlthough State Route 2 winds along the northern side of the wilderness, there is no legal access due to private lands along the boundary. The only public access is from the Pepperwood Height Trail, at the end of the McCain Valley.\n",
+  "concepts": [
+    "Sawtooth Mountains Wilderness",
+    "wilderness",
+    "desert",
+    "sawtooth mountains",
+    "sawtooth",
+    "mountains",
+    "state",
+    "san diego",
+    "san",
+    "public",
+    "mountains wilderness"
+  ],
+  "findings": [
+    "Description",
+    "See also",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Sawtooth Mountains Wilderness",
+      "relationship": "is a",
+      "object": "federal wilderness area of 32",
+      "sentence": "Sawtooth Mountains Wilderness is a federal wilderness area of 32,136 acres (130.0 km2) in the Sawtooth Mountains in eastern San Diego County, California."
+    }
+  ],
+  "timestamp": "2025-04-11T13:36:23.874319"
+}

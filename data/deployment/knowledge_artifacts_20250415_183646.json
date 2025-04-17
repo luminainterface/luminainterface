@@ -1,0 +1,153 @@
+[
+  {
+    "id": "8a37ad9e-01aa-4024-8cfd-5534855cdf64",
+    "concept": "neural_network",
+    "weight": 0.8609993265328888,
+    "node_type": "concept",
+    "connections": [
+      "eb5200a7-fae4-4318-8a6d-bbba0a9e2acb",
+      "8faf5228-5509-4058-a9d7-a4c732d09224",
+      "5a94c525-0c40-4fbe-9172-2f4987fcd3fa",
+      "d860c2ab-a80a-419a-ae9b-076d74d33963",
+      "4dd33feb-a255-4024-b0fe-00361da79dc9"
+    ],
+    "attributes": {
+      "attached_to_source": "neural_network_api_0",
+      "attached_at": "2025-04-15T18:36:46.516095",
+      "source_id": "3df5192e-f28f-45e7-9a0c-c8a4d6cf927b"
+    },
+    "created_by": "Knowledge CI/CD",
+    "created_at": "2025-04-15T18:36:46.820439"
+  },
+  {
+    "id": "056366e9-709d-4686-9646-7a04c530cb6e",
+    "concept": "consciousness",
+    "weight": 0.8361380095724933,
+    "node_type": "concept",
+    "connections": [
+      "dd3ddd03-f8d2-4672-bfb7-71b6d9c91368",
+      "6a04fc69-6c7b-400b-ae71-0532c50ad27d",
+      "9e40da54-539a-46c3-ad54-6758272df153",
+      "d7887695-7447-43ac-add1-d534a45e5177",
+      "63ec26b2-ee61-4dad-b226-4b87f45e6ff3"
+    ],
+    "attributes": {
+      "attached_to_source": "consciousness_api_1",
+      "attached_at": "2025-04-15T18:36:46.515780",
+      "source_id": "3cf0865f-77ae-4521-94b3-8ec15ea7aad0"
+    },
+    "created_by": "Knowledge CI/CD",
+    "created_at": "2025-04-15T18:36:46.820448"
+  },
+  {
+    "id": "a7593c66-4192-4942-8e5e-2cfdd1370298",
+    "concept": "memory_system",
+    "weight": 0.817720063959655,
+    "node_type": "concept",
+    "connections": [
+      "95930611-6e5f-4cc8-bf5d-ff203450d09e",
+      "852b6891-8027-447c-9ae8-0b3500d4cd2b",
+      "7ec5c578-5b5a-4c17-80d3-01b92c3547cb",
+      "9d27cf98-c0b1-4997-ad27-cabdf3cb3cd9",
+      "a71120c0-960d-431a-87ef-5696e0939964"
+    ],
+    "attributes": {
+      "attached_to_source": "memory_system_api_1",
+      "attached_at": "2025-04-15T18:36:46.515818",
+      "source_id": "49d78fb8-1b70-4743-99c5-04cd5e33730c"
+    },
+    "created_by": "Knowledge CI/CD",
+    "created_at": "2025-04-15T18:36:46.820458"
+  },
+  {
+    "id": "5a94c525-0c40-4fbe-9172-2f4987fcd3fa",
+    "concept": "bias",
+    "weight": 0.7948545563219467,
+    "node_type": "memory",
+    "connections": [
+      "8a37ad9e-01aa-4024-8cfd-5534855cdf64"
+    ],
+    "attributes": {},
+    "created_by": "Knowledge CI/CD",
+    "created_at": "2025-04-15T18:36:46.820459"
+  },
+  {
+    "id": "d970ba50-25fa-4ffb-9021-40897c6b4aa0",
+    "concept": "tokenization",
+    "weight": 0.783702138925066,
+    "node_type": "knowledge",
+    "connections": [
+      "f942c6b5-7966-4b7a-a29d-18b66b905e1d"
+    ],
+    "attributes": {},
+    "created_by": "Knowledge CI/CD",
+    "created_at": "2025-04-15T18:36:46.820462"
+  },
+  {
+    "id": "852b6891-8027-447c-9ae8-0b3500d4cd2b",
+    "concept": "working_memory",
+    "weight": 0.7707303152767235,
+    "node_type": "concept",
+    "connections": [
+      "a7593c66-4192-4942-8e5e-2cfdd1370298"
+    ],
+    "attributes": {},
+    "created_by": "Knowledge CI/CD",
+    "created_at": "2025-04-15T18:36:46.820463"
+  },
+  {
+    "id": "4dd33feb-a255-4024-b0fe-00361da79dc9",
+    "concept": "deep_learning",
+    "weight": 0.7694285283259277,
+    "node_type": "memory",
+    "connections": [
+      "8a37ad9e-01aa-4024-8cfd-5534855cdf64"
+    ],
+    "attributes": {},
+    "created_by": "Knowledge CI/CD",
+    "created_at": "2025-04-15T18:36:46.820464"
+  },
+  {
+    "id": "318ab877-975e-487f-815d-c17662e9bc1e",
+    "concept": "artificial_intelligence",
+    "weight": 0.7614534375159718,
+    "node_type": "concept",
+    "connections": [
+      "93ea9559-5e56-49f8-aafe-bfc9a5187b60",
+      "e8ac61c8-9d70-4735-9eaf-f98677eab82e",
+      "478ad801-d3d2-488a-97f5-5b6cb7084d23",
+      "27feeb23-71e4-4e0b-95c2-121476e48da8"
+    ],
+    "attributes": {
+      "attached_to_source": "artificial_intelligence_api_2",
+      "attached_at": "2025-04-15T18:36:46.516172",
+      "source_id": "6f1b912a-3d1b-4f59-b647-fb694e133583"
+    },
+    "created_by": "Knowledge CI/CD",
+    "created_at": "2025-04-15T18:36:46.820466"
+  },
+  {
+    "id": "9e40da54-539a-46c3-ad54-6758272df153",
+    "concept": "awareness",
+    "weight": 0.7558134420174392,
+    "node_type": "memory",
+    "connections": [
+      "056366e9-709d-4686-9646-7a04c530cb6e"
+    ],
+    "attributes": {},
+    "created_by": "Knowledge CI/CD",
+    "created_at": "2025-04-15T18:36:46.820467"
+  },
+  {
+    "id": "478ad801-d3d2-488a-97f5-5b6cb7084d23",
+    "concept": "natural_language_processing",
+    "weight": 0.7487677183992554,
+    "node_type": "concept",
+    "connections": [
+      "318ab877-975e-487f-815d-c17662e9bc1e"
+    ],
+    "attributes": {},
+    "created_by": "Knowledge CI/CD",
+    "created_at": "2025-04-15T18:36:46.820468"
+  }
+]

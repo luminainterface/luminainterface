@@ -1,0 +1,121 @@
+{
+  "Neural Networks": {
+    "topic": "Neural Networks",
+    "timestamp": "2025-04-15T18:56:50.949620",
+    "summary": "Information about Neural Networks. This is a simulated summary that would normally contain actual information fetched from reliable sources.",
+    "success": true,
+    "source": "simulated",
+    "categories": [
+      "Philosophy",
+      "Technology"
+    ]
+  },
+  "Consciousness": {
+    "topic": "Consciousness",
+    "timestamp": "2025-04-15T18:56:52.951321",
+    "summary": "Information about Consciousness. This is a simulated summary that would normally contain actual information fetched from reliable sources.",
+    "success": true,
+    "source": "simulated",
+    "categories": [
+      "Technology",
+      "Consciousness"
+    ]
+  },
+  "Artificial Intelligence": {
+    "topic": "Artificial Intelligence",
+    "timestamp": "2025-04-15T18:56:54.952737",
+    "summary": "Information about Artificial Intelligence. This is a simulated summary that would normally contain actual information fetched from reliable sources.",
+    "success": true,
+    "source": "simulated",
+    "categories": [
+      "Technology",
+      "AI"
+    ]
+  },
+  "Machine Learning": {
+    "topic": "Machine Learning",
+    "timestamp": "2025-04-15T18:56:56.954305",
+    "summary": "Information about Machine Learning. This is a simulated summary that would normally contain actual information fetched from reliable sources.",
+    "success": true,
+    "source": "simulated",
+    "categories": [
+      "Technology",
+      "Consciousness"
+    ]
+  },
+  "Holographic Interfaces": {
+    "topic": "Holographic Interfaces",
+    "timestamp": "2025-04-15T18:56:58.957210",
+    "summary": "Information about Holographic Interfaces. This is a simulated summary that would normally contain actual information fetched from reliable sources.",
+    "success": true,
+    "source": "simulated",
+    "categories": [
+      "Philosophy",
+      "AI"
+    ]
+  },
+  "Natural Language Processing": {
+    "topic": "Natural Language Processing",
+    "timestamp": "2025-04-15T18:57:00.959128",
+    "summary": "Information about Natural Language Processing. This is a simulated summary that would normally contain actual information fetched from reliable sources.",
+    "success": true,
+    "source": "simulated",
+    "categories": [
+      "Philosophy",
+      "Consciousness"
+    ]
+  },
+  "Knowledge Graphs": {
+    "topic": "Knowledge Graphs",
+    "timestamp": "2025-04-15T18:57:02.961009",
+    "summary": "Information about Knowledge Graphs. This is a simulated summary that would normally contain actual information fetched from reliable sources.",
+    "success": true,
+    "source": "simulated",
+    "categories": [
+      "Technology",
+      "Consciousness"
+    ]
+  },
+  "Memory Systems": {
+    "topic": "Memory Systems",
+    "timestamp": "2025-04-15T18:57:04.964451",
+    "summary": "Information about Memory Systems. This is a simulated summary that would normally contain actual information fetched from reliable sources.",
+    "success": true,
+    "source": "simulated",
+    "categories": [
+      "Computing",
+      "Philosophy"
+    ]
+  },
+  "Self-Awareness": {
+    "topic": "Self-Awareness",
+    "timestamp": "2025-04-15T18:57:06.966609",
+    "summary": "Information about Self-Awareness. This is a simulated summary that would normally contain actual information fetched from reliable sources.",
+    "success": true,
+    "source": "simulated",
+    "categories": [
+      "Philosophy",
+      "Technology"
+    ]
+  },
+  "Learning Algorithms": {
+    "topic": "Learning Algorithms",
+    "timestamp": "2025-04-15T18:57:08.969630",
+    "summary": "Information about Learning Algorithms. This is a simulated summary that would normally contain actual information fetched from reliable sources.",
+    "success": true,
+    "source": "simulated",
+    "categories": [
+      "Technology",
+      "AI"
+    ]
+  },
+  "isomorph": {
+    "title": "Isomorph",
+    "summary": "An isomorph is an organism that does not change in shape during growth. The implication is that its volume is proportional to its cubed length, and its surface area to its squared length. This holds for any shape it might have; the actual shape determines the proportionality constants.",
+    "url": "https://en.wikipedia.org/wiki/Isomorph",
+    "thumbnail": "",
+    "full_content": "An isomorph is an organism that does not change in shape during growth. The implication is that its volume is proportional to its cubed length, and its surface area to its squared length. This holds for any shape it might have; the actual shape determines the proportionality constants.\nThe reason why the concept is important in the context of the Dynamic Energy Budget (DEB) theory is that food (substrate) uptake is proportional to surface area, and maintenance to volume. Since volume grows faster than surface area, this controls the ultimate size of the organism. Alfred Russel Wallace wrote this in a letter to E. B. Poulton in 1865. The surface area that is of importance is the part that is involved in substrate uptake (e.g. the gut surface), which is typically a fixed fraction of the total surface area in an isomorph. The DEB theory explains why isomorphs grow according to the von Bertalanffy curve if food availability is constant.\nOrganisms can also change in shape during growth, which affects the growth curve and the ultimate size, see for instance V0-morphs and V1-morphs. Isomorphs can also be called V2/3-morphs.\nMost animals approximate isomorphy, but plants in a vegetation typically start as V1-morphs, then convert to isomorphs, and end up as V0-morphs (if neighbouring plants affect their uptake).",
+    "categories": [],
+    "fetch_time": "2025-04-16T06:14:52.525718"
+  }
+}

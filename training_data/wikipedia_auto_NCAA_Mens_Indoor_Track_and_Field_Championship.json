@@ -1,0 +1,31 @@
+{
+  "title": "NCAA Men's Indoor Track and Field Championship",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/NCAA_Men's_Indoor_Track_and_Field_Championship",
+  "content": "The NCAA Men's Indoor Track and Field Championship refers to one of three annual collegiate indoor track and field competitions for men organised by the National Collegiate Athletic Association for athletes from institutions that make up its three divisions: Division I, II, and III. In each event athlete's individual performances earn points for their institution and the team with the most points receives the NCAA team title in track and field.\n\nA separate NCAA Women's competition is also held.\n",
+  "concepts": [
+    "NCAA Men's Indoor Track and Field Championship",
+    "track field",
+    "track",
+    "ncaa",
+    "field",
+    "team",
+    "points",
+    "men",
+    "indoor track",
+    "indoor",
+    "collegiate"
+  ],
+  "findings": [
+    "See also"
+  ],
+  "relationships": [
+    {
+      "subject": "NCAA Men's Indoor Track and Field Championship",
+      "relationship": "refers to",
+      "object": "one of three annual collegiate indoor track and field competitions for men organised by the national collegiate athletic association for athletes from institutions that make up its three divisions",
+      "sentence": "The NCAA Men's Indoor Track and Field Championship refers to one of three annual collegiate indoor track and field competitions for men organised by the National Collegiate Athletic Association for athletes from institutions that make up its three divisions: Division I, II, and III."
+    }
+  ],
+  "timestamp": "2025-04-11T13:35:50.961326"
+}

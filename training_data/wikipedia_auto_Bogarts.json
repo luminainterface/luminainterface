@@ -1,0 +1,34 @@
+{
+  "title": "Bogart's",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Bogart's",
+  "content": "Bogart's is a music venue located in the Corryville neighborhood of Cincinnati, Ohio, near the University of Cincinnati, across Vine Street from the former  Sudsy Malone's Rock 'n Roll Laundry & Bar.\n\nThe venue opened as a vaudeville theater called the Nordland Plaza Nickelodeon in 1905. It operated until 1955 when it succumbed to the competition from television. It reopened in 1960 screening primarily German films. It later operated as a restaurant with entertainment named Inner Circle. In the mid-1970s, Bogart's opened in the space after an extensive remodeling as a 250-seat club and restaurant, expanded around 1980 and then further expanded to 1,500 seats in 1993.[1] In 1997, Nederlander Concerts assumed management of Bogart's.[2] SFX (now Live Nation) bought many of Nederlander's concert operations in 1999.[3]\n\nPrior to its 1980 expansion, Bogarts hosted themed-party nights, such as a Casablanca club theme when the venue opened. It hosted a wide variety of comedians, ranging from Billy Crystal to Cheech Marin and Tommy Chong, national recording artists and bands that gained fame through their appearances at Bogart's, such as Pearl Jam and Red Hot Chili Peppers.\n\nIn its early years, Bogart's was the proving ground for many upcoming metal bands. The intimate setting offered an up-close experience, often allowing the crowd to flow onto the stage with performers such as Testament, Slayer, Death, Dark Angel, Overkill, W.A.S.P. and others. While metal bands appeared frequently, Bogart's offered performances of several music styles each week.[citation needed]\n\nThe venue remains under management of Live Nation and has two levels: a pit, and a balcony which is open for larger events.[4]\n\nOhio acts that have played at Bogart's include Nine Inch Nails in 1990, Filter in '99, Marilyn Manson in '96, The Black Keys in '06, Twenty One Pilots in '13, Cincinnati's Walk the Moon in '15, Machine Gun Kelly in '14, The Devil Wears Prada in '15, Beartooth in '15, Black Veil Brides in '21, Kid Cudi in '10, Bone Thugs-n-Harmony in '19, John Legend in '16, Tracy Chapman in '95, Elle King in '22, Hawthorne Heights in '05, Relient K in '08, Devo in 1980, The Breeders in '93, and The Afghan Whigs in '99. [Counting Stars in 2017,2018,2019]\n",
+  "concepts": [
+    "Bogart's",
+    "bogart",
+    "venue",
+    "opened",
+    "cincinnati",
+    "bands",
+    "1980",
+    "15",
+    "venue opened",
+    "restaurant",
+    "operated"
+  ],
+  "findings": [
+    "History",
+    "See also",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Bogart's",
+      "relationship": "is a",
+      "object": "music venue located in the corryville neighborhood of cincinnati",
+      "sentence": "Bogart's is a music venue located in the Corryville neighborhood of Cincinnati, Ohio, near the University of Cincinnati, across Vine Street from the former  Sudsy Malone's Rock 'n Roll Laundry & Bar."
+    }
+  ],
+  "timestamp": "2025-04-11T13:34:57.872111"
+}

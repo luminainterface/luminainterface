@@ -1,0 +1,32 @@
+{
+  "title": "Platysoma gracile",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Platysoma_gracile",
+  "content": "Platysoma gracile is a species of clown beetle in the family Histeridae.[1][2] It is found in North America.[2]\n\nThis Polyphaga-related article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Platysoma gracile",
+    "wikipedia expanding",
+    "wikipedia",
+    "stub help",
+    "stub",
+    "species clown",
+    "species",
+    "related article",
+    "related",
+    "polyphaga related",
+    "polyphaga"
+  ],
+  "findings": [
+    "References",
+    "Further reading"
+  ],
+  "relationships": [
+    {
+      "subject": "Platysoma gracile",
+      "relationship": "is a",
+      "object": "species of clown beetle in the family histeridae",
+      "sentence": "Platysoma gracile is a species of clown beetle in the family Histeridae."
+    }
+  ],
+  "timestamp": "2025-04-11T13:31:07.671970"
+}

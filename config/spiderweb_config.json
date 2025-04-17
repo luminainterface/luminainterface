@@ -1,0 +1,6 @@
+{
+  "heartbeat_interval": 5.0,
+  "max_retries": 3,
+  "retry_delay": 1.0,
+  "connection_timeout": 30.0
+}

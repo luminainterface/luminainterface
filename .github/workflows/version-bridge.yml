@@ -1,0 +1,105 @@
+name: Version Bridge
+
+on:
+  push:
+    branches: [ main, 'v*-maintenance' ]
+    paths:
+      - 'src/v*/**'
+      - 'src/version_bridge_integration.py'
+      - '.github/repository.yml'
+  pull_request:
+    branches: [ main, 'v*-maintenance' ]
+    paths:
+      - 'src/v*/**'
+      - 'src/version_bridge_integration.py'
+      - '.github/repository.yml'
+
+jobs:
+  version-bridge:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9]
+        
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyyaml
+        
+    - name: Check version compatibility
+      run: |
+        python -c "
+        import yaml
+        import sys
+        from src.version_bridge_integration import VersionBridgeIntegration
+        
+        # Load repository config
+        with open('.github/repository.yml', 'r') as f:
+            config = yaml.safe_load(f)
+            
+        # Initialize version bridge
+        bridge = VersionBridgeIntegration()
+        
+        # Check version compatibility
+        for version in config['version_system']['supported_versions']:
+            interface_version = bridge.version_capabilities[version.replace('v', '')]['interface_version']
+            compatible_versions = bridge.interface_versions[interface_version]['compatible_with']
+            
+            # Verify against repository config
+            config_compatible = config['version_bridge']['version_compatibility'].get(interface_version, [])
+            if set(compatible_versions) != set(config_compatible):
+                print(f'Version compatibility mismatch for {interface_version}')
+                print(f'Bridge: {compatible_versions}')
+                print(f'Config: {config_compatible}')
+                sys.exit(1)
+        "
+        
+    - name: Run version bridge tests
+      run: |
+        cd src
+        python -m pytest tests/test_version_bridge.py -v
+        
+    - name: Update version status
+      if: success()
+      run: |
+        python -c "
+        import yaml
+        from src.version_bridge_integration import VersionBridgeIntegration
+        
+        # Load repository config
+        with open('.github/repository.yml', 'r') as f:
+            config = yaml.safe_load(f)
+            
+        # Initialize version bridge
+        bridge = VersionBridgeIntegration()
+        
+        # Get current status
+        status = bridge.get_bridge_status()
+        
+        # Update config with current status
+        config['version_system']['current_status'] = status
+        
+        # Save updated config
+        with open('.github/repository.yml', 'w') as f:
+            yaml.dump(config, f, default_flow_style=False)
+        "
+        
+    - name: Commit version status
+      if: success()
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+        git add .github/repository.yml
+        git commit -m "Update version bridge status [skip ci]"
+        git push 

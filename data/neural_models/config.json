@@ -1,0 +1,10 @@
+{
+  "embedding_dim": 128,
+  "hidden_dim": 256,
+  "concept_dim": 64,
+  "num_concepts": 32,
+  "vocab_size": 10000,
+  "temperature": 0.8,
+  "nn_weight": 0.35,
+  "vocabulary": {}
+}

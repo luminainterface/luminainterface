@@ -1,0 +1,31 @@
+{
+  "title": "Anajpur",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Anajpur",
+  "content": "Anajpur is a village in Rangareddy district in Telangana, India.[1] It falls under Hayathnagar mandal and is close to the Outer Ring Road, Hyderabad. Anajpur village is home to Ramoji Film City, the world's largest film production facility.[2]\n\nThis article about a location in Ranga Reddy district, Telangana is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Anajpur",
+    "village",
+    "telangana",
+    "film",
+    "district telangana",
+    "district",
+    "anajpur village",
+    "anajpur",
+    "wikipedia expanding",
+    "wikipedia",
+    "village rangareddy"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Anajpur",
+      "relationship": "is a",
+      "object": "village in rangareddy district in telangana",
+      "sentence": "Anajpur is a village in Rangareddy district in Telangana, India."
+    }
+  ],
+  "timestamp": "2025-04-11T16:39:01.283207"
+}

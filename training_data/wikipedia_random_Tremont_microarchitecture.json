@@ -1,0 +1,23 @@
+{
+  "title": "Tremont (microarchitecture)",
+  "source": "Wikipedia (Random Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Tremont_(microarchitecture)",
+  "content": "Tremont is a microarchitecture for low-power Atom, Celeron and Pentium Silver branded processors used in systems on a chip (SoCs) made by Intel. It is the successor to Goldmont Plus.[2] Intel officially launched Elkhart Lake platform with 10 nm Tremont core on September 23, 2020.[3] Intel officially launched Jasper Lake platform with 10 nm Tremont core on January 11, 2021.[4]\n\nTremont is the third generation out-of-order low-power Atom microarchitecture designed for entry-level desktop and notebook computers. Tremont is built on the 10 nm manufacturing process and supports up to 24 cores.[5] It includes the Intel Gen11 graphics architecture from Ice Lake.\n\nTremont microarchitecture provides the following enhancements over Goldmont Plus:\n\nList of mobile processors as follows:[8]\n\n[MB]\n\n[MB]\n\nPentacore Lakefield CPU consists of 1 \"big\" Sunny Cove core and 4 \"little\" Tremont cores. AVX support on Sunny Cove (still physically present) is disabled to match Tremont core.\n\n[MB]\n\nThese processors are exclusively produced for cell phone radio manufacturers.[9]\n\n[MB]\n\nList of embedded processors as follows:[10]\n\nmodel\n\n[MB]\n\n2 × DDR4-3200\n\n2 × DDR4-3200\n\n2 × DDR4-3200\n",
+  "concepts": [
+    "Tremont (microarchitecture)"
+  ],
+  "findings": [
+    "Design",
+    "Technology",
+    "List of Tremont processors",
+    "Mobile processors (Jasper Lake)",
+    "Mobile processors (Lakefield)",
+    "Server processors (Parker Ridge)",
+    "Processors for base transceiver stations (Snow Ridge)",
+    "Embedded processors (Elkhart Lake)",
+    "See also",
+    "Notes",
+    "References"
+  ],
+  "timestamp": "2025-04-11T10:47:09.636834"
+}

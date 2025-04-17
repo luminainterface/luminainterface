@@ -1,0 +1,23 @@
+{
+  "title": "Review of International Studies",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Review_of_International_Studies",
+  "content": "The Review of International Studies is a peer-reviewed academic journal on international relations published by Cambridge University Press on behalf of the British International Studies Association. From 1975 to 1980, it was known as the British Journal of International Studies. The editor-in-chief is Martin Coward (University of Manchester). Previous editors include J. E. Spence, Roy E. Jones, R. J. Vincent, Richard Little, Paul Taylor, Michael Cox, David Armstrong, Nicholas Rengger, Kimberly Hutchings, and Ruth Blakeley.\n\nAccording to the Journal Citation Reports, the journal has a 2015 impact factor of 1.309, ranking it 21st out of 86 journals in the category \"International Relations\".[1]\n",
+  "concepts": [
+    "Review of International Studies"
+  ],
+  "findings": [
+    "See also",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Review of International Studies",
+      "relationship": "is a",
+      "object": "peer",
+      "sentence": "The Review of International Studies is a peer-reviewed academic journal on international relations published by Cambridge University Press on behalf of the British International Studies Association."
+    }
+  ],
+  "timestamp": "2025-04-11T13:23:03.324998"
+}

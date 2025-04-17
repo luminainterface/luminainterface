@@ -1,0 +1,32 @@
+{
+  "title": "The Old Cows Days/The Days of the Brindled Cow",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/The_Old_Cows_Days/The_Days_of_the_Brindled_Cow",
+  "content": "In the Irish Calendar The Old Cows Days/The Days of the Brindled Cow are the last days of March and the first three days of April; in Irish: Laethanta na Bó Riabhaí.\n\nThe term comes from a folk tale, illustrating the unpredictability of the weather at this time of year in Ireland.[1] The tale relates how the bó riabhach, \"the brindled cow\", complained at the beginning of April to her companions in the herd of the terrible harshness of the previous month of March. As the grumbling of the cow continued, the at first uninterested March began to take umbrage and decided to teach the speckled cow a lesson she would never forget. So March \"borrowed\" the first three days of April but made them so bitterly cold and miserable that before they were ended the unlucky bó riabhach had died. The purported lesson of the \"days of the brindled cow\" is that complaining about the harshness of the weather is done at one's peril.\n\nThe same story can be found in different versions all over Ireland and Europe in general.\n\nThe brindled cow or the bó riabhach referred to is a once common but now rare native Irish cattle breed. [2]\n",
+  "concepts": [
+    "The Old Cows Days/The Days of the Brindled Cow",
+    "days",
+    "cow",
+    "march",
+    "bó",
+    "brindled cow",
+    "brindled",
+    "riabhach",
+    "irish",
+    "bó riabhach",
+    "april"
+  ],
+  "findings": [
+    "See also",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "The Old Cows Days/The Days of the Brindled Cow",
+      "relationship": "are",
+      "object": "the last days of march and the first three days of april",
+      "sentence": "In the Irish Calendar The Old Cows Days/The Days of the Brindled Cow are the last days of March and the first three days of April; in Irish: Laethanta na Bó Riabhaí."
+    }
+  ],
+  "timestamp": "2025-04-11T13:35:27.758845"
+}

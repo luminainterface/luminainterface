@@ -1,0 +1,31 @@
+{
+  "title": "Cyclophora aurora",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Cyclophora_aurora",
+  "content": "Cyclophora aurora is a moth in the  family Geometridae. It is found in New Guinea.[2]\n\nThis Sterrhinae moth related article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Cyclophora aurora",
+    "moth",
+    "wikipedia expanding",
+    "wikipedia",
+    "stub help",
+    "stub",
+    "sterrhinae moth",
+    "sterrhinae",
+    "related article",
+    "related",
+    "new guinea"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Cyclophora aurora",
+      "relationship": "is a",
+      "object": "moth in the  family geometridae",
+      "sentence": "Cyclophora aurora is a moth in the  family Geometridae."
+    }
+  ],
+  "timestamp": "2025-04-11T13:26:43.684753"
+}

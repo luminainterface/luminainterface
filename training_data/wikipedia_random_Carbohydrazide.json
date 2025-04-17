@@ -1,0 +1,17 @@
+{
+  "title": "Carbohydrazide",
+  "source": "Wikipedia (Random Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Carbohydrazide",
+  "content": "Carbohydrazide is the chemical compound with the formula OC(N2H3)2.  It appears as a white solid that is soluble in water,[1][2] but not in many organic solvents, such as ethanol, ether or benzene. It decomposes upon melting.[2]  A number of carbazides are known where one or more N-H groups are replaced by other substituents.  They occur widely in the drugs, herbicides, plant growth regulators, and dyestuffs.\n\nIndustrially the compound is produced by treatment of urea with hydrazine:[3]\n\nIt can also be prepared by reactions of other C1-precursors with hydrazine, such as carbonate esters.[2] \nIt can be prepared from phosgene, but this route cogenerates the hydrazinium salt [N2H5]Cl and results in some diformylation.  Carbazic acid is also a suitable precursor:\n\nThe molecule is nonplanar. All nitrogen centers are at least somewhat pyramidal, indicative of weaker C-N pi-bonding.  The C-N and C-O distances are about 1.36 and 1.25 Å, respectively.[4]\n\nHeating carbohydrazide may result in an explosion. Carbohydrazide is harmful if swallowed, irritating to eyes, respiratory system, and skin. Carbohydrazide is toxic to aquatic organisms.[10]\n",
+  "concepts": [
+    "Carbohydrazide"
+  ],
+  "findings": [
+    "Production",
+    "Structure",
+    "Industrial uses",
+    "Hazards",
+    "References"
+  ],
+  "timestamp": "2025-04-11T10:07:58.952136"
+}

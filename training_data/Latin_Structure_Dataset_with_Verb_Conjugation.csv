@@ -1,0 +1,16 @@
+,type,input,output,pattern,notes,example_sentence,subject,verb,completion,english_translation
+80,structure,Avem volare.,S-V,Subject-Verb,Basic Latin structure: who/what does the action.,Avem volare.,Avis,volat,(none),Avis flies.
+81,structure,Puer librum legit.,S-V-O,Subject-Verb-Object,Subject performs action on the object.,Puer librum legit.,Puer,legit,librum,The boy reads a book.
+82,structure,Caelum caeruleum est.,S-V-Adj,Subject-Verb-Adjective,Describes the subject using 'be' verb.,Caelum caeruleum est.,Caelum,est,caeruleum,The sky is blue.
+83,structure,Puer celeriter currit.,S-V-Adv,Subject-Verb-Adverb,Describes how the action is done.,Puer celeriter currit.,Puer,currit,celeriter,The boy runs quickly.
+84,structure,Liber in mensa est.,S-V-PP,Subject-Verb-PrepositionalPhrase,Indicates location.,Liber in mensa est.,Liber,est,in mensa,The book is on the table.
+85,structure,Estne puella laeta?,Estne...?,Yes/No Question,Asks about a state or description.,Estne puella laeta?,puella,est,laeta,Unable to translate: Estne puella laeta?
+86,structure,Non est frigidum.,Non...,Simple Negative,Negates a state or description.,Non est frigidum.,(none),est,frigidum,Unable to translate: Non est frigidum.
+87,structure,Claude ianuam.,V-(O/PP),Command,Gives an instruction.,Claude ianuam.,(Tu - implied),claude,ianuam,Unable to translate: Claude ianuam.
+88,structure,I + I = II,I + I,Arithmetic,Basic addition in Roman numerals.,I + I = II,I,+,I,Unable to translate: I + I = II
+89,structure,II * III = VI,II * III,Arithmetic,Basic multiplication in Roman numerals.,II * III = VI,II,*,III,Unable to translate: II * III = VI
+90,structure,X - V = V,X - V,Arithmetic,Basic subtraction in Roman numerals.,X - V = V,X,-,V,Unable to translate: X - V = V
+91,structure,VI / II = III,VI / II,Arithmetic,Basic division in Roman numerals.,VI / II = III,VI,/,II,Unable to translate: VI / II = III
+92,structure,Puer habet I + II libros.,S-V-O + Arithmetic,Mixed,Combines sentence structure with arithmetic.,Puer habet I + II libros.,Puer,habet,I + II libros,Unable to translate: Puer habet I + II libros.
+93,structure,Sumus III + IV in numero.,S-V-Adj + Arithmetic,Mixed,Combines description with arithmetic.,Sumus III + IV in numero.,Nos,sumus,III + IV in numero,Unable to translate: Sumus III + IV in numero.
+94,structure,Est in via II + III.,S-V-PP + Arithmetic,Mixed,Combines location with arithmetic.,Est in via II + III.,(none),est,in via II + III,Unable to translate: Est in via II + III.

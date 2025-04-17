@@ -1,0 +1,34 @@
+{
+  "title": "Razor blade steel",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Razor_blade_steel",
+  "content": "Razor blade steel, also known as razor steel, is a special type of stainless steel designed specifically to be used as a razor blade. Its defining characteristics are its chemical composition and shape.[1] Jindal Stainless is the world's largest producer of razor blade stainless steel.\n\nRazor blade steel is a martensitic stainless steel with a composition of chromium between 12 and 14.5%, a carbon content of approximately 0.6%, and the remainder iron and trace elements.[1][2]\n\nThe United States International Trade Commission defines that the shape of the material must be flat rolled coils that are not more than 23 mm (0.91 in) in width. The thickness cannot exceed 0.266 mm (0.0105 in).[1]\n",
+  "concepts": [
+    "Razor blade steel",
+    "steel",
+    "razor",
+    "stainless",
+    "razor blade",
+    "blade",
+    "stainless steel",
+    "shape",
+    "mm",
+    "composition",
+    "blade steel"
+  ],
+  "findings": [
+    "Chemical composition",
+    "Shape",
+    "References",
+    "Bibliography"
+  ],
+  "relationships": [
+    {
+      "subject": "Razor blade steel",
+      "relationship": "is a",
+      "object": "martensitic stainless steel with a composition of chromium between 12 and 14",
+      "sentence": "Razor blade steel is a martensitic stainless steel with a composition of chromium between 12 and 14.5%, a carbon content of approximately 0.6%, and the remainder iron and trace elements."
+    }
+  ],
+  "timestamp": "2025-04-11T16:20:18.888106"
+}

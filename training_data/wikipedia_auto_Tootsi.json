@@ -1,0 +1,22 @@
+{
+  "title": "Tootsi",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Tootsi",
+  "content": "Tootsi is a borough (Estonian: alev) in Põhja-Pärnumaa Parish, Pärnu County, in southwestern Estonia. Before the administrative reform in 2017, Tootsi had a municipality status of its own as Tootsi Parish (Tootsi vald) within Pärnu County. It has the population of 951 (as of 1 January 2009) and an area of 1.76 km².[1]\n\nTootsi was founded in 1938, and in 1949 was granted borough rights.\n\nUntil December 2018 Tootsi had a station on the Tallinn - Pärnu railway line operated by Elron located in the neighbouring village of Elbi.\n\nThere is a museum dedicated to the peat industry in Tootsi.\n\nMusician and playwright Ivar Põllu was born in Tootsi in 1974.\n\nThis Pärnu County location article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Tootsi"
+  ],
+  "findings": [
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Tootsi",
+      "relationship": "is a",
+      "object": "borough",
+      "sentence": "Tootsi is a borough (Estonian: alev) in Põhja-Pärnumaa Parish, Pärnu County, in southwestern Estonia."
+    }
+  ],
+  "timestamp": "2025-04-11T13:23:28.323905"
+}

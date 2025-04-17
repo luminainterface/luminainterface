@@ -1,0 +1,33 @@
+{
+  "title": "Westside Secondary School",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Westside_Secondary_School",
+  "content": "Westside Secondary School is a public high school located in Orangeville, Ontario, Canada that opened on November 25, 1999. The current population is 800 students.\n\nThis Ontario school-related article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Westside Secondary School",
+    "school",
+    "ontario",
+    "wikipedia expanding",
+    "wikipedia",
+    "westside secondary",
+    "westside",
+    "students ontario",
+    "students",
+    "stub help",
+    "stub"
+  ],
+  "findings": [
+    "See also",
+    "Sources",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Westside Secondary School",
+      "relationship": "is a",
+      "object": "public high school located in orangeville",
+      "sentence": "Westside Secondary School is a public high school located in Orangeville, Ontario, Canada that opened on November 25, 1999."
+    }
+  ],
+  "timestamp": "2025-04-11T16:48:51.038407"
+}

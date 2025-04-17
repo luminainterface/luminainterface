@@ -1,0 +1,34 @@
+{
+  "title": "Kiss of a Killer",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Kiss_of_a_Killer",
+  "content": "Kiss of a Killer is a 1993 American made-for-television thriller-drama film written by David  Warfield and directed by Larry Elikann. It stars Annette O'Toole, Eva Marie Saint and Brian Wimmer. The film debuted on February 1, 1993 on ABC.\n\nKate Wilson (Annette O'Toole), leads a double life by spending her days working in a real estate office and her nights caring for her ailing, manipulative mother (Eva Marie Saint). Once a week she tells her mother that she is staying with her friend Reba, when she is actually driving across town to stay at the Red Oak Inn, a local hotel resort which is her \"escape\". One of her encounters at the Red Oak Inn brings her into close contact with a serial rapist who has just stepped up to homicide.\n\nThis article related to an American television thriller film is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Kiss of a Killer",
+    "film",
+    "toole",
+    "thriller",
+    "television thriller",
+    "television",
+    "saint",
+    "red oak",
+    "red",
+    "oak inn",
+    "oak"
+  ],
+  "findings": [
+    "Plot",
+    "Cast",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Kiss of a Killer",
+      "relationship": "is a",
+      "object": "1993 american made",
+      "sentence": "Kiss of a Killer is a 1993 American made-for-television thriller-drama film written by David  Warfield and directed by Larry Elikann."
+    }
+  ],
+  "timestamp": "2025-04-11T17:32:49.427882"
+}

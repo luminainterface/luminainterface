@@ -1,0 +1,31 @@
+{
+  "title": "Lamprodrilus",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Lamprodrilus",
+  "content": "Lamprodrilus is a genus of annelids belonging to the family Lumbriculidae.[1]\n\nSpecies:\n\nThis annelid-related article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Lamprodrilus",
+    "wikipedia expanding",
+    "wikipedia",
+    "stub help",
+    "stub",
+    "species annelid",
+    "species",
+    "related article",
+    "related",
+    "lumbriculidae species",
+    "lumbriculidae"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Lamprodrilus",
+      "relationship": "is a",
+      "object": "genus of annelids belonging to the family lumbriculidae",
+      "sentence": "Lamprodrilus is a genus of annelids belonging to the family Lumbriculidae."
+    }
+  ],
+  "timestamp": "2025-04-11T13:36:01.489938"
+}

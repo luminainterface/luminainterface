@@ -1,0 +1,13 @@
+{
+  "id": "6a6a3d79-6eab-47e1-8bbe-6b5a788e14e5",
+  "timestamp": 1744806498.1430726,
+  "user_message": "hi king",
+  "system_response": "Hello! I'm LUMINA v7.5, how can I assist you today?\n\nNeural Analysis: I've detected these key topics: general.",
+  "metadata": {
+    "insights": [
+      "Mock insight about general"
+    ]
+  },
+  "active_topics": [],
+  "thought_process_id": null
+}

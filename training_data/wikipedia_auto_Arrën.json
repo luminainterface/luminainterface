@@ -1,0 +1,31 @@
+{
+  "title": "Arrën",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Arrën",
+  "content": "Arrën is a village and a former municipality in Kukës County, Albania. At the 2015 local government reform it became a subdivision of the municipality Kukës.[2] The population at the 2023 census was 187.[3]\n\nThe municipal unit consists of the following villages:[4]\n\nThis article about a specific location in Kukës County, Albania, is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Arrën",
+    "kukës",
+    "municipality kukës",
+    "municipality",
+    "kukës county",
+    "county albania",
+    "county",
+    "albania",
+    "wikipedia",
+    "villages article",
+    "villages"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Arrën",
+      "relationship": "is a",
+      "object": "village and a former municipality in kukës county",
+      "sentence": "Arrën is a village and a former municipality in Kukës County, Albania."
+    }
+  ],
+  "timestamp": "2025-04-11T15:38:25.112561"
+}

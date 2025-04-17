@@ -1,0 +1,35 @@
+{
+  "title": "Nokia E60",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Nokia_E60",
+  "content": "The Nokia E60 is a traditional candybar style mobile phone from the Eseries business phone range, an S60 3rd Edition Symbian device. It was introduced on 12 October 2005 along with Nokia E61 and Nokia E70.[1]\n",
+  "concepts": [
+    "Nokia E60",
+    "nokia",
+    "phone",
+    "traditional candybar",
+    "traditional",
+    "symbian device",
+    "symbian",
+    "style mobile",
+    "style",
+    "s60 3rd",
+    "s60"
+  ],
+  "findings": [
+    "Key features",
+    "See also",
+    "References",
+    "External links",
+    "Reviews"
+  ],
+  "relationships": [
+    {
+      "subject": "Nokia E60",
+      "relationship": "is a",
+      "object": "traditional candybar style mobile phone from the eseries business phone range",
+      "sentence": "The Nokia E60 is a traditional candybar style mobile phone from the Eseries business phone range, an S60 3rd Edition Symbian device."
+    }
+  ],
+  "timestamp": "2025-04-11T13:36:37.393083"
+}

@@ -1,0 +1,34 @@
+{
+  "title": "Whangapoua Harbour",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Whangapoua_Harbour",
+  "content": "Whangapoua Harbour is a shallow natural harbour in the northeast of the Coromandel Peninsula.  It is located between Whangapoua in the north, Te Rerenga in the southwest, and Matarangi on the Omara Spit in the north separating it from the ocean. Two boat ramps and a jetty provide boat access into the harbour.[1]\n\nWaitekuri River, Opitonui River, Owera Stream, Otanguru Stream, and Mapauriki Stream all drain the surrounding hills that are part of the Coromandel Range into the 12 km2 harbour, which only has a single narrow mouth to the sea. Tidal flows have built up a bar at the 600m wide entrance, which makes navigation difficult in large swells. The entrance is flanked by the rocky Te Rehutae Point, rising to 85m to the west, and Omara Spit to the east.\n\nThe southern and eastern estuary arms contain extensive areas of grey mangroves. The surrounding land is partly farm land, pine plantations, and native bush.\n\nThe harbour is popular for fishing, particularly with holiday makers in Matarangi and Whangapoua.  Commonly caught fish include kahawai, snapper, John Dory, and barracuda.\n\nCommon plants found in the Whangapoua harbour include mangroves, the seagrass Zostera muelleri, neptune's necklace seaweed Hormosira banksii, and salt marsh rushes. More abundant animals include cockles, mud snails, horn shells, whelks, cat's eyes, pacific oysters and cushion stars.[2]\n\n36°44′22″S 175°37′41″E﻿ / ﻿36.73944°S 175.62806°E﻿ / -36.73944; 175.62806\n\nThis Waikato geography article is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Whangapoua Harbour",
+    "harbour",
+    "whangapoua",
+    "stream",
+    "include",
+    "36",
+    "175",
+    "whangapoua harbour",
+    "te",
+    "surrounding",
+    "spit"
+  ],
+  "findings": [
+    "Geography",
+    "Recreation",
+    "Harbour biota",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Whangapoua Harbour",
+      "relationship": "is a",
+      "object": "shallow natural harbour in the northeast of the coromandel peninsula",
+      "sentence": "Whangapoua Harbour is a shallow natural harbour in the northeast of the Coromandel Peninsula."
+    }
+  ],
+  "timestamp": "2025-04-11T13:28:12.476459"
+}

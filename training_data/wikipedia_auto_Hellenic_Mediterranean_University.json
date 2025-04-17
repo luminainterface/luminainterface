@@ -1,0 +1,33 @@
+{
+  "title": "Hellenic Mediterranean University",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Hellenic_Mediterranean_University",
+  "content": "The Hellenic Mediterranean University (HMU; Greek: Ελληνικό Μεσογειακό Πανεπιστήμιο. ΕΛ.ΜΕ.ΠΑ.) is a public tertiary education institution in Greece, with headquarters in Heraklion, Crete, and branches in Chania, Rethymno, Agios Nikolaos, and Sitia.[1]\n\nThe Hellenic Mediterranean University was founded on 25/04/2019.[2] As of February 2024[update] it consists of six Faculties, with more than 12,000 undergraduate and postgraduate students and approximately 400 teaching staff and research staff.[3][4]\n\nThe Hellenic Mediterranean University is a continuation of the dissolved Technological Educational Institute of Crete.\n\nThe departments of this university are for the most part the same as those of the National Technical University of Athens and the Aristotle University of Thessaloniki.[5]\n\n35°31′08″N 24°02′33″E﻿ / ﻿35.5190°N 24.0424°E﻿ / 35.5190; 24.0424\n",
+  "concepts": [
+    "Hellenic Mediterranean University",
+    "university",
+    "mediterranean university",
+    "mediterranean",
+    "hellenic mediterranean",
+    "hellenic",
+    "35",
+    "24",
+    "staff",
+    "crete",
+    "5190 24"
+  ],
+  "findings": [
+    "Schools and departments",
+    "See also",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Hellenic Mediterranean University",
+      "relationship": "is a",
+      "object": "continuation of the dissolved technological educational institute of crete",
+      "sentence": "[3][4]\n\nThe Hellenic Mediterranean University is a continuation of the dissolved Technological Educational Institute of Crete."
+    }
+  ],
+  "timestamp": "2025-04-11T13:27:14.388102"
+}

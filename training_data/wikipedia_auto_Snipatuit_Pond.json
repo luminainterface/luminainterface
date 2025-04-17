@@ -1,0 +1,32 @@
+{
+  "title": "Snipatuit Pond",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Snipatuit_Pond",
+  "content": "Snipatuit Pond is a shallow 710-acre (2.9 km2) warm water pond in Rochester, Massachusetts. The average depth is five feet and the maximum depth is six feet, except for one very small nine foot hole near the pump station on the west shore. The pond is the headwaters of the Mattapoisett River. The inflow comes from two sources: Cedar Swamp, which is located to the northeast, and Great Quittacas Pond, which is connected to Snipatuit Pond and located to the northwest. The water quality is impaired due to wetlands vegetation. The boat access to the pond is a dirt ramp with limited parking located off Neck Road. Shoreline access is limited to the area east of the pond bordering Neck Road.[1]\n",
+  "concepts": [
+    "Snipatuit Pond",
+    "pond",
+    "located",
+    "water",
+    "snipatuit pond",
+    "snipatuit",
+    "road",
+    "neck road",
+    "neck",
+    "limited",
+    "feet"
+  ],
+  "findings": [
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Snipatuit Pond",
+      "relationship": "is a",
+      "object": "shallow 710",
+      "sentence": "Snipatuit Pond is a shallow 710-acre (2.9 km2) warm water pond in Rochester, Massachusetts."
+    }
+  ],
+  "timestamp": "2025-04-11T13:35:58.963324"
+}

@@ -1,0 +1,315 @@
+name: Neural Integration CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      deploy_environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'test'
+        type: choice
+        options:
+          - test
+          - production
+      run_bridge_migration:
+        description: 'Run v8-v9 bridge migration'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, '3.10']
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-cov
+        pip install -e .[dev]
+    
+    - name: Run unit tests
+      run: |
+        pytest --cov=src --cov-report=xml
+    
+    - name: Run database migration tests
+      run: |
+        pytest tests/database/test_migrations.py -v
+    
+    - name: Run database performance tests
+      run: |
+        pytest tests/database/test_performance.py -v
+    
+    - name: Run database backup tests
+      run: |
+        pytest tests/database/test_backup.py -v
+    
+    - name: Upload coverage report
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        fail_ci_if_error: false
+
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install black isort flake8
+    
+    - name: Check formatting with Black
+      run: black --check src
+    
+    - name: Check imports with isort
+      run: isort --check-only --profile black src
+    
+    - name: Lint with flake8
+      run: flake8 src --max-line-length=100 --extend-ignore=E203
+
+  bridge_test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .[dev]
+        pip install pytest
+    
+    - name: Set up test data structure
+      run: |
+        mkdir -p data/v8/states
+        mkdir -p data/v9/states
+        cp -r src/v8/tests/fixtures/* data/v8/ || true
+        cp -r src/v9/tests/fixtures/* data/v9/ || true
+    
+    - name: Test bridge functionality
+      run: |
+        python -m src.bridge.v8_v9_bridge --action test
+    
+    - name: Test bridge migration scripts
+      run: |
+        python -m pytest src/bridge/tests/ -v
+
+  build:
+    needs: [test, lint, bridge_test]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build wheel
+    
+    - name: Build package
+      run: python -m build
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: dist
+        path: dist/
+        retention-days: 7
+
+  integration_test:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: dist
+        path: dist/
+    
+    - name: Install the package
+      run: |
+        python -m pip install --upgrade pip
+        pip install dist/*.whl
+    
+    - name: Run integration tests
+      run: |
+        # Create and activate virtual environment for testing
+        python -m venv test_env
+        source test_env/bin/activate
+        pip install pytest
+        pytest tests/integration/ -v
+    
+    - name: Test v8-v9 bridge integration
+      run: |
+        source test_env/bin/activate
+        mkdir -p data/v8 data/v9
+        python -m src.bridge.v8_v9_bridge --action migrate-db --direction v8_to_v9 || true
+        python -m src.bridge.v8_v9_bridge --action migrate-db --direction v9_to_v8 || true
+
+  deploy:
+    if: github.event_name == 'workflow_dispatch'
+    needs: [build, integration_test]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: dist
+        path: dist/
+    
+    - name: Publish to Test PyPI
+      if: ${{ github.event.inputs.deploy_environment == 'test' }}
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository_url: https://test.pypi.org/legacy/
+        user: __token__
+        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        skip_existing: true
+    
+    - name: Publish to PyPI
+      if: ${{ github.event.inputs.deploy_environment == 'production' }}
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_API_TOKEN }}
+
+  run_bridge_migration:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_bridge_migration == 'true'
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install package
+      run: |
+        python -m pip install --upgrade pip
+        pip install dist/*.whl || pip install -e .
+    
+    - name: Download production database files
+      env:
+        DB_ACCESS_TOKEN: ${{ secrets.DB_ACCESS_TOKEN }}
+      run: |
+        # Download v8 and v9 database files from secure storage
+        mkdir -p data/v8 data/v9
+        curl -H "Authorization: Bearer $DB_ACCESS_TOKEN" \
+          https://storage.example.com/databases/v8/neural_database.db \
+          -o data/v8/neural_database.db
+        curl -H "Authorization: Bearer $DB_ACCESS_TOKEN" \
+          https://storage.example.com/databases/v9/neural_database.db \
+          -o data/v9/neural_database.db
+    
+    - name: Run database migration
+      run: |
+        # Create backups
+        cp data/v8/neural_database.db data/v8/neural_database.backup.db
+        cp data/v9/neural_database.db data/v9/neural_database.backup.db
+        
+        # Run migration in both directions to ensure full compatibility
+        python -m src.bridge.v8_v9_bridge --action sync --primary v9
+    
+    - name: Upload updated databases
+      env:
+        DB_ACCESS_TOKEN: ${{ secrets.DB_ACCESS_TOKEN }}
+      run: |
+        # Upload updated database files to secure storage
+        curl -X PUT -H "Authorization: Bearer $DB_ACCESS_TOKEN" \
+          -F "file=@data/v8/neural_database.db" \
+          https://storage.example.com/databases/v8/neural_database.db
+        curl -X PUT -H "Authorization: Bearer $DB_ACCESS_TOKEN" \
+          -F "file=@data/v9/neural_database.db" \
+          https://storage.example.com/databases/v9/neural_database.db
+
+  deploy_docs:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install mkdocs mkdocs-material mkdocstrings
+    
+    - name: Build docs
+      run: |
+        # Set up documentation structure
+        mkdir -p docs/bridge
+        cp src/bridge/README.md docs/bridge/index.md || echo "# Neural Bridge Documentation" > docs/bridge/index.md
+        mkdocs build
+    
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./site 

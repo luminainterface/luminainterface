@@ -1,0 +1,1 @@
+{"content": "Query: derivative example\nResult: x^2 * cos(x) + 2*x * sin(x)", "metadata": {"type": "learned_result", "category": "calculus", "subcategory": "derivative", "query": "derivative example"}, "confidence": 1.0}

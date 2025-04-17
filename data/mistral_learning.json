@@ -1,0 +1,35 @@
+{
+  "metadata": {
+    "created": "2025-04-15T12:22:37.768236",
+    "updated": "2025-04-15T12:25:02.484246",
+    "version": "1.0",
+    "model": "mistral-medium"
+  },
+  "autowiki": {
+    "System Test": {
+      "content": "This is a test entry for the Autowiki system",
+      "sources": [
+        "system_test"
+      ],
+      "created": "2025-04-15T12:22:37.769979",
+      "updated": "2025-04-15T12:25:02.482506"
+    },
+    "Neural Networks": {
+      "content": "Neural networks process data through layers of nodes",
+      "sources": [
+        "system_test"
+      ],
+      "created": "2025-04-15T12:22:37.771119",
+      "updated": "2025-04-15T12:25:02.483445"
+    },
+    "Pattern Recognition": {
+      "content": "Pattern recognition is a key aspect of neural networks",
+      "sources": [
+        "system_test"
+      ],
+      "created": "2025-04-15T12:22:37.771881",
+      "updated": "2025-04-15T12:25:02.484141"
+    }
+  },
+  "conversation_memory": []
+}

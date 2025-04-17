@@ -1,0 +1,31 @@
+{
+  "title": "Shikogawa Dam",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Shikogawa_Dam",
+  "content": "Shikogawa Dam is a gravity dam located in Ehime Prefecture in Japan. The dam is used for irrigation and power production. The catchment area of the dam is 17.2 km2. The dam impounds about 8  ha of land when full and can store 1300 thousand cubic meters of water. The construction of the dam was started on 1987 and completed in 2010.[1]\n\nThis article about a dam or floodgate on Shikoku, Japan is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Shikogawa Dam",
+    "dam",
+    "japan",
+    "water construction",
+    "water",
+    "used irrigation",
+    "used",
+    "thousand cubic",
+    "thousand",
+    "stub help",
+    "stub"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Shikogawa Dam",
+      "relationship": "is a",
+      "object": "gravity dam located in ehime prefecture in japan",
+      "sentence": "Shikogawa Dam is a gravity dam located in Ehime Prefecture in Japan."
+    }
+  ],
+  "timestamp": "2025-04-11T13:35:15.553607"
+}

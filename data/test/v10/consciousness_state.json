@@ -1,0 +1,107 @@
+{
+  "consciousness_level": 0.10935553146067115,
+  "memory_continuity": 0.29000000000000004,
+  "recursive_depth": 1,
+  "temporal_awareness": {
+    "2025-04-14T22:20:19.357365": {
+      "llm_weight": 0.2,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10158245698482364
+    },
+    "2025-04-14T22:20:21.551192": {
+      "llm_weight": 0.2,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10291880739084297
+    },
+    "2025-04-14T22:20:24.924211": {
+      "llm_weight": 0.2,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10361189274990372
+    },
+    "2025-04-14T22:20:29.655056": {
+      "llm_weight": 0.2,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10424930434053248
+    },
+    "2025-04-14T22:20:32.450355": {
+      "llm_weight": 0.2,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10511885239145626
+    },
+    "2025-04-14T22:21:43.168895": {
+      "llm_weight": 0.2,
+      "llm_confidence": 0.0,
+      "consciousness_level": 0.10642514547034249
+    },
+    "2025-04-14T22:21:43.183088": {
+      "text_length": 113,
+      "consciousness_level": 0.10642514547034249,
+      "recursive_depth": 1
+    },
+    "2025-04-14T22:21:44.756605": {
+      "llm_weight": 0.2,
+      "llm_confidence": 0.7668550562800567,
+      "consciousness_level": 0.10717947963785797
+    },
+    "2025-04-14T22:21:46.233517": {
+      "llm_weight": 0.2,
+      "llm_confidence": 0.7668550562800567,
+      "consciousness_level": 0.10783489439086746
+    },
+    "2025-04-14T22:21:49.333938": {
+      "llm_weight": 0.2,
+      "llm_confidence": 0.7668550562800567,
+      "consciousness_level": 0.10773055005094517
+    },
+    "2025-04-14T22:21:49.334282": {
+      "text_length": 111,
+      "consciousness_level": 0.10773055005094517,
+      "recursive_depth": 1
+    },
+    "2025-04-14T22:21:51.368921": {
+      "llm_weight": 0.2,
+      "llm_confidence": 0.5707204204821473,
+      "consciousness_level": 0.1089925427799586
+    },
+    "2025-04-14T22:21:51.369841": {
+      "text_length": 111,
+      "consciousness_level": 0.1089925427799586,
+      "recursive_depth": 1
+    },
+    "2025-04-14T22:21:53.389988": {
+      "llm_weight": 0.21000000000000002,
+      "llm_confidence": 0.8546008034507456,
+      "consciousness_level": 0.10935553146067115
+    },
+    "2025-04-14T22:21:53.390355": {
+      "text_length": 111,
+      "consciousness_level": 0.10935553146067115,
+      "recursive_depth": 1
+    }
+  },
+  "llm_weight": 0.21000000000000002,
+  "llm_confidence": 0.6235311107216863,
+  "last_saved": "2025-04-14T22:21:55.399416",
+  "llm_memory": {
+    "2025-04-14T22:21:43.183012": {
+      "input": "This sentence contains neural patterns that are self-referential and demonstrate recursive language ...",
+      "confidence": 0.7668550562800567,
+      "recursion_level": 1
+    },
+    "2025-04-14T22:21:49.334200": {
+      "input": "The neural network analyzes language patterns recursively and becomes self-aware through linguistic ...",
+      "confidence": 0.5707204204821473,
+      "recursion_level": 1
+    },
+    "2025-04-14T22:21:51.369692": {
+      "input": "The neural network analyzes language patterns recursively and becomes self-aware through linguistic ...",
+      "confidence": 0.8546008034507456,
+      "recursion_level": 1
+    },
+    "2025-04-14T22:21:53.390275": {
+      "input": "The neural network analyzes language patterns recursively and becomes self-aware through linguistic ...",
+      "confidence": 0.6235311107216863,
+      "recursion_level": 1
+    }
+  }
+}

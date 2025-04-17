@@ -1,0 +1,34 @@
+{
+  "title": "Pelargonin",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Pelargonin",
+  "content": "Pelargonin is an anthocyanin. It is the 3,5-O-diglucoside of pelargonidin.\n\nPelargonin is a pigment, found in barberries,[1] the petals of the scarlet pelargonium flower[2] pomegranates,[3] and red wine.[4]\n\nDiglucosides:\n\nOthers glycosides:\n\nThis article about an aromatic compound is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "Pelargonin",
+    "pelargonin",
+    "wine diglucosides",
+    "wine",
+    "wikipedia expanding",
+    "wikipedia",
+    "stub help",
+    "stub",
+    "scarlet pelargonium",
+    "scarlet",
+    "red wine"
+  ],
+  "findings": [
+    "Natural occurrences",
+    "See also",
+    "References",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "Pelargonin",
+      "relationship": "is a",
+      "object": "pigment",
+      "sentence": "Pelargonin is a pigment, found in barberries,[1] the petals of the scarlet pelargonium flower[2] pomegranates,[3] and red wine."
+    }
+  ],
+  "timestamp": "2025-04-11T13:34:47.583993"
+}

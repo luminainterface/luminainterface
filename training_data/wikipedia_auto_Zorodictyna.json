@@ -1,0 +1,22 @@
+{
+  "title": "Zorodictyna",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Zorodictyna",
+  "content": "Zorodictyna is a genus of spiders in the family Udubidae native to Madagascar. It has been described as an intermediate genus between Zoropsidae and Dictynidae,[2] though it is now placed in Udubidae. This genus was originally placed in the family Zoropsidae, but it has been reassigned several times since. In 1967, Lehtinen moved it to Miturgidae.[2] In 1999, it was moved back to Zoropsidae,[3] and in 2015, it was moved to Udubidae.[4]\n\nAs of February 2016[update], the genus has two accepted species.[1][5]\n",
+  "concepts": [
+    "Zorodictyna"
+  ],
+  "findings": [
+    "Species",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Zorodictyna",
+      "relationship": "is a",
+      "object": "genus of spiders in the family udubidae native to madagascar",
+      "sentence": "Zorodictyna is a genus of spiders in the family Udubidae native to Madagascar."
+    }
+  ],
+  "timestamp": "2025-04-11T13:23:25.931481"
+}

@@ -1,0 +1,256 @@
+{
+  "global": {
+    "preferred_backend": "pyqtgraph",
+    "fallback_backend": "matplotlib",
+    "last_resort_backend": "custom",
+    "use_gpu_acceleration": true,
+    "anti_aliasing": true,
+    "render_quality": "high",
+    "enable_animations": true,
+    "animation_speed": 300
+  },
+  
+  "themes": {
+    "dark": {
+      "background": "#2d3436",
+      "foreground": "#ecf0f1",
+      "axis": "#95a5a6",
+      "grid": "#7f8c8d",
+      "accent": "#3498db",
+      "accent_secondary": "#2ecc71",
+      "highlight": "#e74c3c",
+      "plot_colors": [
+        "#3498db", "#2ecc71", "#e74c3c", "#9b59b6", 
+        "#f1c40f", "#1abc9c", "#e67e22", "#34495e"
+      ]
+    },
+    "light": {
+      "background": "#ecf0f1",
+      "foreground": "#2d3436",
+      "axis": "#7f8c8d",
+      "grid": "#bdc3c7",
+      "accent": "#2980b9",
+      "accent_secondary": "#27ae60",
+      "highlight": "#c0392b",
+      "plot_colors": [
+        "#2980b9", "#27ae60", "#c0392b", "#8e44ad", 
+        "#f39c12", "#16a085", "#d35400", "#2c3e50"
+      ]
+    },
+    "system": {
+      "use_system_colors": true,
+      "adapt_to_dark_mode": true
+    }
+  },
+  
+  "pyqtgraph": {
+    "antialias": true,
+    "background": "themed",
+    "foreground": "themed",
+    "line_styles": {
+      "neural_activity": {
+        "width": 1.5,
+        "style": "solid",
+        "shadow": false,
+        "glow": true
+      },
+      "language_processing": {
+        "width": 1.5,
+        "style": "solid",
+        "shadow": false,
+        "glow": false
+      },
+      "system_metrics": {
+        "width": 2.0,
+        "style": "solid",
+        "shadow": false,
+        "glow": false
+      },
+      "dream_patterns": {
+        "width": 1.0,
+        "style": "dash",
+        "shadow": true,
+        "glow": true
+      }
+    },
+    "symbol_styles": {
+      "neural_activity": {
+        "symbol": "o",
+        "size": 3,
+        "fill": true
+      },
+      "language_processing": {
+        "symbol": "s",
+        "size": 4,
+        "fill": false
+      },
+      "system_metrics": {
+        "symbol": "d",
+        "size": 5,
+        "fill": true
+      },
+      "dream_patterns": {
+        "symbol": "t",
+        "size": 6,
+        "fill": false
+      }
+    },
+    "advanced": {
+      "gl_enabled": true,
+      "decimation_threshold": 1000,
+      "downsampling_method": "peak-detection",
+      "clip_to_view": true,
+      "auto_range_fraction": 0.95,
+      "export_dpi": 300
+    }
+  },
+  
+  "matplotlib": {
+    "style": "themed",
+    "dpi": 100,
+    "figure_inches": [6, 4],
+    "line_styles": {
+      "neural_activity": {
+        "linestyle": "-",
+        "linewidth": 1.5,
+        "marker": "o",
+        "markersize": 3,
+        "alpha": 0.9
+      },
+      "language_processing": {
+        "linestyle": "-",
+        "linewidth": 1.5,
+        "marker": "s",
+        "markersize": 3,
+        "alpha": 0.9
+      },
+      "system_metrics": {
+        "linestyle": "-",
+        "linewidth": 2.0,
+        "marker": "None",
+        "markersize": 0,
+        "alpha": 1.0
+      },
+      "dream_patterns": {
+        "linestyle": "--",
+        "linewidth": 1.0,
+        "marker": "^",
+        "markersize": 4,
+        "alpha": 0.7
+      }
+    },
+    "advanced": {
+      "constrained_layout": true,
+      "bbox_inches": "tight",
+      "spines_visibility": {
+        "top": false,
+        "right": false,
+        "bottom": true,
+        "left": true
+      },
+      "grid_params": {
+        "alpha": 0.3,
+        "linestyle": ":",
+        "which": "both"
+      },
+      "date_format": "%H:%M:%S"
+    }
+  },
+  
+  "custom_renderer": {
+    "anti_aliasing": true,
+    "line_smoothing": true,
+    "buffer_size": 1000,
+    "render_fps": 30,
+    "optimize_for_cpu": true,
+    "visualization_types": {
+      "system_metrics": "area_chart",
+      "neural_activity": "network_graph",
+      "language_processing": "bar_chart",
+      "dream_patterns": "heat_map"
+    },
+    "advanced": {
+      "use_worker_thread": true,
+      "batch_updates": true,
+      "batch_size": 10,
+      "interpolation_method": "cubic"
+    }
+  },
+  
+  "3d_visualization": {
+    "enabled": true,
+    "backend": "pyqtgraph_3d",
+    "fallback_backend": "matplotlib_3d",
+    "rotation_speed": 0.5,
+    "auto_rotate": false,
+    "render_quality": "medium",
+    "lighting": true,
+    "perspective": 30,
+    "neural_network": {
+      "node_size": 0.05,
+      "edge_width": 0.01,
+      "show_inactive_nodes": true,
+      "inactive_alpha": 0.3,
+      "highlight_active_paths": true,
+      "highlight_brightness": 1.5
+    }
+  },
+  
+  "export": {
+    "default_format": "png",
+    "available_formats": ["png", "jpg", "svg", "pdf", "csv", "json"],
+    "default_dpi": 300,
+    "default_directory": "output/exports/",
+    "auto_filename": "lumina_dashboard_{panel}_{timestamp}",
+    "include_timestamp": true,
+    "timestamp_format": "%Y%m%d_%H%M%S"
+  },
+  
+  "panel_specific": {
+    "system_metrics": {
+      "cpu_color": "#e74c3c",
+      "memory_color": "#3498db",
+      "gpu_color": "#f39c12",
+      "disk_color": "#2ecc71",
+      "warning_threshold_color": "#f39c12",
+      "critical_threshold_color": "#c0392b",
+      "gauge_style": "modern",
+      "show_thresholds": true,
+      "show_historical": true,
+      "history_hours": 24
+    },
+    "neural_activity": {
+      "node_colors": {
+        "input": "#3498db",
+        "hidden": "#2ecc71",
+        "output": "#e74c3c",
+        "memory": "#9b59b6"
+      },
+      "connection_heat_map": true,
+      "pattern_recognition_highlight": true,
+      "show_activation_waves": true,
+      "wave_speed": 0.5,
+      "show_learning_events": true
+    },
+    "language_processing": {
+      "token_processing_color": "#3498db",
+      "semantic_color": "#2ecc71",
+      "grammar_color": "#e74c3c",
+      "vocabulary_color": "#9b59b6",
+      "show_word_cloud": true,
+      "word_cloud_max_words": 100,
+      "show_conversation_flow": true,
+      "show_sentiment_analysis": true
+    },
+    "dream_mode": {
+      "base_color": "#9b59b6",
+      "creativity_color": "#f39c12",
+      "pattern_color": "#2ecc71",
+      "use_color_cycling": true,
+      "color_cycle_speed": 0.1,
+      "pattern_trails": true,
+      "trail_length": 20,
+      "show_pattern_evolution": true
+    }
+  }
+} 

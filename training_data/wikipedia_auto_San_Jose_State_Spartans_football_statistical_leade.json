@@ -1,0 +1,51 @@
+{
+  "title": "San Jose State Spartans football statistical leaders",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/San_Jose_State_Spartans_football_statistical_leaders",
+  "content": "The San Jose State Spartans football statistical leaders are individual statistical leaders of the San Jose State Spartans football program in various categories,[1] including passing, rushing, receiving, total offense, defensive stats, and kicking. Within those areas, the lists identify single-game, single-season, and career leaders. The Spartans represent San Jose State University in the NCAA's Mountain West Conference (MW).\n\nAlthough San Jose State began competing in intercollegiate football in 1893,[1] the school's official record book considers the \"modern era\" to have begun in 1938. Records from before this year are often incomplete and inconsistent, and they are generally not included in these lists.\n\nThese lists are dominated by more recent players for several reasons:\n\nThese lists are updated through the end of the 2016 season.\n\nTotal offense is the sum of passing and rushing statistics. It does not include receiving or returns.[31]\n",
+  "concepts": [
+    "San Jose State Spartans football statistical leaders",
+    "state",
+    "san jose",
+    "san",
+    "lists",
+    "jose state",
+    "jose",
+    "spartans",
+    "leaders",
+    "football",
+    "total offense"
+  ],
+  "findings": [
+    "Passing",
+    "Passing yards",
+    "Passing touchdowns",
+    "Rushing",
+    "Rushing yards",
+    "Rushing touchdowns",
+    "Receiving",
+    "Receptions",
+    "Receiving yards",
+    "Receiving touchdowns",
+    "Total offense",
+    "Total offense yards",
+    "Total touchdowns",
+    "Defense",
+    "Interceptions",
+    "Tackles",
+    "Sacks",
+    "Kicking",
+    "Field goals made",
+    "Field goal percentage",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "San Jose State Spartans football statistical leaders",
+      "relationship": "are",
+      "object": "individual statistical leaders of the san jose state spartans football program in various categories",
+      "sentence": "The San Jose State Spartans football statistical leaders are individual statistical leaders of the San Jose State Spartans football program in various categories,[1] including passing, rushing, receiving, total offense, defensive stats, and kicking."
+    }
+  ],
+  "timestamp": "2025-04-11T13:36:34.843339"
+}

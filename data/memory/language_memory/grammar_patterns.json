@@ -1,0 +1,858 @@
+{
+  "pattern_1": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T13:38:43.404849",
+    "last_seen": "2025-04-14T13:38:43.404851",
+    "count": 1
+  },
+  "pattern_2": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:06.767654",
+    "last_seen": "2025-04-14T16:32:06.767655",
+    "count": 1
+  },
+  "pattern_3": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:07.391281",
+    "last_seen": "2025-04-14T16:32:07.391283",
+    "count": 1
+  },
+  "pattern_4": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:08.292263",
+    "last_seen": "2025-04-14T16:32:08.292265",
+    "count": 1
+  },
+  "pattern_5": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:09.132857",
+    "last_seen": "2025-04-14T16:32:09.132859",
+    "count": 1
+  },
+  "pattern_6": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:09.872492",
+    "last_seen": "2025-04-14T16:32:09.872493",
+    "count": 1
+  },
+  "pattern_7": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:10.508382",
+    "last_seen": "2025-04-14T16:32:10.508383",
+    "count": 1
+  },
+  "pattern_8": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:11.181593",
+    "last_seen": "2025-04-14T16:32:11.181594",
+    "count": 1
+  },
+  "pattern_9": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:11.937517",
+    "last_seen": "2025-04-14T16:32:11.937518",
+    "count": 1
+  },
+  "pattern_10": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:13.200896",
+    "last_seen": "2025-04-14T16:32:13.200897",
+    "count": 1
+  },
+  "pattern_11": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:13.873373",
+    "last_seen": "2025-04-14T16:32:13.873374",
+    "count": 1
+  },
+  "pattern_12": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:14.432518",
+    "last_seen": "2025-04-14T16:32:14.432520",
+    "count": 1
+  },
+  "pattern_13": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:15.066648",
+    "last_seen": "2025-04-14T16:32:15.066650",
+    "count": 1
+  },
+  "pattern_14": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:15.675630",
+    "last_seen": "2025-04-14T16:32:15.675631",
+    "count": 1
+  },
+  "pattern_15": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:16.259633",
+    "last_seen": "2025-04-14T16:32:16.259635",
+    "count": 1
+  },
+  "pattern_16": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:16.880227",
+    "last_seen": "2025-04-14T16:32:16.880227",
+    "count": 1
+  },
+  "pattern_17": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:17.435829",
+    "last_seen": "2025-04-14T16:32:17.435830",
+    "count": 1
+  },
+  "pattern_18": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:18.031195",
+    "last_seen": "2025-04-14T16:32:18.031196",
+    "count": 1
+  },
+  "pattern_19": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:18.676689",
+    "last_seen": "2025-04-14T16:32:18.676690",
+    "count": 1
+  },
+  "pattern_20": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:19.693196",
+    "last_seen": "2025-04-14T16:32:19.693196",
+    "count": 1
+  },
+  "pattern_21": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:20.608939",
+    "last_seen": "2025-04-14T16:32:20.608939",
+    "count": 1
+  },
+  "pattern_22": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:21.111599",
+    "last_seen": "2025-04-14T16:32:21.111599",
+    "count": 1
+  },
+  "pattern_23": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:21.645182",
+    "last_seen": "2025-04-14T16:32:21.645183",
+    "count": 1
+  },
+  "pattern_24": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:22.170388",
+    "last_seen": "2025-04-14T16:32:22.170389",
+    "count": 1
+  },
+  "pattern_25": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:22.757737",
+    "last_seen": "2025-04-14T16:32:22.757739",
+    "count": 1
+  },
+  "pattern_26": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:23.273967",
+    "last_seen": "2025-04-14T16:32:23.273968",
+    "count": 1
+  },
+  "pattern_27": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:23.852567",
+    "last_seen": "2025-04-14T16:32:23.852568",
+    "count": 1
+  },
+  "pattern_28": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:24.519622",
+    "last_seen": "2025-04-14T16:32:24.519622",
+    "count": 1
+  },
+  "pattern_29": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:25.019403",
+    "last_seen": "2025-04-14T16:32:25.019403",
+    "count": 1
+  },
+  "pattern_30": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:25.499318",
+    "last_seen": "2025-04-14T16:32:25.499319",
+    "count": 1
+  },
+  "pattern_31": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:25.990928",
+    "last_seen": "2025-04-14T16:32:25.990928",
+    "count": 1
+  },
+  "pattern_32": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:26.470354",
+    "last_seen": "2025-04-14T16:32:26.470354",
+    "count": 1
+  },
+  "pattern_33": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:26.966410",
+    "last_seen": "2025-04-14T16:32:26.966410",
+    "count": 1
+  },
+  "pattern_34": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:27.431829",
+    "last_seen": "2025-04-14T16:32:27.431829",
+    "count": 1
+  },
+  "pattern_35": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:27.941264",
+    "last_seen": "2025-04-14T16:32:27.941264",
+    "count": 1
+  },
+  "pattern_36": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:28.578183",
+    "last_seen": "2025-04-14T16:32:28.578184",
+    "count": 1
+  },
+  "pattern_37": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:29.435345",
+    "last_seen": "2025-04-14T16:32:29.435346",
+    "count": 1
+  },
+  "pattern_38": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:29.989260",
+    "last_seen": "2025-04-14T16:32:29.989261",
+    "count": 1
+  },
+  "pattern_39": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:30.523241",
+    "last_seen": "2025-04-14T16:32:30.523242",
+    "count": 1
+  },
+  "pattern_40": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:31.015675",
+    "last_seen": "2025-04-14T16:32:31.015675",
+    "count": 1
+  },
+  "pattern_41": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:31.489657",
+    "last_seen": "2025-04-14T16:32:31.489658",
+    "count": 1
+  },
+  "pattern_42": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:31.923611",
+    "last_seen": "2025-04-14T16:32:31.923612",
+    "count": 1
+  },
+  "pattern_43": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:32.437462",
+    "last_seen": "2025-04-14T16:32:32.437463",
+    "count": 1
+  },
+  "pattern_44": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:32.899950",
+    "last_seen": "2025-04-14T16:32:32.899950",
+    "count": 1
+  },
+  "pattern_45": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:33.448147",
+    "last_seen": "2025-04-14T16:32:33.448148",
+    "count": 1
+  },
+  "pattern_46": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:33.981307",
+    "last_seen": "2025-04-14T16:32:33.981308",
+    "count": 1
+  },
+  "pattern_47": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:34.588589",
+    "last_seen": "2025-04-14T16:32:34.588590",
+    "count": 1
+  },
+  "pattern_48": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:35.593683",
+    "last_seen": "2025-04-14T16:32:35.593683",
+    "count": 1
+  },
+  "pattern_49": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:36.103273",
+    "last_seen": "2025-04-14T16:32:36.103274",
+    "count": 1
+  },
+  "pattern_50": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:36.606291",
+    "last_seen": "2025-04-14T16:32:36.606291",
+    "count": 1
+  },
+  "pattern_51": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:37.175851",
+    "last_seen": "2025-04-14T16:32:37.175851",
+    "count": 1
+  },
+  "pattern_52": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:37.804293",
+    "last_seen": "2025-04-14T16:32:37.804294",
+    "count": 1
+  },
+  "pattern_53": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:38.210176",
+    "last_seen": "2025-04-14T16:32:38.210176",
+    "count": 1
+  },
+  "pattern_54": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:38.651865",
+    "last_seen": "2025-04-14T16:32:38.651866",
+    "count": 1
+  },
+  "pattern_55": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:39.065728",
+    "last_seen": "2025-04-14T16:32:39.065728",
+    "count": 1
+  },
+  "pattern_56": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:39.485724",
+    "last_seen": "2025-04-14T16:32:39.485724",
+    "count": 1
+  },
+  "pattern_57": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:39.941423",
+    "last_seen": "2025-04-14T16:32:39.941424",
+    "count": 1
+  },
+  "pattern_58": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:40.337032",
+    "last_seen": "2025-04-14T16:32:40.337032",
+    "count": 1
+  },
+  "pattern_59": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:40.850883",
+    "last_seen": "2025-04-14T16:32:40.850885",
+    "count": 1
+  },
+  "pattern_60": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:41.259896",
+    "last_seen": "2025-04-14T16:32:41.259896",
+    "count": 1
+  },
+  "pattern_61": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:41.693215",
+    "last_seen": "2025-04-14T16:32:41.693217",
+    "count": 1
+  },
+  "pattern_62": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:42.104154",
+    "last_seen": "2025-04-14T16:32:42.104155",
+    "count": 1
+  },
+  "pattern_63": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:42.479518",
+    "last_seen": "2025-04-14T16:32:42.479518",
+    "count": 1
+  },
+  "pattern_64": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:42.944689",
+    "last_seen": "2025-04-14T16:32:42.944690",
+    "count": 1
+  },
+  "pattern_65": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:43.326524",
+    "last_seen": "2025-04-14T16:32:43.326525",
+    "count": 1
+  },
+  "pattern_66": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:43.756136",
+    "last_seen": "2025-04-14T16:32:43.756137",
+    "count": 1
+  },
+  "pattern_67": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:44.159557",
+    "last_seen": "2025-04-14T16:32:44.159557",
+    "count": 1
+  },
+  "pattern_68": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:44.542330",
+    "last_seen": "2025-04-14T16:32:44.542331",
+    "count": 1
+  },
+  "pattern_69": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:45.192046",
+    "last_seen": "2025-04-14T16:32:45.192047",
+    "count": 1
+  },
+  "pattern_70": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:45.605907",
+    "last_seen": "2025-04-14T16:32:45.605907",
+    "count": 1
+  },
+  "pattern_71": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:46.026502",
+    "last_seen": "2025-04-14T16:32:46.026503",
+    "count": 1
+  },
+  "pattern_72": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:46.386406",
+    "last_seen": "2025-04-14T16:32:46.386406",
+    "count": 1
+  },
+  "pattern_73": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:46.795478",
+    "last_seen": "2025-04-14T16:32:46.795479",
+    "count": 1
+  },
+  "pattern_74": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:47.277404",
+    "last_seen": "2025-04-14T16:32:47.277405",
+    "count": 1
+  },
+  "pattern_75": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:47.665106",
+    "last_seen": "2025-04-14T16:32:47.665107",
+    "count": 1
+  },
+  "pattern_76": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:48.050367",
+    "last_seen": "2025-04-14T16:32:48.050368",
+    "count": 1
+  },
+  "pattern_77": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:48.409797",
+    "last_seen": "2025-04-14T16:32:48.409798",
+    "count": 1
+  },
+  "pattern_78": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:48.974564",
+    "last_seen": "2025-04-14T16:32:48.974565",
+    "count": 1
+  },
+  "pattern_79": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:49.414496",
+    "last_seen": "2025-04-14T16:32:49.414497",
+    "count": 1
+  },
+  "pattern_80": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:49.864232",
+    "last_seen": "2025-04-14T16:32:49.864233",
+    "count": 1
+  },
+  "pattern_81": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:50.269103",
+    "last_seen": "2025-04-14T16:32:50.269103",
+    "count": 1
+  },
+  "pattern_82": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:51.007490",
+    "last_seen": "2025-04-14T16:32:51.007492",
+    "count": 1
+  },
+  "pattern_83": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:51.422867",
+    "last_seen": "2025-04-14T16:32:51.422867",
+    "count": 1
+  },
+  "pattern_84": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:51.914012",
+    "last_seen": "2025-04-14T16:32:51.914013",
+    "count": 1
+  },
+  "pattern_85": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:52.376304",
+    "last_seen": "2025-04-14T16:32:52.376304",
+    "count": 1
+  },
+  "pattern_86": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:52.847882",
+    "last_seen": "2025-04-14T16:32:52.847883",
+    "count": 1
+  },
+  "pattern_87": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:53.296666",
+    "last_seen": "2025-04-14T16:32:53.296667",
+    "count": 1
+  },
+  "pattern_88": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:53.726726",
+    "last_seen": "2025-04-14T16:32:53.726727",
+    "count": 1
+  },
+  "pattern_89": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:54.125509",
+    "last_seen": "2025-04-14T16:32:54.125510",
+    "count": 1
+  },
+  "pattern_90": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:54.494033",
+    "last_seen": "2025-04-14T16:32:54.494035",
+    "count": 1
+  },
+  "pattern_91": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:54.879052",
+    "last_seen": "2025-04-14T16:32:54.879053",
+    "count": 1
+  },
+  "pattern_92": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:55.267475",
+    "last_seen": "2025-04-14T16:32:55.267479",
+    "count": 1
+  },
+  "pattern_93": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:55.644084",
+    "last_seen": "2025-04-14T16:32:55.644085",
+    "count": 1
+  },
+  "pattern_94": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:56.168568",
+    "last_seen": "2025-04-14T16:32:56.168569",
+    "count": 1
+  },
+  "pattern_95": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:56.526758",
+    "last_seen": "2025-04-14T16:32:56.526759",
+    "count": 1
+  },
+  "pattern_96": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:57.160077",
+    "last_seen": "2025-04-14T16:32:57.160078",
+    "count": 1
+  },
+  "pattern_97": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:57.516641",
+    "last_seen": "2025-04-14T16:32:57.516644",
+    "count": 1
+  },
+  "pattern_98": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:57.905657",
+    "last_seen": "2025-04-14T16:32:57.905658",
+    "count": 1
+  },
+  "pattern_99": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:58.259784",
+    "last_seen": "2025-04-14T16:32:58.259785",
+    "count": 1
+  },
+  "pattern_100": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:58.610112",
+    "last_seen": "2025-04-14T16:32:58.610112",
+    "count": 1
+  },
+  "pattern_101": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:58.954014",
+    "last_seen": "2025-04-14T16:32:58.954015",
+    "count": 1
+  },
+  "pattern_102": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:59.304594",
+    "last_seen": "2025-04-14T16:32:59.304594",
+    "count": 1
+  },
+  "pattern_103": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:32:59.652264",
+    "last_seen": "2025-04-14T16:32:59.652265",
+    "count": 1
+  },
+  "pattern_104": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:33:01.455045",
+    "last_seen": "2025-04-14T16:33:01.455046",
+    "count": 1
+  },
+  "pattern_105": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:33:01.858246",
+    "last_seen": "2025-04-14T16:33:01.858247",
+    "count": 1
+  },
+  "pattern_106": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:33:02.235309",
+    "last_seen": "2025-04-14T16:33:02.235311",
+    "count": 1
+  },
+  "pattern_107": {
+    "pattern": "DET ADJ NOUN VERB DET NOUN",
+    "example": "The neural network processes the data.",
+    "source": null,
+    "first_seen": "2025-04-14T16:33:02.839431",
+    "last_seen": "2025-04-14T16:33:02.839432",
+    "count": 1
+  }
+}

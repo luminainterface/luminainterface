@@ -1,0 +1,25 @@
+{
+  "title": "Gamma Group",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Gamma_Group",
+  "content": "Gamma Group is an Anglo-German technology company that sells surveillance software to governments and police forces around the world. The company has been strongly criticised by human rights organisations for selling its FinFisher software to undemocratic regimes such as Egypt and Bahrain.\n\nFollowing the Arab Spring protests in 2011, activists from Bahrain identified suspicious emails which were identified as social engineering attempts to persuade them to launch applications containing malicious software. The emails were passed to analysts who identified malware which would give FinFisher access to the infected computers.[1]\n\nThe University of Toronto's CitizenLab conducted an investigation of Gamma which identified \"33 likely government users of FinFisher in 32 countries, based on the presence of a FinFisher master at an IP address in a country or belonging to a specific government department.\"[2]\n\nIn 2014, Gamma Group was hacked by a hacker calling herself Phineas Fisher and a 40 Gigabyte dump of information was released detailing Gamma's 'client lists, price lists, source code, details about the effectiveness of FinFisher malware, user and support documentation, a list of classes/tutorials, and much more.'[3] Further details about Gamma's capabilities can be found in the Surveillance Industry Index.[4]\n\nDespite this hack and the extent of negative publicity about Gamma's activities, FinFisher was reported to be gaining in popularity around the world with numerous governments.[5]\n",
+  "concepts": [
+    "Gamma Group",
+    "gamma",
+    "finfisher",
+    "identified",
+    "software",
+    "world",
+    "surveillance",
+    "malware",
+    "lists",
+    "group",
+    "governments"
+  ],
+  "findings": [
+    "References",
+    "External links"
+  ],
+  "relationships": [],
+  "timestamp": "2025-04-11T14:34:23.111362"
+}

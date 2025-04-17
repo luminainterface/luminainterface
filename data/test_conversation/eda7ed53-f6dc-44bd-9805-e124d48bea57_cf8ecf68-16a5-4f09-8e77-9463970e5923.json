@@ -1,0 +1,12 @@
+{
+  "id": "cf8ecf68-16a5-4f09-8e77-9463970e5923",
+  "timestamp": 1744754474.891981,
+  "user_message": "How does supervised learning work?",
+  "system_response": "Supervised learning involves training a model on labeled data. The model learns to map inputs to outputs based on example input-output pairs.",
+  "metadata": {},
+  "active_topics": [
+    "that",
+    "machine"
+  ],
+  "thought_process_id": "211c92f7-8248-48a1-aa79-483928301f28"
+}

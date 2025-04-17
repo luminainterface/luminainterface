@@ -1,0 +1,2 @@
+2025-04-15 17:52:22,414 - v8.spatial_temple_mapper - INFO - Initializing Spatial Temple Mapper
+SpatialTempleMapper test: SUCCESS

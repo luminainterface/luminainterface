@@ -1,0 +1,4 @@
+id,text,category
+1,This is the first CSV entry for learning.,example
+2,CSV files can contain tabular data for the neural network.,tutorial
+3,Each row can represent a different training sample.,explanation

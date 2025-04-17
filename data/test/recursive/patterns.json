@@ -1,0 +1,34 @@
+{
+  "pattern_history": [
+    {
+      "timestamp": 1744683715.4058366,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.0
+    },
+    {
+      "timestamp": 1744683715.4249299,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.37348164871404715
+    },
+    {
+      "timestamp": 1744683715.4387698,
+      "pattern_count": 0,
+      "pattern_types": [],
+      "avg_depth": 0,
+      "confidence": 0.8988743791875986
+    }
+  ],
+  "recent_patterns": [],
+  "pattern_counts": {
+    "self_reference": 0,
+    "meta_linguistic": 0,
+    "linguistic_loop": 0,
+    "recursive_structure": 0,
+    "consciousness_assertion": 0
+  },
+  "avg_depth": 0
+}

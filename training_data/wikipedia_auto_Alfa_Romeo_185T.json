@@ -1,0 +1,35 @@
+{
+  "title": "Alfa Romeo 185T",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Alfa_Romeo_185T",
+  "content": "The Alfa Romeo 185T is a Formula One car that Alfa Romeo used during the 1985 season. The car was entered in 8 races, but without any success and suffering from poor reliability, the team returned to the previous year's car, the 184T, updated to 184TB specification. \n\nThis was the last Alfa Romeo Formula One car before their return with Sauber Engineering in 2019.\n\nThe car was powered by Alfa's own 890T, a 1.5 L turbocharged V8 engine which produced around 780 hp (582 kW) at 10,200 rpm.[2]\n\nDriven by Patrese, the 185T was involved in arguably the most spectacular accident of the season. On lap 16 of the Monaco Grand Prix, Nelson Piquet in his Brabham-BMW was attempting to pass Patrese along the pit straight. Notoriously hard to pass, Patrese moved across on his former Brabham teammate and put the Brazilian into the guardrail. In a shower of sparks, flames and debris famously captured by the television cameras, both the Brabham and the Alfa were destroyed, though both drivers were able to walk away injury free.\n\nIt was at Monaco where Cheever achieved the best qualifying position for the 185T when he started from fourth on the grid with a time only 0.279 seconds slower than pole winner Ayrton Senna in his Lotus-Renault. Cheever had failed to qualify the 184T at Monaco in 1984. After the qualification, Cheever told reporters \"We have a new wing here, which is much better than the old one, and the grip is good. Most of all though, we're understanding more and more about the Bosch Motronic, and throttle response is excellent. I think we can run with just about anyone on power as well. I mean, the car is good all round right now - if it can finish\". However, it did not take too long for the American to change his tune about the 185T.\n\nIn an interview he gave in 2000, Patrese described the 185T as \"The Worst Car I ever drove\".[3]\n\n(key) (results in bold indicate pole position)\n",
+  "concepts": [
+    "Alfa Romeo 185T",
+    "car",
+    "alfa",
+    "185t",
+    "patrese",
+    "romeo",
+    "monaco",
+    "cheever",
+    "brabham",
+    "alfa romeo",
+    "season"
+  ],
+  "findings": [
+    "Engine",
+    "Racing history",
+    "Aftermath",
+    "Complete Formula One results",
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Alfa Romeo 185T",
+      "relationship": "is a",
+      "object": "formula one car that alfa romeo used during the 1985 season",
+      "sentence": "The Alfa Romeo 185T is a Formula One car that Alfa Romeo used during the 1985 season."
+    }
+  ],
+  "timestamp": "2025-04-11T13:30:30.351297"
+}

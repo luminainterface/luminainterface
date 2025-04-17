@@ -1,0 +1,30 @@
+{"text": "Hello, how are you today?", "target": {"sentiment": 1.0, "complexity": 0.2}}
+{"text": "What is the weather like?", "target": {"sentiment": 0.5, "complexity": 0.1}}
+{"text": "Neural networks are fascinating systems that can learn from data.", "target": {"sentiment": 0.8, "complexity": 0.9}}
+{"text": "I'm feeling great today!", "target": {"sentiment": 0.95, "complexity": 0.3}}
+{"text": "The system seems to be working well now.", "target": {"sentiment": 0.7, "complexity": 0.5}}
+{"text": "Neural networks are computational systems inspired by the human brain.", "target": {"type": "information", "domain": "ai", "confidence": 0.95}}
+{"text": "Deep learning is a subset of machine learning utilizing neural networks with many layers.", "target": {"type": "information", "domain": "ai", "confidence": 0.9}}
+{"text": "Quantum computing leverages quantum mechanics principles for computation.", "target": {"type": "information", "domain": "physics", "confidence": 0.85}}
+{"text": "E = mc² is Einstein's mass-energy equivalence formula.", "target": {"type": "equation", "domain": "physics", "confidence": 0.95}}
+{"text": "Calculus is the mathematical study of continuous change.", "target": {"type": "definition", "domain": "mathematics", "confidence": 0.9}}
+{"text": "The derivative of a function represents its rate of change.", "target": {"type": "definition", "domain": "mathematics", "confidence": 0.92}}
+{"text": "F = ma is Newton's second law of motion.", "target": {"type": "equation", "domain": "physics", "confidence": 0.93}}
+{"text": "Transformers use self-attention mechanisms for natural language processing.", "target": {"type": "information", "domain": "ai", "confidence": 0.88}}
+{"text": "The integral is the area under a curve.", "target": {"type": "definition", "domain": "mathematics", "confidence": 0.91}}
+{"text": "PV = nRT is the ideal gas law equation.", "target": {"type": "equation", "domain": "physics", "confidence": 0.89}}
+{"text": "Reinforcement learning involves agents learning from environment feedback.", "target": {"type": "information", "domain": "ai", "confidence": 0.87}}
+{"text": "The Pythagorean theorem states that a² + b² = c².", "target": {"type": "equation", "domain": "mathematics", "confidence": 0.94}}
+{"text": "A vector is a quantity with both magnitude and direction.", "target": {"type": "definition", "domain": "physics", "confidence": 0.92}}
+{"text": "Convolutional neural networks excel at image processing tasks.", "target": {"type": "information", "domain": "ai", "confidence": 0.91}}
+{"text": "The quadratic formula solves ax² + bx + c = 0.", "target": {"type": "equation", "domain": "mathematics", "confidence": 0.93}}
+{"text": "Machine learning algorithms improve through experience.", "target": {"type": "information", "domain": "ai", "confidence": 0.89}}
+{"text": "GPT models use transformer architectures for text generation.", "target": {"type": "information", "domain": "ai", "confidence": 0.92}}
+{"text": "BERT is a bidirectional transformer for language understanding.", "target": {"type": "information", "domain": "ai", "confidence": 0.90}}
+{"text": "v = u + at is the equation for constant acceleration.", "target": {"type": "equation", "domain": "physics", "confidence": 0.91}}
+{"text": "ΔE = hf is Planck's equation for photon energy.", "target": {"type": "equation", "domain": "physics", "confidence": 0.92}}
+{"text": "A function maps each input to exactly one output.", "target": {"type": "definition", "domain": "mathematics", "confidence": 0.93}}
+{"text": "The limit of a function describes its behavior near a point.", "target": {"type": "definition", "domain": "mathematics", "confidence": 0.91}}
+{"text": "A matrix is a rectangular array of numbers.", "target": {"type": "definition", "domain": "mathematics", "confidence": 0.90}}
+{"text": "Momentum is defined as mass times velocity.", "target": {"type": "definition", "domain": "physics", "confidence": 0.91}}
+{"text": "Neural networks learn by adjusting connection weights.", "target": {"type": "information", "domain": "ai", "confidence": 0.93}} 

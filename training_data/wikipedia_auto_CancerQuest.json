@@ -1,0 +1,32 @@
+{
+  "title": "CancerQuest",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/CancerQuest",
+  "content": "CancerQuest is a non-profit education program based at Emory University.  The central focus of the program is the CancerQuest website, which contains information about the biology and treatment of cancer. The development of CancerQuest began in 1998 by Dr. Gregg Orloff in response to his wife's experience with breast cancer.  Orloff is an Assistant Professor of Hematology and Medical Oncology at Emory University.[1]\n\nThe CancerQuest website is structured like a textbook. Resources on the site include interviews with patients and cancer researchers at the Winship Cancer Institute of Emory University, 3D animations, and links to scientific articles on PubMed. Content includes normal cell biology, cancer biology, cancer treatments and quality of life issues for cancer patients and their caregivers.\n\nCancerQuest went live in 2002. In 2003 Scientific American listed the site as one of the top five in the category of Medicine.[2] In 2007, CancerQuest was the recipient of the 'Mention of Honour' Award from the European School of Oncology as the best cancer education site located outside of Europe.[3]\n\nThrough partnerships with St. Petersburg State University, Russia, University of Siena, Italy, Peking University, China, China Medical University, Taiwan and volunteers in the U.S. the website is available in English, Russian, Italian, Chinese and Spanish.\n\nThis article about an organization in the United States is a stub. You can help Wikipedia by expanding it.",
+  "concepts": [
+    "CancerQuest",
+    "cancer",
+    "university",
+    "cancerquest",
+    "website",
+    "site",
+    "emory university",
+    "emory",
+    "biology",
+    "scientific",
+    "program"
+  ],
+  "findings": [
+    "Notes",
+    "External links"
+  ],
+  "relationships": [
+    {
+      "subject": "CancerQuest",
+      "relationship": "is a",
+      "object": "non",
+      "sentence": "CancerQuest is a non-profit education program based at Emory University."
+    }
+  ],
+  "timestamp": "2025-04-11T13:28:39.619054"
+}

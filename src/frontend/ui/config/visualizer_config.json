@@ -1,0 +1,50 @@
+{
+    "network": {
+        "num_layers": 3,
+        "nodes_per_layer": 4,
+        "animation_speed": 1.0,
+        "signal_frequency": 0.5,
+        "complexity": 0.5
+    },
+    "appearance": {
+        "node_size": 30,
+        "connection_width": 2,
+        "background_color": "#1E1E1E",
+        "grid_enabled": true,
+        "node_colors": {
+            "normal": "#3498db",
+            "auto_learner": "#2ecc71",
+            "logic_gate": "#e74c3c",
+            "seed": "#f39c12"
+        },
+        "connection_colors": {
+            "literal": "#3498db",
+            "semantic": "#e74c3c",
+            "hybrid": "#9b59b6",
+            "auto_learner": "#2ecc71",
+            "logic_gate": "#e67e22",
+            "seed": "#f1c40f"
+        }
+    },
+    "data_sources": {
+        "autowiki": {
+            "enabled": false,
+            "update_interval": 1000
+        },
+        "neural_seed": {
+            "enabled": false,
+            "update_interval": 1000
+        },
+        "external": {
+            "enabled": false,
+            "update_interval": 1000
+        }
+    },
+    "animation": {
+        "base_frequency": 0.5,
+        "frequency_variance": 0.2,
+        "movement_speed": 1.0,
+        "movement_radius": 10.0,
+        "transition_speed": 0.1
+    }
+} 

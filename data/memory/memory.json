@@ -1,0 +1,15 @@
+{
+  "node_1744831310202": {
+    "node_id": "node_1744831310202",
+    "creation_time": "2025-04-16T15:21:50.202747",
+    "last_access": "2025-04-16T15:21:50.202759",
+    "data": {
+      "type": "conversation",
+      "conversation_id": "conv_1744831310202",
+      "messages": []
+    },
+    "connections": [],
+    "metadata": {},
+    "neural_state": {}
+  }
+}

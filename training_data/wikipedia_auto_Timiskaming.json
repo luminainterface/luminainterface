@@ -1,0 +1,31 @@
+{
+  "title": "Timiskaming",
+  "source": "Wikipedia (Auto Fetch)",
+  "source_url": "https://en.wikipedia.org/wiki/Timiskaming",
+  "content": "Timiskaming is a word from the Algonquin Temikami or Temikaming, from tim 'deep' and kami 'open waters'.[1] Alternate spellings include Temiskaming, Témiscaming and Témiscamingue. The word Temagami comes from the same root.\n\nControversy exists over the spelling of this word.  A movement to change the spelling of the District of Timiskaming to Temiskaming (an e instead of an i) cites a typographical error by a government official,[2] but the act of parliament that led to the name change granted this official authority to correct the spelling.  What he considered to be a spelling correction, some people today call a spelling mistake.\n\nThe spelling controversy goes back to the 18th century.  English maps from that century[3] show the spelling of the lake as Temiscamin, Temescaming, Temiscaming, Timiscaming, and Temiscamino, with Temiscaming being the most common.  Spelling of the name of the aboriginal tribe presented even more alternatives.  In all cases, though, there is no k.  The 21st Century has inherited a debate from the 18th Century.\n\nIt refers to the following places, all in northeastern Ontario and western Quebec, Canada:\n\nThe name was also used in several abolished federal and provincial ridings:\n",
+  "concepts": [
+    "Timiskaming",
+    "spelling",
+    "century",
+    "word",
+    "timiskaming",
+    "temiskaming",
+    "temiscaming",
+    "official",
+    "controversy",
+    "change",
+    "18th century"
+  ],
+  "findings": [
+    "References"
+  ],
+  "relationships": [
+    {
+      "subject": "Timiskaming",
+      "relationship": "is a",
+      "object": "word from the algonquin temikami or temikaming",
+      "sentence": "Timiskaming is a word from the Algonquin Temikami or Temikaming, from tim 'deep' and kami 'open waters'."
+    }
+  ],
+  "timestamp": "2025-04-11T13:35:05.544829"
+}
