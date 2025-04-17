@@ -15,6 +15,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from datetime import datetime
 from collections import defaultdict
 import heapq
+import random
 
 # Import utility modules
 from src.utils.logging_config import get_logger

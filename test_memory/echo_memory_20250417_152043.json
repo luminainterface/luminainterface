@@ -1,0 +1,68 @@
+{
+  "timestamp": "2025-04-17T19:20:43.042956",
+  "nodes": {
+    "a1e640f9-bb33-497a-b640-0d5c49f91980": {
+      "id": "a1e640f9-bb33-497a-b640-0d5c49f91980",
+      "content": "Memory one with high activation",
+      "node_type": "test",
+      "metadata": {
+        "activation": "high"
+      },
+      "connections": [],
+      "created_at": "2025-04-17T19:09:03.126469",
+      "updated_at": "2025-04-17T19:19:43.043706",
+      "access_count": 2,
+      "activation_level": 0.40000000000000013,
+      "temporal_markers": [
+        "2025-04-17T19:16:14.545457",
+        "2025-04-17T19:19:43.043706"
+      ]
+    },
+    "9e534ddb-9086-4469-ba67-067f56973fc9": {
+      "id": "9e534ddb-9086-4469-ba67-067f56973fc9",
+      "content": "Memory two with medium activation",
+      "node_type": "test",
+      "metadata": {
+        "activation": "medium"
+      },
+      "connections": [],
+      "created_at": "2025-04-17T19:09:03.126596",
+      "updated_at": "2025-04-17T19:19:43.043748",
+      "access_count": 2,
+      "activation_level": 0,
+      "temporal_markers": [
+        "2025-04-17T19:16:14.545579",
+        "2025-04-17T19:19:43.043748"
+      ]
+    },
+    "0aefd98b-dbc6-4f43-8538-28e5494043e8": {
+      "id": "0aefd98b-dbc6-4f43-8538-28e5494043e8",
+      "content": "Memory three with low activation",
+      "node_type": "test",
+      "metadata": {
+        "activation": "low"
+      },
+      "connections": [],
+      "created_at": "2025-04-17T19:09:03.126661",
+      "updated_at": "2025-04-17T19:19:43.043779",
+      "access_count": 2,
+      "activation_level": 0,
+      "temporal_markers": [
+        "2025-04-17T19:16:14.545681",
+        "2025-04-17T19:19:43.043779"
+      ]
+    }
+  },
+  "connections": {},
+  "config": {
+    "memory_dir": "test_memory",
+    "save_interval": 60,
+    "max_nodes": 10000,
+    "decay_rate": 0.1,
+    "activation_threshold": 0.3,
+    "temporal_awareness": true,
+    "vector_dimensions": 384,
+    "enable_embeddings": true,
+    "mock_mode": true
+  }
+}

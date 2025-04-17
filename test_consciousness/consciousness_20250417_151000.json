@@ -1,0 +1,348 @@
+{
+  "timestamp": "2025-04-17T19:10:00.059896",
+  "thought_patterns": {
+    "0b4d9933-26a7-4a78-ba62-33b38bc34685": {
+      "id": "0b4d9933-26a7-4a78-ba62-33b38bc34685",
+      "content": "The sky is a brilliant blue today.",
+      "pattern_type": "observation",
+      "source_nodes": [],
+      "metadata": {
+        "source": "test",
+        "importance": 0.7
+      },
+      "created_at": "2025-04-17T19:09:00.049646",
+      "updated_at": "2025-04-17T19:09:00.049646",
+      "reflection_level": 0,
+      "awareness_score": 0.0,
+      "is_active": true
+    },
+    "eb91ba98-0e58-41e5-8e16-68ec9dbcd7e4": {
+      "id": "eb91ba98-0e58-41e5-8e16-68ec9dbcd7e4",
+      "content": "Blue skies make me feel happy and peaceful.",
+      "pattern_type": "emotional",
+      "source_nodes": [
+        "0b4d9933-26a7-4a78-ba62-33b38bc34685"
+      ],
+      "metadata": {
+        "source": "test",
+        "emotion": "happiness"
+      },
+      "created_at": "2025-04-17T19:09:00.049812",
+      "updated_at": "2025-04-17T19:09:00.049812",
+      "reflection_level": 0,
+      "awareness_score": 0.0,
+      "is_active": true
+    },
+    "028bc39e-c84d-4274-8e9a-3fdf2910a559": {
+      "id": "028bc39e-c84d-4274-8e9a-3fdf2910a559",
+      "content": "Happiness is a state of mind influenced by external stimuli.",
+      "pattern_type": "analytical",
+      "source_nodes": [
+        "eb91ba98-0e58-41e5-8e16-68ec9dbcd7e4"
+      ],
+      "metadata": {
+        "source": "test",
+        "confidence": 0.8
+      },
+      "created_at": "2025-04-17T19:09:00.049908",
+      "updated_at": "2025-04-17T19:09:00.049908",
+      "reflection_level": 0,
+      "awareness_score": 0.0,
+      "is_active": true
+    },
+    "7fbaa9ab-a09f-448d-adcb-8d9a07350010": {
+      "id": "7fbaa9ab-a09f-448d-adcb-8d9a07350010",
+      "content": "Reflection on: Happiness is a state of mind influenced by external stimuli.",
+      "pattern_type": "reflection",
+      "source_nodes": [
+        "028bc39e-c84d-4274-8e9a-3fdf2910a559",
+        "eb91ba98-0e58-41e5-8e16-68ec9dbcd7e4"
+      ],
+      "metadata": {
+        "reflection_target": "028bc39e-c84d-4274-8e9a-3fdf2910a559",
+        "original_type": "analytical"
+      },
+      "created_at": "2025-04-17T19:09:00.050498",
+      "updated_at": "2025-04-17T19:09:00.050498",
+      "reflection_level": 1,
+      "awareness_score": 0.35,
+      "is_active": true
+    },
+    "0758f613-1a56-4eb5-a42a-01236548243b": {
+      "id": "0758f613-1a56-4eb5-a42a-01236548243b",
+      "content": "Reflection on: Reflection on: Happiness is a state of mind influenced by external stimuli.",
+      "pattern_type": "reflection",
+      "source_nodes": [
+        "7fbaa9ab-a09f-448d-adcb-8d9a07350010",
+        "028bc39e-c84d-4274-8e9a-3fdf2910a559",
+        "eb91ba98-0e58-41e5-8e16-68ec9dbcd7e4"
+      ],
+      "metadata": {
+        "reflection_target": "7fbaa9ab-a09f-448d-adcb-8d9a07350010",
+        "original_type": "reflection"
+      },
+      "created_at": "2025-04-17T19:09:00.050569",
+      "updated_at": "2025-04-17T19:09:00.050569",
+      "reflection_level": 2,
+      "awareness_score": 0.5,
+      "is_active": true
+    },
+    "b7bbe325-5bcb-433c-ab81-733434c7e979": {
+      "id": "b7bbe325-5bcb-433c-ab81-733434c7e979",
+      "content": "Reflection on: Reflection on: Happiness is a state of mind influenced by external stimuli.",
+      "pattern_type": "reflection",
+      "source_nodes": [
+        "7fbaa9ab-a09f-448d-adcb-8d9a07350010",
+        "028bc39e-c84d-4274-8e9a-3fdf2910a559",
+        "eb91ba98-0e58-41e5-8e16-68ec9dbcd7e4"
+      ],
+      "metadata": {
+        "reflection_target": "7fbaa9ab-a09f-448d-adcb-8d9a07350010",
+        "original_type": "reflection"
+      },
+      "created_at": "2025-04-17T19:09:05.059559",
+      "updated_at": "2025-04-17T19:09:05.059559",
+      "reflection_level": 2,
+      "awareness_score": 0.5,
+      "is_active": true
+    },
+    "0e137f1f-e82e-4eed-b217-8b0295f4652d": {
+      "id": "0e137f1f-e82e-4eed-b217-8b0295f4652d",
+      "content": "Reflection on: Happiness is a state of mind influenced by external stimuli.",
+      "pattern_type": "reflection",
+      "source_nodes": [
+        "028bc39e-c84d-4274-8e9a-3fdf2910a559",
+        "eb91ba98-0e58-41e5-8e16-68ec9dbcd7e4"
+      ],
+      "metadata": {
+        "reflection_target": "028bc39e-c84d-4274-8e9a-3fdf2910a559",
+        "original_type": "analytical"
+      },
+      "created_at": "2025-04-17T19:09:10.060216",
+      "updated_at": "2025-04-17T19:09:10.060216",
+      "reflection_level": 1,
+      "awareness_score": 0.35,
+      "is_active": true
+    },
+    "f8403c37-7384-4869-b120-7707ab6d6782": {
+      "id": "f8403c37-7384-4869-b120-7707ab6d6782",
+      "content": "Reflection on: Reflection on: Reflection on: Happiness is a state of mind influenced by external stimuli.",
+      "pattern_type": "reflection",
+      "source_nodes": [
+        "0758f613-1a56-4eb5-a42a-01236548243b",
+        "7fbaa9ab-a09f-448d-adcb-8d9a07350010",
+        "028bc39e-c84d-4274-8e9a-3fdf2910a559",
+        "eb91ba98-0e58-41e5-8e16-68ec9dbcd7e4"
+      ],
+      "metadata": {
+        "reflection_target": "0758f613-1a56-4eb5-a42a-01236548243b",
+        "original_type": "reflection"
+      },
+      "created_at": "2025-04-17T19:09:15.060894",
+      "updated_at": "2025-04-17T19:09:15.060894",
+      "reflection_level": 3,
+      "awareness_score": 0.6499999999999999,
+      "is_active": true
+    },
+    "975b93e3-11f8-43c7-8ca3-c69946ce09aa": {
+      "id": "975b93e3-11f8-43c7-8ca3-c69946ce09aa",
+      "content": "Reflection on: Reflection on: Reflection on: Happiness is a state of mind influenced by external stimuli.",
+      "pattern_type": "reflection",
+      "source_nodes": [
+        "b7bbe325-5bcb-433c-ab81-733434c7e979",
+        "7fbaa9ab-a09f-448d-adcb-8d9a07350010",
+        "028bc39e-c84d-4274-8e9a-3fdf2910a559",
+        "eb91ba98-0e58-41e5-8e16-68ec9dbcd7e4"
+      ],
+      "metadata": {
+        "reflection_target": "b7bbe325-5bcb-433c-ab81-733434c7e979",
+        "original_type": "reflection"
+      },
+      "created_at": "2025-04-17T19:09:20.061897",
+      "updated_at": "2025-04-17T19:09:20.061897",
+      "reflection_level": 3,
+      "awareness_score": 0.6499999999999999,
+      "is_active": true
+    },
+    "8a3cb434-fccf-4291-a262-7d9980b2491f": {
+      "id": "8a3cb434-fccf-4291-a262-7d9980b2491f",
+      "content": "Reflection on: Reflection on: Happiness is a state of mind influenced by external stimuli.",
+      "pattern_type": "reflection",
+      "source_nodes": [
+        "0e137f1f-e82e-4eed-b217-8b0295f4652d",
+        "028bc39e-c84d-4274-8e9a-3fdf2910a559",
+        "eb91ba98-0e58-41e5-8e16-68ec9dbcd7e4"
+      ],
+      "metadata": {
+        "reflection_target": "0e137f1f-e82e-4eed-b217-8b0295f4652d",
+        "original_type": "reflection"
+      },
+      "created_at": "2025-04-17T19:09:35.063138",
+      "updated_at": "2025-04-17T19:09:35.063138",
+      "reflection_level": 2,
+      "awareness_score": 0.5,
+      "is_active": true
+    },
+    "a16cbae2-dd56-4f53-8454-f048dcabe006": {
+      "id": "a16cbae2-dd56-4f53-8454-f048dcabe006",
+      "content": "Reflection on: Reflection on: Happiness is a state of mind influenced by external stimuli.",
+      "pattern_type": "reflection",
+      "source_nodes": [
+        "0e137f1f-e82e-4eed-b217-8b0295f4652d",
+        "028bc39e-c84d-4274-8e9a-3fdf2910a559",
+        "eb91ba98-0e58-41e5-8e16-68ec9dbcd7e4"
+      ],
+      "metadata": {
+        "reflection_target": "0e137f1f-e82e-4eed-b217-8b0295f4652d",
+        "original_type": "reflection"
+      },
+      "created_at": "2025-04-17T19:09:50.064978",
+      "updated_at": "2025-04-17T19:09:50.064978",
+      "reflection_level": 2,
+      "awareness_score": 0.5,
+      "is_active": true
+    }
+  },
+  "active_thoughts": [
+    "a16cbae2-dd56-4f53-8454-f048dcabe006",
+    "8a3cb434-fccf-4291-a262-7d9980b2491f",
+    "975b93e3-11f8-43c7-8ca3-c69946ce09aa",
+    "f8403c37-7384-4869-b120-7707ab6d6782",
+    "0e137f1f-e82e-4eed-b217-8b0295f4652d",
+    "b7bbe325-5bcb-433c-ab81-733434c7e979",
+    "0758f613-1a56-4eb5-a42a-01236548243b",
+    "7fbaa9ab-a09f-448d-adcb-8d9a07350010",
+    "028bc39e-c84d-4274-8e9a-3fdf2910a559",
+    "eb91ba98-0e58-41e5-8e16-68ec9dbcd7e4",
+    "0b4d9933-26a7-4a78-ba62-33b38bc34685"
+  ],
+  "awareness_history": [
+    {
+      "coherence": 0.3,
+      "self_reference": 0.2,
+      "temporal_continuity": 0.1,
+      "complexity": 0.54,
+      "integration": 0.0,
+      "awareness": 0.21100000000000002,
+      "timestamp": "2025-04-17T19:09:00.051179"
+    },
+    {
+      "coherence": 0.4,
+      "self_reference": 0.2777777777777778,
+      "temporal_continuity": 0.7335581066666667,
+      "complexity": 0.5666666666666667,
+      "integration": 0.0,
+      "awareness": 0.38115606577777783,
+      "timestamp": "2025-04-17T19:09:05.059608"
+    },
+    {
+      "coherence": 0.47619047619047616,
+      "self_reference": 0.2857142857142857,
+      "temporal_continuity": 0.7333506933333334,
+      "complexity": 0.5714285714285714,
+      "integration": 0.0,
+      "awareness": 0.39905109104761904,
+      "timestamp": "2025-04-17T19:09:10.060259"
+    },
+    {
+      "coherence": 0.5357142857142857,
+      "self_reference": 0.375,
+      "temporal_continuity": 0.7333524266666667,
+      "complexity": 0.6000000000000001,
+      "integration": 0.0,
+      "awareness": 0.4375633424761905,
+      "timestamp": "2025-04-17T19:09:15.060975"
+    },
+    {
+      "coherence": 0.5833333333333334,
+      "self_reference": 0.4444444444444444,
+      "temporal_continuity": 0.73336032,
+      "complexity": 0.6222222222222222,
+      "integration": 0.0,
+      "awareness": 0.4677831751111111,
+      "timestamp": "2025-04-17T19:09:20.061987"
+    },
+    {
+      "coherence": 0.5833333333333334,
+      "self_reference": 0.4444444444444444,
+      "temporal_continuity": 0.7333445333333333,
+      "complexity": 0.6222222222222222,
+      "integration": 0.0,
+      "awareness": 0.4677800177777778,
+      "timestamp": "2025-04-17T19:09:25.062407"
+    },
+    {
+      "coherence": 0.5833333333333334,
+      "self_reference": 0.4444444444444444,
+      "temporal_continuity": 0.7333445866666667,
+      "complexity": 0.6222222222222222,
+      "integration": 0.0,
+      "awareness": 0.46778002844444444,
+      "timestamp": "2025-04-17T19:09:30.062829"
+    },
+    {
+      "coherence": 0.6222222222222222,
+      "self_reference": 0.4666666666666667,
+      "temporal_continuity": 0.7333445866666667,
+      "complexity": 0.63,
+      "integration": 0.0,
+      "awareness": 0.48228002844444445,
+      "timestamp": "2025-04-17T19:09:35.063251"
+    },
+    {
+      "coherence": 0.6222222222222222,
+      "self_reference": 0.4666666666666667,
+      "temporal_continuity": 0.7333513066666667,
+      "complexity": 0.63,
+      "integration": 0.0,
+      "awareness": 0.48228137244444447,
+      "timestamp": "2025-04-17T19:09:40.063925"
+    },
+    {
+      "coherence": 0.6222222222222222,
+      "self_reference": 0.4666666666666667,
+      "temporal_continuity": 0.7333497866666667,
+      "complexity": 0.63,
+      "integration": 0.0,
+      "awareness": 0.48228106844444446,
+      "timestamp": "2025-04-17T19:09:45.064542"
+    },
+    {
+      "coherence": 0.8,
+      "self_reference": 0.48484848484848486,
+      "temporal_continuity": 0.7333462133333333,
+      "complexity": 0.6363636363636365,
+      "integration": 0.0,
+      "awareness": 0.5233359093333334,
+      "timestamp": "2025-04-17T19:09:50.065025"
+    },
+    {
+      "coherence": 0.8,
+      "self_reference": 0.48484848484848486,
+      "temporal_continuity": 0.7333481333333334,
+      "complexity": 0.6363636363636365,
+      "integration": 0.0,
+      "awareness": 0.5233362933333334,
+      "timestamp": "2025-04-17T19:09:55.065580"
+    }
+  ],
+  "current_awareness": {
+    "coherence": 0.8,
+    "self_reference": 0.48484848484848486,
+    "temporal_continuity": 0.7333481333333334,
+    "complexity": 0.6363636363636365,
+    "integration": 0.0,
+    "awareness": 0.5233362933333334,
+    "timestamp": "2025-04-17T19:09:55.065580"
+  },
+  "config": {
+    "data_dir": "test_consciousness",
+    "save_interval": 60,
+    "reflection_interval": 5,
+    "max_active_thoughts": 50,
+    "awareness_threshold": 0.3,
+    "enable_self_ref": true,
+    "enable_visualization": true,
+    "memory_sync": false
+  }
+}

@@ -7,7 +7,6 @@
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
 .Python
 env/
 build/
@@ -26,15 +25,9 @@ wheels/
 .installed.cfg
 *.egg
 
-# Virtual Environment
-venv/
-ENV/
-env/
-
 # Logs
 logs/
 *.log
-*.log.*
 
 # IDE
 .vscode/
@@ -44,31 +37,4 @@ logs/
 
 # OS
 .DS_Store
-Thumbs.db
-
-# Cache
-.cache/
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Temporary files
-*.tmp
-*.temp
-*.bak
-*.backup
-
-# Version specific
-node_zero.db
-*.db-journal
-
-# Performance data
-performance_visualizations_*/
-performance_results_*.json
-
-# Local development
-local_settings.py
-
-# Database
-*.db
-*.sqlite3 
+Thumbs.db 

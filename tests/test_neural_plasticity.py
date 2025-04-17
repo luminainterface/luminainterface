@@ -25,7 +25,7 @@ from src.v9.neural_plasticity import (
     StructuralPlasticityEngine,
     PlasticityManager
 )
-from src.v9.breathing_system import BreathingSystem, BreathState
+from src.v9.breathing_system import BreathingSystem, BreathingState
 
 class TestSynapticConnection(unittest.TestCase):
     """Test the SynapticConnection class"""
@@ -347,7 +347,7 @@ class TestPlasticityManager(unittest.TestCase):
         """Set up common test fixtures"""
         # Create mock breathing system
         self.mock_breathing = MagicMock(spec=BreathingSystem)
-        self.mock_breathing.get_current_state.return_value = BreathState.INHALE
+        self.mock_breathing.get_current_state.return_value = BreathingState.INHALE
         self.mock_breathing.get_current_amplitude.return_value = 1.0
         
         # Create plasticity manager with testing config
@@ -494,7 +494,7 @@ class TestPlasticityManager(unittest.TestCase):
         self.plasticity.create_connection(pre_id=1, post_id=2, initial_weight=0.5)
         
         # Test with inhale state - should enhance potentiation
-        self.mock_breathing.get_current_state.return_value = BreathState.INHALE
+        self.mock_breathing.get_current_state.return_value = BreathingState.INHALE
         self.plasticity.register_spike(neuron_id=1, timestamp=100.0)
         self.plasticity.register_spike(neuron_id=2, timestamp=110.0)  # Post follows pre - LTP
         self.plasticity._process_spikes()
@@ -507,7 +507,7 @@ class TestPlasticityManager(unittest.TestCase):
         conn = self.plasticity.create_connection(pre_id=1, post_id=2, initial_weight=0.5)
         
         # Test with exhale state - should reduce potentiation
-        self.mock_breathing.get_current_state.return_value = BreathState.EXHALE
+        self.mock_breathing.get_current_state.return_value = BreathingState.EXHALE
         self.plasticity.register_spike(neuron_id=1, timestamp=100.0)
         self.plasticity.register_spike(neuron_id=2, timestamp=110.0)  # Post follows pre - LTP
         self.plasticity._process_spikes()

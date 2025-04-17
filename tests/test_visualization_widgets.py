@@ -72,7 +72,9 @@ def test_2d_widget_animation(network_2d_widget):
     
     # Verify node activations changed
     initial_activation = network_2d_widget.get_node_activation(0)
-    QTimer.singleShot(200, lambda: assert network_2d_widget.get_node_activation(0) != initial_activation)
+    def check_activation():
+        assert network_2d_widget.get_node_activation(0) != initial_activation
+    QTimer.singleShot(200, check_activation)
 
 def test_3d_widget_animation(network_3d_widget):
     """Test animation functionality of 3D network widget."""
@@ -89,10 +91,10 @@ def test_3d_widget_animation(network_3d_widget):
     # Verify node activations and camera angle changed
     initial_activation = network_3d_widget.get_node_activation(0)
     initial_angle = network_3d_widget.get_camera_angle()
-    QTimer.singleShot(200, lambda: (
-        assert network_3d_widget.get_node_activation(0) != initial_activation,
+    def check_changes():
+        assert network_3d_widget.get_node_activation(0) != initial_activation
         assert network_3d_widget.get_camera_angle() != initial_angle
-    ))
+    QTimer.singleShot(200, check_changes)
 
 def test_2d_widget_resize(network_2d_widget):
     """Test resize functionality of 2D network widget."""

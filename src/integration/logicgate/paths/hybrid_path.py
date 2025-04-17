@@ -318,3 +318,4 @@ class HybridPath(ProcessingPath):
             'combination_strategy': self.processor.config.combination_strategy,
             'history_size': len(self.processor.processing_history)
         } 
+ 

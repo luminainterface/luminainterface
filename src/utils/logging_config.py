@@ -11,6 +11,7 @@ import logging.handlers
 from pathlib import Path
 import json
 from datetime import datetime
+from pythonjsonlogger import jsonlogger
 
 class LuminaLogger:
     """Centralized logging configuration for Lumina system"""
@@ -51,26 +52,50 @@ class LuminaLogger:
         root_logger = logging.getLogger()
         root_logger.setLevel(self.config["log_level"])
         
-        # Create formatter
-        formatter = logging.Formatter(
-            self.config["format"],
-            datefmt=self.config["date_format"]
+        # Clear any existing handlers
+        root_logger.handlers = []
+        
+        # Create formatters
+        json_formatter = jsonlogger.JsonFormatter(
+            '%(asctime)s %(levelname)s %(name)s %(message)s'
+        )
+        console_formatter = logging.Formatter(
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         )
         
-        # Setup file handler with rotation
+        # Create and configure file handler
         log_file = log_dir / f"lumina_{datetime.now().strftime('%Y%m%d')}.log"
-        file_handler = logging.handlers.RotatingFileHandler(
+        file_handler = logging.FileHandler(
             log_file,
-            maxBytes=self.config["max_bytes"],
-            backupCount=self.config["backup_count"]
+            mode='a',
+            encoding='utf-8'
         )
-        file_handler.setFormatter(formatter)
-        root_logger.addHandler(file_handler)
+        file_handler.setFormatter(json_formatter)
+        file_handler.setLevel(self.config["log_level"])
         
-        # Setup console handler
+        # Create and configure console handler
         console_handler = logging.StreamHandler()
-        console_handler.setFormatter(formatter)
+        console_handler.setFormatter(console_formatter)
+        console_handler.setLevel(self.config["log_level"])
+        
+        # Add handlers to root logger
+        root_logger.addHandler(file_handler)
         root_logger.addHandler(console_handler)
+        
+        # Set up specific loggers
+        loggers = [
+            'lumina',
+            'memory',
+            'neural_network',
+            'version_bridge',
+            'visualization'
+        ]
+        
+        for logger_name in loggers:
+            logger = logging.getLogger(logger_name)
+            logger.setLevel(self.config["log_level"])
+            logger.addHandler(file_handler)
+            logger.addHandler(console_handler)
     
     def get_logger(self, name):
         """Get or create a logger with the given name"""

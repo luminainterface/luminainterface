@@ -1,5 +1,6 @@
-from PySide6.QtWidgets import QOpenGLWidget
-from PySide6.QtGui import QOpenGLShaderProgram, QOpenGLShader, QMatrix4x4, QVector3D
+from PySide6.QtOpenGLWidgets import QOpenGLWidget
+from PySide6.QtOpenGL import QOpenGLShaderProgram, QOpenGLShader
+from PySide6.QtGui import QMatrix4x4, QVector3D
 from PySide6.QtCore import Qt, QTimer, Signal
 from typing import Dict, Any, List, Tuple, Optional
 import logging

@@ -25,7 +25,7 @@ from dataclasses import dataclass
 from collections import deque
 
 # Local imports
-from .breathing_system import BreathingSystem, BreathState
+from .breathing_system import BreathingSystem, BreathingState
 
 # Set up logging
 logging.basicConfig(
@@ -699,9 +699,9 @@ class PlasticityManager:
             breath_amplitude = self.breathing_system.get_current_amplitude()
             
             # Enhance plasticity during inhale, reduce during exhale
-            if breath_state == BreathState.INHALE:
+            if breath_state == BreathingState.INHALE:
                 breathing_factor = 1.0 + self.config["breathing_modulation_strength"] * breath_amplitude
-            elif breath_state == BreathState.EXHALE:
+            elif breath_state == BreathingState.EXHALE:
                 breathing_factor = 1.0 - 0.5 * self.config["breathing_modulation_strength"] * breath_amplitude
         
         # Process each spike

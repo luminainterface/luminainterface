@@ -1,13 +1,12 @@
 from PySide6.QtWidgets import QWidget, QToolTip
-from PySide6.QtGui import QPainter, QPen, QBrush, QColor, QPainterPath, QLinearGradient
-from PySide6.QtCore import Qt, QPointF, Signal, QRectF, QTime, QElapsedTimer, QTimer
+from PySide6.QtGui import QPainter, QPen, QBrush, QColor, QPainterPath
+from PySide6.QtCore import Qt, QPointF, Signal, QRectF, QTime, QElapsedTimer
 from typing import Dict, Any, List, Tuple, Optional
 import logging
 import math
 import random
 
 from .visualization_widget import VisualizationWidget
-from .growth_visualizer import GrowthVisualizer
 
 class Network2DWidget(VisualizationWidget):
     """2D neural network visualization widget."""
@@ -20,37 +19,8 @@ class Network2DWidget(VisualizationWidget):
     def __init__(self):
         super().__init__()
         self.logger = logging.getLogger(__name__)
-        
-        # Initialize growth visualizer
-        self.growth_visualizer = GrowthVisualizer(self)
-        self.growth_visualizer.setMinimumSize(400, 400)
-        
-        # Growth state tracking
-        self.last_growth_stage = None
-        self.health_metrics = {}
-        self.stability_score = 1.0
-        self.gate_states = {}
-        self.consciousness_level = 0.0
-        self.energy_level = 1.0
-        
-        # Backend connection
-        self.backend_connector = None
-        self.backend_connected = False
-        self.backend_path = None
-        
-        # Timers
-        self.growth_timer = QTimer(self)
-        self.growth_timer.timeout.connect(self.update_growth)
-        self.growth_timer.start(100)  # Update growth every 100ms
-        
-        # Signals
-        self.new_nodes_added = Signal(list)
-        self.growth_stage_changed = Signal(str)
-        
-        # Initialize other attributes
-        self.nodes = []
-        self.connections = []
-        self.signals = []
+        self.nodes: List[Tuple[float, float, float]] = []  # (x, y, activation)
+        self.connections: List[Tuple[int, int, float]] = []  # (from_idx, to_idx, weight)
         self.node_radius = 15
         self.connection_width = 2
         self._num_layers = 0
@@ -58,43 +28,43 @@ class Network2DWidget(VisualizationWidget):
         self.hovered_node = -1
         
         # Animation variables
-        self.animation_speed = 1.0
+        self.animation_speed = 1.0  # Base animation speed multiplier
         self.last_update_time = QTime.currentTime()
         self.elapsed_timer = QElapsedTimer()
         self.elapsed_timer.start()
         
         # Node and connection animation parameters
-        self.node_oscillation_speed = 0.5
-        self.connection_oscillation_speed = 0.25
-        self.node_phase_offset = 0.0
-        self.connection_phase_offset = 0.0
+        self.node_oscillation_speed = 0.5  # Oscillations per second
+        self.connection_oscillation_speed = 0.25  # Oscillations per second
+        self.node_phase_offset = 0.0  # Phase offset for node oscillations
+        self.connection_phase_offset = 0.0  # Phase offset for connection oscillations
         
         # Node complexity parameters
-        self.min_nodes = 1
-        self.max_nodes = 300
-        self.current_node_complexity = 0.0
-        self.target_node_complexity = 0.0
-        self.complexity_transition_speed = 0.1
+        self.min_nodes = 1  # Minimum number of nodes (changed from 30 to 1)
+        self.max_nodes = 300  # Maximum number of nodes
+        self.current_node_complexity = 0.0  # Current complexity level (0.0 to 1.0)
+        self.target_node_complexity = 0.0  # Target complexity level
+        self.complexity_transition_speed = 0.1  # Speed of complexity transition
         
         # Signal transfer animation
-        self.signal_speed = 0.5
-        self.signals = []
-        self.signal_radius = 5
-        self.signal_frequency = 0.1
+        self.signal_speed = 0.5  # Signal speed in units per second
+        self.signals: List[Tuple[int, int, float, float, bool]] = []  # (from_idx, to_idx, progress, strength, is_reverse)
+        self.signal_radius = 5  # Radius of signal pulse
+        self.signal_frequency = 0.1  # How often to generate new signals
         
         # Bidirectional signal transfer variables
-        self.bidirectional_enabled = True
-        self.reverse_signal_probability = 0.3
-        self.reverse_signal_speed_multiplier = 0.8
-        self.reverse_signal_strength_multiplier = 0.7
+        self.bidirectional_enabled = True  # Whether to allow bidirectional signal transfer
+        self.reverse_signal_probability = 0.3  # Probability of generating a reverse signal
+        self.reverse_signal_speed_multiplier = 0.8  # Speed multiplier for reverse signals
+        self.reverse_signal_strength_multiplier = 0.7  # Strength multiplier for reverse signals
         
         # Diagonal signal transfer variables
-        self.diagonal_signal_enabled = True
-        self.diagonal_signal_probability = 0.3
-        self.diagonal_signal_speed_multiplier = 1.2
-        self.diagonal_signal_strength_multiplier = 0.8
+        self.diagonal_signal_enabled = True  # Whether to allow diagonal signal transfer
+        self.diagonal_signal_probability = 0.3  # Probability of generating a diagonal signal
+        self.diagonal_signal_speed_multiplier = 1.2  # Speed multiplier for diagonal signals
+        self.diagonal_signal_strength_multiplier = 0.8  # Strength multiplier for diagonal signals
         
-        self.setMouseTracking(True)
+        self.setMouseTracking(True)  # Enable mouse tracking for hover effects
         
     def initialize(self, params: Dict[str, Any]) -> bool:
         """Initialize the 2D network visualization."""
@@ -103,11 +73,6 @@ class Network2DWidget(VisualizationWidget):
                 return False
                 
             self.logger.info("Initializing 2D network visualization")
-            
-            # Initialize growth visualizer
-            if 'growth' in params:
-                self.growth_visualizer.set_config(params['growth'])
-            
             # Generate initial network layout
             num_layers = params.get("num_layers", 3)
             nodes_per_layer = params.get("nodes_per_layer", 4)
@@ -137,9 +102,6 @@ class Network2DWidget(VisualizationWidget):
             self.diagonal_signal_probability = params.get("diagonal_signal_probability", 0.3)
             self.diagonal_signal_speed_multiplier = params.get("diagonal_signal_speed_multiplier", 1.2)
             self.diagonal_signal_strength_multiplier = params.get("diagonal_signal_strength_multiplier", 0.8)
-            
-            # Start growth timer
-            self.growth_timer.start()
             
             return self._generate_network_layout(num_layers, nodes_per_layer)
         except Exception as e:
@@ -324,17 +286,13 @@ class Network2DWidget(VisualizationWidget):
                 self.signals.append((from_idx, to_idx, 0.0, strength, is_reverse))
                 
     def paintEvent(self, event):
-        """Paint the network visualization."""
+        """Paint the 2D network visualization."""
         try:
             if not self.is_initialized():
                 return
                 
             painter = QPainter(self)
             painter.setRenderHint(QPainter.Antialiasing)
-            
-            # Draw growth visualization first
-            if self.growth_visualizer:
-                self.growth_visualizer.paintEvent(event)
             
             # Draw connections
             for from_idx, to_idx, weight in self.connections:
@@ -409,10 +367,6 @@ class Network2DWidget(VisualizationWidget):
         try:
             super().resizeEvent(event)
             if self.is_initialized():
-                # Update growth visualizer size
-                if self.growth_visualizer:
-                    self.growth_visualizer.setGeometry(self.rect())
-                
                 # Regenerate layout on resize
                 self._generate_network_layout(self._num_layers, self._nodes_per_layer)
         except Exception as e:
@@ -450,18 +404,9 @@ class Network2DWidget(VisualizationWidget):
     def cleanup(self):
         """Clean up visualization resources."""
         try:
-            # Stop growth timer
-            self.growth_timer.stop()
-            
-            # Clean up growth visualizer
-            if self.growth_visualizer:
-                self.growth_visualizer.cleanup()
-                
-            # Clean up network resources
             self.nodes.clear()
             self.connections.clear()
             self.signals.clear()
-            
             super().cleanup()
         except Exception as e:
             self.logger.error(f"Error during 2D network cleanup: {str(e)}")
@@ -496,6 +441,17 @@ class Network2DWidget(VisualizationWidget):
                 
         except Exception as e:
             self.logger.error(f"Error handling mouse move: {str(e)}")
+            
+    def resizeEvent(self, event):
+        """Handle widget resize events."""
+        try:
+            super().resizeEvent(event)
+            if self.is_initialized():
+                # Regenerate layout on resize
+                self._generate_network_layout(self._num_layers, self._nodes_per_layer)
+        except Exception as e:
+            self.logger.error(f"Error during 2D network resize: {str(e)}")
+            self.error_occurred.emit(str(e))
             
     def set_diagonal_signal_enabled(self, enabled: bool):
         """Enable or disable diagonal signal transfer."""
@@ -544,63 +500,61 @@ class Network2DWidget(VisualizationWidget):
     def get_current_complexity(self) -> float:
         """Get the current complexity level (0.0 to 1.0)."""
         return self.current_node_complexity 
-
-    def update_growth(self):
-        """Update growth visualization based on current state."""
-        if not self.growth_visualizer:
-            return
+    def resizeEvent(self, event):
+        """Handle widget resize events."""
+        try:
+            super().resizeEvent(event)
+            if self.is_initialized():
+                # Regenerate layout on resize
+                self._generate_network_layout(self._num_layers, self._nodes_per_layer)
+        except Exception as e:
+            self.logger.error(f"Error during 2D network resize: {str(e)}")
+            self.error_occurred.emit(str(e))
             
-        # Get new nodes and stage changes
-        new_nodes = self._get_new_nodes()
-        stage_change = self._get_stage_change()
+    def set_diagonal_signal_enabled(self, enabled: bool):
+        """Enable or disable diagonal signal transfer."""
+        self.diagonal_signal_enabled = enabled
         
-        # Update growth visualizer
-        self.growth_visualizer.update_from_network(
-            nodes=self.nodes,
-            connections=self.connections,
-            signals=self.signals
-        )
+    def set_diagonal_signal_probability(self, probability: float):
+        """Set the probability of generating diagonal signals."""
+        self.diagonal_signal_probability = max(0.0, min(1.0, probability))
         
-        # Update system state
-        system_state = {
-            'health': self.health_metrics,
-            'stability': self.stability_score,
-            'gate_states': self.gate_states,
-            'consciousness': self.consciousness_level,
-            'energy': self.energy_level
-        }
-        self.growth_visualizer.update_from_system_state(system_state)
+    def set_diagonal_signal_speed_multiplier(self, multiplier: float):
+        """Set the speed multiplier for diagonal signals."""
+        self.diagonal_signal_speed_multiplier = max(0.1, min(2.0, multiplier))
         
-        # Update backend state
-        if self.backend_connector and self.backend_connector.is_connected():
-            backend_info = self.backend_connector.get_backend_info()
-            self.growth_visualizer.update_from_backend(backend_info)
-            
-        # Emit signals for new nodes and stage changes
-        if new_nodes:
-            self.new_nodes_added.emit(new_nodes)
-        if stage_change:
-            self.growth_stage_changed.emit(stage_change)
-            
-        # Update visualization
-        self.update()
-
-    def _get_new_nodes(self) -> List[Dict]:
-        """Get newly added nodes since last update."""
-        new_nodes = []
-        for node in self.nodes:
-            if node.get('new', False):
-                new_nodes.append(node)
-                node['new'] = False
-        return new_nodes
-
-    def _get_stage_change(self) -> Optional[str]:
-        """Check if growth stage has changed."""
-        if not self.growth_visualizer:
-            return None
-            
-        current_stage = self.growth_visualizer.growth_stage.name
-        if current_stage != self.last_growth_stage:
-            self.last_growth_stage = current_stage
-            return current_stage
-        return None
+    def set_diagonal_signal_strength_multiplier(self, multiplier: float):
+        """Set the strength multiplier for diagonal signals."""
+        self.diagonal_signal_strength_multiplier = max(0.1, min(1.0, multiplier))
+        
+    def set_bidirectional_enabled(self, enabled: bool):
+        """Enable or disable bidirectional signal transfer."""
+        self.bidirectional_enabled = enabled
+        
+    def set_reverse_signal_probability(self, probability: float):
+        """Set the probability of generating reverse signals."""
+        self.reverse_signal_probability = max(0.0, min(1.0, probability))
+        
+    def set_reverse_signal_speed_multiplier(self, multiplier: float):
+        """Set the speed multiplier for reverse signals."""
+        self.reverse_signal_speed_multiplier = max(0.1, min(1.0, multiplier))
+        
+    def set_reverse_signal_strength_multiplier(self, multiplier: float):
+        """Set the strength multiplier for reverse signals."""
+        self.reverse_signal_strength_multiplier = max(0.1, min(1.0, multiplier))
+        
+    def set_node_complexity(self, complexity: float):
+        """Set the target node complexity level (0.0 to 1.0)."""
+        self.target_node_complexity = max(0.0, min(1.0, complexity))
+        
+    def set_complexity_transition_speed(self, speed: float):
+        """Set the speed of complexity transitions."""
+        self.complexity_transition_speed = max(0.01, min(1.0, speed))
+        
+    def get_current_node_count(self) -> int:
+        """Get the current number of nodes in the network."""
+        return len(self.nodes)
+        
+    def get_current_complexity(self) -> float:
+        """Get the current complexity level (0.0 to 1.0)."""
+        return self.current_node_complexity 

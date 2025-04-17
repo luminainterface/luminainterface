@@ -240,3 +240,4 @@ async def test_flow_control(triple_gate):
     assert state['states']['literal']['flow'] == FlowDirection.FORWARD.value
     assert state['states']['semantic']['flow'] == FlowDirection.BACKWARD.value
     assert state['states']['hybrid']['flow'] == FlowDirection.BIDIRECTIONAL.value 
+ 

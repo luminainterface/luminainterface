@@ -87,6 +87,10 @@ async def test_v10_v12_compatibility():
     v10_bridge = V10Bridge()
     v12_bridge = V12Bridge()
 
+    # Connect versions
+    assert v10_bridge.connect_version('v12', v12_bridge)
+    assert v12_bridge.connect_version('v10', v10_bridge)
+
     # Create test data
     test_data = {
         'message': 'Cross-version test',

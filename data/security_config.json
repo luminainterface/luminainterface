@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "v7.5": {
+      "read": true,
+      "write": true,
+      "execute": true
+    },
+    "v7.0": {
+      "read": true,
+      "write": true,
+      "execute": false
+    },
+    "v6.0": {
+      "read": true,
+      "write": false,
+      "execute": false
+    },
+    "v5.0": {
+      "read": true,
+      "write": false,
+      "execute": false
+    }
+  },
+  "encryption_key": "b806cbdddfbea672eea5a1b922052df5146b6e8133e6bda8a2839f2945b4def5"
+}

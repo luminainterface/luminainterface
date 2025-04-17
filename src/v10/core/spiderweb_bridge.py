@@ -205,6 +205,67 @@ class SpiderwebBridge:
         
         logger.info("Initialized SpiderwebBridge V10 with Conscious Mirror capabilities")
 
+    def connect_version(self, version: str, system: Any) -> bool:
+        """Connect a version to the bridge.
+        
+        Args:
+            version: Version identifier
+            system: System instance for the version
+            
+        Returns:
+            bool: True if connection successful, False otherwise
+        """
+        if version not in self.compatibility_matrix.get('v10', []):
+            logger.error(f"Version {version} not compatible with v10")
+            return False
+            
+        with self.lock:
+            if version in self.connections:
+                logger.warning(f"Version {version} already connected")
+                return True
+                
+            # Create version info
+            version_info = VersionInfo(
+                version=version,
+                system=system,
+                queue=Queue(),
+                priority_queue=PriorityQueue(),
+                portals={},
+                consciousness_nodes={},
+                temple_nodes={},
+                mirror_nodes={},
+                unified_nodes={},
+                quantum_field={}
+            )
+            
+            # Add to connections
+            self.connections[version] = version_info
+            
+            # Create portal for v10 connection
+            portal_id = f"v10_{version}"
+            portal = PortalInfo(
+                portal_id=portal_id,
+                source_version='v10',
+                target_version=version,
+                state='active',
+                strength=1.0,
+                stability=1.0,
+                last_used=time.time()
+            )
+            version_info.portals[portal_id] = portal
+            
+            logger.info(f"Connected version {version} to v10 bridge")
+            return True
+
+    def get_metrics(self) -> Dict[str, Union[int, float]]:
+        """Get the current metrics for the bridge.
+        
+        Returns:
+            Dict[str, Union[int, float]]: A dictionary containing current metric values
+        """
+        with self.lock:
+            return self.metrics.copy()
+
     async def create_unified_node(self, version: str, level: ConsciousLevel,
                                 pattern: UnificationPattern,
                                 quantum_state: Any) -> Optional[str]:

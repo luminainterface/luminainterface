@@ -225,3 +225,4 @@ class BackendBridge:
             if hasattr(component, 'get_metrics'):
                 metrics[name] = component.get_metrics()
         return metrics 
+ 

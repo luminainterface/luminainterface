@@ -836,7 +836,6 @@ async def test_logic_gate_visual_feedback(ping_system):
     
     # Check color reset
     assert gate.config.color == ping_system.config.gate_colors[LogicGateType.AND] 
-
 @pytest.mark.asyncio
 async def test_logic_gate_ping_synchronization(ping_system, mock_triple_gate):
     """Test synchronization between logic gates and ping system"""

@@ -236,3 +236,4 @@ class SemanticPath(ProcessingPath):
             'similarity_threshold': self.processor.config.similarity_threshold,
             'cached_embeddings': len(self.processor.embedding_cache)
         } 
+ 

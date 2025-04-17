@@ -1,271 +1,430 @@
 # Neural Network Visualization System
 
-## Quick Start
-1. Double-click `run_visualizer.bat` to start the visualization
-2. Modify `src/frontend/ui/config/visualizer_config.json` to customize settings
-3. Run the batch file again to apply changes
+A comprehensive visualization system for neural networks, providing real-time visualization of network states, growth processes, system metrics, and overall system health.
+
+## Installation
+
+### Prerequisites
+- Python 3.8 or higher
+- pip (Python package manager)
+- Git (for version control)
+
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/yourusername/neural_network_project.git
+cd neural_network_project
+```
+
+### Step 2: Create Virtual Environment
+```bash
+# Windows
+python -m venv venv
+venv\Scripts\activate
+
+# Linux/Mac
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### Step 3: Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### Step 4: Verify Installation
+```bash
+python -c "from src.frontend.ui.components.visualization_system import visualization_system; print('Installation successful!')"
+```
 
 ## Configuration
-The visualizer can be customized through the configuration file located at:
-`src/frontend/ui/config/visualizer_config.json`
 
-### Configuration Options
+### Configuration File
+Create or modify `src/frontend/ui/config/visualizer_config.json`:
 
-#### Network Settings
 ```json
 {
     "network": {
-        "num_layers": 3,           // Number of network layers
-        "nodes_per_layer": 4,      // Nodes per layer
-        "animation_speed": 1.0,    // Overall animation speed
-        "signal_frequency": 0.5,   // Signal generation frequency
-        "complexity": 0.5,         // Network complexity
-        "growth_rate": 0.1,        // System growth rate
-        "stability_threshold": 0.7  // System stability threshold
-    }
-}
-```
-
-#### Appearance Settings
-```json
-{
+        "num_layers": 3,
+        "nodes_per_layer": 4,
+        "animation_speed": 1.0,
+        "signal_frequency": 0.5,
+        "complexity": 0.5,
+        "growth_rate": 0.1,
+        "stability_threshold": 0.7
+    },
     "appearance": {
-        "node_size": 30,           // Size of nodes
-        "connection_width": 2,     // Width of connections
-        "background_color": "#1E1E1E",  // Background color
-        "grid_enabled": true,      // Show/hide grid
-        "node_colors": {           // Node color schemes
+        "node_size": 30,
+        "connection_width": 2,
+        "background_color": "#1E1E1E",
+        "grid_enabled": true,
+        "node_colors": {
             "normal": "#3498db",
             "auto_learner": "#2ecc71",
             "logic_gate": "#e74c3c",
             "seed": "#f39c12",
             "system": "#9b59b6"
-        },
-        "connection_colors": {     // Connection color schemes
-            "literal": "#3498db",
-            "semantic": "#e74c3c",
-            "hybrid": "#9b59b6",
-            "auto_learner": "#2ecc71",
-            "logic_gate": "#e67e22",
-            "seed": "#f1c40f"
-        },
-        "growth_effects": {        // Growth visualization settings
-            "ring_radius": 50,     // Growth ring radius
-            "pulse_speed": 2.0,    // Growth pulse speed
-            "stage_colors": {      // Growth stage colors
-                "seed": "#f1c40f",
-                "sprout": "#2ecc71",
-                "sapling": "#3498db",
-                "mature": "#9b59b6"
-            }
         }
-    }
-}
-```
-
-#### Data Source Settings
-```json
-{
-    "data_sources": {
-        "autowiki": {
-            "enabled": false,      // Enable/disable AutoWiki integration
-            "update_interval": 1000 // Update frequency in milliseconds
-        },
-        "neural_seed": {
-            "enabled": false,      // Enable/disable Neural Seed integration
-            "update_interval": 1000
-        },
-        "external": {
-            "enabled": false,      // Enable/disable external data source
-            "update_interval": 1000
-        },
-        "system_grower": {         // System grower integration
-            "enabled": true,       // Enable/disable system grower
-            "update_interval": 500, // Update frequency
-            "health_metrics": {    // Health monitoring
-                "cpu_usage": true,
-                "memory_usage": true,
-                "process_count": true,
-                "stability": true
-            }
-        }
-    }
-}
-```
-
-#### Animation Settings
-```json
-{
+    },
     "animation": {
-        "base_frequency": 0.5,     // Base oscillation frequency
-        "frequency_variance": 0.2, // Randomness in frequency
-        "movement_speed": 1.0,     // Node movement speed
-        "movement_radius": 10.0,   // Maximum movement radius
-        "transition_speed": 0.1,   // State transition speed
-        "growth_animation": {      // Growth animation settings
-            "ring_duration": 1000,  // Growth ring duration (ms)
-            "pulse_duration": 500,  // Growth pulse duration
-            "stage_transition": 2000 // Stage transition duration
-        }
+        "base_frequency": 0.5,
+        "frequency_variance": 0.2,
+        "movement_speed": 1.0,
+        "movement_radius": 10.0,
+        "transition_speed": 0.1
     }
 }
 ```
 
-## Running the Visualizer
+## Usage
 
-### Using Batch File
-Simply double-click `run_visualizer.bat` to start the visualization with default settings. The batch file will:
-1. Install required dependencies
-2. Start the system grower backend
-3. Launch the visualization
-4. Handle cleanup on exit
+### Starting the Visualizer
 
-### Command Line
+#### Method 1: Using the Launcher Script
 ```bash
 python src/frontend/ui/visualizer_launcher.py
 ```
 
-### Custom Configuration
-1. Edit `src/frontend/ui/config/visualizer_config.json`
-2. Save changes
-3. Restart the visualizer
+#### Method 2: Programmatic Usage
+```python
+from src.frontend.ui.components.visualization_system import visualization_system
+from PySide6.QtWidgets import QApplication
+import sys
 
-## Architecture
+def main():
+    app = QApplication(sys.argv)
+    
+    # Get visualization components
+    network_viz = visualization_system.get_visualization('network')
+    growth_viz = visualization_system.get_visualization('growth')
+    metrics_viz = visualization_system.get_visualization('metrics')
+    system_viz = visualization_system.get_visualization('system')
+    
+    # Show visualizations
+    network_viz.show()
+    growth_viz.show()
+    metrics_viz.show()
+    system_viz.show()
+    
+    sys.exit(app.exec())
 
-### Core Components
-
-1. **Network2DWidget** (`src/frontend/ui/components/widgets/network_2d_widget.py`)
-   - The main visualization engine
-   - Handles node and connection rendering
-   - Processes real-time data updates
-   - Manages animation states and transitions
-   - Implements growth visualization
-
-2. **GrowthVisualizer** (`src/frontend/ui/components/growth_visualizer.py`)
-   - Handles growth-specific visual effects
-   - Manages growth rings and pulses
-   - Tracks evolution markers
-   - Displays health indicators
-
-3. **SystemState** (`src/frontend/ui/components/system_state.py`)
-   - Manages system growth state
-   - Tracks growth stages
-   - Monitors system health
-   - Handles backend communication
-
-4. **TestWindow** (`src/frontend/ui/test_window.py`)
-   - Test interface for the visualization
-   - Provides UI controls and metrics display
-   - Acts as a testing environment
-
-5. **VisualizerLauncher** (`src/frontend/ui/visualizer_launcher.py`)
-   - Handles initialization and configuration
-   - Manages application lifecycle
-   - Loads and applies settings
-
-### Data Flow
-```
-Configuration File
-    ↓
-VisualizerLauncher
-    ↓
-TestWindow (UI Layer)
-    ↓
-Network2DWidget (Core Animation)
-    ↓
-GrowthVisualizer (Growth Effects)
-    ↓
-SystemState (Growth Management)
-    ↓
-Data Sources (AutoWiki, Neural Seed, System Grower)
+if __name__ == '__main__':
+    main()
 ```
 
-## Features
+### Basic Operations
 
-### Visualization Elements
-- **Nodes**: Represent neural network units
-  - Normal nodes
-  - Auto-learner nodes
-  - Logic gate nodes
-  - Seed component nodes
-  - System nodes
+#### 1. Network Visualization
+```python
+# Initialize network
+network_viz = visualization_system.get_visualization('network')
 
-- **Connections**: Represent network relationships
-  - Literal connections (blue)
-  - Semantic connections (red)
-  - Hybrid connections (purple)
-  - Auto-learner connections (green)
-  - Logic gate connections (orange)
-  - Seed connections (brown)
+# Add nodes
+network_viz.add_node('input1', activation=0.5, label='Input 1')
+network_viz.add_node('hidden1', activation=0.0, label='Hidden 1')
+network_viz.add_node('output1', activation=0.0, label='Output 1')
 
-### Growth Visualization
-- **Growth Rings**: Animated rings showing node growth
-- **Evolution Markers**: Visual indicators for stage changes
-- **Health Indicators**: Real-time system health metrics
-- **Stage Backgrounds**: Color-coded backgrounds for growth stages
-- **Connection Pulses**: Animated pulses along strong connections
+# Add connections
+network_viz.add_connection('input1', 'hidden1', weight=0.8)
+network_viz.add_connection('hidden1', 'output1', weight=0.6)
 
-### Animation States
-- **Connection Modes**:
-  - IDLE: Normal state
-  - ACTIVE: High activity
-  - LEARNING: Training state
-  - ERROR: Problem state
+# Update states
+network_viz.update_node('hidden1', activation=0.7)
+network_viz.update_connection('input1', 'hidden1', weight=0.9)
+```
 
-- **Growth Stages**:
-  - SEED: Initial state (yellow)
-  - SPROUT: Early development (green)
-  - SAPLING: Intermediate growth (blue)
-  - MATURE: Full development (purple)
+#### 2. Growth Visualization
+```python
+# Initialize growth visualization
+growth_viz = visualization_system.get_visualization('growth')
 
-### System Integration
-- **System Grower**: Backend process for system evolution
-- **Health Monitoring**: Real-time system metrics
-- **Growth Tracking**: Stage progression visualization
-- **Stability Analysis**: System stability indicators
+# Monitor growth progress
+current_stage = growth_viz.get_current_stage()
+progress = growth_viz.get_stage_progress()
+
+# Reset growth if needed
+growth_viz.reset_growth()
+```
+
+#### 3. Metrics Visualization
+```python
+# Initialize metrics visualization
+metrics_viz = visualization_system.get_visualization('metrics')
+
+# Update metrics
+metrics_viz.update_metric('health', 0.85)
+metrics_viz.update_metric('stability', 0.75)
+metrics_viz.update_metric('energy', 0.90)
+metrics_viz.update_metric('consciousness', 0.65)
+
+# Update gate states
+metrics_viz.update_gate_state('gate1', True)
+metrics_viz.update_gate_state('gate2', False)
+
+# Update system status
+metrics_viz.update_system_status('Running')
+```
+
+#### 4. System Visualization
+```python
+# Initialize system visualization
+system_viz = visualization_system.get_visualization('system')
+
+# Update component status
+system_viz.update_component_status('backend', 'Online')
+system_viz.update_component_status('network', 'Active')
+system_viz.update_component_status('growth', 'Growing')
+system_viz.update_component_status('metrics', 'Monitoring')
+
+# Update connections
+system_viz.update_connection_status('backend', 'network', 'Active')
+system_viz.update_connection_status('network', 'growth', 'Active')
+system_viz.update_connection_status('growth', 'metrics', 'Active')
+
+# Update system metrics
+system_viz.update_system_metric('health', 0.9)
+system_viz.update_system_metric('stability', 0.8)
+system_viz.update_system_status('Operational')
+```
+
+### Advanced Usage
+
+#### Customizing Visualizations
+```python
+# Customize network appearance
+network_viz.set_node_size(40)
+network_viz.set_connection_width(3)
+network_viz.set_background_color('#2C3E50')
+
+# Customize growth animation
+growth_viz.set_animation_speed(1.5)
+growth_viz.set_stage_duration('seed', 3.0)
+growth_viz.set_stage_duration('sprout', 4.0)
+
+# Customize metrics display
+metrics_viz.set_history_length(200)
+metrics_viz.set_update_interval(100)  # milliseconds
+metrics_viz.set_chart_type('line')  # or 'bar', 'area'
+
+# Customize system visualization
+system_viz.set_component_size(120, 80)
+system_viz.set_connection_style('curved')  # or 'straight', 'dashed'
+```
+
+#### Event Handling
+```python
+# Handle node selection
+def on_node_selected(node_id):
+    print(f"Selected node: {node_id}")
+    # Update other visualizations based on selection
+
+network_viz.node_selected.connect(on_node_selected)
+
+# Handle growth stage changes
+def on_stage_changed(stage):
+    print(f"Growth stage changed to: {stage}")
+    # Update metrics or system state
+
+growth_viz.stage_changed.connect(on_stage_changed)
+
+# Handle metric updates
+def on_metric_updated(metric, value):
+    print(f"Metric {metric} updated to {value}")
+    # Update other components
+
+metrics_viz.metric_updated.connect(on_metric_updated)
+```
+
+#### Performance Optimization
+```python
+# Adjust frame rate
+visualization_system.set_frame_rate(60)  # or lower for better performance
+
+# Enable/disable features
+network_viz.set_feature_enabled('animations', True)
+growth_viz.set_feature_enabled('particles', False)
+metrics_viz.set_feature_enabled('history', True)
+
+# Set update intervals
+network_viz.set_update_interval(16)  # ~60fps
+growth_viz.set_update_interval(33)   # ~30fps
+metrics_viz.set_update_interval(100)  # 10fps
+```
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Configuration File Not Found**
-   - Ensure `visualizer_config.json` exists in the correct location
-   - Check file permissions
-   - Verify JSON syntax is correct
+1. **Visualization Not Starting**
+   - Check Python version: `python --version`
+   - Verify dependencies: `pip list`
+   - Check configuration file syntax
+   - Ensure virtual environment is activated
 
-2. **Visualization Not Starting**
-   - Check Python installation
-   - Verify required packages are installed
-   - Check console for error messages
-
-3. **Performance Issues**
+2. **Performance Issues**
    - Reduce network complexity
    - Increase update intervals
    - Disable unnecessary features
    - Check system resource usage
 
-4. **Growth Visualization Issues**
-   - Verify system grower is running
-   - Check growth stage transitions
-   - Monitor system health metrics
-   - Adjust growth animation parameters
+3. **Visual Artifacts**
+   - Update graphics drivers
+   - Adjust anti-aliasing settings
+   - Modify transparency settings
+   - Check for conflicting visual effects
+
+4. **Connection Issues**
+   - Verify backend is running
+   - Check connection settings
+   - Monitor network status
+   - Review error logs
 
 ### Debugging
-- Check the console output for error messages
-- Verify configuration file syntax
-- Monitor system resources
-- Check data source connections
-- Review growth stage transitions
-- Monitor system health metrics
+
+```python
+# Enable debug mode
+visualization_system.set_debug_mode(True)
+
+# Check component status
+print(f"Network status: {network_viz.get_status()}")
+print(f"Growth status: {growth_viz.get_status()}")
+print(f"Metrics status: {metrics_viz.get_status()}")
+print(f"System status: {system_viz.get_status()}")
+
+# Monitor performance
+print(f"Frame rate: {visualization_system.get_frame_rate()}")
+print(f"Memory usage: {visualization_system.get_memory_usage()}")
+print(f"CPU usage: {visualization_system.get_cpu_usage()}")
+```
+
+## Features
+
+### Core Visualization Components
+
+1. **Network Visualization**
+   - Real-time node and connection visualization
+   - Dynamic node activation updates
+   - Connection weight visualization
+   - Interactive node selection and hovering
+   - Responsive layout management
+   - Color-coded node states
+   - Weight-based connection coloring
+
+2. **Growth Visualization**
+   - Multi-stage growth animation
+   - Smooth stage transitions
+   - Visual feedback for growth progress
+   - Six distinct growth stages:
+     - Seed
+     - Sprout
+     - Branch
+     - Leaf
+     - Flower
+     - Fruit
+   - Stage progress tracking
+   - Reset capability
+
+3. **Metrics Visualization**
+   - Real-time system metrics display
+   - Historical data tracking
+   - Trend visualization
+   - Gate state monitoring
+   - System status display
+   - Metric history charts
+   - Current metric values
+   - Color-coded metric indicators
+
+4. **System Visualization**
+   - Overall system status display
+   - Component connection visualization
+   - System-wide metric tracking
+   - Component status monitoring
+   - Health indicators
+   - Stability metrics
+   - Energy levels
+   - Consciousness tracking
+
+### Technical Features
+
+1. **Performance**
+   - 60fps smooth animations
+   - Efficient resource management
+   - Frame timing control
+   - Performance optimization
+   - Memory management
+
+2. **Visual Quality**
+   - High-quality rendering
+   - Anti-aliased graphics
+   - Smooth transitions
+   - Transparent backgrounds
+   - Clear visual hierarchy
+
+3. **Responsiveness**
+   - Proper resize handling
+   - Dynamic layout updates
+   - Smooth scaling
+   - Aspect ratio maintenance
+   - Component repositioning
+
+4. **State Management**
+   - Comprehensive state tracking
+   - Real-time updates
+   - State synchronization
+   - Error handling
+   - Recovery mechanisms
+
+## Component Integration
+
+### NetworkVisualization
+```python
+- Node management
+- Connection handling
+- Layout algorithms
+- Interactive features
+- State updates
+```
+
+### GrowthVisualization
+```python
+- Stage management
+- Animation control
+- Progress tracking
+- Visual effects
+- State transitions
+```
+
+### MetricsVisualization
+```python
+- Data tracking
+- History management
+- Real-time updates
+- Visual representation
+- Status monitoring
+```
+
+### SystemVisualization
+```python
+- Component tracking
+- Connection management
+- System monitoring
+- Health indicators
+- Status updates
+```
 
 ## Contributing
-1. Fork the repository
-2. Create a feature branch
-3. Implement changes
-4. Submit pull request
+
+1. **Development Guidelines**
+   - Follow PEP 8 style guide
+   - Maintain documentation
+   - Write unit tests
+   - Use type hints
+
+2. **Code Organization**
+   - Modular design
+   - Clear interfaces
+   - Consistent patterns
+   - Proper encapsulation
 
 ## License
-[Specify your license here]
 
-## Contact
-[Your contact information] 
+This project is licensed under the MIT License - see the LICENSE file for details. 

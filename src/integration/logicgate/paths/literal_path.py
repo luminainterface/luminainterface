@@ -192,3 +192,4 @@ class LiteralPath(ProcessingPath):
             'case_sensitive': self.processor.config.case_sensitive,
             'threshold': self.processor.config.exact_match_threshold
         } 
+ 

@@ -261,3 +261,4 @@ class OutputProcessor:
 
 # Create global instance
 logic_gate_system = LogicGateSystem() 
+ 

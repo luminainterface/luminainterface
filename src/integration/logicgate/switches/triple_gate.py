@@ -332,3 +332,4 @@ class TripleGate:
                     path_type,
                     GateState.OPEN if path_type in best_paths else GateState.CLOSED
                 ) 
+ 
