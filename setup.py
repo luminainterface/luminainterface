@@ -36,7 +36,7 @@ def setup_environment():
 
 setup(
     name="lumina_neural_network",
-    version='0.1.1',
+    version='0.1.2',
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     install_requires=[

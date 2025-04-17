@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.2] - 2025-04-17
+
+
+
+
+## [0.1.2] - 2025-04-17
+
+
+
+
 ## [0.1.1] - 2025-04-17
 
 Added automated release process and improved CI/CD pipeline
