@@ -35,35 +35,33 @@ def setup_environment():
             print("Please manually copy Consolas.ttf to assets/fonts directory")
 
 setup(
-    name="neural_network_project",
-    version="0.1",
-    packages=find_packages(),
+    name="lumina_neural_network",
+    version='0.1.1',
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     install_requires=[
-        'pytest>=7.3.0',
-        'pytest-asyncio>=0.18.0',
-        'pytest-mock>=3.14.0',
-        'pytest-cov>=6.1.1',
-        'aiohttp>=3.8.0',
-        'pydantic>=1.8.0',
-        'torch>=1.9.0',
-        'prometheus_client>=0.11.0',
-        'python-json-logger>=2.0.2'
+        "numpy>=1.26.0",
+        "pandas>=2.2.0",
+        "scikit-learn>=1.4.0",
+        "torch>=2.2.0",
+        "pytest>=7.4.0",
+        "pytest-asyncio>=0.21.0",
+        "pytest-cov>=4.1.0"
     ],
-    python_requires='>=3.8',
-    author="Lumina Development Team",
-    author_email="lumina@example.com",
-    description="Lumina Frontend System - Advanced Neural Network Visualization and Control Interface",
+    python_requires=">=3.10",
+    author="Lumina Neural Network Team",
+    author_email="team@lumina.ai",
+    description="Advanced neural network system with versioned components",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/lumina_frontend",
+    url="https://github.com/yourusername/lumina-neural-network",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
     ],
 )
 
