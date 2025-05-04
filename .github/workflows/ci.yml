@@ -1,0 +1,74 @@
+name: Lumina CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install ruff pytest
+        cd lumina-core
+        pip install -r requirements.txt
+        
+    - name: Install Node.js dependencies
+      run: |
+        cd ui
+        npm install
+        
+    - name: Run Python linting
+      run: |
+        ruff check lumina-core/
+        
+    - name: Run JavaScript linting
+      run: |
+        cd ui
+        npm run lint
+        
+    - name: Run Python tests
+      run: |
+        cd lumina-core
+        pytest -q
+        
+    - name: Build Docker images
+      run: |
+        cd ops
+        docker compose build --progress plain
+
+    - name: Create and verify freeze
+      run: |
+        cd ops
+        # Create freeze with CI-optimized settings
+        SNAP_WAIT=0 ARCHIVE_COMPRESSION=1 ./freeze.sh
+        # Verify the freeze
+        ./verify_freeze.sh lumina_freeze_*.tar.gz
+        # Upload as artifact for inspection
+        tar_file=$(ls lumina_freeze_*.tar.gz)
+        echo "FREEZE_FILE=$tar_file" >> $GITHUB_ENV
+        echo "FREEZE_CHECKSUM=$(cat ${tar_file}.sha256)" >> $GITHUB_ENV
+
+    - name: Upload freeze artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: lumina-freeze
+        path: ops/lumina_freeze_*.tar.gz
+        retention-days: 7 

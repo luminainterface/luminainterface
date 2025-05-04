@@ -1,0 +1,49 @@
+groups:
+- name: lumina-runtime
+  rules:
+  # 1. High p95 latency
+  - alert: LuminaHighP95Latency
+    expr: histogram_quantile(
+            0.95,
+            sum(rate(http_request_latency_seconds_bucket[5m])) by (le,endpoint)
+          ) > 2
+    for: 10m
+    labels: { severity: warning }
+    annotations:
+      summary: "High p95 latency on {{ $labels.endpoint }}"
+      description: "p95 > 2 s for 10 min"
+
+  # 2. Cache miss spike
+  - alert: LuminaCacheMissSpike
+    expr: |
+      sum(rate(cache_operations_total{operation="get",result="miss"}[5m])) /
+      sum(rate(cache_operations_total{operation="get"}[5m])) > 0.5
+    for: 5m
+    labels: { severity: warning }
+    annotations:
+      summary: "Cache miss rate > 50 %"
+
+  # 3. Redis down
+  - alert: LuminaRedisDown
+    expr: cache_entries{layer="redis"} == -1
+    for: 2m
+    labels: { severity: critical }
+    annotations:
+      summary: "Redis cache unreachable"
+
+  # 4. Prune job stale
+  - alert: LuminaPruneJobStale
+    expr: time() - prune_last_run_timestamp > 86400
+    for: 15m
+    labels: { severity: warning }
+    annotations:
+      summary: "Vector prune job hasn't run in 24 h"
+
+  # 5. Qdrant errors
+  - alert: LuminaQdrantErrors
+    expr: increase(qdrant_request_errors_total[5m]) > 5
+    for: 5m
+    labels: { severity: warning }
+    annotations:
+      summary: "Qdrant error rate elevated"
+      description: "More than 5 errors in 5 minutes" 

@@ -1,0 +1,67 @@
+name: Frontend Lint, Test & Audit
+
+on:
+  push:
+    paths:
+      - 'ui/**'
+  pull_request:
+    paths:
+      - 'ui/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ui
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          
+      - name: Install dependencies
+        run: pnpm install
+        
+      - name: Check formatting
+        run: pnpm format:check
+        
+      - name: Run linter
+        run: pnpm lint
+        
+      - name: Run tests
+        run: pnpm test
+        
+      - name: Run accessibility tests
+        run: pnpm test:a11y
+        
+      - name: Start dev server
+        run: pnpm dev &
+        
+      - name: Wait for dev server
+        run: sleep 10
+        
+      - name: Run Lighthouse CI
+        run: pnpm lighthouse
+        
+      - name: Upload accessibility report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-report
+          path: ui/accessibility-report.json
+          
+      - name: Upload Lighthouse report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-report
+          path: ui/lighthouse-report.json 

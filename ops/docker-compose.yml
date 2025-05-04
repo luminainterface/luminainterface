@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  hub-api:
+    build:
+      context: ../lumina-core
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - VECTOR_DB_URL=http://vector-db:6333
+      - LLM_ENGINE_URL=http://llm-engine:11434
+      - REDIS_URL=redis://redis:6379
+      - ENVIRONMENT=development
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../lumina-core:/app
+      - /app/__pycache__
+      - /app/.pytest_cache
+    depends_on:
+      - vector-db
+      - llm-engine
+      - redis
+    restart: unless-stopped
+
+  ui:
+    build:
+      context: ../ui
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true
+    volumes:
+      - ../ui:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - hub-api
+    restart: unless-stopped
+
+  vector-db:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+    volumes:
+      - vector_data:/qdrant/storage
+    restart: unless-stopped
+
+  llm-engine:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - model_data:/root/.ollama
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  scheduler:
+    build:
+      context: ../lumina-core
+      dockerfile: Dockerfile.scheduler
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - ENVIRONMENT=development
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../lumina-core:/app
+      - /app/__pycache__
+      - /app/.pytest_cache
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+volumes:
+  vector_data:
+  model_data:
+  redis_data: 
