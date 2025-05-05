@@ -1,0 +1,175 @@
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6381:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6335:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 1 bash -c '>/dev/tcp/localhost/6333'"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11436:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+      - ./ops/ollama/init.sh:/init.sh
+    entrypoint: ["/bin/bash", "-c", "/bin/ollama serve & sleep 5 && chmod +x /init.sh && /init.sh && wait"]
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  graph-api:
+    build:
+      context: .
+      dockerfile: graph_api/Dockerfile
+    ports:
+      - "8201:8200"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - QDRANT_URL=http://qdrant:6333
+      - VECTOR_DB_URL=http://qdrant:6333
+      - LLM_ENGINE_URL=http://ollama:11434
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-H", "Accept: application/json", "http://localhost:8200/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+  event-mux:
+    build:
+      context: .
+      dockerfile: event_mux/Dockerfile
+    ports:
+      - "8101:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 15s
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  crawler:
+    build:
+      context: .
+      dockerfile: crawler/Dockerfile
+    ports:
+      - "8401:8400"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - GRAPH_API_URL=http://graph-api:8200
+      - GITHUB_SHA=${GITHUB_SHA:-unknown}
+    volumes:
+      - ./crawler:/app
+    depends_on:
+      redis:
+        condition: service_healthy
+      graph-api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-H", "Accept: application/json", "http://localhost:8400/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  masterchat:
+    build:
+      context: .
+      dockerfile: masterchat/Dockerfile
+    env_file: .env
+    ports:
+      - "8301:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - QDRANT_URL=http://qdrant:6333
+      - OLLAMA_URL=http://ollama:11434
+      - GRAPH_API_URL=http://graph-api:8200
+      - EVENT_MUX_URL=http://event-mux:8100
+      - CRAWLER_URL=http://crawler:8400
+    volumes:
+      - .:/app
+      - master_state:/data
+    depends_on:
+      redis:
+        condition: service_healthy
+      graph-api:
+        condition: service_healthy
+      event-mux:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-H", "Accept: application/json", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./ops/alerts:/etc/prometheus/alerts
+      - prometheus_data:/prometheus
+    depends_on:
+      - masterchat
+      - graph-api
+      - event-mux
+      - crawler
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana_pwd
+      - GF_AUTH_DISABLE_SIGNUP_MENU=true
+      - GF_AUTH_DISABLE_LOGIN_FORM=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./ops/grafana/dashboards:/var/lib/grafana/dashboards
+      - ./ops/grafana/provisioning:/etc/grafana/provisioning
+    secrets:
+      - grafana_pwd
+    depends_on:
+      - prometheus
+
+volumes:
+  redis_data:
+  qdrant_data:
+  ollama_data:
+  prometheus_data:
+  grafana_data:
+  master_state:
+
+secrets:
+  grafana_pwd:
+    file: ./ops/secrets/grafana_pwd.txt 

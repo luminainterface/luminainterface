@@ -1,0 +1,147 @@
+# Lumina Project Owners Matrix
+
+owners:
+  data_management:
+    primary: backend_lead
+    delegate: sre_lead
+    areas:
+      - data_retention
+      - backup_strategy
+      - data_classification
+      - compliance
+
+  cicd:
+    primary: devops_lead
+    delegate: frontend_lead
+    areas:
+      - release_process
+      - deployment
+      - automation
+      - quality_gates
+
+  monitoring:
+    primary: sre_lead
+    delegate: devops_lead
+    areas:
+      - alerting
+      - metrics
+      - logging
+      - dashboards
+
+  documentation:
+    primary: tech_writer
+    delegate: all_leads
+    areas:
+      - api_docs
+      - runbooks
+      - adrs
+      - onboarding
+
+  team_development:
+    primary: eng_manager
+    delegate: hr_partner
+    areas:
+      - training
+      - onboarding
+      - career_growth
+      - team_culture
+
+  security:
+    primary: security_lead
+    delegate: sre_lead
+    areas:
+      - compliance
+      - access_control
+      - audit
+      - incident_response
+
+  infrastructure:
+    primary: devops_lead
+    delegate: sre_lead
+    areas:
+      - kubernetes
+      - networking
+      - storage
+      - scaling
+
+  quality:
+    primary: qa_lead
+    delegate: frontend_lead
+    areas:
+      - testing
+      - automation
+      - performance
+      - accessibility
+
+contacts:
+  backend_lead:
+    email: backend-lead@lumina.ai
+    slack: @backend-lead
+    pagerduty: backend-lead
+
+  sre_lead:
+    email: sre-lead@lumina.ai
+    slack: @sre-lead
+    pagerduty: sre-lead
+
+  devops_lead:
+    email: devops-lead@lumina.ai
+    slack: @devops-lead
+    pagerduty: devops-lead
+
+  frontend_lead:
+    email: frontend-lead@lumina.ai
+    slack: @frontend-lead
+    pagerduty: frontend-lead
+
+  tech_writer:
+    email: tech-writer@lumina.ai
+    slack: @tech-writer
+
+  eng_manager:
+    email: eng-manager@lumina.ai
+    slack: @eng-manager
+
+  security_lead:
+    email: security-lead@lumina.ai
+    slack: @security-lead
+    pagerduty: security-lead
+
+  qa_lead:
+    email: qa-lead@lumina.ai
+    slack: @qa-lead
+
+  hr_partner:
+    email: hr-partner@lumina.ai
+    slack: @hr-partner
+
+escalation_paths:
+  production_incident:
+    - sre_lead
+    - devops_lead
+    - eng_manager
+    - security_lead
+
+  security_incident:
+    - security_lead
+    - sre_lead
+    - eng_manager
+    - legal_team
+
+  compliance_issue:
+    - security_lead
+    - legal_team
+    - eng_manager
+
+  team_emergency:
+    - eng_manager
+    - hr_partner
+    - exec_team
+
+on_call:
+  primary: sre_lead
+  backup: devops_lead
+  escalation: eng_manager
+  schedule: "0 0 * * *"  # Daily rotation at midnight
+  handoff_time: "09:00"  # 9 AM handoff
+  timezone: "UTC" 

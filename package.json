@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "canvas-confetti": "^1.9.3",
+    "vue-toastification": "^1.7.14"
+  }
+}

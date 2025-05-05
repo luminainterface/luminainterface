@@ -1,5 +1,58 @@
 # Lumina Operations Infrastructure
 
+## Project Overview
+
+Lumina is a neural-network interface that bridges human conversation with AI systems via a self-growing language+memory core. This repo contains all services—backend, UI, and ops scripts—needed to run Lumina locally or on a server.
+
+## Quick Start
+
+```bash
+git clone https://github.com/luminainterface/luminainterface.git
+cd luminainterface
+docker compose up --build
+# UI → http://localhost:3000
+# API → http://localhost:8000  (requires X-API-Key header set to $LUMINA_API_KEY)
+```
+
+## Directory Map
+
+| Path         | Purpose                                         |
+|--------------|-------------------------------------------------|
+| lumina_core/ | FastAPI backend, Ollama proxy, vector memory    |
+| ui/          | Vanilla JS front-end (chat, metrics, shortcuts) |
+| ops/         | Docker Compose, freeze/verify scripts, backups  |
+| docs/        | Grafana dashboards, Prometheus alert rules      |
+
+## Alpha API Key
+- All API requests require the `X-API-Key` header set to your `$LUMINA_API_KEY` environment variable.
+
+## CI/CD Pipeline
+- Lint ➔ tests ➔ build ➔ freeze verify ➔ optional S3 backup
+- [![CI](https://github.com/luminainterface/luminainterface/actions/workflows/ci.yml/badge.svg)](https://github.com/luminainterface/luminainterface/actions/workflows/ci.yml)
+
+## Backup & Restore
+- See `ops/README.md` for detailed backup, freeze, and restore instructions.
+- Use `freeze_and_push.sh` for S3 backups and `verify_freeze.sh` for archive validation.
+
+## Security & Monitoring
+- No sensitive data in version control
+- Environment files excluded from git
+- Docker images built from verified sources
+- Checksums for archive verification
+- Container health checks via restart policy
+- Debug mode for verbose output
+- CI pipeline status checks
+
+## Future Improvements
+- Add coverage reporting to CI
+- Implement Storybook for UI components
+- Add Docker registry authentication support
+- Consider adding monitoring metrics
+
+---
+
+For the latest onboarding, usage, and contribution guidelines, see the top-level [README.md](../README.md).
+
 ## Development Environment
 
 ### Docker Compose Services

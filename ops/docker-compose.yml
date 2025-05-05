@@ -3,7 +3,7 @@ version: '3.8'
 services:
   hub-api:
     build:
-      context: ../lumina-core
+      context: ../lumina_core
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
@@ -13,8 +13,9 @@ services:
       - REDIS_URL=redis://redis:6379
       - ENVIRONMENT=development
       - PYTHONUNBUFFERED=1
+      # - LUMINA_API_KEY=alpha-1234  # Development API key - disabled for local testing
     volumes:
-      - ../lumina-core:/app
+      - ../lumina_core:/app
       - /app/__pycache__
       - /app/.pytest_cache
     depends_on:
@@ -23,22 +24,60 @@ services:
       - redis
     restart: unless-stopped
 
+  event-mux:
+    build:
+      context: ../lumina_core
+      dockerfile: Dockerfile.event_mux
+    ports:
+      - "8001:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - ENVIRONMENT=development
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../lumina_core:/app
+      - /app/__pycache__
+      - /app/.pytest_cache
+    depends_on:
+      - redis
+      - kafka
+    restart: unless-stopped
+
+  nn-consumer:
+    build:
+      context: ../lumina_core
+      dockerfile: Dockerfile.nn_consumer
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - ENVIRONMENT=development
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../lumina_core:/app
+      - /app/__pycache__
+      - /app/.pytest_cache
+    depends_on:
+      - redis
+      - kafka
+    restart: unless-stopped
+
   ui:
     build:
       context: ../ui
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3000:80"
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_EVENT_MUX_URL=ws://localhost:8001
       - NODE_ENV=development
-      - WATCHPACK_POLLING=true
+      - NEXT_PUBLIC_API_KEY=alpha-1234  # Development API key
     volumes:
-      - ../ui:/app
-      - /app/node_modules
-      - /app/.next
+      - ../ui:/usr/share/nginx/html:ro
     depends_on:
       - hub-api
+      - event-mux
     restart: unless-stopped
 
   vector-db:
@@ -67,21 +106,75 @@ services:
 
   scheduler:
     build:
-      context: ../lumina-core
+      context: ../lumina_core
       dockerfile: Dockerfile.scheduler
     environment:
       - REDIS_URL=redis://redis:6379
       - ENVIRONMENT=development
       - PYTHONUNBUFFERED=1
     volumes:
-      - ../lumina-core:/app
+      - ../lumina_core:/app
       - /app/__pycache__
       - /app/.pytest_cache
     depends_on:
       - redis
     restart: unless-stopped
 
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    volumes:
+      - zookeeper_data:/bitnami/zookeeper
+    restart: unless-stopped
+
+  kafka:
+    image: bitnami/kafka:latest
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CFG_NUM_PARTITIONS=3
+    volumes:
+      - kafka_data:/bitnami/kafka
+    depends_on:
+      - zookeeper
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"  # Changed to 3001 to avoid conflict with UI
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
 volumes:
   vector_data:
   model_data:
-  redis_data: 
+  redis_data:
+  zookeeper_data:
+  kafka_data:
+  prometheus_data: 

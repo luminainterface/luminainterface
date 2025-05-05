@@ -1,0 +1,24 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'hub-api'
+    static_configs:
+      - targets: ['hub-api:8000']
+
+  - job_name: 'event-mux'
+    static_configs:
+      - targets: ['event-mux:8000']
+
+  - job_name: 'nn-consumer'
+    static_configs:
+      - targets: ['nn-consumer:8000']
+
+  - job_name: 'scheduler'
+    static_configs:
+      - targets: ['scheduler:8000']
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090'] 

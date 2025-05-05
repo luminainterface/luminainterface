@@ -1,0 +1,21 @@
+FROM alpine:3.18
+
+# Install required packages
+RUN apk add --no-cache \
+    bash \
+    tar \
+    netcat-openbsd \
+    coreutils
+
+# Copy verification script
+COPY scripts/verify_backup.sh /usr/local/bin/verify_backup.sh
+RUN chmod +x /usr/local/bin/verify_backup.sh
+
+# Create backup directory
+RUN mkdir -p /backups
+
+# Set working directory
+WORKDIR /backups
+
+# Run verification script
+CMD ["/usr/local/bin/verify_backup.sh"] 

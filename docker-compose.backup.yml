@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  backup-verifier:
+    build:
+      context: .
+      dockerfile: scripts/Dockerfile.backup-verifier
+    volumes:
+      - ./backups:/backups
+      - ./scripts:/scripts
+    environment:
+      - BACKUP_DIR=/backups
+      - RETENTION_DAYS=31
+      - PROMETHEUS_PORT=9090
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+networks:
+  monitoring:
+    external: true 

@@ -1,0 +1,29 @@
+event: log
+data: {"agent":"CrawlAgent","status":"start"}
+
+event: log
+data: {"agent":"CrawlAgent","status":"end"}
+
+event: log
+data: {"agent":"SummariseAgent","status":"start"}
+
+event: log
+data: {"agent":"SummariseAgent","status":"end"}
+
+event: log
+data: {"agent":"QAAgent","status":"start"}
+
+event: log
+data: {"agent":"QAAgent","status":"end"}
+
+event: metrics
+data: {"nodes_per_second": 100, "edges_per_second": 150, "avg_degree": 2.5, "cluster_entropy": 0.8}
+
+event: health
+data: {"service":"API","status":"ok","latency": 150}
+
+event: health
+data: {"service":"Event-Mux","status":"ok","latency": 100}
+
+event: health
+data: {"service":"Redis","status":"ok","latency": 50} 

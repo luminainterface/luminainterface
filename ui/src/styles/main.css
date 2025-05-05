@@ -1,0 +1,83 @@
+:root {
+  --bg: #05070d;
+  --text: #e8e8e8;
+  --accent: #8c55ff;
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, Arial, sans-serif;
+}
+
+html, body, #app {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, Arial, sans-serif;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  background: #0003;
+}
+
+nav .logo {
+  font-weight: 700;
+  margin-right: 1rem;
+}
+
+#layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 25% 1fr 20%;
+}
+
+.chat-panel {
+  border-right: 1px solid #222;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-panel .history {
+  flex: 1;
+  overflow: auto;
+  padding: 0.5rem;
+}
+
+.chat-panel form {
+  display: flex;
+}
+
+.chat-panel input {
+  flex: 1;
+  background: #111;
+  color: var(--text);
+  border: none;
+  padding: 0.4rem;
+}
+
+.graph-slot {
+  background: #05070d;
+  position: relative;
+  overflow: hidden;
+}
+
+.metrics-panel {
+  border-left: 1px solid #222;
+  padding: 0.5rem;
+} 

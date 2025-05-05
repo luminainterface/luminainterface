@@ -1,0 +1,7 @@
+fastapi==0.110.0
+uvicorn[standard]==0.29.0
+redis==5.0.4
+duckdb==0.10.3
+sse-starlette==2.0.0
+apscheduler==3.10.4
+mistralai==0.1.8 

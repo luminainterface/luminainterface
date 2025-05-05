@@ -1,0 +1,21 @@
+{
+    "question": "What are neural networks?",
+    "expected": {
+        "answer": "Neural networks are computing systems inspired by the biological neural networks in human brains. They consist of interconnected nodes (neurons) organized in layers that process and transmit information. Each connection between nodes has an associated weight that adjusts as the network learns. Neural networks are particularly effective at pattern recognition and are widely used in deep learning applications. They can learn to perform tasks by considering examples, generally without being programmed with task-specific rules.",
+        "confidence": 0.94,
+        "sources": [
+            "Neural Network",
+            "Artificial Neural Network",
+            "Deep Learning"
+        ],
+        "facts": [
+            "Inspired by biological neural networks in human brains",
+            "Consist of interconnected nodes organized in layers",
+            "Each connection has an associated weight that adjusts during learning",
+            "Excel at pattern recognition tasks",
+            "Can learn from examples without explicit programming",
+            "Form the foundation of deep learning systems",
+            "Used in applications like image recognition, natural language processing, and game playing"
+        ]
+    }
+} 

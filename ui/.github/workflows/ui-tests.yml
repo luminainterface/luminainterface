@@ -1,0 +1,101 @@
+name: UI Tests
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'ui/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'ui/**'
+
+jobs:
+  ui-tests:
+    runs-on: ubuntu-latest
+    
+    env:
+      CYPRESS_BASE_URL: http://localhost:5173
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ui/package-lock.json
+          
+      - name: Install dependencies
+        working-directory: ui
+        run: npm ci
+        
+      - name: Start Docker services
+        run: |
+          cd ..
+          docker compose up -d
+          sleep 30  # Wait for services to be ready
+          
+      - name: Run Cypress tests
+        id: cypress
+        working-directory: ui
+        run: npm run cypress:ci
+        
+      - name: Upload Cypress reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-report
+          path: |
+            ui/cypress/reports
+            ui/cypress/screenshots
+            ui/cypress/videos
+          
+      - name: Notify Slack on failure
+        if: failure() && github.ref == 'refs/heads/main'
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": "❌ UI Tests Failed",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "❌ UI Tests Failed"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Build:* ${{ github.workflow }} #${{ github.run_number }}\n*Commit:* ${{ github.sha }}\n*Branch:* ${{ github.ref_name }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "View the test report and screenshots in the GitHub Actions artifacts."
+                  },
+                  "accessory": {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Report"
+                    },
+                    "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          
+      - name: Cleanup
+        if: always()
+        run: |
+          cd ..
+          docker compose down 

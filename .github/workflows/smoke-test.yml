@@ -1,0 +1,48 @@
+name: Lumina Smoke Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Start Lumina Stack
+      run: |
+        docker compose up -d
+        # Wait for services to be healthy
+        timeout 300 bash -c 'until docker compose ps | grep -q "(healthy)"; do sleep 5; done'
+    
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq curl
+    
+    - name: Run Smoke Test
+      run: ./scripts/full_smoke.sh
+    
+    - name: Checkout Logs on Failure
+      if: failure()
+      run: |
+        echo "=== Graph API Logs ==="
+        docker compose logs graph-api
+        echo "=== MasterChat Logs ==="
+        docker compose logs masterchat
+        echo "=== Event Mux Logs ==="
+        docker compose logs event-mux
+        echo "=== Crawler Logs ==="
+        docker compose logs crawler
+    
+    - name: Cleanup
+      if: always()
+      run: docker compose down 

@@ -1,0 +1,173 @@
+# Data Retention Policy
+
+## Overview
+This document defines the retention periods and purge procedures for all data types in the Lumina system.
+
+## Data Types
+
+### User Data
+```yaml
+user_data:
+  retention_period: 90 days
+  purge_script: scripts/purge_user_data.sh
+  backup_required: true
+  sensitive: true
+  compliance_notes: GDPR Article 17
+```
+
+### Graph Data
+```yaml
+graph_data:
+  retention_period: 365 days
+  purge_script: scripts/purge_graph_data.sh
+  backup_required: true
+  sensitive: false
+  compliance_notes: Business records
+```
+
+### Vector Embeddings
+```yaml
+vector_embeddings:
+  retention_period: 180 days
+  purge_script: scripts/purge_vectors.sh
+  backup_required: true
+  sensitive: false
+  compliance_notes: ML model artifacts
+```
+
+### Log Data
+```yaml
+log_data:
+  retention_period: 30 days
+  purge_script: scripts/purge_logs.sh
+  backup_required: false
+  sensitive: false
+  compliance_notes: System logs
+```
+
+### Analytics Data
+```yaml
+analytics_data:
+  retention_period: 365 days
+  purge_script: scripts/purge_analytics.sh
+  backup_required: true
+  sensitive: false
+  compliance_notes: Business metrics
+```
+
+## Purge Scripts
+
+### User Data Purge
+```bash
+#!/bin/bash
+# scripts/purge_user_data.sh
+
+# Purge user data older than retention period
+find /data/users -type f -mtime +90 -exec rm {} \;
+
+# Update user metadata
+python3 scripts/update_user_metadata.py --purge-old
+
+# Notify affected users
+python3 scripts/notify_users.py --purge-notice
+```
+
+### Graph Data Purge
+```bash
+#!/bin/bash
+# scripts/purge_graph_data.sh
+
+# Purge graph data older than retention period
+find /data/graphs -type f -mtime +365 -exec rm {} \;
+
+# Update graph metadata
+python3 scripts/update_graph_metadata.py --purge-old
+
+# Archive to cold storage
+python3 scripts/archive_to_s3.py --type graph
+```
+
+### Vector Embeddings Purge
+```bash
+#!/bin/bash
+# scripts/purge_vectors.sh
+
+# Purge vectors older than retention period
+find /data/vectors -type f -mtime +180 -exec rm {} \;
+
+# Update vector metadata
+python3 scripts/update_vector_metadata.py --purge-old
+
+# Archive to cold storage
+python3 scripts/archive_to_s3.py --type vector
+```
+
+## Backup Procedures
+
+### Daily Backups
+```yaml
+daily_backup:
+  schedule: "0 0 * * *"
+  script: scripts/backup_daily.sh
+  retention: 7 days
+  storage: hot
+```
+
+### Weekly Backups
+```yaml
+weekly_backup:
+  schedule: "0 0 * * 0"
+  script: scripts/backup_weekly.sh
+  retention: 30 days
+  storage: warm
+```
+
+### Monthly Backups
+```yaml
+monthly_backup:
+  schedule: "0 0 1 * *"
+  script: scripts/backup_monthly.sh
+  retention: 365 days
+  storage: cold
+```
+
+## Compliance Notes
+
+### GDPR Requirements
+- Right to be forgotten
+- Data minimization
+- Storage limitation
+- Purpose limitation
+
+### Data Classification
+- PII (Personally Identifiable Information)
+- Business Critical
+- System Generated
+- Analytics
+
+## Monitoring
+
+### Retention Metrics
+```yaml
+metrics:
+  - name: data_retention_compliance
+    type: gauge
+    description: "Percentage of data types compliant with retention policy"
+    threshold: 100%
+
+  - name: purge_job_success
+    type: counter
+    description: "Number of successful purge operations"
+    threshold: 100%
+
+  - name: backup_job_success
+    type: counter
+    description: "Number of successful backup operations"
+    threshold: 100%
+```
+
+## Updates
+
+- 2024-03-XX: Initial retention policy created
+- 2024-03-XX: Added purge scripts
+- 2024-03-XX: Defined backup procedures 

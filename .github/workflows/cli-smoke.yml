@@ -1,0 +1,51 @@
+name: CLI Smoke Test
+
+on:
+  push:
+    paths:
+      - 'lumina_core/masterchat/scripts/**'
+      - 'lumina_core/masterchat/tests/**'
+      - '.github/workflows/cli-smoke.yml'
+  pull_request:
+    paths:
+      - 'lumina_core/masterchat/scripts/**'
+      - 'lumina_core/masterchat/tests/**'
+      - '.github/workflows/cli-smoke.yml'
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r lumina_core/masterchat/requirements.txt
+        pip install pytest pytest-asyncio
+        
+    - name: Run CLI tests
+      run: |
+        cd lumina_core/masterchat
+        pytest tests/test_cli.py -v
+        
+    - name: Run CLI smoke test
+      run: |
+        cd lumina_core/masterchat
+        python scripts/masterchat_cli.py ask "What is quantum computing?" --local | tee /tmp/out
+        grep -qi "quantum" /tmp/out
+        
+    - name: Run interactive mode test
+      run: |
+        cd lumina_core/masterchat
+        echo "What is AI?" | python scripts/masterchat_cli.py ask --interactive --local | tee /tmp/interactive
+        grep -qi "artificial intelligence" /tmp/interactive 

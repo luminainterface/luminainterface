@@ -1,0 +1,32 @@
+groups:
+  - name: backup_alerts
+    rules:
+      - alert: BackupVerificationFailed
+        expr: backup_verification_status == 0
+        for: 5m
+        labels:
+          severity: critical
+          team: sre
+        annotations:
+          summary: "Backup verification failed"
+          description: "Backup {{ $labels.file }} verification failed"
+
+      - alert: BackupTooOld
+        expr: backup_age_seconds > 86400 * 2  # 2 days
+        for: 1h
+        labels:
+          severity: warning
+          team: sre
+        annotations:
+          summary: "Backup is too old"
+          description: "Backup {{ $labels.file }} is {{ $value | humanizeDuration }} old"
+
+      - alert: BackupVerificationSlow
+        expr: backup_verification_duration_seconds > 300  # 5 minutes
+        for: 15m
+        labels:
+          severity: warning
+          team: sre
+        annotations:
+          summary: "Backup verification is slow"
+          description: "Backup {{ $labels.file }} verification took {{ $value | humanizeDuration }}" 

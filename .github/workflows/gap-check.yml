@@ -1,0 +1,27 @@
+name: Gap Status Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-gaps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Check for unchecked gaps
+        run: |
+          if grep -q '\[ \]' docs/GAP_STATUS.md; then
+            echo "❌ Unresolved gaps remain in docs/GAP_STATUS.md"
+            echo "Please either:"
+            echo "1. Mark gaps as completed with [x]"
+            echo "2. Create a GitHub issue and link it"
+            exit 1
+          else
+            echo "✅ All tracked gaps are closed or have associated issues"
+          fi 

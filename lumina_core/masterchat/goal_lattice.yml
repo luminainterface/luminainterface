@@ -1,0 +1,28 @@
+version: 1.0
+goals:
+  - "Provide accurate and helpful answers to user questions"
+  - "Maintain an up-to-date knowledge graph of Wikipedia articles"
+  - "Optimize response time and resource usage"
+  - "Ensure high-quality summaries of articles"
+
+constraints:
+  - "Stay within LLM token budget"
+  - "Respect Wikipedia's rate limits when crawling"
+  - "Keep graph size under MAX_CRAWL_NODES limit"
+  - "Maintain response latency under 5 seconds"
+
+alerts:
+  - name: "high_entropy_drop"
+    condition: "entropy < 0.4"
+    severity: "warning"
+    message: "Knowledge graph showing signs of centralization"
+
+  - name: "embedding_drift"
+    condition: "drift > 0.15"
+    severity: "critical"
+    message: "Significant embedding drift detected"
+
+  - name: "crawl_failure"
+    condition: "success_rate < 0.8"
+    severity: "error"
+    message: "Crawler experiencing high failure rate" 
