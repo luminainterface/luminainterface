@@ -169,4 +169,118 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - 📚 [Documentation](docs/README.md)
 - 🐛 [Issue Tracker](https://github.com/jtran/luminainterface/issues)
-- 💬 [Discussions](https://github.com/jtran/luminainterface/discussions) 
+- 💬 [Discussions](https://github.com/jtran/luminainterface/discussions)
+
+# Lumina Project - Backup & Logging Infrastructure
+
+## Overview
+This branch implements backup verification and logging infrastructure for the Lumina project, focusing on data integrity, monitoring, and observability.
+
+## Key Components
+
+### 1. Backup Verification System
+- Automated backup integrity checks
+- Prometheus metrics export
+- Configurable retention policies
+- Docker-based deployment
+- Alert rules for monitoring
+
+### 2. Logging Infrastructure
+- Centralized logging with Loki
+- Grafana dashboards for visualization
+- Log aggregation and analysis
+- Performance monitoring
+
+## Implementation Details
+
+### Files for Review
+
+#### Backup Verification
+1. `scripts/verify_backup.sh`
+   - Core verification logic
+   - MD5 checksum validation
+   - Metrics generation
+
+2. `docker-compose.backup.yml`
+   - Service configuration
+   - Resource limits
+   - Network setup
+
+3. `scripts/Dockerfile.backup-verifier`
+   - Container definition
+   - Dependencies
+   - Runtime configuration
+
+#### Monitoring
+1. `prometheus/rules/backup_alerts.yml`
+   - Alert definitions
+   - Thresholds
+   - Team assignments
+
+2. `grafana/dashboards/crawler_logs.json`
+   - Log visualization
+   - Error tracking
+   - Performance metrics
+
+#### Documentation
+1. `docs/backup-verification.md`
+   - System overview
+   - Setup instructions
+   - Troubleshooting guide
+
+## Review Focus Areas
+
+### 1. Security
+- Backup integrity verification
+- Access controls
+- Secret management
+
+### 2. Scalability
+- Resource allocation
+- Performance optimization
+- Data retention
+
+### 3. Maintainability
+- Documentation completeness
+- Error handling
+- Alert configuration
+
+### 4. Monitoring
+- Metric selection
+- Dashboard usability
+- Alert thresholds
+
+## Getting Started
+
+1. Clone the repository:
+```bash
+git clone https://github.com/luminainterface/luminainterface.git
+cd luminainterface
+```
+
+2. Switch to the review branch:
+```bash
+git checkout polish-pass
+```
+
+3. Start the services:
+```bash
+docker compose -f docker-compose.backup.yml up -d
+```
+
+4. Access the dashboards:
+- Grafana: http://localhost:3000
+- Prometheus: http://localhost:9090
+
+## Review Process
+1. Review the code changes in the `polish-pass` branch
+2. Focus on the files listed above
+3. Leave comments and suggestions using GitHub's review tools
+4. Pay special attention to:
+   - Security considerations
+   - Error handling
+   - Documentation completeness
+   - Monitoring effectiveness
+
+## Version
+Current tag: v0.2.0 
