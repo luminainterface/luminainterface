@@ -1,0 +1,30 @@
+# Core dependencies
+fastapi>=0.68.0
+uvicorn>=0.15.0
+prometheus-client>=0.11.0
+prometheus-fastapi-instrumentator>=5.7.1
+aiohttp>=3.8.0
+aioredis>=2.0.0
+python-multipart>=0.0.5
+pydantic>=1.8.0
+httpx>=0.23.0
+redis>=5.0.1
+numpy==1.24.3
+torch==2.0.1
+transformers==4.30.2
+sentence-transformers==2.2.2
+huggingface_hub==0.16.4
+python-dotenv>=1.0.0
+qdrant-client>=1.1.1
+
+# Testing and development
+pytest>=6.2.5
+pytest-asyncio>=0.15.1
+pytest-cov>=2.12.1
+black>=21.7b0
+isort>=5.9.3
+flake8>=3.9.2
+mypy>=0.910
+
+# Monitoring and logging
+python-json-logger>=2.0.2 

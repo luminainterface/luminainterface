@@ -1,0 +1,19 @@
+{
+    "question": "What is quantum computing?",
+    "expected": {
+        "answer": "Quantum computing is a type of computing that uses quantum bits (qubits) to perform calculations. Unlike classical computers that use bits (0s and 1s), quantum computers leverage quantum mechanical phenomena like superposition and entanglement to process information. This allows them to solve certain problems exponentially faster than classical computers, particularly in areas like cryptography, optimization, and simulation of quantum systems.",
+        "confidence": 0.95,
+        "sources": [
+            "Quantum Computing",
+            "Quantum Computer",
+            "Quantum Information"
+        ],
+        "facts": [
+            "Uses quantum bits (qubits) instead of classical bits",
+            "Leverages quantum mechanical phenomena like superposition and entanglement",
+            "Can solve certain problems exponentially faster than classical computers",
+            "Particularly effective for cryptography, optimization, and quantum system simulation",
+            "Still in early stages of development with significant technical challenges"
+        ]
+    }
+} 

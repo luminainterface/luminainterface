@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+PyMuPDF
+sentence-transformers
+qdrant-client
+redis
+aiohttp
+scikit-learn
+numpy
+python-dotenv 

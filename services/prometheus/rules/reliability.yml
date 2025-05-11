@@ -1,0 +1,59 @@
+groups:
+- name: reliability
+  rules:
+  # Redis AOF monitoring
+  - alert: RedisAOFWriteStall
+    expr: |
+      increase(redis_aof_current_size_bytes[5m]) > 0 
+      and rate(redis_persist_latency_seconds_sum[5m]) > 0.025
+    for: 2m
+    labels:
+      severity: warning
+      service: redis
+    annotations:
+      summary: "Redis AOF fsync latency is high"
+      description: "Redis AOF fsync latency is >25ms for 2m. This may indicate disk I/O issues."
+
+  # Stream consumer lag monitoring
+  - alert: StreamConsumerLagHigh
+    expr: redis_stream_group_pending_messages > 500
+    for: 3m
+    labels:
+      severity: warning
+      service: redis
+    annotations:
+      summary: "High Redis Stream consumer lag detected"
+      description: "Stream consumer group has more than 500 pending messages for 3m."
+
+  # Stream memory usage
+  - alert: StreamMemoryHigh
+    expr: redis_stream_length_bytes > 100000000  # 100MB
+    for: 5m
+    labels:
+      severity: warning
+      service: redis
+    annotations:
+      summary: "Redis Stream memory usage is high"
+      description: "Stream is using more than 100MB of memory for 5m."
+
+  # AOF rewrite status
+  - alert: AOFRewriteStalled
+    expr: redis_aof_rewrite_in_progress == 1 and rate(redis_aof_rewrite_buffer_bytes[5m]) == 0
+    for: 10m
+    labels:
+      severity: warning
+      service: redis
+    annotations:
+      summary: "Redis AOF rewrite appears stalled"
+      description: "AOF rewrite has been in progress for 10m with no buffer changes."
+
+  # Stream consumer group health
+  - alert: StreamConsumerGroupDead
+    expr: redis_stream_group_consumers == 0
+    for: 1m
+    labels:
+      severity: critical
+      service: redis
+    annotations:
+      summary: "Redis Stream consumer group has no active consumers"
+      description: "Stream consumer group has been without active consumers for 1m." 

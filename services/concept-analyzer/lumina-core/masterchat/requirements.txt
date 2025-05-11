@@ -1,0 +1,45 @@
+# Web Framework
+fastapi>=0.68.0
+uvicorn>=0.15.0
+starlette>=0.36.3
+python-multipart>=0.0.9
+
+# Database & Caching
+redis>=4.0.0
+duckdb>=0.3.0
+
+# Data Processing & Validation
+pydantic>=1.8.0
+PyYAML>=6.0.0
+typing-extensions>=4.9.0
+
+# Task Scheduling & Background Jobs
+apscheduler>=3.8.0
+
+# HTTP & Async
+httpx>=0.26.0
+anyio>=4.3.0
+
+# Server-Sent Events
+sse-starlette>=0.7.0
+
+# LLM Integration
+mistralai>=0.2.5
+
+# Monitoring & Metrics
+prometheus-client>=0.11.0
+
+# Template Engine
+jinja2>=3.0.0
+
+# Environment & Configuration
+python-dotenv>=0.19.0
+
+# Additional dependencies
+wikipedia>=1.4.0
+pyyaml>=6.0.0
+
+# CLI dependencies
+typer[all]>=0.9.0
+rich>=13.7.0
+prompt-toolkit>=3.0.43 

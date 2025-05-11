@@ -1,0 +1,37 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'redis_streams'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+    metrics_path: /metrics
+
+  - job_name: 'content-extractor'
+    static_configs:
+      - targets: ['content-extractor:8000']
+    metrics_path: /metrics
+
+  - job_name: 'concept-linker'
+    static_configs:
+      - targets: ['concept-linker:8000']
+    metrics_path: /metrics
+
+  - job_name: 'qdrant'
+    static_configs:
+      - targets: ['qdrant:6333']
+    metrics_path: /metrics
+
+  - job_name: 'retrain-listener'
+    static_configs:
+      - targets: ['retrain-listener:8000']
+    metrics_path: /metrics
+    scrape_interval: 5s  # More frequent scraping for retraining metrics
+
+rule_files:
+  - /etc/prometheus/rules/*.yml 

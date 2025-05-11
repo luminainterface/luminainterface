@@ -1,0 +1,20 @@
+{
+    "question": "What is machine learning?",
+    "expected": {
+        "answer": "Machine learning is a field of artificial intelligence that focuses on developing systems that can learn from and make decisions based on data. It involves algorithms that can improve automatically through experience and by the use of data. Machine learning approaches are typically classified into three broad categories: supervised learning, unsupervised learning, and reinforcement learning. These methods are widely used in applications such as computer vision, natural language processing, recommendation systems, and autonomous systems.",
+        "confidence": 0.93,
+        "sources": [
+            "Machine Learning",
+            "Artificial Intelligence",
+            "Deep Learning"
+        ],
+        "facts": [
+            "A subset of artificial intelligence focused on learning from data",
+            "Three main categories: supervised, unsupervised, and reinforcement learning",
+            "Algorithms improve automatically through experience",
+            "Widely used in computer vision, NLP, and recommendation systems",
+            "Requires large amounts of data for training in many cases",
+            "Can be used for both classification and regression tasks"
+        ]
+    }
+} 

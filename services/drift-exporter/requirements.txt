@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+redis>=4.0.0
+prometheus-fastapi-instrumentator>=5.7.1
+prometheus-client>=0.16.0
+loguru>=0.5.3 

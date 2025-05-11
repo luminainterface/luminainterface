@@ -1,0 +1,47 @@
+groups:
+  - name: redis_streams
+    rules:
+      - alert: StreamConsumerLag
+        expr: redis_stream_consumer_pending_count > 100
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Redis Stream lag"
+          description: "Stream {{ $labels.stream }} has {{ $value }} pending messages for consumer {{ $labels.consumer }}"
+
+      - alert: StreamConsumerError
+        expr: rate(redis_stream_consumer_errors_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis Stream consumer errors"
+          description: "Stream {{ $labels.stream }} consumer {{ $labels.consumer }} is experiencing errors"
+
+      - alert: StreamGroupMissing
+        expr: redis_stream_groups == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Missing Redis Stream consumer group"
+          description: "Stream {{ $labels.stream }} has no consumer groups"
+
+      - alert: StreamMemoryUsage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Redis memory usage"
+          description: "Redis memory usage is at {{ $value | humanizePercentage }}"
+
+      - alert: StreamConsumerIdle
+        expr: redis_stream_consumer_idle_seconds > 300
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Redis Stream consumer idle"
+          description: "Stream {{ $labels.stream }} consumer {{ $labels.consumer }} has been idle for {{ $value | humanizeDuration }}" 

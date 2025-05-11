@@ -1,0 +1,5 @@
+httpx==0.24.1
+# Uncomment if you want direct Neo4j integration
+neo4j==5.11.0
+python-dotenv==1.0.0
+redis>=5.0.1 

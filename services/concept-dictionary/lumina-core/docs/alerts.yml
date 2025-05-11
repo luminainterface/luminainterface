@@ -1,0 +1,41 @@
+groups:
+  - name: wiki_qa
+    rules:
+      # Alert on high latency
+      - alert: WikiQA_High_Latency
+        expr: |
+          histogram_quantile(0.95, rate(crawl_duration_seconds_bucket[5m])) > 5 or
+          histogram_quantile(0.95, rate(summarise_duration_seconds_bucket[5m])) > 5 or
+          histogram_quantile(0.95, rate(qa_duration_seconds_bucket[5m])) > 5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High latency in wiki-qa pipeline"
+          description: "{{ $labels.agent }} p95 latency > 5s for 10m"
+
+      # Alert on stalled node growth
+      - alert: NN_Node_Growth_Stalled
+        expr: time() - synapse_nodes_total_last_update > 86400
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Neural network growth stalled"
+          description: "No new nodes added in 24h"
+
+      # Alert on high error rate
+      - alert: WikiQA_High_Error_Rate
+        expr: |
+          rate(crawl_requests_total{status="error"}[5m]) /
+          rate(crawl_requests_total[5m]) > 0.1 or
+          rate(summarise_requests_total{status="error"}[5m]) /
+          rate(summarise_requests_total[5m]) > 0.1 or
+          rate(qa_requests_total{status="error"}[5m]) /
+          rate(qa_requests_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate in wiki-qa pipeline"
+          description: "{{ $labels.agent }} error rate > 10% for 5m" 

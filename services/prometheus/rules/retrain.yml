@@ -1,0 +1,47 @@
+groups:
+  - name: retrain_listener
+    rules:
+      - alert: RetrainListenerHighErrorRate
+        expr: rate(retrain_triggered_total{reason="error"}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High retraining error rate"
+          description: "Retrain listener is experiencing a high rate of errors ({{ $value }} errors/min)"
+
+      - alert: RetrainListenerBatchProcessingDelay
+        expr: rate(retrain_seconds_sum[5m]) / rate(retrain_seconds_count[5m]) > 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Slow batch processing"
+          description: "Retrain listener is taking too long to process batches ({{ $value }}s average)"
+
+      - alert: RetrainListenerLowConfidenceRate
+        expr: rate(retrain_triggered_total{reason="low_confidence"}[5m]) > 0.5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High rate of low confidence outputs"
+          description: "Many outputs are triggering retraining due to low confidence ({{ $value }} per minute)"
+
+      - alert: RetrainListenerNoConceptsRate
+        expr: rate(retrain_triggered_total{reason="no_concepts"}[5m]) > 0.2
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High rate of outputs with no concepts"
+          description: "Many outputs are triggering retraining due to missing concepts ({{ $value }} per minute)"
+
+      - alert: RetrainListenerBatchSizeAnomaly
+        expr: abs(rate(retrain_batch_size_sum[5m]) / rate(retrain_batch_size_count[5m]) - 10) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Abnormal batch size"
+          description: "Retrain listener batch size is significantly different from expected ({{ $value }} average)" 
