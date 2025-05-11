@@ -1,0 +1,74 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6381:6379"
+    volumes:
+      - ./test-results/logs/redis:/var/log/redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6335:6333"
+    volumes:
+      - ./test-results/logs/qdrant:/var/log/qdrant
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 1 bash -c '>/dev/tcp/localhost/6333'"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  graph-api:
+    build:
+      context: .
+      dockerfile: graph_api/Dockerfile
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - QDRANT_URL=http://qdrant:6333
+    volumes:
+      - ./test-results/logs/graph-api:/var/log/app
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8200/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  test-runner:
+    build:
+      context: .
+      dockerfile: test-runner/Dockerfile
+    depends_on:
+      graph-api:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    volumes:
+      - .:/workspace
+      - ./test-results:/workspace/test-results
+    working_dir: /workspace
+    environment:
+      - PYTHONPATH=/workspace
+      - REDIS_URL=redis://redis:6379
+      - QDRANT_URL=http://qdrant:6333
+      - GRAPH_API_URL=http://graph-api:8200
+      - PYTEST_HTML=/workspace/test-results/reports/report.html
+      - PYTEST_JUNIT=/workspace/test-results/reports/junit.xml
+    entrypoint: ["/workspace/scripts/wait-for-it.sh", "graph-api:8200", "--", "pytest", "-v", "--junitxml=/workspace/test-results/reports/junit.xml", "--html=/workspace/test-results/reports/report.html", "masterchat/tests"]
+
+networks:
+  default:
+    name: lumina_test_net 

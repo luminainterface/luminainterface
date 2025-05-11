@@ -1,0 +1,7 @@
+FROM python:3.10-slim
+WORKDIR /app
+COPY drift_monitor.py .
+RUN pip install sentence-transformers prometheus-client requests numpy
+EXPOSE 9200
+CMD ["python", "drift_monitor.py"] 
+ 

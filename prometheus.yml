@@ -3,22 +3,95 @@ global:
   evaluation_interval: 15s
 
 scrape_configs:
+  - job_name: 'output-engine'
+    static_configs:
+      - targets: ['output-engine:8000']
+    metrics_path: '/metrics'
+
+  - job_name: 'concept-dictionary'
+    static_configs:
+      - targets: ['concept-dictionary:8000']
+    metrics_path: '/metrics'
+
+  - job_name: 'concept-trainer'
+    static_configs:
+      - targets: ['concept-trainer-growable:8905']
+    metrics_path: '/metrics'
+
+  - job_name: 'graph-api'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['graph-api:8200']
+
+  - job_name: 'concept-analyzer'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['concept-analyzer:8500']
+
+  - job_name: 'learning-graph'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['learning-graph:8600']
+
+  - job_name: 'action-handler'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['action-handler:8700']
+
+  - job_name: 'trend-analyzer'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['trend-analyzer:8800']
+
+  - job_name: 'crawler'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['crawler:8400']
+
+  - job_name: 'crawler-mlbridge'
+    metrics_path: '/mlbridge/metrics'
+    static_configs:
+      - targets: ['crawler:8000']
+
+  - job_name: 'event-mux'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['event-mux:8000']
+
+  - job_name: 'masterchat'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['masterchat:8000']
+
+  - job_name: 'auditor'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['auditor:9109']
+
+  - job_name: 'debugger'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['debugger:9111']
+
+  - job_name: 'growth-monitor'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['growth-monitor:8000']
+
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
 
-  - job_name: 'graph-api'
+  - job_name: 'drift-exporter'
+    metrics_path: '/metrics'
     static_configs:
-      - targets: ['graph-api:8200']
+      - targets: ['drift-exporter:8816']
 
-  - job_name: 'masterchat'
-    static_configs:
-      - targets: ['masterchat:8000']
+rule_files:
+  - "/etc/prometheus/alerts/*.yml"
 
-  - job_name: 'crawler'
-    static_configs:
-      - targets: ['crawler:8400']
-
-  - job_name: 'event-mux'
-    static_configs:
-      - targets: ['event-mux:8100'] 
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - 'alertmanager:9093' 

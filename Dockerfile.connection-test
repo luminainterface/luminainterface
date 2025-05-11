@@ -1,0 +1,8 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY check_connections.py .
+RUN pip install httpx requests
+
+CMD ["python", "check_connections.py"] 
