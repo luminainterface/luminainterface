@@ -1,1 +1,2 @@
-recursive-include lumina_core/common *.py 
+include lumina_core/common/*.py
+recursive-include lumina_core *.py 
