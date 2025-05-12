@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="lumina_core",
     version="0.1.0",
-    packages=find_packages(),
+    packages=find_packages(include=["lumina_core", "lumina_core.*", "lumina_core.common", "lumina_core.common.*"]),
     install_requires=[
         "fastapi>=0.104.0",
         "uvicorn>=0.24.0",
