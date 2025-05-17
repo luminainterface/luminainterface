@@ -1,0 +1,40 @@
+from typing import List
+import asyncio
+from log import logger
+from graph_operations import graph_operations
+
+async def sync_nodes_with_concept_dictionary(nodes: List[Node]):
+    """Background task to sync nodes with the concept dictionary"""
+    success_count = 0
+    error_count = 0
+    
+    try:
+        async with get_http_client() as client:
+            for node in nodes:
+                try:
+                    # Update concept in dictionary
+                    response = await client.post(
+                        f"{CONCEPT_DICT_URL}/concepts/update",
+                        json=ConceptUpdate(
+                            concept_id=node.id,
+                            properties=node.properties,
+                            metadata=node.metadata
+                        ).dict()
+                    )
+                    response.raise_for_status()
+                    success_count += 1
+                    
+                    # Wait a bit to avoid overwhelming the service
+                    await asyncio.sleep(0.1)
+                except Exception as e:
+                    error_count += 1
+                    logger.error(f"Error updating concept {node.id}: {str(e)}")
+                    continue
+            
+            # Log final stats
+            logger.info(f"Sync completed: {success_count} successful, {error_count} failed")
+            graph_operations.labels(operation="concept_sync_background", status="success").inc()
+    except Exception as e:
+        graph_operations.labels(operation="concept_sync_background", status="error").inc()
+        logger.error(f"Error in background sync: {str(e)}")
+        raise  # Re-raise the exception to be handled by the caller 

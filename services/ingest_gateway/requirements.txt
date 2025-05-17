@@ -1,0 +1,6 @@
+fastapi==0.104.1
+aiofiles==23.2.1
+redis==4.5.4
+# lumina_core @ git+https://github.com/your-org/lumina_core.git
+prometheus_client==0.17.1
+uvicorn[standard]==0.24.0 

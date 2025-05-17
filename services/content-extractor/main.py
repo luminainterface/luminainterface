@@ -1,22 +1,26 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from prometheus_client import Counter, Histogram
 import asyncio
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Set, List
 import newspaper
 import trafilatura
-from langdetect import detect
+from langdetect import detect, DetectorFactory
 from bs4 import BeautifulSoup
 import pdfminer.high_level
 import io
 from datetime import datetime
 import json
+import re
 from lumina_core.common.bus import BusClient
 from lumina_core.common.retry import with_retry
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("content-extractor")
+
+# Set seed for consistent language detection
+DetectorFactory.seed = 0
 
 # Prometheus metrics
 EXTRACT_OK = Counter("extract_ok_total", "Successful extractions", ["type"])
@@ -30,6 +34,32 @@ EXTRACT_QUALITY = Histogram("extract_quality", "Content quality metrics",
 EXTRACT_LENGTH = Histogram("extract_length", "Content length in characters",
     buckets=[100, 500, 1000, 2000, 5000, 10000, 20000])
 EXTRACT_LANGUAGE = Counter("extract_language_total", "Content language distribution", ["lang"])
+EXTRACT_PII = Counter("extract_pii_total", "PII detection results", ["type"])
+
+# PII patterns
+PII_PATTERNS = {
+    "email": r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b',
+    "phone": r'\b(?:\+\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b',
+    "ssn": r'\b\d{3}[-]?\d{2}[-]?\d{4}\b',
+    "credit_card": r'\b(?:\d[ -]*?){13,19}\b',
+    "ip_address": r'\b(?:\d{1,3}\.){3}\d{1,3}\b'
+}
+
+# Language support
+SUPPORTED_LANGUAGES = {
+    "en": "English",
+    "es": "Spanish",
+    "fr": "French",
+    "de": "German",
+    "it": "Italian",
+    "pt": "Portuguese",
+    "nl": "Dutch",
+    "pl": "Polish",
+    "ru": "Russian",
+    "ja": "Japanese",
+    "zh": "Chinese",
+    "ko": "Korean"
+}
 
 class Skip(Exception):
     """Raised when content should be skipped"""
@@ -39,8 +69,9 @@ class ContentExtractor:
     def __init__(self, redis_url: str):
         self.bus = BusClient(redis_url=redis_url)
         self.min_content_length = 250
-        self.supported_languages = {"en"}
-        self.supported_types = {"html", "pdf", "docx", "txt"}
+        self.supported_languages = set(SUPPORTED_LANGUAGES.keys())
+        self.supported_types = {"html", "pdf", "docx", "txt", "gitfile"}
+        self.pii_threshold = 3  # Number of PII matches before skipping
         
     async def connect(self):
         """Connect to Redis and create consumer groups"""
@@ -77,6 +108,41 @@ class ContentExtractor:
             
         return min(score, 1.0)
         
+    def detect_pii(self, text: str) -> Dict[str, List[str]]:
+        """Detect PII in text and return matches by type."""
+        matches = {}
+        for pii_type, pattern in PII_PATTERNS.items():
+            found = re.findall(pattern, text)
+            if found:
+                matches[pii_type] = found
+                EXTRACT_PII.labels(type=pii_type).inc()
+        return matches
+        
+    def should_skip_pii(self, matches: Dict[str, List[str]]) -> bool:
+        """Determine if content should be skipped due to PII."""
+        total_matches = sum(len(m) for m in matches.values())
+        return total_matches >= self.pii_threshold
+        
+    def clean_pii(self, text: str, matches: Dict[str, List[str]]) -> str:
+        """Replace detected PII with placeholders."""
+        cleaned = text
+        for pii_type, found in matches.items():
+            for item in found:
+                if pii_type == "email":
+                    replacement = "[EMAIL]"
+                elif pii_type == "phone":
+                    replacement = "[PHONE]"
+                elif pii_type == "ssn":
+                    replacement = "[SSN]"
+                elif pii_type == "credit_card":
+                    replacement = "[CARD]"
+                elif pii_type == "ip_address":
+                    replacement = "[IP]"
+                else:
+                    replacement = f"[{pii_type.upper()}]"
+                cleaned = cleaned.replace(item, replacement)
+        return cleaned
+        
     async def extract_text(self, text: str, content_type: str = "txt") -> Dict[str, Any]:
         """Extract and clean content from plain text"""
         try:
@@ -86,10 +152,27 @@ class ContentExtractor:
             # Basic cleaning
             text = " ".join(text.split())  # Normalize whitespace
             
-            # Language detection
-            lang = detect(text)
-            if lang not in self.supported_languages:
-                raise Skip(f"unsupported_language:{lang}")
+            # PII detection and cleaning
+            pii_matches = self.detect_pii(text)
+            if self.should_skip_pii(pii_matches):
+                raise Skip("too_much_pii")
+            text = self.clean_pii(text, pii_matches)
+            
+            # Language detection with confidence
+            try:
+                detector = DetectorFactory.create()
+                detector.append(text)
+                lang = detector.detect()
+                confidence = detector.get_probabilities()[0].prob
+                
+                if lang not in self.supported_languages:
+                    raise Skip(f"unsupported_language:{lang}")
+                if confidence < 0.6:  # Require 60% confidence
+                    raise Skip(f"low_language_confidence:{lang}:{confidence:.2f}")
+                    
+            except Exception as e:
+                logger.warning(f"Language detection failed: {e}")
+                raise Skip("language_detection_failed")
                 
             # Length check
             if len(text) < self.min_content_length:
@@ -105,8 +188,11 @@ class ContentExtractor:
                 "text": text,
                 "title": "",  # Plain text doesn't have titles
                 "lang": lang,
+                "lang_confidence": confidence,
                 "type": content_type,
-                "quality_score": quality_score
+                "quality_score": quality_score,
+                "pii_detected": bool(pii_matches),
+                "pii_types": list(pii_matches.keys())
             }
             
         except Exception as e:
@@ -188,6 +274,14 @@ class ContentExtractor:
             result = await self.extract_html(msg["html"])
             result["source_id"] = msg.get("source_id")
             result["timestamp"] = datetime.utcnow().isoformat()
+            
+            # PII detection and cleaning
+            pii_matches = self.detect_pii(result["text"])
+            if self.should_skip_pii(pii_matches):
+                raise Skip("too_much_pii")
+            result["text"] = self.clean_pii(result["text"], pii_matches)
+            result["pii_detected"] = bool(pii_matches)
+            result["pii_types"] = list(pii_matches.keys())
             
             # Calculate quality metrics
             quality_score = self.calculate_quality_score(result["text"], result["title"])

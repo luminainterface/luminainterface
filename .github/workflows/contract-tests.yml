@@ -1,0 +1,69 @@
+name: Contract Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  contract-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest httpx redis qdrant-client
+        pip install -e lumina_core/
+    
+    - name: Install Spectral
+      run: |
+        npm install -g @stoplight/spectral-cli
+    
+    - name: Lint OpenAPI specs
+      run: |
+        spectral lint graph-api/openapi.yaml
+        spectral lint event-mux/asyncapi.yaml
+    
+    - name: Start services
+      run: |
+        docker compose -f ci.compose.yml up -d redis qdrant graph-api crawler masterchat
+        # Wait for services to be healthy
+        ./scripts/wait-for-services.sh
+    
+    - name: Run contract tests
+      run: |
+        pytest tests/contract --services graph-api crawler masterchat
+    
+    - name: Check service health
+      run: |
+        # Query auditor for service health
+        response=$(curl -s http://localhost:9109/health)
+        status=$(echo $response | jq -r '.status')
+        if [ "$status" != "healthy" ]; then
+          echo "Services are not healthy"
+          echo $response | jq '.'
+          exit 1
+        fi
+    
+    - name: Check Prometheus metrics
+      run: |
+        # Query Prometheus for service health
+        response=$(curl -s http://localhost:9091/api/v1/query?query=sum\(service_health+%3D%3D+0\))
+        value=$(echo $response | jq -r '.data.result[0].value[1]')
+        if [ "$value" != "0" ]; then
+          echo "Some services are unhealthy"
+          exit 1
+        fi
+    
+    - name: Stop services
+      if: always()
+      run: docker compose -f ci.compose.yml down 

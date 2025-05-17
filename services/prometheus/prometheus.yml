@@ -29,7 +29,7 @@ scrape_configs:
 
   - job_name: 'retrain-listener'
     static_configs:
-      - targets: ['retrain-listener:8000']
+      - targets: ['retrain-listener:8680']
     metrics_path: /metrics
     scrape_interval: 5s  # More frequent scraping for retraining metrics
 

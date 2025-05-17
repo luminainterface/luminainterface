@@ -5,10 +5,12 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.redis import RedisInstrumentor
-from opentelemetry.instrumentation.httpx import HTTPXInstrumentor
 from fastapi import FastAPI
+import logging
 
 from lumina_core.common.config import get_settings
+
+logger = logging.getLogger(__name__)
 
 def setup_tracing(app: FastAPI, service_name: str) -> None:
     """Configure OpenTelemetry tracing for a FastAPI application."""
@@ -40,8 +42,14 @@ def setup_tracing(app: FastAPI, service_name: str) -> None:
     # Instrument Redis
     RedisInstrumentor().instrument()
     
-    # Instrument HTTPX for outgoing requests
-    HTTPXInstrumentor().instrument()
+    # Try to instrument HTTPX for outgoing requests
+    try:
+        from opentelemetry.instrumentation.httpx import HTTPXInstrumentor
+        HTTPXInstrumentor().instrument()
+    except ImportError as e:
+        logger.warning("HTTPX instrumentation not available: %s", str(e))
+    except Exception as e:
+        logger.warning("Failed to instrument HTTPX: %s", str(e))
 
 def create_span(name: str, context: dict = None) -> trace.Span:
     """Create a new trace span with optional context."""

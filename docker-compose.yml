@@ -7,24 +7,66 @@ name: lumina-system
 
 networks:
   backend:
+    name: lumina-system_backend
     driver: bridge
 
 services:
   redis:
-    image: redis:7.2-alpine
+    image: redis:7-alpine
+    command: redis-server --requirepass 02211998
     ports:
       - "6379:6379"
-    volumes:
-      - redis_data:/data
-    command: redis-server --appendonly yes --save 900 1 --save 300 10
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 3
-    restart: unless-stopped
     networks:
       - backend
+
+  ingest-gateway:
+    build:
+      context: .
+      dockerfile: services/ingest_gateway/Dockerfile
+    ports:
+      - "8601:8601"
+    environment:
+      - REDIS_URL=redis://:02211998@redis:6379
+      - QUEUE_STREAM=ingest.queue
+      - FP_SET=ingest.fp
+      - MIN_LICENSE_CONFIDENCE=0.8
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - backend
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8601/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  dead-letter-ui:
+    build:
+      context: .
+      dockerfile: services/dead-letter-ui/Dockerfile
+    ports:
+      - "8602:8602"
+    environment:
+      - REDIS_URL=redis://:02211998@redis:6379
+      - DEAD_LETTER_API_KEY=${LUMINA_API_KEY:-changeme}
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - backend
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8602/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
   # Busybox that keeps Streams alive (creates groups on first boot)
   redis-streams-init:
@@ -38,7 +80,7 @@ services:
 
   redis-exporter:
     image: oliver006/redis_exporter:latest
-    command: --redis.addr=redis://redis:6379
+    command: --redis.addr=redis://:02211998@redis:6379
     ports:
       - "9121:9121"
     depends_on:
@@ -75,15 +117,17 @@ services:
 
   qdrant:
     image: qdrant/qdrant:latest
-    volumes:
-      - qdrant_data:/qdrant/storage
     ports:
       - "6333:6333"
       - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - backend
     healthcheck:
-      test: ["CMD-SHELL", "timeout 1 bash -c '>/dev/tcp/localhost/6333'"]
+      test: ["CMD", "test", "1" ]
       interval: 10s
-      timeout: 3s
+      timeout: 5s
       retries: 3
 
   ollama:
@@ -92,20 +136,31 @@ services:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
     networks:
       - backend
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_MODELS=nomic-embed-text
+      - OLLAMA_ORIGINS=*
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '2'
+          memory: 4G
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      test: ["CMD-SHELL", "curl -f http://localhost:11434/api/version && curl -f -X POST http://localhost:11434/api/generate -H 'Content-Type: application/json' -d '{\"model\": \"nomic-embed-text\", \"prompt\": \"test\"}' || exit 1"]
       interval: 30s
-      timeout: 5s
-      retries: 3
+      timeout: 30s
+      retries: 5
+      start_period: 180s
     restart: unless-stopped
 
   prometheus:
@@ -249,28 +304,42 @@ services:
       context: .
       dockerfile: services/crawler/Dockerfile
     ports:
-      - "8000:8000"
+      - "8400:8400"
     environment:
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://:02211998@redis:6379
       - QDRANT_URL=http://qdrant:6333
-      - GRAPH_API_URL=http://graph-api:8829
-      - CONCEPT_DICT_URL=http://concept-dict:8000
-      - BUS_STREAM=ingest.crawl
-      - CRAWL_REQ_STREAM=crawl_request
-      - MAX_DEPTH=3
-      - MAX_LINKS_PER_PAGE=50
-      - CACHE_TTL=3600
-      - MIN_RELEVANCE_SCORE=0.5
-      - MAX_CONCURRENT_CRAWLS=10
-      - DEAD_LETTER_STREAM=dlq.crawler
-      - LOG_LEVEL=INFO
+      - OLLAMA_URL=http://ollama:11434
+      - OLLAMA_MODEL=nomic-embed-text
+      - TRAINING_DATA_PATH=/app/training_data
+      - CHUNK_SIZE=500
+      - CHUNK_OVERLAP=100
+      - BATCH_SIZE=8
+      - PROCESS_INTERVAL=3600
+      - INQUIRY_CHECK_INTERVAL=300
+      - RETRAIN_INTERVAL=100
+      - RATE_LIMIT_REQUESTS=10
+      - RATE_LIMIT_PERIOD=60
+    volumes:
+      - ./training_data:/app/training_data
     depends_on:
       redis:
         condition: service_healthy
-      concept-dict:
+      qdrant:
+        condition: service_healthy
+      ollama:
         condition: service_healthy
     networks:
       - backend
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8400/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
     restart: unless-stopped
 
   event-mux:
@@ -297,80 +366,116 @@ services:
     ports:
       - "8709:8709"
     environment:
-      - REDIS_URL=redis://redis:6379
-      - EMBED_MODEL=all-MiniLM-L6-v2
-      - CONCEPT_TRAINER_URL=http://concept-trainer-growable:8905
-    depends_on:
-      redis:
-        condition: service_healthy
-      concept-trainer-growable:
-        condition: service_started
+      - REDIS_URL=redis://:02211998@redis:6379
+      - EMBED_MODEL=nomic-embed-text
+      - TRAIN_URL=http://concept-trainer-growable:8710/train_batch
     networks:
       - backend
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8709/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
   output-engine:
     build:
-      context: ./services/output-engine
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/output-engine-v2/Dockerfile
     ports:
       - "9000:9000"
     environment:
-      - OLLAMA_URL=http://ollama:11434
+      - REDIS_URL=redis://:02211998@redis:6379
+      - CONCEPT_DICT_URL=http://concept-dictionary:8828
+      - TRAINER_URL=http://concept-trainer-growable:8710
       - OUTPUT_ENGINE_API_KEY=changeme
-      - TEMP_DIR=/tmp/output-engine
-      - REDIS_URL=redis://redis:6379
-      - CONCEPT_STREAM=concept.new
-      - GENERATION_STREAM=output.generated
-      - CONCEPT_DICT_URL=http://concept-dict:8828
+      - HUGGINGFACE_TOKEN=${HUGGINGFACE_TOKEN}
+      - HEALTH_CHECK_TIMEOUT=30
+      - MAX_RETRIES=3
+      - RETRY_DELAY=5
+      - STARTUP_TIMEOUT=120
     volumes:
-      - output-engine-temp:/tmp/output-engine
       - adapters_data:/adapters
     depends_on:
       redis:
         condition: service_healthy
-      concept-dict:
-        condition: service_started
+      qdrant:
+        condition: service_healthy
       ollama:
-        condition: service_started
+        condition: service_healthy
+      concept-dictionary:
+        condition: service_healthy
+      concept-trainer-growable:
+        condition: service_healthy
+    networks:
+      - backend
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9000/health && curl -f http://localhost:9000/ready || exit 1"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 120s
+    restart: unless-stopped
+
+  concept-dictionary:
+    build:
+      context: ./services/concept-dictionary
+      dockerfile: Dockerfile
+    ports:
+      - "8828:8828"
+    environment:
+      - REDIS_URL=redis://:02211998@redis:6379
+      - QDRANT_URL=http://qdrant:6333
+      - CONCEPT_DICT_API_KEY=${LUMINA_API_KEY:-changeme}
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
     networks:
       - backend
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8828/health"]
       interval: 30s
       timeout: 5s
       retries: 3
     restart: unless-stopped
 
-  concept-dict:
+  graph-api:
     build:
       context: .
-      dockerfile: services/concept-dictionary/Dockerfile
+      dockerfile: services/graph-api/Dockerfile
     ports:
-      - "8828:8000"
+      - "8200:8200"
     environment:
-      - REDIS_URL=redis://redis:6379
-      - NEO4J_URL=bolt://neo4j:7687
-      - EMBEDDING_DIM=384
-      - EMBEDDING_MULTI_MODULE=false
+      - REDIS_URL=redis://:02211998@redis:6379
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=password
+      - QDRANT_URL=http://qdrant:6333
+      - SERVICE_PORT=8200
+      - LOG_LEVEL=INFO
     depends_on:
       redis:
         condition: service_healthy
       neo4j:
         condition: service_healthy
+      qdrant:
+        condition: service_healthy
     networks:
       - backend
     restart: unless-stopped
-
-  graph-api:
-    build:
-      context: ./services/graph-api
-      dockerfile: Dockerfile
-    ports:
-      - "8829:8829"
-    networks:
-      - backend
-    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8200/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   concept-trainer:
     image: alpine
@@ -383,27 +488,36 @@ services:
 
   concept-trainer-growable:
     build:
-      context: .
-      dockerfile: services/concept-trainer-growable/Dockerfile
-    ports:
-      - "8905:8905"
-    environment:
-      - REDIS_URL=redis://redis:6379
-      - DICT_URL=http://concept-dict:8000
-      - QDRANT_URL=http://qdrant:6333
-      - DEVICE=${DEVICE:-cpu}
-      - MODEL_DATA_DIR=/app/data
+      context: ./services/concept-trainer-growable
+      dockerfile: Dockerfile
     volumes:
-      - ./services/concept-trainer-growable/data:/app/data
-      - ./services/concept-trainer-growable/training_data:/app/training_data
+      - trainer_batches:/data/batches
+      - trainer_adapters:/adapters
+      - trainer_state:/app/data
+    environment:
+      - REDIS_URL=redis://:02211998@redis:6379
+      - QDRANT_URL=http://qdrant:6333
+      - DEVICE=cuda
+      - DICT_URL=http://concept-dictionary:8828
+      - REDIS_PASSWORD=02211998
+    ports:
+      - "8710:8710"  # API
+      - "8711:8711"  # Metrics
     depends_on:
       redis:
         condition: service_healthy
-      concept-dict:
+      qdrant:
+        condition: service_healthy
+      concept-dictionary:
         condition: service_healthy
     networks:
       - backend
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8710/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
   concept-trainer-embedder:
     image: alpine
@@ -455,10 +569,22 @@ services:
 
   dual-chat-router:
     build:
-      context: ./services/dual-chat-router
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/dual-chat-router/Dockerfile
     ports:
-      - "8838:8838"
+      - "8300:8300"
+    environment:
+      - REDIS_URL=redis://:02211998@redis:6379
+      - OUTPUT_ENGINE_URL=http://output-engine:9000
+      - OLLAMA_URL=http://ollama:11434
+      - OUTPUT_ENGINE_API_KEY=changeme
+    depends_on:
+      redis:
+        condition: service_healthy
+      output-engine:
+        condition: service_healthy
+      ollama:
+        condition: service_started
     networks:
       - backend
     restart: unless-stopped
@@ -470,11 +596,32 @@ services:
     ports:
       - "8839:8839"
     environment:
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://:02211998@redis:6379
     volumes:
       - adapters_data:/adapters
     networks:
       - backend
+    restart: unless-stopped
+
+  feedback-logger:
+    build:
+      context: ./services/feedback_logger
+      dockerfile: Dockerfile
+    ports:
+      - "8900:8900"
+    environment:
+      - REDIS_URL=redis://:02211998@redis:6379
+      - FEEDBACK_LOGGER_API_KEY=${LUMINA_API_KEY:-changeme}
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8900/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
     restart: unless-stopped
 
 # --- Disabled: No directory or Dockerfile found for masterchat-llm ---
@@ -499,27 +646,17 @@ services:
 #     - "80:80"
 #   restart: unless-stopped
 
-  pdf-trainer:
-    build:
-      context: ./services/pdf-trainer
-      dockerfile: Dockerfile
-    ports:
-      - "8841:8841"
-    networks:
-      - backend
-    restart: unless-stopped
-
   retrain-listener:
     build:
-      context: .
-      dockerfile: services/retrain-listener/Dockerfile
+      context: ./retrain-listener
+      dockerfile: Dockerfile
     environment:
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://:02211998@redis:6379
       - TRAIN_URL=http://batch-embedder:8709/train_batch
       - SOURCE_STREAM=output.generated
       - BATCH_SIZE=64
     ports:
-      - "8000:8000"
+      - "8680:8680"
     depends_on:
       redis:
         condition: service_healthy
@@ -528,6 +665,11 @@ services:
     networks:
       - backend
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8680/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
   graph-concept-adapter:
     build:
@@ -583,6 +725,20 @@ services:
 #     - backend
 #   restart: unless-stopped
 
+  rag-coordinator:
+    build:
+      context: ./services/rag-coordinator
+      dockerfile: Dockerfile
+    environment:
+      - REDIS_URL=redis://:02211998@redis:6379
+      - CONCEPT_DICT_URL=http://concept-dictionary:8828
+    depends_on:
+      concept-dictionary:
+        condition: service_healthy
+    networks:
+      - backend
+    restart: unless-stopped
+
 volumes:
   redis_data:
     driver: local
@@ -598,6 +754,11 @@ volumes:
   ollama_data:
   output-engine-temp:
   adapters_data:
+    driver: local
+  trainer_batches:
+  trainer_adapters:
+  trainer_state:
+  crawler_data:
     driver: local
 
 # Remaining services (not yet added) in the stack:

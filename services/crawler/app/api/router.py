@@ -95,6 +95,8 @@ async def start_crawl(request: CrawlRequest, background_tasks: BackgroundTasks):
     """Start a crawl from a given Wikipedia page"""
     if not crawler:
         raise HTTPException(status_code=503, detail="Crawler not initialized")
+    if not crawler_status["is_running"]:
+        raise HTTPException(status_code=503, detail="Crawler service is not running. Start it first using /api/v1/crawler/start")
         
     try:
         # Add crawl task to background tasks
@@ -155,7 +157,7 @@ async def process_graph(
             graph_path=graph_path,
             redis_url=os.getenv("REDIS_URL", "redis://localhost:6379"),
             neo4j_url=os.getenv("NEO4J_URL", "bolt://localhost:7687"),
-            concept_dict_url=os.getenv("CONCEPT_DICT_URL", "http://localhost:8000")
+            concept_dict_url=os.getenv("CONCEPT_DICT_URL", "http://localhost:8526")
         )
         
         try:
@@ -218,7 +220,7 @@ async def health_check():
             session.run("RETURN 1")
         
         # Check Concept Dictionary
-        concept_dict_url = os.getenv("CONCEPT_DICT_URL", "http://localhost:8000")
+        concept_dict_url = os.getenv("CONCEPT_DICT_URL", "http://localhost:8526")
         response = requests.get(f"{concept_dict_url}/health")
         concept_dict_status = "healthy" if response.status_code == 200 else "unhealthy"
         
@@ -254,6 +256,8 @@ async def start_smart_crawl(request: SmartCrawlRequest, background_tasks: Backgr
     """Start a smart crawl from a given Wikipedia page with adaptive depth and priority"""
     if not crawler:
         raise HTTPException(status_code=503, detail="Crawler not initialized")
+    if not crawler_status["is_running"]:
+        raise HTTPException(status_code=503, detail="Crawler service is not running. Start it first using /api/v1/crawler/start")
         
     try:
         # Update crawler settings if provided

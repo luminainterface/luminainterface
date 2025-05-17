@@ -14,4 +14,9 @@ transformers==4.30.2
 sentence-transformers==2.2.2
 huggingface_hub==0.16.4
 python-dotenv>=1.0.0
+newspaper3k>=0.2.8
+trafilatura>=1.6.1
+langdetect>=1.0.9
+pdfminer.six>=20221105
+beautifulsoup4>=4.12.2
 # lumina-core is installed from local copy 

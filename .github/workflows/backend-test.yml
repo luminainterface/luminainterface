@@ -1,0 +1,125 @@
+name: Backend Test Pipeline
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+env:
+  DOCKER_COMPOSE_FILE: docker-compose.test.yml
+  TEST_RESULTS_DIR: test-results
+  LOGS_DIR: test-results/logs
+  REPORTS_DIR: test-results/reports
+
+jobs:
+  test-stack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Start Test Stack
+        run: |
+          docker-compose -f ${{ env.DOCKER_COMPOSE_FILE }} up -d
+          echo "Waiting for services to start..."
+          sleep 10
+
+      - name: Verify Service Health
+        id: health-check
+        run: |
+          chmod +x ./scripts/healthcheck.sh
+          ./scripts/healthcheck.sh --timeout=60 --json > health-status.json
+          
+          # Parse health check results
+          if jq -e '.[] | select(.status == "unhealthy")' health-status.json > /dev/null; then
+            echo "::error::Some services are unhealthy. Check health-status.json for details."
+            exit 1
+          fi
+
+      - name: Run Backend Tests
+        id: run-tests
+        run: |
+          docker-compose -f ${{ env.DOCKER_COMPOSE_FILE }} exec -T test-runner \
+            /workspace/scripts/test-runner-entrypoint.sh
+        continue-on-error: true
+
+      - name: Collect Test Results
+        if: always()
+        run: |
+          # Ensure directories exist
+          mkdir -p ${{ env.REPORTS_DIR }}
+          mkdir -p ${{ env.LOGS_DIR }}
+          
+          # Copy test results from containers
+          docker-compose -f ${{ env.DOCKER_COMPOSE_FILE }} exec -T graph-api \
+            cp -r /var/log/app/* ${{ env.LOGS_DIR }}/graph-api/ || true
+          
+          docker-compose -f ${{ env.DOCKER_COMPOSE_FILE }} exec -T redis \
+            cp -r /var/log/redis/* ${{ env.LOGS_DIR }}/redis/ || true
+          
+          docker-compose -f ${{ env.DOCKER_COMPOSE_FILE }} exec -T qdrant \
+            cp -r /var/log/qdrant/* ${{ env.LOGS_DIR }}/qdrant/ || true
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: |
+            ${{ env.REPORTS_DIR }}
+            health-status.json
+          retention-days: 7
+
+      - name: Upload Service Logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: service-logs
+          path: ${{ env.LOGS_DIR }}
+          retention-days: 7
+
+      - name: Parse Test Results
+        if: always()
+        uses: mikepenz/action-junit-report@v3
+        with:
+          report_paths: ${{ env.REPORTS_DIR }}/junit.xml
+          check_name: Backend Test Results
+          fail_on_failure: true
+
+      - name: Notify on Failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "❌ Backend tests failed in ${{ github.repository }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Backend Test Failure*\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref }}\nCommit: ${{ github.sha }}\n\n<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run>"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        continue-on-error: true
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker-compose -f ${{ env.DOCKER_COMPOSE_FILE }} down -v 

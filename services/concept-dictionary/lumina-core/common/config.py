@@ -4,7 +4,7 @@ from functools import lru_cache
 
 class LuminaSettings(BaseSettings):
     # Service URLs
-    REDIS_URL: str = "redis://redis:6379"
+    REDIS_URL: str = "redis://:02211998@redis:6379"
     QDRANT_URL: str = "http://qdrant:6333"
     OLLAMA_URL: str = "http://ollama:11434"
     GRAPH_API_URL: str = "http://graph-api:8200"

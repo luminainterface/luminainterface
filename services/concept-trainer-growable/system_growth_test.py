@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 # Configuration
 HOST = "localhost"
-PORT = 8905
+PORT = 8710
 BASE_URL = f"http://{HOST}:{PORT}"
 CHECK_INTERVAL = 300  # 5 minutes
 MAX_RETRIES = 3

@@ -1,0 +1,153 @@
+name: Lumina v1 Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag (e.g., v1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  release-verification:
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r tests/requirements.txt
+        pip install requests prometheus-client
+
+    - name: Build all services
+      run: |
+        docker compose build --no-cache --progress plain
+        echo "Build completed successfully"
+
+    - name: Launch full stack
+      run: |
+        docker compose up -d
+        echo "Waiting for services to be healthy..."
+        sleep 60  # Give services time to start
+
+    - name: Verify service health
+      run: |
+        # Check all core services
+        services=(
+          "graph-api:8200"
+          "crawler:8400"
+          "masterchat:8300"
+          "concept-analyzer:8500"
+          "learning-graph:8600"
+          "trend-analyzer:8800"
+          "action-handler:8700"
+          "event-mux:8100"
+          "debugger:9111"
+        )
+        
+        for service in "${services[@]}"; do
+          IFS=':' read -r name port <<< "$service"
+          echo "Checking $name..."
+          if ! curl -sf "http://localhost:$port/health" > /dev/null; then
+            echo "❌ $name is not healthy"
+            exit 1
+          fi
+          echo "✅ $name is healthy"
+        done
+
+    - name: Run stabilize_v1.sh
+      run: |
+        chmod +x ./scripts/stabilize_v1.sh
+        ./scripts/stabilize_v1.sh
+
+    - name: Verify metrics collection
+      run: |
+        # Check Prometheus targets
+        if ! curl -sf "http://localhost:9090/api/v1/targets" | grep -q '"state":"up"'; then
+          echo "❌ Some Prometheus targets are down"
+          exit 1
+        fi
+        
+        # Check Grafana API
+        if ! curl -sf "http://localhost:3000/api/health" | grep -q '"database":"ok"'; then
+          echo "❌ Grafana is not healthy"
+          exit 1
+        fi
+
+    - name: Create release tag
+      if: success()
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git tag -a "${{ github.event.inputs.release_tag }}" -m "Lumina v1 Release"
+        git push origin "${{ github.event.inputs.release_tag }}"
+
+    - name: Create GitHub Release
+      if: success()
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.event.inputs.release_tag }}
+        name: "Lumina v1 Release"
+        body: |
+          # Lumina v1 Release
+          
+          ## Core Features
+          - Real-time knowledge growth from crawling and conversation
+          - Continuous learning via LLM ↔ NN feedback
+          - Full-stack observability and health monitoring
+          - Modular, Dockerized architecture
+          
+          ## Components
+          - ✅ Concept-Analyzer metrics exporter
+          - ✅ Action-Handler metrics fix
+          - ✅ Learning-Graph health fix
+          - ✅ Crawler → Concept-Dictionary hook
+          - ✅ Dual-Chat Router integration
+          - ✅ Trainer consumption loop
+          - ✅ Auto-crawl trigger
+          - ✅ Grafana provisioning
+          - ✅ Prometheus rule modularization
+          - ✅ Expanded stabilize_v1.sh
+          - ✅ CI job for v1
+          - ✅ Minimal Demo / CLI
+          
+          ## Getting Started
+          ```bash
+          # Clone the repository
+          git clone https://github.com/your-org/lumina.git
+          cd lumina
+          
+          # Checkout the release
+          git checkout ${{ github.event.inputs.release_tag }}
+          
+          # Start the stack
+          docker compose up -d
+          ```
+          
+          ## Documentation
+          - [Installation Guide](docs/installation.md)
+          - [API Documentation](docs/api.md)
+          - [Monitoring Guide](docs/monitoring.md)
+        draft: false
+        prerelease: false
+        files: |
+          ops/lumina_freeze_*.tar.gz
+          ops/lumina_freeze_*.tar.gz.sha256
+
+    - name: Tear down
+      if: always()
+      run: |
+        docker compose down -v 

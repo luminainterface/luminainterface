@@ -21,7 +21,7 @@ class SmartCrawler(Crawler):
         qdrant_url: str,
         graph_api_url: str,
         concept_dict_url: str,
-        embedding_model: str = "all-MiniLM-L6-v2",
+        embedding_model: str = "nomic-embed-text",
         max_depth: int = 3,
         max_links_per_page: int = 15,
         cache_ttl: int = 86400,  # 24 hours

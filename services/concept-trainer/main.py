@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import torch
 import torch.nn as nn
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Any
 import uvicorn
 from datetime import datetime
 import redis.asyncio as redis
@@ -11,60 +11,30 @@ import os
 from prometheus_fastapi_instrumentator import Instrumentator
 from loguru import logger
 from qdrant_client import QdrantClient
+from batch_processor import BatchProcessor, TrainerVectorBatch
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../concept-trainer-growable')))
+from model import GrowableConceptNet
 
 app = FastAPI(title="Concept Trainer Service")
 
-# Initialize Redis client
-redis_client = redis.from_url(
-    os.getenv("REDIS_URL", "redis://redis:6379"),
-    encoding="utf-8",
-    decode_responses=True
-)
-
+# Environment variables
+REDIS_URL = os.getenv("REDIS_URL", "redis://:02211998@redis:6379")
 QDRANT_URL = os.getenv("QDRANT_URL", "http://qdrant:6333")
 COLLECTION = "lumina_embeddings"
 
-# Utility to fetch system vectors from Qdrant
-def fetch_system_vectors(top_k=20, query_text=None, embedding_model=None):
-    client = QdrantClient(QDRANT_URL)
-    filters = {"must": [{"key": "type", "match": {"value": "system"}}]}
-    if query_text and embedding_model:
-        query_vec = embedding_model.encode([query_text])[0]
-        hits = client.search(
-            collection_name=COLLECTION,
-            query_vector=query_vec,
-            limit=top_k,
-            query_filter=filters
-        )
-    else:
-        hits = client.scroll(
-            collection_name=COLLECTION,
-            scroll_filter=filters,
-            limit=top_k
-        )[0]
-    return [h.payload for h in hits]
+# Initialize Redis client
+redis_client = redis.from_url(REDIS_URL, encoding="utf-8", decode_responses=True)
 
+# Initialize Qdrant client
+qdrant_client = QdrantClient(QDRANT_URL)
+
+# Training configuration
 class TrainingConfig:
-    def __init__(self, input_dim: int = 2, hidden_dim: int = 64, output_dim: int = 2):
+    def __init__(self, input_dim: int = 768, hidden_dim: int = 512, output_dim: int = 768):
         self.input_dim = input_dim
         self.hidden_dim = hidden_dim
         self.output_dim = output_dim
-
-class ConceptEmbeddingModel(nn.Module):
-    def __init__(self, config: TrainingConfig):
-        super().__init__()
-        self.fc1 = nn.Linear(config.input_dim, config.hidden_dim)
-        self.fc2 = nn.Linear(config.hidden_dim, config.hidden_dim)
-        self.fc3 = nn.Linear(config.hidden_dim, config.output_dim)
-        self.dropout = nn.Dropout(0.2)
-        self.relu = nn.ReLU()
-        
-    def forward(self, x):
-        x = self.relu(self.fc1(x))
-        x = self.dropout(x)
-        x = self.relu(self.fc2(x))
-        x = self.dropout(x)
-        return self.fc3(x)
 
 # Set seeds for reproducibility
 torch.manual_seed(42)
@@ -74,11 +44,17 @@ if torch.cuda.is_available():
 # Device handling
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Initialize model
+# Initialize model and batch processor
 config = TrainingConfig()
-model = ConceptEmbeddingModel(config)
+model = GrowableConceptNet(
+    input_size=config.input_dim,
+    hidden_sizes=[config.hidden_dim, config.hidden_dim],
+    output_size=config.output_dim,
+    activation='relu'
+)
 model = model.to(device)
 optimizer = torch.optim.Adam(model.parameters())
+batch_processor = BatchProcessor(model, device, REDIS_URL, QDRANT_URL)
 
 class TrainingRequest(BaseModel):
     concept_id: str
@@ -124,6 +100,26 @@ async def train(request: TrainingRequest):
         logger.error(f"Error in training: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/train/batch")
+async def train_batch(batch: TrainerVectorBatch):
+    """Process a batch of vectors for training"""
+    try:
+        # Process the batch using the batch processor
+        result = await batch_processor.process_batch({
+            "vectors": batch.vectors,
+            "batch_id": batch.batch_id,
+            "metadata": batch.metadata
+        })
+        
+        if result["status"] == "error":
+            raise HTTPException(status_code=500, detail=result.get("error", "Unknown error"))
+        
+        return result
+        
+    except Exception as e:
+        logger.error(f"Error in batch training: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
@@ -132,8 +128,7 @@ async def health_check():
         await redis_client.ping()
         
         # Test Qdrant connection
-        client = QdrantClient(QDRANT_URL)
-        client.get_collections()
+        qdrant_client.get_collections()
         
         return {
             "status": "healthy",
@@ -141,8 +136,15 @@ async def health_check():
             "version": "1.0.0",
             "timestamp": datetime.utcnow().isoformat(),
             "model": {
-                "type": "concept-embedding",
-                "device": str(device)
+                "type": "growable-concept-net",
+                "device": str(device),
+                "input_dim": config.input_dim,
+                "hidden_dim": config.hidden_dim,
+                "output_dim": config.output_dim
+            },
+            "batch_processing": {
+                "chunk_size": batch_processor.CHUNK_SIZE,
+                "max_concurrent_chunks": batch_processor.MAX_CONCURRENT_CHUNKS
             },
             "connections": {
                 "redis": "connected",

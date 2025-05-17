@@ -1,0 +1,40 @@
+groups:
+  - name: service_latency
+    rules:
+      - alert: HighAnalysisDuration
+        expr: histogram_quantile(0.95, rate(lumina_concept_analysis_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+          service: concept-analyzer
+        annotations:
+          summary: "High concept analysis duration"
+          description: "95th percentile of concept analysis duration is {{ $value }}s (threshold 2s)"
+
+      - alert: CriticalAnalysisDuration
+        expr: histogram_quantile(0.95, rate(lumina_concept_analysis_duration_seconds_bucket[5m])) > 5
+        for: 2m
+        labels:
+          severity: critical
+          service: concept-analyzer
+        annotations:
+          summary: "Critical concept analysis duration"
+          description: "95th percentile of concept analysis duration is {{ $value }}s (threshold 5s)"
+
+      - alert: HighServiceLatency
+        expr: rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m]) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High service latency"
+          description: "Service {{ $labels.service }} has average latency of {{ $value }}s (threshold 0.5s)"
+
+      - alert: CriticalServiceLatency
+        expr: rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m]) > 1
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical service latency"
+          description: "Service {{ $labels.service }} has average latency of {{ $value }}s (threshold 1s)" 

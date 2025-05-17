@@ -1,0 +1,20 @@
+groups:
+  - name: health
+    rules:
+      - alert: ServiceHealthCritical
+        expr: service_health == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $labels.check }} health failed on {{ $labels.instance }}"
+          description: "Service health check failed for {{ $labels.check }} on {{ $labels.instance }}. Check the /health endpoint for details."
+
+      - alert: ServiceHealthWarning
+        expr: service_health == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.check }} health degraded on {{ $labels.instance }}"
+          description: "Service health check has been failing for {{ $labels.check }} on {{ $labels.instance }} for more than 5 minutes." 

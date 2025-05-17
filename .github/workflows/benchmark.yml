@@ -1,0 +1,66 @@
+name: Performance Benchmarks
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  benchmark:
+    name: Run Performance Benchmarks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build project
+        run: npm run build
+      
+      - name: Run benchmarks
+        run: node scripts/run-benchmarks.js
+        
+      - name: Check performance thresholds
+        run: node scripts/check-performance.js
+        
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v3
+        with:
+          name: benchmark-results
+          path: |
+            benchmark-results.json
+            benchmark-report.html
+          
+      - name: Performance regression check
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('benchmark-results.json', 'utf8'));
+            
+            let comment = '⚠️ **Performance Regression Detected**\n\n';
+            comment += '| Metric | Current | Threshold | Status |\n';
+            comment += '|--------|----------|-----------|--------|\n';
+            
+            for (const warning of results.warnings) {
+              comment += `| ${warning.metric} | ${warning.value} | ${warning.threshold} | ❌ |\n`;
+            }
+            
+            comment += '\nSee attached artifacts for detailed report.';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              body: comment
+            }); 

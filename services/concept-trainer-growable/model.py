@@ -30,122 +30,72 @@ class LayerMetrics:
             }
 
 class GrowableLayer(nn.Module):
-    """A layer that can grow its capacity"""
-    def __init__(self, input_size: int, output_size: int, activation: str = 'relu'):
+    """A neural network layer that can grow its capacity"""
+    def __init__(self, in_features: int, out_features: int, activation: str = 'relu'):
         super().__init__()
-        self.input_size = input_size
-        self.output_size = output_size
-        self.current_capacity = output_size
-        self.max_capacity = output_size * 4  # Maximum growth factor
+        self.in_features = in_features
+        self.out_features = out_features
+        self.current_capacity = out_features
         self.activation = activation
-        self.last_growth = datetime.now()
         self.growth_history = []
-        self.drift_contributions = []  # Track drift contributions
         
-        # Initialize layer with multidimensional support
-        self.linear = nn.Linear(input_size, output_size)
-        self.dropout = nn.Dropout(0.1)  # Add dropout for regularization
-        self._init_weights()
+        # Initialize layer
+        self.linear = nn.Linear(in_features, out_features)
+        self.batch_norm = nn.BatchNorm1d(out_features)
         
-        logger.info(f"Created GrowableLayer with input_size={input_size}, output_size={output_size}, activation={activation}")
-        
-    def _init_weights(self):
-        """Initialize weights using Kaiming initialization"""
+        # Initialize weights
         nn.init.kaiming_normal_(self.linear.weight, mode='fan_out', nonlinearity='relu')
-        if self.linear.bias is not None:
-            nn.init.constant_(self.linear.bias, 0)
+        nn.init.constant_(self.linear.bias, 0)
+        
+        logger.info(f"Created GrowableLayer: in_features={in_features}, out_features={out_features}")
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Forward pass with activation and dropout"""
-        # Ensure input is properly shaped
-        if len(x.shape) < 2:
-            x = x.view(-1, self.input_size)
-        
+        """Forward pass with activation"""
         x = self.linear(x)
-        x = self.dropout(x)
+        if x.size(0) > 1:  # Only apply batch norm if batch size > 1
+            x = self.batch_norm(x)
         
         if self.activation == 'relu':
             return F.relu(x)
         elif self.activation == 'tanh':
             return torch.tanh(x)
-        elif self.activation == 'sigmoid':
-            return torch.sigmoid(x)
-        return x
+        else:
+            return x
     
     def grow(self, new_size: int) -> None:
         """Grow the layer to a new size"""
         if new_size <= self.current_capacity:
-            logger.warning(f"New size {new_size} not larger than current size {self.current_capacity}")
-            return
-            
-        if new_size > self.max_capacity:
-            logger.warning(f"New size {new_size} exceeds max capacity {self.max_capacity}")
-            new_size = self.max_capacity
+            raise ValueError(f"New size {new_size} must be greater than current capacity {self.current_capacity}")
             
         logger.info(f"Growing layer from {self.current_capacity} to {new_size}")
         
         # Create new layer with larger size
-        new_layer = nn.Linear(self.input_size, new_size)
+        new_linear = nn.Linear(self.in_features, new_size)
+        new_batch_norm = nn.BatchNorm1d(new_size)
         
         # Initialize new weights
-        nn.init.kaiming_normal_(new_layer.weight, mode='fan_out', nonlinearity='relu')
-        if new_layer.bias is not None:
-            nn.init.constant_(new_layer.bias, 0)
-            
+        nn.init.kaiming_normal_(new_linear.weight, mode='fan_out', nonlinearity='relu')
+        nn.init.constant_(new_linear.bias, 0)
+        
         # Copy existing weights
-        new_layer.weight.data[:self.current_capacity] = self.linear.weight.data
-        if new_layer.bias is not None:
-            new_layer.bias.data[:self.current_capacity] = self.linear.bias.data
-            
-        # Replace old layer
-        self.linear = new_layer
+        with torch.no_grad():
+            new_linear.weight[:self.current_capacity] = self.linear.weight
+            new_linear.bias[:self.current_capacity] = self.linear.bias
+        
+        # Replace old layer with new one
+        self.linear = new_linear
+        self.batch_norm = new_batch_norm
+        self.out_features = new_size
         self.current_capacity = new_size
-        self.last_growth = datetime.now()
         
         # Record growth event
         self.growth_history.append({
             'timestamp': datetime.now().isoformat(),
             'old_size': self.current_capacity,
-            'new_size': new_size,
-            'growth_factor': new_size / self.current_capacity
+            'new_size': new_size
         })
         
         logger.info(f"Layer grown successfully to {new_size}")
-    
-    def get_drift_contribution(self) -> float:
-        """Calculate this layer's contribution to overall drift"""
-        if not self.drift_contributions:
-            return 0.0
-            
-        # Use exponential moving average of drift contributions
-        alpha = 0.3  # Decay factor
-        ema = self.drift_contributions[0]
-        for contribution in self.drift_contributions[1:]:
-            ema = alpha * contribution + (1 - alpha) * ema
-        return ema
-    
-    def update_drift_contribution(self, contribution: float):
-        """Update the layer's drift contribution history"""
-        self.drift_contributions.append(contribution)
-        if len(self.drift_contributions) > 10:  # Keep last 10 contributions
-            self.drift_contributions.pop(0)
-    
-    def should_grow(self, 
-                   current_drift: float,
-                   drift_threshold: float = 0.001,
-                   min_time_between_growth: int = 1) -> bool:
-        """Determine if layer should grow based on drift and time"""
-        time_since_last_growth = (datetime.now() - self.last_growth).total_seconds()
-        
-        should_grow = (current_drift > drift_threshold and 
-                      time_since_last_growth > min_time_between_growth and
-                      self.current_capacity < self.max_capacity)
-        
-        logger.info(f"Should grow check: drift={current_drift}, threshold={drift_threshold}, "
-                   f"time_since_last={time_since_last_growth}, current_capacity={self.current_capacity}, "
-                   f"max_capacity={self.max_capacity}, result={should_grow}")
-        
-        return should_grow
 
 class GrowableConceptNet(nn.Module):
     """A neural network that can grow its capacity over time"""
@@ -153,12 +103,14 @@ class GrowableConceptNet(nn.Module):
                  input_size: int,
                  hidden_sizes: List[int] = None,
                  output_size: int = 2,  # Binary classification
-                 activation: str = 'relu'):
+                 activation: str = 'relu',
+                 learning_rate: float = 1e-4):
         super().__init__()
         
         self.input_size = input_size
         self.output_size = output_size
         self.activation = activation
+        self.last_training = None
         
         # Default to larger hidden sizes if none provided
         if hidden_sizes is None:
@@ -186,17 +138,18 @@ class GrowableConceptNet(nn.Module):
                 GrowableLayer(hidden_sizes[i], hidden_sizes[i+1], activation)
             )
             self.batch_norms.append(nn.BatchNorm1d(hidden_sizes[i+1]))
-            
-        # Output layer for binary classification
+        
+        # Output layer
         self.output_layer = nn.Sequential(
-            nn.Linear(hidden_sizes[-1], 1),  # Single output
-            nn.Sigmoid()  # Squash to [0, 1]
+            nn.Linear(hidden_sizes[-1], output_size),
+            nn.LogSoftmax(dim=1)
         )
         
-        # Initialize weights using better initialization
+        # Initialize weights
         self.apply(self._init_weights)
         
-        # Training history
+        # Training state
+        self.optimizer = torch.optim.Adam(self.parameters(), lr=learning_rate)
         self.training_history = []
         self.concept_metrics = {}  # Per-concept metrics
         
@@ -210,146 +163,20 @@ class GrowableConceptNet(nn.Module):
                 nn.init.constant_(module.bias, 0)
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Forward pass with binary classification support"""
-        logger.info(f"Forward pass input shape: {x.shape}")
-        
+        """Forward pass"""
         # Ensure input is properly shaped
         if len(x.shape) < 2:
             x = x.view(-1, self.input_size)
         
         # Process through hidden layers
         for i, (layer, bn) in enumerate(zip(self.layers, self.batch_norms)):
-            logger.info(f"Layer {i} input shape: {x.shape}")
             x = layer(x)
             if x.size(0) > 1:  # Only apply batch norm if batch size > 1
                 x = bn(x)
-            logger.info(f"Layer {i} output shape: {x.shape}")
-            
-        # Final output layer with binary classification
-        x = self.output_layer(x)  # Returns probabilities in [0, 1]
-        logger.info(f"Sigmoid output shape: {x.shape}")
         
-        # Convert to binary classification format
-        x = x.view(-1, 1)  # Ensure shape is (batch_size, 1)
-        x = torch.cat([x, 1 - x], dim=1)  # [p, 1-p] for each sample
-        x = torch.log(x + 1e-10)  # Add small epsilon to avoid log(0)
-        logger.info(f"Final output shape: {x.shape}")
-        
+        # Final output layer
+        x = self.output_layer(x)
         return x
-    
-    def evaluate_drift(self, 
-                      concept_id: str,
-                      new_data: torch.Tensor,
-                      old_data: torch.Tensor) -> float:
-        """Evaluate concept drift between old and new data"""
-        logger.info(f"Evaluating drift for concept {concept_id}")
-        logger.info(f"New data shape: {new_data.shape}, Old data shape: {old_data.shape}")
-        
-        with torch.no_grad():
-            # Get model outputs
-            old_output = self(old_data)
-            new_output = self(new_data)
-            
-            logger.info(f"Old output shape: {old_output.shape}, New output shape: {new_output.shape}")
-            
-            # Calculate input space drift
-            input_mean_old = old_data.mean(0)
-            input_mean_new = new_data.mean(0)
-            input_mean_drift = torch.norm(input_mean_new - input_mean_old) / (torch.norm(input_mean_old) + 1e-6)
-            
-            input_std_old = old_data.std(0)
-            input_std_new = new_data.std(0)
-            input_std_drift = torch.norm(input_std_new - input_std_old) / (torch.norm(input_std_old) + 1e-6)
-            
-            # Calculate output space drift
-            output_mean_old = old_output.mean(0)
-            output_mean_new = new_output.mean(0)
-            output_mean_drift = torch.norm(output_mean_new - output_mean_old) / (torch.norm(output_mean_old) + 1e-6)
-            
-            output_std_old = old_output.std(0)
-            output_std_new = new_output.std(0)
-            output_std_drift = torch.norm(output_std_new - output_std_old) / (torch.norm(output_std_old) + 1e-6)
-            
-            # Calculate representation change
-            old_norm = old_output / (torch.norm(old_output, dim=1, keepdim=True) + 1e-6)
-            new_norm = new_output / (torch.norm(new_output, dim=1, keepdim=True) + 1e-6)
-            cos_sim = torch.mean(torch.sum(old_norm * new_norm, dim=1))
-            cos_drift = 1.0 - cos_sim
-            
-            # Calculate scale changes
-            input_scale_old = torch.norm(old_data)
-            input_scale_new = torch.norm(new_data)
-            input_scale_drift = abs(input_scale_new - input_scale_old) / (input_scale_old + 1e-6)
-            
-            # Combine drift metrics
-            total_drift = (
-                input_mean_drift + 
-                input_std_drift + 
-                output_mean_drift + 
-                output_std_drift + 
-                cos_drift + 
-                input_scale_drift
-            ) / 6.0
-            
-            logger.info(f"Drift components: input_mean={input_mean_drift:.4f}, "
-                       f"input_std={input_std_drift:.4f}, output_mean={output_mean_drift:.4f}, "
-                       f"output_std={output_std_drift:.4f}, cos={cos_drift:.4f}, "
-                       f"scale={input_scale_drift:.4f}, total={total_drift:.4f}")
-            
-            # Record drift metrics
-            if concept_id not in self.concept_metrics:
-                self.concept_metrics[concept_id] = {
-                    'drift_history': [],
-                    'last_update': datetime.now().isoformat(),
-                    'last_loss': 0.0,
-                    'last_accuracy': 0.0,
-                    'last_drift': 0.0,
-                    'drift_trend': 0.0,  # Slope of drift over time
-                    'maturity_score': 0.0,  # Concept maturity score
-                    'growth_threshold': 0.001  # Initial growth threshold
-                }
-            
-            # Update drift history
-            drift_entry = {
-                'timestamp': datetime.now().isoformat(),
-                'drift': total_drift.item(),
-                'input_drift': input_mean_drift.item(),
-                'output_drift': output_mean_drift.item(),
-                'scale_drift': input_scale_drift.item(),
-                'cos_drift': cos_drift.item(),
-                'input_data': new_data.mean(0).tolist()  # Store mean input data
-            }
-            self.concept_metrics[concept_id]['drift_history'].append(drift_entry)
-            
-            # Calculate drift trend (slope of last 5 points)
-            drift_history = self.concept_metrics[concept_id]['drift_history']
-            if len(drift_history) >= 5:
-                recent_drifts = [entry['drift'] for entry in drift_history[-5:]]
-                timestamps = [datetime.fromisoformat(entry['timestamp']) for entry in drift_history[-5:]]
-                time_diffs = [(t - timestamps[0]).total_seconds() for t in timestamps]
-                
-                # Calculate linear regression slope
-                x_mean = sum(time_diffs) / len(time_diffs)
-                y_mean = sum(recent_drifts) / len(recent_drifts)
-                numerator = sum((x - x_mean) * (y - y_mean) for x, y in zip(time_diffs, recent_drifts))
-                denominator = sum((x - x_mean) ** 2 for x in time_diffs)
-                slope = numerator / (denominator + 1e-6)
-                
-                self.concept_metrics[concept_id]['drift_trend'] = slope
-                
-                # Update maturity score based on drift stability
-                stability_score = 1.0 / (1.0 + abs(slope))  # Higher score for stable drift
-                self.concept_metrics[concept_id]['maturity_score'] = (
-                    0.7 * self.concept_metrics[concept_id]['maturity_score'] +
-                    0.3 * stability_score
-                )
-                
-                # Adjust growth threshold based on maturity
-                base_threshold = 0.001
-                maturity_factor = 1.0 - (0.5 * self.concept_metrics[concept_id]['maturity_score'])
-                self.concept_metrics[concept_id]['growth_threshold'] = base_threshold * maturity_factor
-            
-            return total_drift.item()
     
     def should_grow(self, concept_id: str) -> Tuple[bool, int]:
         """Determine if any layer should grow based on concept drift and maturity"""
@@ -358,10 +185,10 @@ class GrowableConceptNet(nn.Module):
             return False, -1
             
         metrics = self.concept_metrics[concept_id]
-        drift = metrics['last_drift']
-        drift_trend = metrics['drift_trend']
-        maturity = metrics['maturity_score']
-        threshold = metrics['growth_threshold']
+        drift = metrics.get('last_drift', 0.0)
+        drift_trend = metrics.get('drift_trend', 0.0)
+        maturity = metrics.get('maturity_score', 0.0)
+        threshold = metrics.get('growth_threshold', 0.1)
         
         logger.info(f"Checking growth for concept {concept_id}:")
         logger.info(f"Drift: {drift:.4f}, Trend: {drift_trend:.4f}")
@@ -376,7 +203,7 @@ class GrowableConceptNet(nn.Module):
             max_layer_drift = 0.0
             
             for i, layer in enumerate(self.layers):
-                layer_drift = layer.get_drift_contribution()
+                layer_drift = self._calculate_layer_drift(i, concept_id)
                 if layer_drift > max_layer_drift:
                     max_layer_drift = layer_drift
                     max_drift_layer = i
@@ -387,6 +214,26 @@ class GrowableConceptNet(nn.Module):
         
         logger.info("No layers need to grow")
         return False, -1
+    
+    def _calculate_layer_drift(self, layer_idx: int, concept_id: str) -> float:
+        """Calculate drift contribution for a specific layer"""
+        if concept_id not in self.concept_metrics:
+            return 0.0
+            
+        metrics = self.concept_metrics[concept_id]
+        drift_history = metrics.get('drift_history', [])
+        
+        if not drift_history:
+            return 0.0
+            
+        # Calculate drift based on layer's output statistics
+        recent_drifts = [entry.get('layer_drifts', {}).get(str(layer_idx), 0.0) 
+                        for entry in drift_history[-5:]]
+        
+        if not recent_drifts:
+            return 0.0
+            
+        return np.mean(recent_drifts)
     
     def grow_layer(self, layer_idx: int, new_size: int) -> None:
         """Grow a specific layer"""
@@ -403,6 +250,9 @@ class GrowableConceptNet(nn.Module):
         if layer_idx < len(self.batch_norms):
             self.batch_norms[layer_idx] = nn.BatchNorm1d(new_size)
             logger.info(f"Updated batch norm for layer {layer_idx}")
+        
+        # Update optimizer
+        self.optimizer = torch.optim.Adam(self.parameters(), lr=self.optimizer.param_groups[0]['lr'])
     
     def record_training(self, 
                        concept_id: str,
@@ -419,15 +269,54 @@ class GrowableConceptNet(nn.Module):
                 'last_update': datetime.now().isoformat(),
                 'last_loss': 0.0,
                 'last_accuracy': 0.0,
-                'last_drift': 0.0
+                'last_drift': 0.0,
+                'drift_trend': 0.0,
+                'maturity_score': 0.0,
+                'growth_threshold': 0.1
             }
-            
-        self.concept_metrics[concept_id].update({
+        
+        # Update metrics
+        metrics = self.concept_metrics[concept_id]
+        metrics.update({
             'last_update': datetime.now().isoformat(),
             'last_loss': loss,
             'last_accuracy': accuracy,
             'last_drift': drift
         })
+        
+        # Calculate drift trend
+        drift_history = metrics['drift_history']
+        drift_history.append({
+            'timestamp': datetime.now().isoformat(),
+            'drift': drift,
+            'loss': loss,
+            'accuracy': accuracy
+        })
+        
+        # Keep only last 100 entries
+        if len(drift_history) > 100:
+            drift_history = drift_history[-100:]
+        
+        # Calculate drift trend using linear regression
+        if len(drift_history) >= 5:
+            timestamps = [datetime.fromisoformat(entry['timestamp']) for entry in drift_history[-5:]]
+            drifts = [entry['drift'] for entry in drift_history[-5:]]
+            x = np.array([(t - timestamps[0]).total_seconds() for t in timestamps])
+            y = np.array(drifts)
+            slope = np.polyfit(x, y, 1)[0]
+            metrics['drift_trend'] = float(slope)
+        
+        # Update maturity score (simplified)
+        metrics['maturity_score'] = min(1.0, len(drift_history) / 100.0)
+        
+        # Update growth threshold based on recent performance
+        if len(drift_history) >= 5:
+            recent_drifts = [entry['drift'] for entry in drift_history[-5:]]
+            drift_std = np.std(recent_drifts)
+            metrics['growth_threshold'] = max(0.001, min(0.1, drift_std * 2))
+        
+        # Update last training timestamp
+        self.last_training = datetime.now().isoformat()
     
     def get_concept_metrics(self, concept_id: str) -> Dict:
         """Get metrics for a specific concept"""
@@ -441,7 +330,8 @@ class GrowableConceptNet(nn.Module):
             'layer_sizes': [layer.current_capacity for layer in self.layers],
             'total_params': sum(p.numel() for p in self.parameters()),
             'growth_events': sum(len(layer.growth_history) for layer in self.layers),
-            'concepts_tracked': len(self.concept_metrics)
+            'concepts_tracked': len(self.concept_metrics),
+            'last_training': self.last_training
         }
         logger.info(f"Network stats: {stats}")
         return stats

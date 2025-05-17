@@ -5,6 +5,7 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
 import asyncio
 from lumina_core.common.bus import BusClient
+from lumina_core.common.config import get_settings
 from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 import logging
 from pydantic import BaseModel
@@ -14,6 +15,9 @@ import json
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Get settings
+settings = get_settings()
 
 app = FastAPI(title="Dead-Letter UI")
 
@@ -26,14 +30,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Environment variables
-REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379")
+# Environment variables with defaults
 DLQ_PREFIX = os.getenv("DLQ_PREFIX", "dlq.")
 MAX_RETRIES = int(os.getenv("MAX_RETRIES", "3"))
 RETRY_DELAY = float(os.getenv("RETRY_DELAY", "1.0"))
 
-# Initialize Redis client
-bus = BusClient(redis_url=REDIS_URL)
+# Initialize Redis client using settings
+bus = BusClient(redis_url=settings.REDIS_URL)
 
 # Metrics
 DLQ_MESSAGES_TOTAL = Counter(

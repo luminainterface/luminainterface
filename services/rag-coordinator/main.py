@@ -220,7 +220,7 @@ class RAGCoordinator:
             log.error(f"Error enriching chunks with metadata: {e}")
             raise
             
-    @with_retry("rag.request", max_attempts=3, dead_letter_stream="rag.dlq")
+    @with_retry(max_attempts=3)
     async def process_request(self, msg: Dict[str, Any]):
         """Process a RAG request with retry logic and DLQ support"""
         start_time = datetime.now()

@@ -5,11 +5,14 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install -y \
     curl \
+    redis-tools \
     build-essential \
     bash \
     git \
-    netcat-traditional \
     && rm -rf /var/lib/apt/lists/*
+
+# Create scripts directory
+RUN mkdir -p /app/scripts
 
 # Copy requirements first for better caching
 COPY requirements.txt .
@@ -17,41 +20,33 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy lumina-core from the project root
-COPY ../../lumina-core ./lumina-core
-RUN pip install -e ./lumina-core
+# Copy lumina-core (as lumina_core) into /app/lumina_core (for consistency with import lumina_core.common)
+COPY lumina-core /app/lumina_core
 
-# Copy application code
-COPY . .
+# Install lumina-core in development mode
+RUN pip install -e /app/lumina_core
+
+# Copy concept-dictionary service code
+COPY . /app/
 
 # Set environment variables
-ENV PYTHONPATH="/app:/app/lumina-core" \
+ENV PYTHONPATH="/app" \
     PYTHONUNBUFFERED=1 \
     EMBEDDING_DIM=384 \
-    EMBEDDING_MULTI_MODULE=false
+    EMBEDDING_MULTI_MODULE=false \
+    PORT=8828
 
 # Create health check script
 RUN echo '#!/bin/bash\n\
-curl -f http://localhost:8000/health || exit 1' > /app/healthcheck.sh && \
+curl -f http://localhost:8828/health || exit 1' > /app/healthcheck.sh && \
 chmod +x /app/healthcheck.sh
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
     CMD /app/healthcheck.sh
 
-# Create startup script
-RUN echo '#!/bin/bash\n\
-\n\
-# Wait for dependencies\n\
-/app/scripts/wait-for-it.sh redis:6379 -- echo "Redis is up" || exit 1\n\
-/app/scripts/wait-for-it.sh neo4j:7687 -- echo "Neo4j is up" || exit 1\n\
-\n\
-# Start the application\n\
-exec uvicorn app.main:app --host 0.0.0.0 --port 8000\n\
-' > /app/start.sh && chmod +x /app/start.sh
-
 # Expose port
-EXPOSE 8000
+EXPOSE 8828
 
-# Run the startup script
-CMD ["/app/start.sh"] 
+# Run the application directly with uvicorn
+CMD ["uvicorn", "concept_dictionary.main:app", "--host", "0.0.0.0", "--port", "8828"] 

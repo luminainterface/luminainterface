@@ -1,0 +1,42 @@
+groups:
+  - name: concept_drift
+    rules:
+      - alert: HighConceptDrift
+        expr: lumina_concept_drift_score > 0.3
+        for: 5m
+        labels:
+          severity: warning
+          service: concept-analyzer
+        annotations:
+          summary: "High concept drift detected"
+          description: "Concept {{ $labels.concept_id }} has drift score {{ $value }} (threshold 0.3)"
+
+      - alert: CriticalConceptDrift
+        expr: lumina_concept_drift_score > 0.7
+        for: 2m
+        labels:
+          severity: critical
+          service: concept-analyzer
+        annotations:
+          summary: "Critical concept drift detected"
+          description: "Concept {{ $labels.concept_id }} has drift score {{ $value }} (threshold 0.7)"
+
+      - alert: LowConceptMaturity
+        expr: lumina_concept_maturity_score < 0.2
+        for: 10m
+        labels:
+          severity: warning
+          service: concept-analyzer
+        annotations:
+          summary: "Low concept maturity"
+          description: "Concept {{ $labels.concept_id }} has maturity score {{ $value }} (threshold 0.2)"
+
+      - alert: HighDriftAlertCount
+        expr: lumina_concept_drift_alerts > 5
+        for: 5m
+        labels:
+          severity: warning
+          service: concept-analyzer
+        annotations:
+          summary: "Multiple concepts with high drift"
+          description: "{{ $value }} concepts have high drift scores" 

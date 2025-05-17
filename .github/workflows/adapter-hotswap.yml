@@ -1,0 +1,86 @@
+name: Adapter Hot-Swap Test
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'services/output-engine/**'
+      - 'services/masterchat-core/**'
+      - 'services/masterchat-llm/**'
+      - 'services/concept-trainer-growable/**'
+      - 'lumina_core/common/adapter_watcher.py'
+      - 'tests/test_adapter_hotswap.py'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'services/output-engine/**'
+      - 'services/masterchat-core/**'
+      - 'services/masterchat-llm/**'
+      - 'services/concept-trainer-growable/**'
+      - 'lumina_core/common/adapter_watcher.py'
+      - 'tests/test_adapter_hotswap.py'
+
+jobs:
+  test-hotswap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    services:
+      redis:
+        image: redis:7.2-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+          
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r tests/requirements.txt
+        
+    - name: Start test services
+      run: |
+        docker-compose up -d redis concept-dictionary concept-trainer-growable output-engine masterchat-core masterchat-llm
+        # Wait for services to be ready
+        ./scripts/wait_for_services.sh output-engine:9000 masterchat-core:8839 masterchat-llm:8840
+        
+    - name: Run hot-swap test
+      env:
+        REDIS_URL: redis://localhost:6379
+      run: |
+        python tests/test_adapter_hotswap.py
+        
+    - name: Check metrics
+      if: always()
+      run: |
+        # Verify adapter versions in metrics
+        for service in output-engine:9000 masterchat-core:8839 masterchat-llm:8840; do
+          curl -s http://localhost:$service/metrics | grep adapter_version || exit 1
+        done
+        
+    - name: Upload logs
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: service-logs
+        path: |
+          services/*/logs/
+          tests/logs/
+        if-no-files-found: warn
+        
+    - name: Cleanup
+      if: always()
+      run: docker-compose down -v 

@@ -1,12 +1,116 @@
 name: Lumina CI
 
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main, develop ]
+on: [push, pull_request]
 
 jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install test dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r tests/requirements.txt
+
+    - name: Build & Launch stack
+      run: |
+        docker compose -f docker-compose.yml up -d --build
+        # Wait for services to be ready
+        ./scripts/wait_for_services.sh
+        sleep 40
+
+    - name: Validate concept-analyzer
+      run: |
+        python services/concept-analyzer/run_validation.py
+
+    - name: Run stabilize_v1.sh
+      run: |
+        chmod +x ./scripts/stabilize_v1.sh
+        ./scripts/stabilize_v1.sh --ci
+        
+    - name: Verify core functionality
+      run: |
+        # Test crawler auto-recovery
+        pytest -m e2e tests/e2e/test_crawler_recovery.py -vv
+        
+        # Test concept learning flow
+        pytest -m e2e tests/e2e/test_concept_learning.py -vv
+        
+        # Test drift detection
+        pytest -m e2e tests/e2e/test_drift_detection.py -vv
+        
+        # Test knowledge gaps
+        pytest -m e2e tests/e2e/test_knowledge_gaps.py -vv
+
+    - name: Verify metrics and monitoring
+      run: |
+        # Check Prometheus targets
+        curl -sf http://localhost:9090/api/v1/targets | jq -e '.data.activeTargets | map(select(.health == "up")) | length > 8'
+        
+        # Check Alertmanager config
+        curl -sf http://localhost:9093/-/ready
+        
+        # Verify Grafana dashboards
+        curl -sf -H "Authorization: Bearer lumina" http://localhost:3000/api/dashboards/uid/lumina-overview
+        
+        # Check metrics endpoints
+        for service in crawler concept-analyzer action-handler learning-graph dual-chat-router; do
+          curl -sf http://localhost:9090/api/v1/query?query=up{job=\"$service\"} | jq -e '.data.result[0].value[1] == "1"'
+        done
+
+    - name: Run integration tests
+      run: |
+        pytest -m "not e2e" -q
+
+    - name: Verify data flow
+      run: |
+        # Test concept dictionary updates
+        curl -sf -X POST http://localhost:8000/concepts -H "Content-Type: application/json" -d '{"term":"test_concept","definition":"test"}'
+        
+        # Test crawler ingestion
+        curl -sf -X POST http://localhost:8401/crawl -H "Content-Type: application/json" -d '{"url":"https://example.com","concept":"test_concept"}'
+        
+        # Test dual-chat comparison
+        curl -sf -X POST http://localhost:8140/chat -H "Content-Type: application/json" -d '{"text":"What is test_concept?"}'
+        
+        # Verify events in Redis
+        docker compose exec redis redis-cli PUBSUB CHANNELS "lumina.*" | grep -q "lumina.events"
+
+    - name: Export test results
+      if: always()
+      run: |
+        mkdir -p test-results
+        # Collect logs
+        docker compose logs > test-results/docker-compose.log
+        # Collect metrics
+        curl -sf http://localhost:9090/api/v1/query?query=up > test-results/prometheus-up.json
+        curl -sf http://localhost:9093/api/v1/alerts > test-results/alertmanager-alerts.json
+        # Collect stabilization results
+        cp scripts/stabilize_v1.json test-results/
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: test-results/
+        retention-days: 7
+
+    - name: Tear down
+      if: always()
+      run: |
+        docker compose down -v
+
   lint-and-test:
     runs-on: ubuntu-latest
     

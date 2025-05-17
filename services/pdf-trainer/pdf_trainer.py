@@ -16,17 +16,22 @@ from datetime import datetime
 import uuid
 import random
 import requests
-from lumina_core.common.bus import BusClient, StreamMessage
+from lumina_core.common.bus import BusClient
+from lumina_core.common.stream_message import StreamMessage
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("pdf-trainer")
 
-# Remove concept trainer URLs since we're not using direct connection
-SLEEP_INTERVAL = 60  # seconds
+# Constants
+SLEEP_INTERVAL = int(os.getenv("SLEEP_INTERVAL", "60"))  # seconds
+PDF_DIR = os.getenv("PDF_DIR", "/app/training_data")
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
+QDRANT_URL = os.getenv("QDRANT_URL", "http://qdrant:6333")
+REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379")
 
 # Initialize bus client
-bus = BusClient(redis_url=os.getenv("REDIS_URL", "redis://redis:6379"))
+bus = BusClient(redis_url=REDIS_URL)
 
 class PDFSection:
     def __init__(self, title: str, content: str, page_num: int, confidence: float = 1.0):
@@ -39,10 +44,15 @@ class PDFTrainer:
     def __init__(self, revectorize=False):
         # Always force reprocessing
         self.revectorize = True
-        self.qdrant_client = QdrantClient(url=os.getenv("QDRANT_URL", "http://qdrant:6333"))
-        self.model = SentenceTransformer(os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2"))
+        self.qdrant_client = QdrantClient(url=QDRANT_URL)
+        self.model = SentenceTransformer(EMBEDDING_MODEL)
         self.collection = os.getenv("QDRANT_COLLECTION", "pdf_embeddings")
-        self.pdf_dir = Path(os.getenv("PDF_DIR", "training_data/"))
+        self.pdf_dir = Path(PDF_DIR)
+        
+        # Ensure PDF directory exists
+        if not self.pdf_dir.exists():
+            logger.warning(f"PDF directory {self.pdf_dir} does not exist, creating it")
+            self.pdf_dir.mkdir(parents=True, exist_ok=True)
         
         # Initialize TF-IDF vectorizer for section detection
         self.tfidf = TfidfVectorizer(
@@ -187,37 +197,9 @@ class PDFTrainer:
         return chunks
 
     async def process_pdf(self, pdf_path: Path) -> None:
-        """Process a single PDF file and write to JSON file only."""
+        """Process a single PDF file and publish to ingest.pdf stream."""
         try:
             logger.info(f"[process_pdf] Starting processing for: {pdf_path}")
-            # Ensure training_data directory exists
-            training_data_dir = Path("training_data")
-            if not training_data_dir.exists():
-                logger.warning("training_data directory missing, creating it.")
-                training_data_dir.mkdir(parents=True, exist_ok=True)
-            # Ensure training_concepts.json exists
-            json_path = training_data_dir / "training_concepts.json"
-            if not json_path.exists():
-                logger.info("training_concepts.json missing, creating it.")
-                with open(json_path, "w", encoding="utf-8") as f:
-                    pass
-
-            # Extract raw text from PDF
-            try:
-                doc = fitz.open(pdf_path)
-                raw_text = "\n".join(page.get_text() for page in doc)
-                logger.info(f"[process_pdf] Extracted raw text from {pdf_path}, length: {len(raw_text)}")
-                # Write raw text as a JSON object
-                raw_text_obj = {
-                    "filename": pdf_path.name,
-                    "raw_text": raw_text,
-                    "extracted_at": datetime.utcnow().isoformat()
-                }
-                with open(json_path, "a", encoding="utf-8") as f:
-                    f.write(json.dumps(raw_text_obj) + "\n")
-                logger.info(f"[process_pdf] Wrote raw text JSON for {pdf_path}")
-            except Exception as raw_exc:
-                logger.error(f"[process_pdf] Failed to extract/write raw text for {pdf_path}: {raw_exc}")
             
             # Extract text with structure
             try:
@@ -227,28 +209,32 @@ class PDFTrainer:
                 logger.error(f"[process_pdf] Extraction failed for {pdf_path}: {extract_exc}")
                 return
             
-            wrote_any = False
-            seen_chunks = set()  # Track unique chunks to avoid duplication
-            
             # Process each section
             for section_idx, section in enumerate(sections):
-                logger.info(f"[process_pdf] Section {section_idx}: '{section.title}' (page {section.page_num})")
+                logger.info(f"[process_pdf] Processing section {section_idx}: '{section.title}' (page {section.page_num})")
+                
                 # Chunk section text
                 chunks = self._chunk_text(section.content)
-                logger.info(f"[process_pdf] Section {section_idx} chunked into {len(chunks)} chunks.")
+                logger.info(f"[process_pdf] Section {section_idx} chunked into {len(chunks)} chunks")
                 
                 for chunk_idx, chunk in enumerate(chunks):
-                    # Skip if duplicate
-                    chunk_hash = hash(chunk.strip())
-                    if chunk_hash in seen_chunks:
-                        logger.info(f"[process_pdf] Skipping duplicate chunk {chunk_idx} of section {section_idx}")
-                        continue
-                        
-                    # Generate embedding
                     try:
+                        # Generate embedding
                         embedding = self.model.encode(chunk)
                         vec_id = str(uuid.uuid4())
-                        logger.info(f"[process_pdf] Embedded chunk {chunk_idx} of section {section_idx}")
+                        
+                        # Prepare metadata
+                        metadata = {
+                            "filename": pdf_path.name,
+                            "section": section.title,
+                            "page": section.page_num,
+                            "chunk": chunk_idx,
+                            "processed_at": datetime.utcnow().isoformat(),
+                            "content_type": "pdf",
+                            "source_type": "training_data",
+                            "quality_score": self._calculate_quality_score(chunk),
+                            "language": "en"  # Assuming English for training data
+                        }
                         
                         # Publish to ingest.pdf stream
                         await bus.publish(
@@ -258,58 +244,48 @@ class PDFTrainer:
                                 "file_path": str(pdf_path),
                                 "vec_id": vec_id,
                                 "ts": time.time(),
-                                "metadata": {
-                                    "filename": pdf_path.name,
-                                    "section": section.title,
-                                    "page": section.page_num,
-                                    "chunk": chunk_idx,
-                                    "processed_at": datetime.utcnow().isoformat()
-                                }
+                                "content": chunk,
+                                "embedding": embedding.tolist(),
+                                "metadata": metadata
                             }
                         )
                         logger.info(f"[process_pdf] Published chunk {chunk_idx} to ingest.pdf stream")
                         
+                        # Small delay to prevent overwhelming the system
+                        await asyncio.sleep(0.1)
+                        
                     except Exception as embed_exc:
-                        logger.error(f"[process_pdf] Embedding failed for {pdf_path} section {section.title} chunk {chunk_idx}: {embed_exc}")
+                        logger.error(f"[process_pdf] Failed to process chunk {chunk_idx} of section {section.title}: {embed_exc}")
                         continue
                         
-                    # Prepare concept dict
-                    concept = {
-                        "term": chunk,
-                        "embedding": embedding.tolist() if hasattr(embedding, 'tolist') else list(embedding),
-                        "label": section.title,
-                        "truth": section.confidence,
-                        "growth": 0.5,  # Placeholder, can be improved
-                        "metadata": {
-                            "filename": pdf_path.name,
-                            "section": section.title,
-                            "page": section.page_num,
-                            "chunk": chunk_idx,
-                            "processed_at": datetime.utcnow().isoformat()
-                        }
-                    }
-                    
-                    # Write as JSON line
-                    try:
-                        logger.info(f"[process_pdf] Writing concept to JSON: {json_path} (section {section_idx} chunk {chunk_idx})")
-                        with open(json_path, "a", encoding="utf-8") as f:
-                            f.write(json.dumps(concept) + "\n")
-                        logger.info(f"[process_pdf] Successfully wrote concept for {pdf_path} section {section.title} chunk {chunk_idx}")
-                        wrote_any = True
-                        seen_chunks.add(chunk_hash)
-                    except Exception as file_exc:
-                        logger.error(f"[process_pdf] Failed to write concept to JSON: {file_exc}")
-                    await asyncio.sleep(0.1)
-                    
-            # If nothing was written, write a placeholder
-            if not wrote_any:
-                logger.warning(f"[process_pdf] No data was written for {pdf_path}, writing placeholder.")
-                placeholder = {"term": None, "error": "No data processed", "filename": str(pdf_path)}
-                with open(json_path, "a", encoding="utf-8") as f:
-                    f.write(json.dumps(placeholder) + "\n")
             logger.info(f"[process_pdf] Finished processing {pdf_path}")
+            
         except Exception as e:
             logger.error(f"[process_pdf] Error processing PDF {pdf_path}: {e}")
+
+    def _calculate_quality_score(self, text: str) -> float:
+        """Calculate a quality score for the text chunk."""
+        score = 0.0
+        
+        # Length score (0-0.3)
+        length_score = min(len(text) / 1000, 1.0) * 0.3
+        score += length_score
+        
+        # Sentence structure (0-0.3)
+        sentences = text.split(". ")
+        if sentences:
+            avg_sentence_length = sum(len(s.split()) for s in sentences) / len(sentences)
+            if 5 <= avg_sentence_length <= 25:
+                score += 0.3
+        
+        # Vocabulary diversity (0-0.4)
+        words = text.lower().split()
+        if words:
+            unique_words = len(set(words))
+            diversity = unique_words / len(words)
+            score += diversity * 0.4
+        
+        return min(score, 1.0)
 
     async def process_all_pdfs(self) -> None:
         """Process all PDFs in the directory."""

@@ -1,5 +1,7 @@
-FROM python:3.9-slim
+# Use Python 3.10 slim image as base
+FROM python:3.10-slim
 
+# Set working directory
 WORKDIR /app
 
 # Install system dependencies
@@ -12,14 +14,34 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY . .
+# Copy service files
+COPY main.py .
+COPY model.py .
+COPY routes.py .
+COPY __init__.py .
 
-# Create data directory for model persistence
-RUN mkdir -p /app/data && chmod 777 /app/data
+# Create necessary directories
+RUN mkdir -p /data/batches /adapters /app/data
 
-# Expose port
-EXPOSE 8905
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    REDIS_HOST=redis \
+    REDIS_PORT=6379 \
+    QDRANT_HOST=qdrant \
+    QDRANT_PORT=6333 \
+    MODEL_INPUT_SIZE=768 \
+    BATCH_SIZE=32 \
+    TRAINING_INTERVAL=60 \
+    GROWTH_THRESHOLD=0.1 \
+    API_PORT=8710 \
+    METRICS_PORT=8711
 
-# Run the application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8905"] 
+# Expose ports
+EXPOSE ${API_PORT} ${METRICS_PORT}
+
+# Set volume mounts
+VOLUME ["/data/batches", "/adapters", "/app/data"]
+
+# Run the service
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8710"] 

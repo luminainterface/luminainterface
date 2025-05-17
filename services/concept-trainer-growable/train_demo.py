@@ -9,6 +9,9 @@ import requests
 import os
 import logging
 import traceback
+import json
+from datetime import datetime
+from typing import Dict
 
 # Configure logging
 logging.basicConfig(
@@ -297,9 +300,23 @@ def retrain_model():
         y_truth = torch.tensor([d['truth'] for d in all_data], dtype=torch.float32).unsqueeze(1)
         y_growth = torch.tensor([d['growth'] for d in all_data], dtype=torch.float32).unsqueeze(1)
         
+        # Create train/val split
+        train_size = int(0.8 * len(X))
+        indices = torch.randperm(len(X))
+        train_indices = indices[:train_size]
+        val_indices = indices[train_size:]
+        
+        X_train, X_val = X[train_indices], X[val_indices]
+        y_class_train, y_class_val = y_class[train_indices], y_class[val_indices]
+        y_truth_train, y_truth_val = y_truth[train_indices], y_truth[val_indices]
+        y_growth_train, y_growth_val = y_growth[train_indices], y_growth[val_indices]
+        
         # Initialize model and optimizer
         model = MultiHeadNet(NUM_FEATURES, len(LABELS))
-        optimizer = optim.Adam(model.parameters(), lr=0.01)
+        optimizer = optim.Adam(model.parameters(), lr=0.01, weight_decay=1e-5)
+        scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer, mode='min', factor=0.5, patience=10, verbose=True
+        )
         
         # Loss functions
         criterion_class = nn.CrossEntropyLoss()
@@ -311,94 +328,129 @@ def retrain_model():
         
         # Training loop
         max_epochs = 2000
-        best_metrics = {'conf': 0.0, 'acc': 0.0, 'sem': 0.0}
+        best_val_loss = float('inf')
         patience = 50  # Early stopping patience
         no_improve = 0
+        best_model_state = None
+        
+        # Metrics tracking
+        metrics_history = {
+            'train': {'loss': [], 'acc': [], 'conf': [], 'sem': []},
+            'val': {'loss': [], 'acc': [], 'conf': [], 'sem': []}
+        }
         
         for epoch in range(max_epochs):
+            # Training phase
             model.train()
             optimizer.zero_grad()
             
             # Forward pass
-            class_logits, truth_pred, growth_pred = model(X)
+            class_logits, truth_pred, growth_pred = model(X_train)
             
             # Compute losses
-            loss_class = criterion_class(class_logits, y_class)
-            loss_truth = criterion_truth(truth_pred, y_truth)
-            loss_growth = criterion_growth(growth_pred, y_growth)
-            loss = loss_class + loss_truth + loss_growth
+            loss_class = criterion_class(class_logits, y_class_train)
+            loss_truth = criterion_truth(truth_pred, y_truth_train)
+            loss_growth = criterion_growth(growth_pred, y_growth_train)
+            train_loss = loss_class + loss_truth + loss_growth
             
             # Backward pass
-            loss.backward()
+            train_loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
             optimizer.step()
             
-            # Evaluation
+            # Validation phase
             model.eval()
             with torch.no_grad():
-                pred_class = class_logits.argmax(dim=1)
-                conf = torch.softmax(class_logits, dim=1).max(dim=1)[0]
-                avg_conf = conf.mean().item()
-                class_acc = (pred_class == y_class).float().mean().item()
+                val_class_logits, val_truth_pred, val_growth_pred = model(X_val)
                 
-                # Compute semantic similarity scores
-                sem_scores = []
-                for i, d in enumerate(all_data):
-                    pred_label = class_logits[i].argmax().item()
-                    sem_score = cosine_similarity(d['vector'], prototypes[pred_label])
-                    sem_scores.append(sem_score)
-                avg_sem_score = np.mean(sem_scores)
+                # Compute validation losses
+                val_loss_class = criterion_class(val_class_logits, y_class_val)
+                val_loss_truth = criterion_truth(val_truth_pred, y_truth_val)
+                val_loss_growth = criterion_growth(val_growth_pred, y_growth_val)
+                val_loss = val_loss_class + val_loss_truth + val_loss_growth
                 
-                # Check for improvement
-                current_metrics = {
-                    'conf': avg_conf,
-                    'acc': class_acc,
-                    'sem': avg_sem_score
-                }
-                
-                if all(current_metrics[k] > best_metrics[k] for k in best_metrics):
-                    best_metrics = current_metrics
-                    no_improve = 0
-                    # Save best model
-                    script_dir = os.path.dirname(os.path.abspath(__file__))
-                    save_path = os.path.join(script_dir, 'model_best.pth')
-                    torch.save(model.state_dict(), save_path)
-                    logger.info(f"Saved best model to {save_path}")
-                else:
-                    no_improve += 1
+                # Compute metrics for both phases
+                for phase, (logits, targets, probs) in [
+                    ('train', (class_logits, y_class_train, truth_pred)),
+                    ('val', (val_class_logits, y_class_val, val_truth_pred))
+                ]:
+                    pred_class = logits.argmax(dim=1)
+                    conf = torch.softmax(logits, dim=1).max(dim=1)[0]
+                    
+                    metrics_history[phase]['loss'].append(
+                        val_loss.item() if phase == 'val' else train_loss.item()
+                    )
+                    metrics_history[phase]['acc'].append(
+                        (pred_class == targets).float().mean().item()
+                    )
+                    metrics_history[phase]['conf'].append(conf.mean().item())
+                    
+                    # Compute semantic similarity scores
+                    sem_scores = []
+                    for i, d in enumerate(all_data):
+                        pred_label = logits[i].argmax().item()
+                        sem_score = cosine_similarity(d['vector'], prototypes[pred_label])
+                        sem_scores.append(sem_score)
+                    metrics_history[phase]['sem'].append(np.mean(sem_scores))
             
-            # Logging
-            if (epoch + 1) % 25 == 0 or epoch == 0:
-                logger.info(f"Epoch {epoch+1:3d} | Loss: {loss.item():.4f} | "
-                          f"Class acc: {class_acc:.2f} | Avg conf: {avg_conf:.2f} | "
-                          f"Avg sem: {avg_sem_score:.2f}")
+            # Learning rate scheduling
+            scheduler.step(val_loss)
             
-            # Early stopping
+            # Early stopping check
+            if val_loss < best_val_loss:
+                best_val_loss = val_loss
+                best_model_state = model.state_dict().copy()
+                no_improve = 0
+            else:
+                no_improve += 1
+                
             if no_improve >= patience:
-                logger.info(f"Early stopping at epoch {epoch+1}")
+                logger.info(f"Early stopping triggered after {epoch + 1} epochs")
                 break
+                
+            # Log progress
+            if (epoch + 1) % 10 == 0:
+                logger.info(
+                    f"Epoch {epoch + 1}/{max_epochs} - "
+                    f"Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}, "
+                    f"LR: {optimizer.param_groups[0]['lr']:.6f}"
+                )
+        
+        # Restore best model
+        if best_model_state is not None:
+            model.load_state_dict(best_model_state)
             
-            # Success criteria
-            if avg_conf > 0.90 and class_acc > 0.90 and avg_sem_score > 0.90:
-                logger.info(f"Reached >=0.90 in all categories at epoch {epoch+1}")
-                break
-        
-        # Save final model
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        save_path = os.path.join(script_dir, 'model_final.pth')
-        torch.save(model.state_dict(), save_path)
-        logger.info(f"Model state saved to {save_path}")
-        
-        # Update concept dictionary
-        logger.info(f"Upserting {len(all_data)} concepts to the concept dictionary...")
-        for concept in all_data:
-            logger.info(f"Upserting concept: {concept['question']}")
-            upsert_to_concept_dictionary(concept)
+        # Save training history
+        save_training_history(metrics_history)
         
         return model
+        
     except Exception as e:
-        logger.error(f"Error in retrain_model: {e}")
-        logger.error(f"Traceback: {traceback.format_exc()}")
-        raise
+        logger.error(f"Error in retraining: {str(e)}", exc_info=True)
+        return None
+
+def save_training_history(metrics_history: Dict):
+    """Save training metrics history to disk"""
+    try:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        history_file = f"training_history_{timestamp}.json"
+        
+        # Convert tensors to lists for JSON serialization
+        serializable_history = {
+            phase: {
+                metric: [float(x) for x in values]
+                for metric, values in metrics.items()
+            }
+            for phase, metrics in metrics_history.items()
+        }
+        
+        with open(history_file, 'w') as f:
+            json.dump(serializable_history, f, indent=2)
+            
+        logger.info(f"Training history saved to {history_file}")
+        
+    except Exception as e:
+        logger.error(f"Error saving training history: {str(e)}", exc_info=True)
 
 # Example usage:
 # add_training_sample(vector, label, truth, growth, question)

@@ -1,24 +1,16 @@
-from fastapi import FastAPI, BackgroundTasks, Response
+from fastapi import FastAPI, BackgroundTasks, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import logging
 import os
 import asyncio
-from datetime import datetime, timedelta
-import json
-import uuid
-from prometheus_client import Counter, Gauge, Histogram, generate_latest, CONTENT_TYPE_LATEST
-import time
-import requests
-from redis import Redis
-from neo4j import GraphDatabase
-from fastapi.responses import JSONResponse
-from lumina_core.common.bus import BusClient
-import aiohttp
+from datetime import datetime
+from typing import Dict, Any, Optional
+from pydantic import BaseModel
+import httpx
 
-from .api.router import router, crawler
-from .core.smart_crawler import SmartCrawler
-from .core.graph_processor import GraphProcessor
-from .core.ml_bridge import MLBridge
+from .core.crawler import Crawler
+from .core.training_crawler import TrainingCrawler
+from .models.file_item import FileProcessingConfig, FileMetadata
 
 # Configure logging
 logging.basicConfig(
@@ -30,8 +22,8 @@ logger = logging.getLogger(__name__)
 
 # Create FastAPI app
 app = FastAPI(
-    title="Smart Crawler Service",
-    description="A service for crawling Wikipedia pages and building a knowledge graph",
+    title="Lumina Crawler Service",
+    description="Service for crawling and processing training data files",
     version="1.0.0"
 )
 
@@ -44,284 +36,212 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include API router
-app.include_router(router, prefix="/api/v1")
-
 # Global variables for background tasks
 background_tasks = set()
 PROCESS_INTERVAL = int(os.getenv("PROCESS_INTERVAL", "3600"))  # Default: 1 hour
 INQUIRY_CHECK_INTERVAL = int(os.getenv("INQUIRY_CHECK_INTERVAL", "300"))  # Default: 5 minutes
 
-ml_bridge = MLBridge()
-RETRAIN_INTERVAL = int(os.getenv("RETRAIN_INTERVAL", "100"))  # Retrain after N samples
-ml_sample_counter = 0
+# Global crawler instance
+crawler: Optional[Crawler] = None
+# Singleton pattern for training crawler and its background task
+training_crawler_singleton = None
+training_crawler_task_started = False
 
-# MLBridge metrics
-MLBRIDGE_SAMPLES = Counter("mlbridge_samples_total", "Total MLBridge training samples")
-MLBRIDGE_RETRAINS = Counter("mlbridge_retrains_total", "Total MLBridge retrain events")
-MLBRIDGE_LAST_RETRAIN = Gauge("mlbridge_last_retrain_timestamp", "Timestamp of last MLBridge retrain")
-MLBRIDGE_LAST_ERROR = Gauge("mlbridge_last_error", "1 if last MLBridge operation errored, else 0")
-MLBRIDGE_LAST_ERROR_MSG = None  # Store last error message (not a Prometheus metric)
+class CrawlerConfig(BaseModel):
+    """Configuration for the crawler service."""
+    redis_url: str = "redis://:02211998@redis:6379"
+    qdrant_url: str = "http://qdrant:6333"
+    ollama_url: str = "http://ollama:11434"
+    ollama_model: str = "nomic-embed-text"
+    training_data_path: str = "/app/training_data"
+    chunk_size: int = 1000
+    chunk_overlap: int = 200
+    batch_size: int = 32
 
-GRAPH_API_KEY = os.getenv("GRAPH_API_KEY", "changeme")
-CONCEPT_DICT_API_KEY = os.getenv("CONCEPT_DICT_API_KEY", "changeme")
-
-# Add Prometheus metric for fetch time
-CRAWLER_FETCH_SECONDS = Histogram("crawler_fetch_seconds", "Time spent fetching URLs in crawler")
-
-# New: BusClient for ingest.queue
-bus = BusClient(redis_url=os.getenv("REDIS_URL", "redis://localhost:6379"))
-
-async def process_inquiries():
-    """Background task to process crawl requests with system priority and a 10s pause, with MLBridge hooks and robust debugging."""
-    global ml_sample_counter, MLBRIDGE_LAST_ERROR_MSG
-    while True:
+async def ensure_ollama_model(model_name: str = "nomic-embed-text", base_url: str = "http://ollama:11434"):
+    """Ensure the Ollama model is available."""
+    async with httpx.AsyncClient(base_url=base_url, timeout=30.0) as client:
         try:
-            logger.info("Checking for system crawl requests...")
-            request = await crawler.redis_client.get_next_crawl_request(source="system")
-            if not request:
-                logger.info("No system crawl found, checking for graph crawl requests...")
-                request = await crawler.redis_client.get_next_crawl_request(source="graph")
-
-            if request:
-                concept = request.get('concept')
-                inquiry_id = request.get('inquiry_id')
-                source = request.get('source', 'unknown')
-                logger.info(f"Processing {source} crawl for concept: {concept}")
-                try:
-                    # --- MLBridge: Prepare sample ---
-                    crawl_sample = {
-                        'vector': [0.0],  # TODO: Replace with actual vector
-                        'usage': 0,       # TODO: Replace with actual usage
-                        'last_crawled': 0, # TODO: Replace with actual timestamp
-                        'label': 1.0 if source == 'system' else 0.5
-                    }
-                    output_sample = {
-                        'vector': [0.0],  # TODO: Replace with actual output vector
-                        'context': [0.0], # TODO: Replace with actual context
-                        'prev_output': [0.0], # TODO: Replace with previous output
-                        'label': 1.0 if source == 'system' else 0.5
-                    }
-                    crawl_priority_score = 0.5  # TODO: Replace with actual model score
-                    output_score = 0.5          # TODO: Replace with actual model score
-
-                    # Add samples to MLBridge
-                    ml_bridge.add_priority_sample(crawl_sample, output_score=output_score)
-                    ml_bridge.add_output_sample(output_sample, priority_score=crawl_priority_score)
-                    ml_sample_counter += 1
-                    MLBRIDGE_SAMPLES.inc()
-
-                    # --- End MLBridge sample ---
-                    success = await crawler.crawl(concept)
-                    if success:
-                        if inquiry_id:
-                            await crawler.redis_client.update_inquiry_status(inquiry_id, "completed")
-                        logger.info(f"Successfully processed {source} inquiry for concept: {concept}")
-                    else:
-                        if inquiry_id:
-                            await crawler.redis_client.update_inquiry_status(inquiry_id, "failed")
-                        await crawler.redis_client.add_to_dead_letter_queue(concept, "Crawl failed")
-                        logger.error(f"Failed to crawl concept: {concept}")
-
-                    # --- MLBridge: Retrain periodically ---
-                    if ml_sample_counter % RETRAIN_INTERVAL == 0:
-                        logger.info("[MLBridge] Retraining models after %d samples...", ml_sample_counter)
-                        try:
-                            ml_bridge.cross_train(epochs=5, lr=1e-3)
-                            MLBRIDGE_RETRAINS.inc()
-                            MLBRIDGE_LAST_RETRAIN.set(time.time())
-                            MLBRIDGE_LAST_ERROR.set(0)
-                            MLBRIDGE_LAST_ERROR_MSG = None
-                        except Exception as ml_e:
-                            logger.error(f"[MLBridge] Error during cross-training: {ml_e}", exc_info=True)
-                            MLBRIDGE_LAST_ERROR.set(1)
-                            MLBRIDGE_LAST_ERROR_MSG = str(ml_e)
-                except Exception as e:
-                    logger.error(f"Error processing {source} inquiry for concept {concept}: {e}", exc_info=True)
-                    if inquiry_id:
-                        await crawler.redis_client.update_inquiry_status(inquiry_id, "error")
-                    await crawler.redis_client.add_to_dead_letter_queue(concept, str(e))
-                    MLBRIDGE_LAST_ERROR.set(1)
-                    MLBRIDGE_LAST_ERROR_MSG = str(e)
+            # Check if model exists
+            response = await client.get("/api/tags")
+            if response.status_code == 200:
+                models = response.json().get("models", [])
+                if any(m.get("name") == model_name for m in models):
+                    logger.info(f"Model {model_name} already exists")
+                    return True
+            
+            # Pull the model
+            logger.info(f"Pulling model {model_name}...")
+            response = await client.post(
+                "/api/pull",
+                json={"name": model_name}
+            )
+            if response.status_code == 200:
+                logger.info(f"Successfully pulled model {model_name}")
+                return True
             else:
-                logger.info("No crawl requests found. Waiting for next cycle.")
+                logger.error(f"Failed to pull model {model_name}: {response.text}")
+                return False
+                
         except Exception as e:
-            logger.error(f"Error in inquiry processing: {e}", exc_info=True)
-            MLBRIDGE_LAST_ERROR.set(1)
-            MLBRIDGE_LAST_ERROR_MSG = str(e)
-        await asyncio.sleep(10)  # Natural 10 second pause between each crawl
-
-async def process_graph_concepts():
-    """Process concepts from the graph when no inquiries are pending"""
-    try:
-        graph_path = os.getenv("TRAINING_DATA_PATH", "/training_data/graph (1).json")
-        if not os.path.exists(graph_path):
-            logger.warning("Graph file not found at " + graph_path + " (using fallback).")
-            graph_path = "/training_data/graph (1).json"
-        if not os.path.exists(graph_path):
-            logger.warning("Fallback graph file " + graph_path + " not found, cannot load graph.")
-            return
-
-        processor = GraphProcessor(crawler)
-        if processor.load_graph(graph_path):
-            concepts = processor.get_unprocessed_concepts()
-            logger.info(f"Graph loaded. {len(concepts)} unprocessed concepts found.")
-            for concept in concepts:
-                logger.info(f"Adding graph concept to crawl queue: {concept}")
-                await crawler.redis_client.add_to_crawl_queue(
-                    concept=concept,
-                    weight=0.3,  # Lower weight for graph-based concepts
-                    source="graph"
-                )
-        else:
-            logger.warning("Graph could not be loaded or was empty.")
-    except Exception as e:
-        logger.error(f"Error processing graph concepts: {e}")
-
-async def start_background_tasks():
-    """Start background tasks"""
-    # Start inquiry processing task
-    inquiry_task = asyncio.create_task(process_inquiries())
-    background_tasks.add(inquiry_task)
-    inquiry_task.add_done_callback(background_tasks.discard)
-
-async def handle_ingest_queue(msg):
-    data = msg.data
-    if data.get("type") != "url":
-        return
-    url = data["payload"]
-    fp = data["fp"]
-    ts = int(time.time())
-    try:
-        with CRAWLER_FETCH_SECONDS.time():
-            async with aiohttp.ClientSession() as session:
-                async with session.get(url, timeout=15) as resp:
-                    html = await resp.text()
-        # Publish to ingest.raw_html
-        payload = {"url": url, "html": html, "fp": fp, "ts": ts}
-        await bus.publish("ingest.raw_html", payload)
-        logger.info(f"Fetched and published {url} (fp={fp}) to ingest.raw_html")
-    except Exception as e:
-        logger.error(f"Failed to fetch {url}: {e}")
-
-async def start_ingest_queue_consumer():
-    await bus.connect()
-    await bus.consume(
-        stream="ingest.queue",
-        group="workers",
-        consumer="crawler",
-        handler=handle_ingest_queue,
-        block_ms=1000,
-        count=1
-    )
+            logger.error(f"Error ensuring Ollama model: {e}")
+            return False
 
 @app.on_event("startup")
 async def startup_event():
-    """Initialize the crawler on startup"""
+    """Initialize the crawler service on startup."""
+    global crawler, training_crawler_singleton, training_crawler_task_started
+    
     try:
-        # Get configuration from environment variables
-        redis_url = os.getenv("REDIS_URL", "redis://redis:6379")
-        qdrant_url = os.getenv("QDRANT_URL", "http://qdrant:6333")
-        graph_api_url = os.getenv("GRAPH_API_URL", "http://graph-api:8200")
-        concept_dict_url = os.getenv("CONCEPT_DICT_URL", "http://concept-dict:8000")
-        embedding_model = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
+        logger.info("Starting crawler service initialization...")
         
-        # Initialize smart crawler
-        global crawler
-        crawler = SmartCrawler(
-            redis_url=redis_url,
-            qdrant_url=qdrant_url,
-            graph_api_url=graph_api_url,
-            concept_dict_url=concept_dict_url,
-            embedding_model=embedding_model,
-            max_depth=int(os.getenv("WIKI_SEARCH_DEPTH", "3")),
-            max_links_per_page=int(os.getenv("WIKI_MAX_RESULTS", "15")),
-            min_relevance_score=float(os.getenv("MIN_RELEVANCE_SCORE", "0.6")),
-            max_concurrent_crawls=int(os.getenv("MAX_CONCURRENT_CRAWLS", "5"))
+        # Ensure Ollama model is available
+        if not await ensure_ollama_model():
+            raise Exception("Failed to ensure Ollama model availability")
+        
+        # Initialize training crawler singleton
+        logger.info("Initializing training data crawler singleton...")
+        training_crawler_singleton = await TrainingCrawler.get_instance()
+        await training_crawler_singleton.initialize()
+        
+        # Start the crawler
+        logger.info("Starting crawler...")
+        crawler = Crawler(
+            redis_url=os.getenv("REDIS_URL", "redis://:02211998@redis:6379"),
+            qdrant_url=os.getenv("QDRANT_URL", "http://qdrant:6333"),
+            ollama_url=os.getenv("OLLAMA_URL", "http://ollama:11434"),
+            ollama_model=os.getenv("OLLAMA_MODEL", "nomic-embed-text"),
+            training_data_path=os.getenv("TRAINING_DATA_PATH", "/app/training_data"),
+            config=FileProcessingConfig(
+                chunk_size=int(os.getenv("CHUNK_SIZE", "1000")),
+                chunk_overlap=int(os.getenv("CHUNK_OVERLAP", "200")),
+                batch_size=int(os.getenv("BATCH_SIZE", "32"))
+            )
         )
+        await crawler.initialize()
         
-        logger.info("Smart crawler service initialized successfully")
-
-        # Start background tasks
-        await start_background_tasks()
-        asyncio.create_task(start_ingest_queue_consumer())
+        # Start the crawl worker in the background
+        asyncio.create_task(crawler.start_crawl_worker())
         
+        logger.info("Crawler service started")
     except Exception as e:
         logger.error(f"Failed to initialize crawler service: {e}")
         raise
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    """Cleanup on shutdown"""
-    logger.info("Shutting down crawler service") 
-    # Cancel all background tasks
-    for task in background_tasks:
-        task.cancel()
-    # Wait for all tasks to complete
-    await asyncio.gather(*background_tasks, return_exceptions=True)
+    """Stop the crawler service on shutdown."""
+    global crawler
+    if crawler:
+        await crawler.stop()
+        logger.info("Crawler service stopped")
 
 @app.get("/health")
-async def health():
-    """Health check endpoint with Redis and Neo4j status."""
+async def health_check() -> Dict[str, Any]:
+    """Health check endpoint."""
+    if not crawler:
+        raise HTTPException(status_code=503, detail="Crawler service not initialized")
+    
     try:
-        # Check Redis
-        redis_url = os.getenv("REDIS_URL", "redis://localhost:6379")
-        redis = Redis.from_url(redis_url)
-        redis.ping()
-        
-        # Check Neo4j
-        neo4j_url = os.getenv("NEO4J_URL", "bolt://localhost:7687")
-        neo4j = GraphDatabase.driver(neo4j_url, auth=("neo4j", "password"))
-        with neo4j.session() as session:
-            session.run("RETURN 1")
-        
-        # Check Concept Dictionary
-        concept_dict_url = os.getenv("CONCEPT_DICT_URL", "http://localhost:8000")
-        response = requests.get(f"{concept_dict_url}/health")
-        concept_dict_status = "healthy" if response.status_code == 200 else "unhealthy"
+        status = await crawler.get_status()
+        return {
+            "status": "healthy" if status["worker_running"] else "degraded",
+            "details": status
+        }
+    except Exception as e:
+        logger.error(f"Health check failed: {str(e)}")
+        raise HTTPException(status_code=503, detail=str(e))
+
+@app.post("/process")
+async def process_file(file_path: str, background_tasks: BackgroundTasks) -> Dict[str, Any]:
+    """Process a single file."""
+    if not crawler:
+        raise HTTPException(status_code=503, detail="Crawler service not initialized")
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail=f"File not found: {file_path}")
+    
+    try:
+        # Add file to crawl queue
+        await crawler.redis.xadd(
+            'crawl_queue',
+            {
+                'file_path': file_path,
+                'timestamp': datetime.utcnow().isoformat()
+            }
+        )
         
         return {
-            "status": "healthy",
-            "redis": "connected",
-            "neo4j": "connected",
-            "concept_dictionary": concept_dict_status,
-            "graph_path": os.getenv("TRAINING_DATA_PATH", "not configured")
+            "status": "queued",
+            "file_path": file_path,
+            "message": "File added to processing queue"
         }
-    except RedisError as e:
-        logger.error(f"Redis health check failed: {e}")
-        return JSONResponse(
-            status_code=503,
-            content={
-                "status": "unhealthy",
-                "redis": "disconnected",
-                "error": str(e)
-            }
-        )
+        
     except Exception as e:
-        logger.error(f"Health check failed: {e}")
-        return JSONResponse(
-            status_code=500,
-            content={
-                "status": "unhealthy",
-                "error": str(e)
-            }
-        )
+        logger.error(f"Error queueing file {file_path}: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/mlbridge/health")
-async def mlbridge_health():
-    """Health endpoint for MLBridge."""
-    status = {
-        "status": "ok",
-        "priority_samples": len(ml_bridge.priority_training_data),
-        "output_samples": len(ml_bridge.output_training_data),
-        "retrain_count": MLBRIDGE_RETRAINS._value.get(),
-        "last_retrain": MLBRIDGE_LAST_RETRAIN._value.get(),
-        "last_error": MLBRIDGE_LAST_ERROR._value.get(),
-        "last_error_msg": MLBRIDGE_LAST_ERROR_MSG,
-    }
-    return status
+@app.get("/status")
+async def get_status() -> Dict[str, Any]:
+    """Get detailed crawler status."""
+    if not crawler:
+        raise HTTPException(status_code=503, detail="Crawler service not initialized")
+    
+    try:
+        return await crawler.get_status()
+    except Exception as e:
+        logger.error(f"Error getting status: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/mlbridge/metrics")
-def mlbridge_metrics():
-    """Prometheus metrics endpoint for MLBridge."""
-    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST) 
+@app.post("/restart")
+async def restart_crawler() -> Dict[str, Any]:
+    """Restart the crawler service."""
+    if not crawler:
+        raise HTTPException(status_code=503, detail="Crawler service not initialized")
+    
+    try:
+        await crawler.stop()
+        await crawler.initialize()
+        await crawler.start()
+        return {"status": "restarted", "message": "Crawler service restarted successfully"}
+    except Exception as e:
+        logger.error(f"Error restarting crawler: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/training_crawler/health")
+async def training_crawler_health() -> Dict[str, Any]:
+    """Get training crawler health status."""
+    if not training_crawler_singleton:
+        raise HTTPException(status_code=503, detail="Training crawler not initialized")
+    
+    try:
+        return {
+            "status": "healthy",
+            "initialized": True,
+            "processed_files": len(training_crawler_singleton.processed_files),
+            "failed_files": len(training_crawler_singleton.failed_files)
+        }
+    except Exception as e:
+        logger.error(f"Training crawler health check failed: {str(e)}")
+        raise HTTPException(status_code=503, detail=str(e))
+
+@app.get("/training_crawler/metrics")
+async def training_crawler_metrics() -> Dict[str, Any]:
+    """Get training crawler metrics."""
+    if not training_crawler_singleton:
+        raise HTTPException(status_code=503, detail="Training crawler not initialized")
+    
+    try:
+        return {
+            "processed_files": len(training_crawler_singleton.processed_files),
+            "failed_files": len(training_crawler_singleton.failed_files),
+            "queue_length": await training_crawler_singleton.redis.xlen('crawl_queue'),
+            "dead_letter_length": await training_crawler_singleton.redis.xlen('crawl_dead_letter')
+        }
+    except Exception as e:
+        logger.error(f"Error getting training crawler metrics: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000) 

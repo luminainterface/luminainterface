@@ -1,0 +1,38 @@
+groups:
+  - name: service_health
+    rules:
+      - alert: ServiceRestart
+        expr: changes(process_start_time_seconds[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Service restarted"
+          description: "Service {{ $labels.service }} has restarted {{ $value }} times in the last 5 minutes"
+
+      - alert: HighRestartRate
+        expr: rate(process_start_time_seconds[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High service restart rate"
+          description: "Service {{ $labels.service }} is restarting too frequently"
+
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service is down"
+          description: "Service {{ $labels.service }} has been down for more than 1 minute"
+
+      - alert: ServiceUnhealthy
+        expr: health_status == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Service is unhealthy"
+          description: "Service {{ $labels.service }} is reporting unhealthy status" 

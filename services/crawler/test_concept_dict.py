@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 async def test_concept_registration():
     """Test concept registration through both adapter and direct client"""
     # Initialize clients
-    concept_dict_url = os.getenv("CONCEPT_DICT_URL", "http://localhost:8000")
+    concept_dict_url = os.getenv("CONCEPT_DICT_URL", "http://localhost:8526")
     crawler = Crawler(
         redis_url="redis://localhost:6379",
         qdrant_url="http://localhost:6333",

@@ -1,13 +1,13 @@
 # Core dependencies
 fastapi>=0.68.0
 uvicorn>=0.15.0
-pydantic>=1.8.0
+pydantic==2.6.1
 python-dotenv>=0.19.0
 httpx>=0.24.0
 redis>=4.0.0
 prometheus-client>=0.11.0
 loguru>=0.5.0
-pydantic-settings
+pydantic-settings==2.2.1
 
 # LLM and embeddings
 mistralai>=0.0.7

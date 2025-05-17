@@ -27,7 +27,7 @@ This module acts as a translation and integration layer between the Crawler's ML
 
 3. Configure service URLs via environment variables if needed:
    - `GRAPH_API_URL` (default: http://graph-api:8200)
-   - `CONCEPT_DICT_URL` (default: http://concept-dictionary:8000)
+   - `CONCEPT_DICT_URL` (default: http://concept-dictionary:8526)
    - `NEO4J_URL` (default: bolt://neo4j:7687)
 
 ## Extending

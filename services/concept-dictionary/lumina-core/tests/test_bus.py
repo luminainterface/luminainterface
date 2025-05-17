@@ -6,7 +6,8 @@ import json
 from datetime import datetime
 from typing import List, Dict
 import redis.asyncio as aioredis
-from lumina_core.common.bus import BusClient, StreamMessage
+from lumina_core.common.bus import BusClient
+from lumina_core.common.stream_message import StreamMessage
 
 # Test configuration
 TEST_STREAM = "test:bus"

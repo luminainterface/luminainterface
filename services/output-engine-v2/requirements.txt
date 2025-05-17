@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+transformers
+sentence-transformers
+bitsandbytes
+httpx
+redis
+prometheus_fastapi_instrumentator 

@@ -5,7 +5,7 @@ from typing import Dict, Any, Optional
 from neo4j import GraphDatabase
 
 GRAPH_API_URL = os.getenv("GRAPH_API_URL", "http://graph-api:8200")
-CONCEPT_DICT_URL = os.getenv("CONCEPT_DICT_URL", "http://concept-dictionary:8000")
+CONCEPT_DICT_URL = os.getenv("CONCEPT_DICT_URL", "http://concept-dictionary:8526")
 NEO4J_URL = os.getenv("NEO4J_URL", "bolt://neo4j:7687")
 NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "password")

@@ -1,0 +1,8 @@
+httpx==0.25.1
+redis==5.0.1
+numpy==1.26.2
+scikit-learn==1.4.0
+prometheus-client==0.17.1
+rich==13.7.0
+hiredis==2.2.3
+typing-extensions>=4.8.0 

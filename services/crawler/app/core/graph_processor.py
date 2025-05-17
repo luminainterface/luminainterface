@@ -29,7 +29,7 @@ class GraphProcessor:
         self.processed_nodes: set = set()
         self.priority_queue: Dict[str, float] = {}  # Node ID -> Priority Score
         self.vector_cache: Dict[str, List[float]] = {}
-        self.concept_dict_url = os.getenv("CONCEPT_DICT_URL", "http://localhost:8000")
+        self.concept_dict_url = os.getenv("CONCEPT_DICT_URL", "http://localhost:8526")
         self.adapter = GraphConceptAdapter()
         self.concept_client = ConceptClient(self.concept_dict_url)
         

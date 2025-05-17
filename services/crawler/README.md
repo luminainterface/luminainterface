@@ -1,167 +1,169 @@
-# Smart Crawler Service
+# Lumina Crawler Service
 
-A service for intelligently crawling Wikipedia pages and building a knowledge graph. The service integrates with:
-- Qdrant for vector storage
-- Redis for caching and queuing
-- Graph API for relationship management
-- Concept Dictionary for concept storage
+A robust service for crawling and processing training data files, generating embeddings, and storing them in a vector database. The service supports multiple file types (JSON, JSONL, PDF, text) and provides a REST API for file processing and monitoring.
 
 ## Features
 
-- Smart crawling with adaptive depth and priority
-- Intelligent content extraction and filtering
-- Automatic concept linking and relationship discovery
-- Vector-based similarity search
-- Priority-based crawl scheduling
-- Concurrent crawling with rate limiting
-- Comprehensive monitoring and metrics
-- Cache management with TTL
+- **Multi-format Support**: Process JSON, JSONL, PDF, and text files
+- **Embedding Generation**: Generate embeddings using Ollama models
+- **Vector Storage**: Store embeddings in Qdrant vector database
+- **Queue Management**: Process files asynchronously using Redis streams
+- **Health Monitoring**: Comprehensive health checks and metrics
+- **REST API**: Easy-to-use HTTP endpoints for file processing and monitoring
+- **Incremental Processing**: Automatically process new files in the training data directory
+- **Error Handling**: Robust error handling with dead letter queue
+- **Metrics**: Prometheus metrics for monitoring
 
-## API Endpoints
+## Architecture
 
-### POST /api/v1/smart-crawl
-Start a smart crawl from a given Wikipedia page with adaptive depth and priority.
+The service consists of several key components:
 
-Request body:
-```json
-{
-    "start_title": "string",
-    "max_pages": 100,  // optional
-    "min_relevance_score": 0.6,  // optional
-    "max_depth": 3,  // optional
-    "max_links_per_page": 15  // optional
-}
-```
+1. **File Processor**: Handles different file types and generates embeddings
+2. **Crawler**: Manages worker coordination and file processing queue
+3. **Vector Store**: Stores and retrieves embeddings
+4. **Redis Client**: Manages message queues and caching
+5. **FastAPI Application**: Provides REST API endpoints
 
-### POST /api/v1/crawl
-Legacy endpoint for basic crawling.
+## Prerequisites
 
-Request body:
-```json
-{
-    "start_title": "string",
-    "max_depth": 2,
-    "max_links_per_page": 10
-}
-```
-
-### GET /api/v1/search
-Search for similar concepts.
-
-Query parameters:
-- `query`: Search query string
-- `limit`: Maximum number of results (default: 5)
-
-### GET /api/v1/stats
-Get statistics about the current crawl process.
-
-Response:
-```json
-{
-    "total_pages": 100,
-    "average_priority": 0.75,
-    "max_priority": 0.95,
-    "active_crawls": 3,
-    "cache_hits": {
-        "total": 50,
-        "by_depth": {
-            "0": 20,
-            "1": 15,
-            "2": 10,
-            "3": 5
-        }
-    }
-}
-```
-
-### GET /api/v1/health
-Health check endpoint.
+- Docker and Docker Compose
+- Redis (for message queues)
+- Qdrant (for vector storage)
+- Ollama (for embedding generation)
 
 ## Environment Variables
 
-- `REDIS_URL`: Redis connection URL (default: redis://redis:6379)
-- `QDRANT_URL`: Qdrant connection URL (default: http://qdrant:6333)
-- `GRAPH_API_URL`: Graph API URL (default: http://graph-api:8200)
-- `CONCEPT_DICT_URL`: Concept Dictionary URL (default: http://concept-dict:8000)
-- `EMBEDDING_MODEL`: Sentence transformer model name (default: all-MiniLM-L6-v2)
-- `WIKI_SEARCH_DEPTH`: Maximum crawl depth (default: 3)
-- `WIKI_MAX_RESULTS`: Maximum links per page (default: 15)
-- `MIN_RELEVANCE_SCORE`: Minimum relevance score for pages (default: 0.6)
-- `MAX_CONCURRENT_CRAWLS`: Maximum number of concurrent crawls (default: 5)
+| Variable | Description | Default |
+|----------|-------------|---------|
+| REDIS_URL | Redis connection URL | redis://:02211998@redis:6379 |
+| QDRANT_URL | Qdrant connection URL | http://qdrant:6333 |
+| OLLAMA_URL | Ollama service URL | http://ollama:11434 |
+| OLLAMA_MODEL | Ollama model name | all-MiniLM-L6-v2 |
+| TRAINING_DATA_PATH | Path to training data | /app/training_data |
+| CHUNK_SIZE | Text chunk size | 1000 |
+| CHUNK_OVERLAP | Chunk overlap size | 200 |
+| BATCH_SIZE | Processing batch size | 32 |
+| PROCESS_INTERVAL | Background processing interval | 3600 |
+| INQUIRY_CHECK_INTERVAL | Queue check interval | 300 |
+| RETRAIN_INTERVAL | MLBridge retrain interval | 100 |
 
-## Smart Crawling Features
+## API Endpoints
 
-### Priority Calculation
-The smart crawler calculates priority scores for pages based on:
-- Depth in the crawl tree
-- Existence in concept dictionary
-- Content relevance using vector similarity
-- Link relationships
+### Health and Status
 
-### Adaptive Depth
-The crawler adapts its depth based on:
-- Content relevance scores
-- Priority thresholds
-- Available resources
-- Cache hit rates
+- `GET /health`: Health check endpoint
+- `GET /status`: Get detailed crawler status
+- `GET /training_crawler/health`: Training crawler health status
+- `GET /training_crawler/metrics`: Training crawler metrics
+- `GET /mlbridge/health`: MLBridge health status
+- `GET /mlbridge/metrics`: MLBridge metrics
 
-### Concurrent Processing
-- Multiple pages are processed concurrently
-- Rate limiting prevents overloading
-- Resource usage is monitored and adjusted
+### File Processing
 
-### Caching Strategy
-- Pages are cached with TTL
-- Cache hits are tracked by depth
-- Cache invalidation based on content updates
+- `POST /process?file_path=<path>`: Process a single file
+- `POST /restart`: Restart the crawler service
+
+## Usage
+
+1. Build and start the service:
+
+```bash
+docker-compose up -d
+```
+
+2. Process a file:
+
+```bash
+curl -X POST "http://localhost:8000/process?file_path=/path/to/file.json"
+```
+
+3. Check service status:
+
+```bash
+curl "http://localhost:8000/health"
+```
+
+4. Monitor metrics:
+
+```bash
+curl "http://localhost:8000/training_crawler/metrics"
+```
+
+## File Processing
+
+### Supported File Types
+
+1. **JSON Files**
+   - Handles both dictionary and list structures
+   - Converts dictionary entries to list format
+   - Generates embeddings for each entry
+
+2. **JSONL Files**
+   - Processes each line as a separate JSON object
+   - Validates JSON format
+   - Generates embeddings for each line
+
+3. **PDF Files**
+   - Extracts text content
+   - Splits into chunks
+   - Generates embeddings for each chunk
+
+4. **Text Files**
+   - Splits into chunks
+   - Generates embeddings for each chunk
+
+### Processing Flow
+
+1. File is added to the crawl queue
+2. Worker picks up the file
+3. File processor determines type and processes accordingly
+4. Embeddings are generated and stored in Qdrant
+5. Results are published to the results stream
+
+## Error Handling
+
+- Failed files are moved to a dead letter queue
+- Processing errors are logged and reported
+- Retry mechanism for transient failures
+- Comprehensive error reporting in API responses
 
 ## Monitoring
 
-### Prometheus Metrics
-- `crawler_requests_total`: Total crawl requests
-- `crawler_fetch_seconds`: Page fetch latency
-- `crawler_process_seconds`: Page processing latency
-- `crawler_pages_total`: Total pages crawled
-- `crawler_priority_avg`: Average page priority
-- `crawler_active_crawls`: Active crawl count
-- `crawler_cache_hits_total`: Cache hit count
-- `crawler_errors_total`: Error count
+The service provides several monitoring endpoints:
+
+- Health checks
+- Processing statistics
+- Queue lengths
+- Error rates
+- MLBridge metrics
+- Training crawler metrics
 
 ## Development
 
-1. Install dependencies:
+1. Clone the repository
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Run the service:
+3. Run tests:
 ```bash
-uvicorn app.main:app --host 0.0.0.0 --port 8400
+pytest
 ```
 
-## Docker
-
-Build and run with Docker:
+4. Start the service:
 ```bash
-docker build -t smart-crawler .
-docker run -p 8400:8400 smart-crawler
+uvicorn app.main:app --reload
 ```
 
-## Architecture
+## Contributing
 
-The service is built with a modular architecture:
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
-- `core/`: Core components
-  - `smart_crawler.py`: Smart crawler implementation
-  - `crawler.py`: Base crawler functionality
-  - `wiki_client.py`: Wikipedia API client
-  - `vector_store.py`: Qdrant vector store client
-  - `graph_client.py`: Graph API client
-  - `concept_client.py`: Concept Dictionary client
-  - `redis_client.py`: Redis client
-  - `graph_processor.py`: Graph processing utilities
+## License
 
-- `api/`: API endpoints
-  - `router.py`: FastAPI router
-
-- `main.py`: Application entry point 
+This project is licensed under the MIT License - see the LICENSE file for details. 

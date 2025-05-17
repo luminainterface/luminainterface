@@ -1,0 +1,18 @@
+{
+    "question": "What is artificial intelligence?",
+    "expected": {
+        "answer": "Artificial Intelligence (AI) is the simulation of human intelligence by machines that are programmed to think and learn like humans. It encompasses a wide range of technologies and approaches, from rule-based expert systems to modern machine learning and deep learning. AI systems can perform tasks such as visual perception, speech recognition, decision-making, and language translation, often at levels comparable to or exceeding human capabilities.",
+        "confidence": 0.92,
+        "sources": [
+            "https://en.wikipedia.org/wiki/Artificial_intelligence",
+            "https://en.wikipedia.org/wiki/Machine_learning"
+        ],
+        "facts": [
+            "Simulates human intelligence in machines",
+            "Includes machine learning and deep learning",
+            "Can perform complex tasks like pattern recognition",
+            "Used in various applications from healthcare to finance",
+            "Continues to evolve with new algorithms and approaches"
+        ]
+    }
+} 

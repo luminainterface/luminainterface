@@ -1,0 +1,47 @@
+groups:
+  - name: service_health
+    rules:
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+          description: "Service {{ $labels.job }} has been down for more than 1 minute"
+
+      - alert: HighLatency
+        expr: rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m]) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High latency on {{ $labels.job }}"
+          description: "Service {{ $labels.job }} has high latency (> 1s) for more than 5 minutes"
+
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate on {{ $labels.job }}"
+          description: "Service {{ $labels.job }} has error rate > 10% for more than 5 minutes"
+
+      - alert: AuditScoreLow
+        expr: audit_score < 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low audit score detected"
+          description: "Overall audit score has been below 80% for more than 5 minutes"
+
+      - alert: AuditChecksFailing
+        expr: sum(audit_pass == 0) > 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Audit checks failing"
+          description: "One or more audit checks have been failing for more than 2 minutes" 

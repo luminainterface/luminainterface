@@ -2,6 +2,7 @@ import os
 import json
 import asyncio
 import time
+import logging
 from typing import Dict, Any
 from fastapi import FastAPI, Request, HTTPException
 from sse_starlette.sse import EventSourceResponse
@@ -10,11 +11,20 @@ from redis.exceptions import ResponseError
 import duckdb
 import apscheduler.schedulers.asyncio
 from mistralai.async_client import MistralAsyncClient
-from prometheus_client import generate_latest, CollectorRegistry, Counter, Histogram
+from prometheus_client import generate_latest, CollectorRegistry, Counter, Histogram, Gauge
 from lumina_core.common.cors import add_cors
+from prometheus_fastapi_instrumentator import Instrumentator
+import random
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="MasterChat")
-add_cors(app)
+add_cors(app, ["http://localhost:3001", "*"])
+Instrumentator().instrument(app).expose(app)
 
 # Initialize metrics
 reg = CollectorRegistry()
@@ -22,14 +32,37 @@ request_total = Counter("masterchat_requests_total", "REST requests", ["path"], 
 latency = Histogram("masterchat_request_seconds", "Latency", ["path"], registry=reg)
 plan_seconds = Histogram("masterchat_plan_seconds", "Planner cycle latency", registry=reg)
 
+tasks_executed_total = Counter(
+    "tasks_executed_total",
+    "Total number of tasks executed",
+    ["type"]
+)
+task_latency_seconds = Histogram(
+    "task_latency_seconds",
+    "Latency of task execution",
+    ["type"]
+)
+task_failures_total = Counter(
+    "task_failures_total",
+    "Total number of failed tasks",
+    ["type"]
+)
+task_queue_depth = Gauge(
+    "task_queue_depth",
+    "Current depth of the task queue"
+)
+
 # Initialize Redis client
-redis_client = redis.from_url(os.getenv("REDIS_URL", "redis://redis:6379"))
+redis_client = redis.from_url(os.getenv("REDIS_URL", "redis://:02211998@redis:6379"))
 
 db = duckdb.connect("/data/state.db")
 db.execute("CREATE TABLE IF NOT EXISTS events(ts DOUBLE, type VARCHAR, body VARCHAR)")
 db.execute("CREATE TABLE IF NOT EXISTS planner_logs(ts DOUBLE, msg VARCHAR)")
 
 CLIENT = MistralAsyncClient(api_key=os.getenv("MISTRAL_API_KEY", ""))
+
+class ChatRequest(BaseModel):
+    message: str
 
 # ---------- Ingest ---------- #
 async def ingest():
@@ -124,7 +157,6 @@ async def health_check() -> Dict[str, bool]:
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# ---------- bootstrap ---------- #
 @app.on_event("startup")
 async def boot():
     loop = asyncio.get_event_loop()
@@ -133,4 +165,63 @@ async def boot():
     cron = os.getenv("PLAN_CRON", "*/10 * * * *")
     sched.add_job(plan_cycle, trigger="cron", **dict(zip(
         ["minute","hour","day","month","day_of_week"], cron.split())))
-    sched.start() 
+    sched.start()
+
+@app.on_event("startup")
+async def simulate_metrics():
+    async def loop():
+        while True:
+            tasks_executed_total.labels(type="ingest").inc(random.randint(1, 3))
+            tasks_executed_total.labels(type="analyze").inc(random.randint(0, 2))
+            task_latency_seconds.labels(type="ingest").observe(random.uniform(0.2, 1.5))
+            task_latency_seconds.labels(type="analyze").observe(random.uniform(0.1, 2.0))
+            task_failures_total.labels(type="ingest").inc(random.randint(0, 1))
+            task_failures_total.labels(type="analyze").inc(random.randint(0, 1))
+            task_queue_depth.set(random.randint(0, 100))
+            await asyncio.sleep(10)
+    asyncio.create_task(loop())
+
+@app.get("/")
+def root():
+    return {"message": "MasterChat API active"}
+
+@app.post("/masterchat/chat")
+async def chat_endpoint(request: ChatRequest):
+    """Main chat endpoint"""
+    try:
+        # Generate message_id
+        message_id = str(int(time.time()))
+        
+        # Create a crawl request
+        crawl_request = {
+            "concept": request.message,
+            "priority": "high",
+            "metadata": {
+                "source": "masterchat",
+                "coverage": 0.0,
+                "timestamp": time.time(),
+                "message_id": message_id
+            }
+        }
+        
+        # Publish crawl request to Redis
+        await redis_client.publish(
+            "lumina.graph.crawl",
+            json.dumps(crawl_request).encode('utf-8')  # Encode as bytes
+        )
+        
+        # Return success response with message_id
+        return {
+            "message_id": message_id,
+            "status": "processing",
+            "detail": "Crawl request sent successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Chat error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e)) 
+
+@app.post("/v1/chat/completions")
+async def chat_completions():
+    # Placeholder: return a simple chat completion
+    return {"id": "dummy", "object": "chat.completion", "choices": [{"message": {"role": "assistant", "content": "Hello from placeholder endpoint."}}]} 

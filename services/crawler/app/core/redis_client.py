@@ -7,13 +7,12 @@ import os
 from .vector_store import VectorStore
 import time
 from lumina_core.common.bus import BusClient
-import aioredis
 import asyncio
 
 logger = logging.getLogger(__name__)
 
 class RedisClient:
-    def __init__(self, redis_url: str, cache_ttl: int = 86400):
+    def __init__(self, redis_url: str = "redis://:02211998@redis:6379", cache_ttl: int = 86400):
         self.redis_url = redis_url
         self.cache_ttl = cache_ttl
         self._redis = None
@@ -38,14 +37,20 @@ class RedisClient:
         await self.bus.close()
         
     async def connect(self):
-        """Connect to Redis"""
+        """Connect to Redis if not already connected."""
         if not self._redis:
-            self._redis = await aioredis.from_url(
-                self.redis_url,
-                encoding="utf-8",
-                decode_responses=True
-            )
-            
+            try:
+                self._redis = redis.from_url(
+                    self.redis_url,
+                    encoding='utf-8',
+                    decode_responses=True
+                )
+                await self._redis.ping()
+                logger.info("Connected to Redis")
+            except Exception as e:
+                logger.error(f"Failed to connect to Redis: {e}")
+                raise
+
     async def disconnect(self):
         """Disconnect from Redis"""
         if self._redis:
@@ -559,4 +564,55 @@ class RedisClient:
             }
         except Exception as e:
             logger.error(f"Error getting cache stats: {e}")
-            return {"hits": 0, "misses": 0, "total": 0} 
+            return {"hits": 0, "misses": 0, "total": 0}
+
+    async def xadd(self, stream: str, data: dict, maxlen: int = 1000) -> str:
+        """Add data to a Redis stream with optional max length."""
+        try:
+            if not self._redis:
+                await self.connect()
+            return await self._redis.xadd(stream, data, maxlen=maxlen)
+        except Exception as e:
+            logger.error(f"Error adding to stream {stream}: {e}")
+            raise
+
+    async def xgroup_create(self, stream: str, group: str, mkstream: bool = True) -> None:
+        """Create a consumer group for a stream."""
+        try:
+            if not self._redis:
+                await self.connect()
+            await self._redis.xgroup_create(stream, group, mkstream=mkstream)
+        except Exception as e:
+            if "BUSYGROUP" not in str(e):  # Ignore if group already exists
+                logger.error(f"Error creating group {group} for stream {stream}: {e}")
+                raise
+
+    async def xreadgroup(self, group: str, consumer: str, streams: dict, count: int = 1, block: int = 0) -> list:
+        """Read from a stream using consumer groups."""
+        try:
+            if not self._redis:
+                await self.connect()
+            return await self._redis.xreadgroup(group, consumer, streams, count=count, block=block)
+        except Exception as e:
+            logger.error(f"Error reading from stream with group {group}: {e}")
+            raise
+
+    async def xack(self, stream: str, group: str, message_id: str) -> int:
+        """Acknowledge a message in a stream."""
+        try:
+            if not self._redis:
+                await self.connect()
+            return await self._redis.xack(stream, group, message_id)
+        except Exception as e:
+            logger.error(f"Error acknowledging message {message_id} in stream {stream}: {e}")
+            raise
+
+    async def xlen(self, stream: str) -> int:
+        """Get the length of a stream."""
+        try:
+            if not self._redis:
+                await self.connect()
+            return await self._redis.xlen(stream)
+        except Exception as e:
+            logger.error(f"Error getting length of stream {stream}: {e}")
+            return 0 

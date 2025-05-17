@@ -1,0 +1,349 @@
+import os
+import asyncio
+import logging
+from typing import Dict, List, Optional, Any
+from datetime import datetime
+import torch
+import torch.nn as nn
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends
+from pydantic import BaseModel
+from prometheus_client import Counter, Gauge, Histogram, start_http_server
+from prometheus_fastapi_instrumentator import Instrumentator
+from starlette.middleware.cors import CORSMiddleware
+import redis.asyncio as aioredis
+from qdrant_client import QdrantClient
+import numpy as np
+from contextlib import asynccontextmanager
+import uvicorn
+import httpx
+
+from model import GrowableConceptNet
+from routes import router as model_router
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('app.log'),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+# Environment variables
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
+QDRANT_PORT = int(os.getenv("QDRANT_PORT", "6333"))
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", None)
+MODEL_INPUT_SIZE = int(os.getenv("MODEL_INPUT_SIZE", "768"))  # Default to BERT-like size
+BATCH_SIZE = int(os.getenv("BATCH_SIZE", "32"))
+TRAINING_INTERVAL = int(os.getenv("TRAINING_INTERVAL", "60"))  # seconds
+GROWTH_THRESHOLD = float(os.getenv("GROWTH_THRESHOLD", "0.1"))
+API_PORT = int(os.getenv("API_PORT", "8710"))
+METRICS_PORT = int(os.getenv("METRICS_PORT", "8711"))
+DICT_URL = os.getenv("DICT_URL", "http://concept-dictionary:8828")
+AUTO_INGEST_INTERVAL = int(os.getenv("AUTO_INGEST_INTERVAL", "120"))  # seconds
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", None)
+
+# Prometheus metrics
+TRAINING_REQUESTS = Counter(
+    'concept_trainer_training_requests_total',
+    'Total number of training requests',
+    ['concept_id']
+)
+TRAINING_DURATION = Histogram(
+    'concept_trainer_training_duration_seconds',
+    'Time spent training',
+    ['concept_id']
+)
+GROWTH_EVENTS = Counter(
+    'concept_trainer_growth_events_total',
+    'Total number of model growth events',
+    ['concept_id', 'layer_idx']
+)
+DRIFT_LEVEL = Histogram(
+    'concept_trainer_drift_level',
+    'Concept drift level',
+    ['concept_id']
+)
+
+# Data models
+class VectorBatch(BaseModel):
+    """A batch of vectors for training"""
+    concept_id: str
+    vectors: List[List[float]]
+    labels: Optional[List[int]] = None
+    metadata: Optional[Dict[str, Any]] = None
+
+class TrainingMetrics(BaseModel):
+    """Training metrics for a concept"""
+    concept_id: str
+    loss: float
+    accuracy: float
+    drift: float
+    timestamp: datetime
+    metadata: Optional[Dict[str, Any]] = None
+
+class GrowthRequest(BaseModel):
+    """Request to grow the model"""
+    concept_id: str
+    layer_idx: int
+    new_size: int
+    reason: str
+
+# Global state
+redis_client = None
+qdrant_client = None
+model = None
+training_queue = asyncio.Queue()
+is_training = False
+training_lock = asyncio.Lock()
+
+# Track last seen update per concept
+last_concept_updates = {}
+
+def get_concept_vectors(concept: dict) -> Optional[List[List[float]]]:
+    # Try to extract vectors from the concept dict (adapt as needed)
+    embedding = concept.get("embedding")
+    if embedding and isinstance(embedding, list) and all(isinstance(x, (float, int)) for x in embedding):
+        return [embedding]
+    return None
+
+async def auto_ingest_from_concept_dictionary():
+    global last_concept_updates
+    while True:
+        try:
+            async with httpx.AsyncClient() as client:
+                resp = await client.get(f"{DICT_URL}/concepts")
+                if resp.status_code == 200:
+                    concepts = resp.json()
+                    new_count = 0
+                    for concept in concepts:
+                        cid = concept.get("term")
+                        last_updated = concept.get("last_updated") or concept.get("updated_at")
+                        if not cid or not last_updated:
+                            continue
+                        # Only process if new or updated
+                        if cid not in last_concept_updates or last_concept_updates[cid] != last_updated:
+                            vectors = get_concept_vectors(concept)
+                            if vectors:
+                                batch = VectorBatch(
+                                    concept_id=cid,
+                                    vectors=vectors,
+                                    labels=None,
+                                    metadata=concept.get("metadata")
+                                )
+                                await training_queue.put(batch)
+                                last_concept_updates[cid] = last_updated
+                                new_count += 1
+                    if new_count:
+                        logger.info(f"Auto-ingested {new_count} new/updated concepts from Concept Dictionary.")
+                        await trigger_training()
+                else:
+                    logger.warning(f"Failed to fetch concepts from Concept Dictionary: {resp.status_code}")
+        except Exception as e:
+            logger.error(f"Auto-ingest error: {e}")
+        await asyncio.sleep(AUTO_INGEST_INTERVAL)
+
+async def trigger_training():
+    global is_training
+    if not is_training and not training_lock.locked() and not training_queue.empty():
+        async with training_lock:
+            is_training = True
+            try:
+                while not training_queue.empty():
+                    batch = await training_queue.get()
+                    # Actual training logic
+                    vectors = torch.tensor(batch.vectors, dtype=torch.float32)
+                    labels = torch.zeros(len(batch.vectors), dtype=torch.long) if batch.labels is None else torch.tensor(batch.labels, dtype=torch.long)
+                    outputs = model(vectors)
+                    criterion = torch.nn.NLLLoss()
+                    loss = criterion(outputs, labels)
+                    model.optimizer.zero_grad()
+                    loss.backward()
+                    model.optimizer.step()
+                    # Optionally record metrics
+                    accuracy = (torch.argmax(outputs, dim=1) == labels).float().mean().item()
+                    model.record_training(batch.concept_id, loss.item(), accuracy, drift=0.0)
+                    logger.info(f"Auto-trained on concept: {batch.concept_id}, loss={loss.item():.4f}, acc={accuracy:.4f}")
+                # Save model after training
+                torch.save(model.state_dict(), "model_final.pth")
+                logger.info("Model state saved after auto-training.")
+            finally:
+                is_training = False
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logger.info("Lifespan context started: initializing global state.")
+    global redis_client, qdrant_client, model
+    
+    # Initialize Redis client with optional password
+    redis_url = f"redis://{REDIS_HOST}:{REDIS_PORT}"
+    if REDIS_PASSWORD:
+        redis_url = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}"
+    redis_client = aioredis.from_url(redis_url, encoding="utf-8", decode_responses=True)
+    logger.info(f"Connected to Redis at {REDIS_HOST}:{REDIS_PORT}{' with password' if REDIS_PASSWORD else ''}")
+    
+    # Initialize Qdrant client with optional API key
+    if QDRANT_API_KEY:
+        qdrant_client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT, api_key=QDRANT_API_KEY)
+        logger.info(f"Connected to Qdrant at {QDRANT_HOST}:{QDRANT_PORT} with API key")
+    else:
+        qdrant_client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+        logger.info(f"Connected to Qdrant at {QDRANT_HOST}:{QDRANT_PORT}")
+    
+    # Initialize model
+    model = GrowableConceptNet(
+        input_size=MODEL_INPUT_SIZE,
+        hidden_sizes=[MODEL_INPUT_SIZE, MODEL_INPUT_SIZE // 2, MODEL_INPUT_SIZE // 4],
+        output_size=2,  # Binary classification
+        activation="relu",
+        learning_rate=1e-4
+    )
+    logger.info(f"Initialized model with input size {MODEL_INPUT_SIZE}")
+    
+    # Start background tasks
+    asyncio.create_task(process_training_queue())
+    asyncio.create_task(monitor_concept_queue())
+    asyncio.create_task(auto_ingest_from_concept_dictionary())
+    
+    yield
+    
+    # Cleanup
+    if redis_client:
+        await redis_client.close()
+    if qdrant_client:
+        qdrant_client.close()
+
+# Initialize FastAPI app
+app = FastAPI(
+    title="Concept Trainer Growable Service",
+    description="A service for training and growing concept models",
+    version="1.0.0",
+    lifespan=lifespan
+)
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Add Prometheus instrumentation
+Instrumentator().instrument(app).expose(app)
+
+# Mount routers
+app.include_router(model_router, prefix="/api/v1")
+
+# Health check endpoint
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    if redis_client is None or qdrant_client is None:
+        logger.error("Health check failed: global state (redis_client or qdrant_client) is not initialized (lifespan context may not have run).")
+        raise HTTPException(status_code=503, detail="Service not fully initialized (global state (redis_client or qdrant_client) is None).")
+    try:
+        logger.info("[HEALTH] Checking Redis connection...")
+        await redis_client.ping()
+        logger.info("[HEALTH] Redis connection OK.")
+        logger.info("[HEALTH] Checking Qdrant connection...")
+        qdrant_client.get_collections()
+        logger.info("[HEALTH] Qdrant connection OK.")
+        return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+    except Exception as e:
+        logger.error(f"[HEALTH] Health check failed: {e} (type: {type(e)})")
+        import traceback
+        logger.error(traceback.format_exc())
+        raise HTTPException(status_code=503, detail=str(e))
+
+# Model endpoints
+@app.post("/model/train")
+async def train_model(batch: VectorBatch, background_tasks: BackgroundTasks):
+    """Add a batch of vectors to the training queue"""
+    try:
+        # Validate input
+        if not batch.vectors or not batch.concept_id:
+            raise HTTPException(status_code=400, detail="Invalid batch data")
+            
+        # Add to training queue
+        await training_queue.put(batch)
+        CONCEPT_QUEUE_SIZE.inc()
+        
+        return {"status": "queued", "concept_id": batch.concept_id}
+    except Exception as e:
+        TRAINING_REQUESTS.labels(concept_id=batch.concept_id).inc()
+        logger.error(f"Error queueing training batch: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/model/status")
+async def model_status():
+    """Get current model status"""
+    if not model:
+        raise HTTPException(status_code=503, detail="Model not initialized")
+    return {
+        "queue_size": training_queue.qsize(),
+        "is_training": is_training,
+        "model_stats": model.get_network_stats(),
+        "last_training": getattr(model, 'last_training', None)
+    }
+
+@app.post("/model/grow")
+async def grow_model(request: GrowthRequest):
+    """Grow the model's capacity"""
+    try:
+        if not model:
+            raise HTTPException(status_code=503, detail="Model not initialized")
+            
+        # Grow the specified layer
+        model.grow_layer(request.layer_idx, request.new_size)
+        GROWTH_EVENTS.labels(concept_id=request.concept_id, layer_idx=request.layer_idx).inc()
+        
+        return {
+            "status": "grown",
+            "concept_id": request.concept_id,
+            "layer_idx": request.layer_idx,
+            "new_size": request.new_size
+        }
+    except Exception as e:
+        logger.error(f"Error growing model: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Background tasks
+async def process_training_queue():
+    """Process the training queue periodically"""
+    global is_training
+    
+    while True:
+        try:
+            # Get next batch from Redis
+            # TODO: Implement proper queue processing
+            pass
+        except Exception as e:
+            logger.error(f"Error processing training queue: {str(e)}")
+        finally:
+            is_training = False
+            await asyncio.sleep(TRAINING_INTERVAL)
+
+async def monitor_concept_queue():
+    """Monitor concept queue for growth opportunities"""
+    while True:
+        try:
+            # Get all tracked concepts from model metrics
+            stats = model.get_network_stats()
+            tracked_concepts = list(model.concept_metrics.keys())
+            
+            # Check each concept for growth
+            for concept_id in tracked_concepts:
+                should_grow, layer_idx = model.should_grow(concept_id)
+                if should_grow:
+                    logger.info(f"Growth opportunity detected for concept {concept_id} at layer {layer_idx}")
+                    # TODO: Implement automatic growth
+                    pass
+        except Exception as e:
+            logger.error(f"Error monitoring concept queue: {str(e)}")
+        await asyncio.sleep(TRAINING_INTERVAL) 

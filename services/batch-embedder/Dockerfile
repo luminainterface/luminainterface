@@ -3,56 +3,43 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && \
-    apt-get install -y \
-    curl \
+RUN apt-get update && apt-get install -y \
     build-essential \
-    bash \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+    curl \
+    netcat-traditional \
+    && rm -rf /var/lib/apt/lists/* \
+    && curl https://sh.rustup.rs -sSf | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Copy requirements first for better caching
-COPY requirements.txt .
-
-# Install Python dependencies
+COPY services/batch-embedder/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy lumina-core from the project root
-COPY ../../lumina-core ./lumina-core
-RUN pip install -e ./lumina-core
+# Copy lumina_core (the whole package) and install it
+COPY lumina_core /app/lumina_core
+WORKDIR /app/lumina_core
+RUN pip install -e .
+WORKDIR /app
 
-# Copy application code
-COPY . .
+# Copy batch-embedder service code (from services/batch-embedder) into /app
+COPY services/batch-embedder /app
 
-# Set environment variables
-ENV PYTHONPATH="/app:/app/lumina-core" \
-    PYTHONUNBUFFERED=1 \
-    EMBED_MODEL=all-MiniLM-L6-v2
-
-# Create cache directory for sentence-transformers
-RUN mkdir -p /root/.cache/torch/sentence_transformers
-
-# Create health check script
-RUN echo '#!/bin/bash\n\
-curl -f http://localhost:8709/health || exit 1' > /app/healthcheck.sh && \
-chmod +x /app/healthcheck.sh
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD /app/healthcheck.sh
+# Copy wait-for-it.sh script
+COPY scripts/wait-for-it.sh /app/scripts/wait-for-it.sh
+RUN chmod +x /app/scripts/wait-for-it.sh
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
 \n\
 # Wait for dependencies\n\
 /app/scripts/wait-for-it.sh redis:6379 -- echo "Redis is up" || exit 1\n\
-/app/scripts/wait-for-it.sh concept-trainer-growable:8905 -- echo "Concept Trainer is up" || exit 1\n\
+/app/scripts/wait-for-it.sh concept-trainer-growable:8710 -- echo "Concept Trainer Growable is up" || exit 1\n\
 \n\
 # Start the application\n\
-exec uvicorn app.main:app --host 0.0.0.0 --port 8709\n\
+exec python main.py\n\
 ' > /app/start.sh && chmod +x /app/start.sh
 
-# Expose port
+# Expose metrics port
 EXPOSE 8709
 
 # Run the startup script

@@ -1,172 +1,104 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-import numpy as np
-import logging
-import os
-from prometheus_fastapi_instrumentator import Instrumentator
-from prometheus_client import Counter, Histogram
-import redis.asyncio as redis
-from typing import Dict
+import os, asyncio, time, uuid, logging, json
+from typing import List
+from collections import deque
 
+import httpx
+import numpy as np
 from sentence_transformers import SentenceTransformer
 from lumina_core.common.bus import BusClient
+from lumina_core.common.stream_message import StreamMessage
+from lumina_core.common.retry import with_retry
+from qdrant_client import QdrantClient
+from prometheus_client import Counter, Histogram, start_http_server
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("batch-embedder")
+# ─────────────────────── config ──────────────────────────
+REDIS_URL   = os.getenv("REDIS_URL", "redis://redis:6379")
+INGEST_STREAM = os.getenv("INGEST_CLEANED_STREAM", "ingest.cleaned")
+TRAIN_URL   = os.getenv("TRAIN_URL", "http://concept-trainer-growable:8710/train_batch")
+MAX_BATCH   = int(os.getenv("BATCH_SIZE", 128))
+BATCH_SEC   = int(os.getenv("BATCH_SECONDS", 5))
 
-# Initialize FastAPI app
-app = FastAPI(title="Batch Embedder")
-Instrumentator().instrument(app).expose(app)
+embedder = SentenceTransformer("all-MiniLM-L6-v2")
+qdrant   = QdrantClient(url=os.getenv("QDRANT_URL", "http://qdrant:6333"))
+bus      = BusClient(REDIS_URL)
 
-# Initialize metrics
-BATCHES_RECEIVED = Counter(
-    'batch_embedder_batches_total',
-    'Number of batches received'
-)
+# ─────────────────────── metrics ─────────────────────────
+start_http_server(8709)
+EMBED_BATCHES = Counter("embed_batches_total", "batches sent to trainer")
+EMBED_VECTORS = Counter("embed_vectors_total", "vectors embedded")
+TRAIN_POST    = Histogram("trainer_post_seconds", "latency posting to trainer",
+                          buckets=[0.05,0.1,0.3,0.6,1,2,4])
+        
+# ─────────────────────── models ──────────────────────────
+class CleanMsg(StreamMessage):
+    fp: str
+    text: str
+    lang: str
+    ts: float
 
-BATCH_SIZE = Histogram(
-    'batch_embedder_batch_size',
-    'Size of received batches'
-)
+# queue for the batch
+pending: deque[CleanMsg] = deque()
 
-PROCESSING_TIME = Histogram(
-    'batch_embedder_processing_seconds',
-    'Time spent processing batches'
-)
+# ───────────────── novelty calc ──────────────────────────
+def novelty(vec: List[float]) -> float:
+    hits = qdrant.search(
+        collection_name="concepts",
+        query_vector=vec,
+        limit=3,
+        with_payload=False
+    )
+    nearest = hits[0].score if hits else 0.0
+    return max(0.0, 1 - nearest)
 
-# Initialize Redis client
-redis_client = redis.from_url(os.getenv("REDIS_URL", "redis://redis:6379"))
+# ───────────────── handler ───────────────────────────────
+@with_retry(bus, INGEST_STREAM)
+async def on_clean(data: dict):
+    msg = CleanMsg(**data)
+    pending.append(msg)
 
-# Initialize bus client and model
-MODEL = SentenceTransformer(os.getenv("EMBED_MODEL", "all-MiniLM-L6-v2"))
-bus = BusClient(redis_url=os.getenv("REDIS_URL", "redis://redis:6379"))
-TRAIN_STREAM = "trainer.vectors"
+async def batch_loop():
+    while True:
+        await asyncio.sleep(BATCH_SEC)
+        if not pending: 
+            continue
+        batch, vecs, fps, metas = [], [], [], []
+        while pending and len(batch) < MAX_BATCH:
+            m = pending.popleft()
+            v = embedder.encode(m.text, convert_to_numpy=True).tolist()
+            vecs.append(v)
+            fps.append(m.fp)
+            metas.append({"lang": m.lang, "novelty": novelty(v)})
+            batch.append(m)
+        await post_batch(fps, vecs, metas)
+        EMBED_BATCHES.inc()
+        EMBED_VECTORS.inc(len(batch))
 
-class TrainBatch(BaseModel):
-    batch_id: str
-    embed_ids: list[str]
-    vectors: list[list[float]]
-
-class HealthResponse(BaseModel):
-    status: str
-    dependencies: Dict[str, str]
-
-@app.get("/health", response_model=HealthResponse)
-async def health_check():
-    """Health check endpoint that verifies Redis and bus connections"""
-    try:
-        # Check Redis connection
-        await redis_client.ping()
-        # Check bus connection
-        await bus.ping()
-        return HealthResponse(
-            status="healthy",
-            dependencies={
-                "redis": "connected",
-                "bus": "connected"
-            }
-        )
-    except Exception as e:
-        logger.error(f"Health check failed: {e}")
-        raise HTTPException(
-            status_code=503,
-            detail={
-                "status": "unhealthy",
-                "error": str(e)
-            }
-        )
-
-@app.post("/train_batch")
-async def train(batch: TrainBatch):
-    """Process a batch of vectors and forward to trainer"""
-    try:
-        with PROCESSING_TIME.time():
-            # Validate batch
-            if not batch.embed_ids or not batch.vectors:
-                raise HTTPException(status_code=400, detail="Empty batch")
-            if len(batch.embed_ids) != len(batch.vectors):
-                raise HTTPException(status_code=400, detail="Mismatched batch sizes")
-                
-            # Forward to trainer stream
-            await bus.publish(TRAIN_STREAM, batch.dict())
-            
-            # Update metrics
-            BATCHES_RECEIVED.inc()
-            BATCH_SIZE.observe(len(batch.embed_ids))
-            
-            logger.info(f"Forwarded batch {batch.batch_id} with {len(batch.embed_ids)} vectors")
-            return {"status": "queued", "batch_id": batch.batch_id}
-            
-    except Exception as e:
-        logger.error(f"Error processing batch: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-async def handle_raw_html(msg):
-    data = msg.data
-    url = data.get("url")
-    html = data.get("html")
-    fp = data.get("fp")
-    ts = data.get("ts")
-    if not html or not url or not fp:
-        logger.warning(f"Malformed ingest.raw_html message: {data}")
-        return
-    # Embed html (simple: use first 1000 chars)
-    text = html[:1000]
-    vector = MODEL.encode(text).tolist()
-    batch = {
-        "batch_id": f"html-{fp}-{ts}",
-        "embed_ids": [fp],
-        "vectors": [vector]
+@TRAIN_POST.time()
+async def post_batch(fps, vecs, metas):
+    payload = {
+        "batch_id": uuid.uuid4().hex,
+        "embed_ids": fps,
+        "vectors": vecs,
+        "meta": metas
     }
-    await bus.publish(TRAIN_STREAM, batch)
-    logger.info(f"Embedded and forwarded HTML for {url} (fp={fp})")
+    async with httpx.AsyncClient(timeout=60) as cli:
+        r = await cli.post(TRAIN_URL, json=payload)
+        r.raise_for_status()
 
-async def handle_raw_pdf(msg):
-    data = msg.data
-    file_id = data.get("file_id")
-    fp = data.get("fp")
-    ts = data.get("ts")
-    if not file_id or not fp:
-        logger.warning(f"Malformed ingest.raw_pdf message: {data}")
-        return
-    # Simulate embedding (real: load and embed PDF)
-    vector = [0.0] * MODEL.get_sentence_embedding_dimension()
-    batch = {
-        "batch_id": f"pdf-{fp}-{ts}",
-        "embed_ids": [fp],
-        "vectors": [vector]
-    }
-    await bus.publish(TRAIN_STREAM, batch)
-    logger.info(f"Forwarded PDF for {file_id} (fp={fp})")
-
-@app.on_event("startup")
-async def startup_event():
-    await bus.connect()
-    # Start consumers for both streams
-    import asyncio
-    asyncio.create_task(bus.consume(
-        stream="ingest.raw_html",
+# ───────────────── main ──────────────────────────────────
+async def main():
+    asyncio.create_task(
+        bus.consume(
+            stream=INGEST_STREAM,
         group="embed",
-        consumer="batch-embedder",
-        handler=handle_raw_html,
-        block_ms=1000,
-        count=1
-    ))
-    asyncio.create_task(bus.consume(
-        stream="ingest.raw_pdf",
-        group="embed",
-        consumer="batch-embedder",
-        handler=handle_raw_pdf,
-        block_ms=1000,
-        count=1
-    ))
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Close Redis connection on shutdown"""
-    await bus.close()
+            consumer=os.getenv("HOSTNAME","embedder"),
+            handler=on_clean
+        )
+    )
+    asyncio.create_task(batch_loop())
+    while True:  # keep service alive
+        await asyncio.sleep(3600)
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8709) 
+    logging.basicConfig(level=logging.INFO)
+    asyncio.run(main()) 

@@ -1,0 +1,74 @@
+groups:
+  - name: critical_alerts
+    rules:
+      - alert: ServiceHealthCritical
+        expr: service_health == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service health check failed"
+          description: "Service {{ $labels.service }} health check is failing"
+
+      - alert: HighConceptDrift
+        expr: concept_drift_score > 0.3
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High concept drift detected"
+          description: "Concept {{ $labels.concept }} drift score is {{ $value }}"
+
+      - alert: HighCrawlLatency
+        expr: histogram_quantile(0.95, rate(crawl_latency_seconds_bucket[5m])) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High crawl latency"
+          description: "p95 crawl latency is {{ $value }}s"
+
+      - alert: TaskQueueOverflow
+        expr: task_queue_depth > 500
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Task queue is overflowing"
+          description: "Queue depth is {{ $value }} tasks"
+
+      - alert: HighMemoryUsage
+        expr: memory_rss_mb > 384
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage"
+          description: "Service {{ $labels.service }} using {{ $value }}MB RSS"
+
+      - alert: WebSocketDisconnects
+        expr: rate(websocket_disconnects_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "WebSocket disconnects detected"
+          description: "{{ $value }} disconnects per second"
+
+      - alert: RedisLatencyHigh
+        expr: redis_operation_duration_seconds > 0.1
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Redis latency"
+          description: "Redis operation taking {{ $value }}s"
+
+      - alert: QdrantLatencyHigh
+        expr: qdrant_operation_duration_seconds > 0.2
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Qdrant latency"
+          description: "Qdrant operation taking {{ $value }}s" 

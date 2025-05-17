@@ -1,0 +1,122 @@
+name: Snapshot Replay Test
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/**'
+      - 'services/**'
+      - 'ops/**'
+      - '.github/workflows/replay.yml'
+    branches: [ main ]
+
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    services:
+      redis:
+        image: redis:7.2-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+          
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r tests/requirements.txt
+        
+    - name: Make scripts executable
+      run: |
+        chmod +x scripts/*.sh
+        
+    - name: Start test stack
+      run: |
+        docker compose up -d redis concept-dictionary concept-trainer-growable
+        ./scripts/wait_for_services.sh redis:6379 concept-dictionary:8500 concept-trainer-growable:8710
+        
+    - name: Generate test data
+      run: |
+        # Add test messages to streams
+        docker compose exec redis redis-cli XADD ingest.crawl * url test title TEST vec_id 1 ts 1
+        docker compose exec redis redis-cli XADD ingest.pdf * url test.pdf title TEST_PDF vec_id 2 ts 2
+        docker compose exec redis redis-cli XADD output.generated * query test response TEST confidence 0.9 ts 3
+        
+        # Create test adapter
+        docker compose exec concept-trainer-growable curl -X POST http://localhost:8710/adapters/test -d '{"name": "test"}'
+        
+    - name: Take snapshot
+      run: |
+        ./scripts/freeze.sh
+        
+    - name: Verify snapshot
+      run: |
+        SNAP=$(ls lumina-snapshot-*.tar.gz | tail -n 1)
+        if [ ! -f "$SNAP" ]; then
+          echo "❌ Snapshot file not found"
+          exit 1
+        fi
+        echo "✅ Found snapshot: $SNAP"
+        
+    - name: Tear down stack
+      run: |
+        docker compose down -v
+        
+    - name: Restore from snapshot
+      run: |
+        SNAP=$(ls lumina-snapshot-*.tar.gz | tail -n 1)
+        ./scripts/restore.sh "$SNAP"
+        
+    - name: Verify restore
+      run: |
+        # Wait for services
+        ./scripts/wait_for_services.sh redis:6379 concept-dictionary:8500 concept-trainer-growable:8710
+        
+        # Verify stream contents
+        echo "▶ Verifying stream contents..."
+        for stream in ingest.crawl ingest.pdf output.generated; do
+          count=$(docker compose exec redis redis-cli XLEN "$stream")
+          if [ "$count" -eq 0 ]; then
+            echo "❌ Stream $stream is empty after restore"
+            exit 1
+          fi
+          echo "✅ Stream $stream has $count messages"
+        done
+        
+        # Verify adapter
+        echo "▶ Verifying adapter..."
+        if ! docker compose exec concept-trainer-growable curl -s http://localhost:8710/adapters/test | grep -q "test"; then
+          echo "❌ Test adapter not found after restore"
+          exit 1
+        fi
+        echo "✅ Test adapter found"
+        
+    - name: Upload logs
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: replay-logs
+        path: |
+          services/*/logs/
+          tests/logs/
+        if-no-files-found: warn
+        
+    - name: Cleanup
+      if: always()
+      run: |
+        docker compose down -v
+        rm -f lumina-snapshot-*.tar.gz 

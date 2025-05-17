@@ -1,3 +1,7 @@
 httpx>=0.24.0
 # Uncomment if you want direct Neo4j integration
-neo4j>=5.0.0 
+neo4j>=5.0.0
+qdrant-client>=1.6.0
+pydantic==2.6.1
+pydantic-settings==2.2.1
+typing-extensions>=4.2.0 

@@ -17,7 +17,7 @@ from lumina_core.common.bus import BusClient
 from lumina_core.common.retry import with_retry
 
 from sentence_transformers import SentenceTransformer
-from lumina_core.common.bus import StreamMessage
+from lumina_core.common.stream_message import StreamMessage
 import httpx
 
 # Configure logging
