@@ -9,6 +9,8 @@ from typing import Dict, Optional, Any, List
 from lumina_core.common.bus import BusClient, StreamMessage
 from .db import redis_async_client, qdrant_client, model, ConceptDB, ConceptMetadata
 from pydantic import BaseModel
+from prometheus_client import Counter, Gauge
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -21,32 +23,34 @@ bus = BusClient(redis_url=os.getenv("REDIS_URL", "redis://:02211998@redis:6379")
 # Track Redis connection state
 _redis_connected = False
 
+# Track service pause state
+_service_paused = False
+SYNC_THRESHOLD = 10  # Threshold below which we consider sync healthy
+SYNC_CHECK_INTERVAL = 30  # Check sync status every 30 seconds
+
+# Metrics
+DRIFT = Counter('dict_qdrant_drift_total', 'Total number of concept-vector mismatches detected')
+REPAIR = Counter('dict_qdrant_repair_total', 'Total number of repairs performed')
+SYNC_DIFF = Gauge('dict_qdrant_sync_difference', 'Current difference between Redis and Qdrant concept counts')
+RECONCILING = Gauge('dict_qdrant_reconciling', 'Whether a reconciliation is currently running (0/1)')
+
+# Constants
+BATCH_SIZE = 1000  # Number of vectors to process in each batch
+
 async def ensure_redis_connection():
-    """Ensure Redis connection is established and maintained."""
+    """Ensure Redis connection is established."""
     global _redis_connected
-    max_retries = 3
-    retry_delay = 5  # seconds
-    
-    for attempt in range(max_retries):
-        try:
-            if not _redis_connected:
-                logger.info(f"[DEBUG] Attempting Redis connection (attempt {attempt + 1}/{max_retries})...")
-                await bus.connect()
-                # Verify connection with ping
-                await redis_async_client.ping()
-                _redis_connected = True
-                logger.info("Connected to Redis (async)")
-                return True
-        except Exception as e:
-            logger.error(f"Failed to connect to Redis (attempt {attempt + 1}/{max_retries}): {e}")
-            _redis_connected = False
-            if attempt < max_retries - 1:
-                logger.info(f"Retrying in {retry_delay} seconds...")
-                await asyncio.sleep(retry_delay)
-            else:
-                logger.error("Max retries reached for Redis connection")
-                raise
-    return False
+    try:
+        await redis_async_client.ping()
+        _redis_connected = True
+        return True
+    except Exception as e:
+        logger.error(f"Redis connection error: {e}")
+        _redis_connected = False
+        return False
+
+# Initialize Redis connection
+asyncio.create_task(ensure_redis_connection())
 
 class CrawlIn(BaseModel):
     """Message from crawler."""
@@ -85,9 +89,14 @@ async def process_concept(
     embedding: Optional[List[float]] = None,
     license_type: Optional[str] = None
 ) -> Optional[ConceptOut]:
-    """Process a concept with deduplication and license checking."""
+    """Process a concept with deduplication and license checking. If embedding is provided but its dimension is not 768, it is removed so that the concept is re-embedded (via the concept-dictionary's model) later."""
     try:
-        # Add concept with deduplication
+        # Remove embedding if its dimension is not 768 (so that it is re-embedded later)
+        if embedding is not None and len(embedding) != 768:
+            logger.warning(f"Removing embedding for concept {term} (dimension {len(embedding)} != 768). It will be re-embedded.")
+            embedding = None
+
+        # Add concept with deduplication (embedding is now None if it was removed)
         success, result = await db.add_concept(
             term=term,
             definition=definition,
@@ -107,7 +116,7 @@ async def process_concept(
             logger.error(f"Failed to retrieve concept after adding: {term}")
             return None
 
-        # Ensure concept is in Qdrant
+        # Ensure concept is in Qdrant (if embedding is available)
         try:
             # Check if concept exists in Qdrant
             point = await qdrant_client.retrieve(
@@ -115,25 +124,23 @@ async def process_concept(
                 ids=[term],
                 with_payload=False
             )
-            
-            if not point:
-                # Add to Qdrant if not present
-                if embedding:
-                    await qdrant_client.upsert(
-                        collection_name="concepts",
-                        points=[{
-                            "id": term,
-                            "vector": embedding,
-                            "payload": {
-                                "term": term,
-                                "definition": definition,
-                                "metadata": meta
-                            }
-                        }]
-                    )
-                    logger.info(f"Added concept {term} to Qdrant")
-                else:
-                    logger.warning(f"No embedding available for concept {term}, skipping Qdrant sync")
+            if not point and concept.embedding:
+                # Add to Qdrant if not present and embedding is available (now guaranteed to be 768)
+                await qdrant_client.upsert(
+                    collection_name="concepts",
+                    points=[{
+                        "id": term,
+                        "vector": concept.embedding,
+                        "payload": {
+                            "term": term,
+                            "definition": definition,
+                            "metadata": meta
+                        }
+                    }]
+                )
+                logger.info(f"Added concept {term} to Qdrant (embedding dimension: {len(concept.embedding)})")
+            elif not concept.embedding:
+                logger.warning(f"No embedding (or removed embedding) for concept {term}, skipping Qdrant sync.")
         except Exception as e:
             logger.error(f"Error syncing concept {term} to Qdrant: {e}")
             # Continue processing even if Qdrant sync fails
@@ -244,10 +251,242 @@ async def handle_pdf_message(msg: PdfIn) -> None:
     except Exception as e:
         logger.error(f"Error handling PDF message: {e}")
 
+async def reconcile() -> None:
+    """Reconcile concepts between Redis and Qdrant with version tracking."""
+    try:
+        RECONCILING.set(1)
+        logger.info("Starting reconciliation between Redis and Qdrant")
+        
+        # Set crawler pause flag
+        await redis_async_client.set("crawler.PAUSE", "1")
+        
+        # Get all concept keys from Redis
+        concept_keys = []
+        async for key in redis_async_client.scan_iter("concept:*"):
+            if await is_concept_key(key):
+                concept_keys.append(key)
+        
+        logger.info(f"Found {len(concept_keys)} concepts in Redis")
+        
+        # Collect concepts and their data
+        redis_concepts = {}
+        for key in concept_keys:
+            try:
+                data = await redis_async_client.get(key)
+                if data:
+                    concept = json.loads(data)
+                    if concept.get("embedding"):  # Only process concepts with embeddings
+                        redis_concepts[key] = concept
+            except Exception as e:
+                logger.error(f"Error reading concept {key}: {e}")
+        
+        # Get all points from Qdrant with version info
+        qdrant_points = {}
+        offset = None
+        while True:
+            try:
+                result, next_page = await qdrant_client.scroll(
+                    collection_name="concepts",
+                    limit=1000,
+                    with_payload=True,
+                    with_vectors=True,
+                    offset=offset
+                )
+                
+                if not result:
+                    break
+                
+                for point in result:
+                    payload = point.payload or {}
+                    term = payload.get("term") or str(point.id)
+                    if term:
+                        qdrant_points[term] = {
+                            "point": point,
+                            "version": payload.get("version", 0),
+                            "sync_state": payload.get("sync_state", {})
+                        }
+                
+                if not next_page:
+                    break
+                offset = next_page
+                
+            except Exception as e:
+                logger.error(f"Error scrolling Qdrant points: {e}")
+                break
+        
+        logger.info(f"Found {len(qdrant_points)} concepts in Qdrant")
+        
+        # Track reconciliation metrics
+        stats = {
+            "missing_vectors": 0,
+            "orphan_vectors": 0,
+            "version_mismatches": 0,
+            "sync_errors": 0,
+            "healed": 0
+        }
+        
+        # Process Redis concepts
+        for key, concept in redis_concepts.items():
+            term = key.replace("concept:", "")
+            qdrant_data = qdrant_points.get(term)
+            
+            try:
+                if not qdrant_data:
+                    # Concept missing in Qdrant
+                    stats["missing_vectors"] += 1
+                    await qdrant_client.upsert(
+                        collection_name="concepts",
+                        points=[{
+                            "id": term,
+                            "vector": concept["embedding"],
+                            "payload": {
+                                **concept,
+                                "term": term,
+                                "version": concept.get("version", 1),
+                                "sync_state": {
+                                    "redis_synced": True,
+                                    "qdrant_synced": True,
+                                    "last_sync_attempt": datetime.utcnow().isoformat(),
+                                    "sync_error": None
+                                }
+                            }
+                        }]
+                    )
+                    stats["healed"] += 1
+                elif qdrant_data["version"] < concept.get("version", 1):
+                    # Version mismatch - Redis has newer version
+                    stats["version_mismatches"] += 1
+                    await qdrant_client.upsert(
+                        collection_name="concepts",
+                        points=[{
+                            "id": term,
+                            "vector": concept["embedding"],
+                            "payload": {
+                                **concept,
+                                "term": term,
+                                "version": concept.get("version", 1),
+                                "sync_state": {
+                                    "redis_synced": True,
+                                    "qdrant_synced": True,
+                                    "last_sync_attempt": datetime.utcnow().isoformat(),
+                                    "sync_error": None
+                                }
+                            }
+                        }]
+                    )
+                    stats["healed"] += 1
+                elif not qdrant_data["sync_state"].get("qdrant_synced", True):
+                    # Sync state indicates Qdrant needs update
+                    stats["sync_errors"] += 1
+                    await qdrant_client.upsert(
+                        collection_name="concepts",
+                        points=[{
+                            "id": term,
+                            "vector": concept["embedding"],
+                            "payload": {
+                                **concept,
+                                "term": term,
+                                "version": concept.get("version", 1),
+                                "sync_state": {
+                                    "redis_synced": True,
+                                    "qdrant_synced": True,
+                                    "last_sync_attempt": datetime.utcnow().isoformat(),
+                                    "sync_error": None
+                                }
+                            }
+                        }]
+                    )
+                    stats["healed"] += 1
+            except Exception as e:
+                logger.error(f"Error reconciling concept {term}: {e}")
+                continue
+        
+        # Find and remove orphan vectors
+        redis_terms = {key.replace("concept:", "") for key in redis_concepts.keys()}
+        orphan_vectors = []
+        for term, data in qdrant_points.items():
+            if term not in redis_terms:
+                orphan_vectors.append(data["point"].id)
+                stats["orphan_vectors"] += 1
+        
+        if orphan_vectors:
+            try:
+                await qdrant_client.delete(
+                    collection_name="concepts",
+                    points_selector={"ids": orphan_vectors}
+                )
+                logger.info(f"Removed {len(orphan_vectors)} orphan vectors from Qdrant")
+            except Exception as e:
+                logger.error(f"Error removing orphan vectors: {e}")
+        
+        # Log reconciliation results
+        logger.info(
+            f"Reconciliation completed:\n"
+            f"  - Missing vectors added: {stats['missing_vectors']}\n"
+            f"  - Version mismatches fixed: {stats['version_mismatches']}\n"
+            f"  - Sync errors resolved: {stats['sync_errors']}\n"
+            f"  - Orphan vectors removed: {stats['orphan_vectors']}\n"
+            f"  - Total concepts healed: {stats['healed']}"
+        )
+        
+        # Update metrics
+        REPAIR.labels(type="missing").inc(stats["missing_vectors"])
+        REPAIR.labels(type="version").inc(stats["version_mismatches"])
+        REPAIR.labels(type="sync").inc(stats["sync_errors"])
+        REPAIR.labels(type="orphan").inc(stats["orphan_vectors"])
+        
+    except Exception as e:
+        logger.error(f"Error during reconciliation: {e}")
+    finally:
+        RECONCILING.set(0)
+        # Clear crawler pause flag
+        await redis_async_client.delete("crawler.PAUSE")
+
+async def check_sync_status() -> None:
+    """Check sync status between Redis and Qdrant."""
+    try:
+        redis_count = len(await redis_async_client.keys("concept:*"))
+        qdrant_count = len(qdrant_client.scroll(
+            collection_name="concepts",
+            limit=1,  # We only need the count
+            with_payload=False
+        )[0])
+        
+        sync_diff = abs(redis_count - qdrant_count)
+        SYNC_DIFF.set(sync_diff)
+        
+        if sync_diff > SYNC_THRESHOLD:
+            logger.warning(f"Sync difference detected: {sync_diff} concepts")
+            # Trigger reconciliation if not already running
+            if RECONCILING._value.get() == 0:  # Access the internal value
+                asyncio.create_task(reconcile())
+        
+    except Exception as e:
+        logger.error(f"Error checking sync status: {e}")
+
+async def periodic_sync_check() -> None:
+    """Periodically check sync status."""
+    while True:
+        await check_sync_status()
+        await asyncio.sleep(SYNC_CHECK_INTERVAL)
+
 async def handle_message(msg: StreamMessage) -> None:
     """Handle incoming stream messages."""
+    global _service_paused
+    
+    # Check if service is paused
+    if _service_paused:
+        logger.warning(f"Skipping message from {msg.stream} - service is paused due to sync issues")
+        return
+        
     logger.info(f"[DEBUG] Received message in handle_message from stream {msg.stream}: {msg}")
     try:
+        # Check sync status before processing
+        await check_sync_status()
+        if _service_paused:
+            logger.warning(f"Skipping message from {msg.stream} - service is paused due to sync issues")
+            return
+            
         data = msg.data
         if isinstance(data, str):
             try:
@@ -276,6 +515,9 @@ async def start_consumers():
     """Start consuming from streams."""
     global _redis_connected
     logger.info("[DEBUG] Entered start_consumers() - launching consumer loop...")
+    
+    # Start the periodic sync check
+    asyncio.create_task(periodic_sync_check())
     
     while True:
         try:
@@ -309,6 +551,18 @@ async def start_consumers():
         except Exception as e:
             logger.error(f"Error in consumer loop: {e}", exc_info=True)
             await asyncio.sleep(1)  # Prevent tight loop on errors
+
+async def consume_concept_new():
+    while True:
+        try:
+            # Poll for new messages on stream "concept:new" (group "concept-dict")
+            if not (msg := await redis_async_client.xreadgroup("concept-dict", "concept-dict-consumer", {"concept:new": ">"}, count=1, block=1000)):
+                logger.error("No new message received on stream concept:new (group concept-dict).")
+            else:
+                logger.info(f"Received new concept message on stream concept:new: {msg}")
+        except Exception as e:
+            logger.error(f"Error consuming concept:new stream: {e}")
+            await asyncio.sleep(1)
 
 if __name__ == "__main__":
     try:
