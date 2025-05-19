@@ -18,6 +18,7 @@ class RedisClient:
         self._redis = None
         self._lock = asyncio.Lock()
         self.bus = BusClient(redis_url=redis_url)
+        self._bus_connected = False
         self.system_crawl_channel = "lumina.system.crawl"
         self.crawl_queue = "crawler.queue"
         self.dead_letter_queue = "crawler.deadletter"
@@ -37,7 +38,7 @@ class RedisClient:
         await self.bus.close()
         
     async def connect(self):
-        """Connect to Redis if not already connected."""
+        """Connect to Redis and BusClient if not already connected."""
         if not self._redis:
             try:
                 self._redis = redis.from_url(
@@ -51,11 +52,24 @@ class RedisClient:
                 logger.error(f"Failed to connect to Redis: {e}")
                 raise
 
+        if not self._bus_connected:
+            try:
+                await self.bus.connect()
+                self._bus_connected = True
+                logger.info("Connected to BusClient")
+            except Exception as e:
+                logger.error(f"Failed to connect BusClient: {e}")
+                raise
+
     async def disconnect(self):
-        """Disconnect from Redis"""
+        """Disconnect from Redis and BusClient"""
         if self._redis:
             await self._redis.close()
             self._redis = None
+        if self._bus_connected:
+            await self.bus.close()
+            self._bus_connected = False
+            logger.info("Disconnected from BusClient")
             
     async def get_cache(self, key: str) -> Optional[Dict[str, Any]]:
         """Get value from cache"""
@@ -498,6 +512,10 @@ class RedisClient:
     async def publish_crawl_result(self, concept: str, result: Dict) -> bool:
         """Publish crawl result to ingest.crawl stream."""
         try:
+            self.logger.info(f"Attempting to publish crawl result for {concept} to ingest.crawl stream")
+            # Ensure connections are established
+            await self.connect()
+            
             # Prepare ingest.crawl message
             message = {
                 "url": result.get("url", ""),
@@ -512,9 +530,10 @@ class RedisClient:
                 data=message,
                 maxlen=1000  # Keep last 1000 results
             )
+            self.logger.info(f"Successfully published crawl result for {concept} to ingest.crawl stream")
             return True
         except Exception as e:
-            logger.error(f"Error publishing crawl result: {e}")
+            self.logger.error(f"Error publishing crawl result for {concept}: {e}")
             return False
 
     async def get_consumer_lag(self, queue_name: str, consumer_group: str) -> int:
@@ -616,3 +635,31 @@ class RedisClient:
         except Exception as e:
             logger.error(f"Error getting length of stream {stream}: {e}")
             return 0 
+    async def xack(self, stream: str, group: str, message_id: str) -> int:
+        """Acknowledge a message in a stream."""
+        try:
+            if not self._redis:
+                await self.connect()
+            return await self._redis.xack(stream, group, message_id)
+        except Exception as e:
+            logger.error(f"Error acknowledging message {message_id} in stream {stream}: {e}")
+            raise
+
+    async def xlen(self, stream: str) -> int:
+        """Get the length of a stream."""
+        try:
+            if not self._redis:
+                await self.connect()
+            return await self._redis.xlen(stream)
+        except Exception as e:
+            logger.error(f"Error getting length of stream {stream}: {e}")
+            return 0 
+
+    async def add_concept(self, term: str, data: dict) -> bool:
+        """Add or update a concept directly in Redis."""
+        try:
+            await self._redis.set(f"concept:{term}", json.dumps(data))
+            return True
+        except Exception as e:
+            logger.error(f"Error adding concept {term} to Redis: {e}")
+            return False 

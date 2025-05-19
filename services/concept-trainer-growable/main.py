@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends
 from pydantic import BaseModel
-from prometheus_client import Counter, Gauge, Histogram, start_http_server
+from prometheus_client import Counter, Gauge, Histogram, start_http_server, CollectorRegistry
 from prometheus_fastapi_instrumentator import Instrumentator
 from starlette.middleware.cors import CORSMiddleware
 import redis.asyncio as aioredis
@@ -16,9 +16,14 @@ import numpy as np
 from contextlib import asynccontextmanager
 import uvicorn
 import httpx
+from time import sleep
 
 from model import GrowableConceptNet
 from routes import router as model_router
+from concept_pipeline import GrowableConceptPipeline
+from services.crawler.app.core.concept_client import ConceptClient
+from services.crawler.app.core.embeddings import CustomOllamaEmbeddings
+from services.crawler.app.core.sync_manager import SyncManager
 
 # Configure logging
 logging.basicConfig(
@@ -43,7 +48,7 @@ TRAINING_INTERVAL = int(os.getenv("TRAINING_INTERVAL", "60"))  # seconds
 GROWTH_THRESHOLD = float(os.getenv("GROWTH_THRESHOLD", "0.1"))
 API_PORT = int(os.getenv("API_PORT", "8710"))
 METRICS_PORT = int(os.getenv("METRICS_PORT", "8711"))
-DICT_URL = os.getenv("DICT_URL", "http://concept-dictionary:8828")
+DICT_URL = os.getenv("DICT_URL", "http://concept-dict:8828")
 AUTO_INGEST_INTERVAL = int(os.getenv("AUTO_INGEST_INTERVAL", "120"))  # seconds
 REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", None)
 
@@ -97,6 +102,10 @@ class GrowthRequest(BaseModel):
 redis_client = None
 qdrant_client = None
 model = None
+concept_client = None
+embeddings = None
+sync_manager = None
+pipeline = None
 training_queue = asyncio.Queue()
 is_training = False
 training_lock = asyncio.Lock()
@@ -115,37 +124,62 @@ async def auto_ingest_from_concept_dictionary():
     global last_concept_updates
     while True:
         try:
-            async with httpx.AsyncClient() as client:
-                resp = await client.get(f"{DICT_URL}/concepts")
-                if resp.status_code == 200:
-                    concepts = resp.json()
-                    new_count = 0
-                    for concept in concepts:
-                        cid = concept.get("term")
-                        last_updated = concept.get("last_updated") or concept.get("updated_at")
-                        if not cid or not last_updated:
-                            continue
-                        # Only process if new or updated
-                        if cid not in last_concept_updates or last_concept_updates[cid] != last_updated:
-                            vectors = get_concept_vectors(concept)
-                            if vectors:
-                                batch = VectorBatch(
-                                    concept_id=cid,
-                                    vectors=vectors,
-                                    labels=None,
-                                    metadata=concept.get("metadata")
-                                )
-                                await training_queue.put(batch)
-                                last_concept_updates[cid] = last_updated
-                                new_count += 1
-                    if new_count:
-                        logger.info(f"Auto-ingested {new_count} new/updated concepts from Concept Dictionary.")
-                        await trigger_training()
-                else:
-                    logger.warning(f"Failed to fetch concepts from Concept Dictionary: {resp.status_code}")
+            async with httpx.AsyncClient(timeout=30.0) as client:  # Add timeout
+                try:
+                    resp = await client.get(f"{DICT_URL}/concepts")
+                    if resp.status_code == 200:
+                        concepts = resp.json()
+                        new_count = 0
+                        for concept in concepts:
+                            try:
+                                cid = concept.get("term")
+                                last_updated = concept.get("last_updated") or concept.get("updated_at")
+                                if not cid or not last_updated:
+                                    logger.debug(f"Skipping concept without term or last_updated: {concept}")
+                                    continue
+                                
+                                # Only process if new or updated
+                                if cid not in last_concept_updates or last_concept_updates[cid] != last_updated:
+                                    vectors = get_concept_vectors(concept)
+                                    if vectors:
+                                        batch = VectorBatch(
+                                            concept_id=cid,
+                                            vectors=vectors,
+                                            labels=None,
+                                            metadata=concept.get("metadata")
+                                        )
+                                        await training_queue.put(batch)
+                                        last_concept_updates[cid] = last_updated
+                                        new_count += 1
+                                        logger.info(f"Queued concept {cid} for training")
+                                    else:
+                                        logger.debug(f"No vectors found for concept {cid}")
+                            except Exception as e:
+                                logger.error(f"Error processing concept {concept.get('term', 'unknown')}: {str(e)}")
+                                continue
+                        
+                        if new_count:
+                            logger.info(f"Auto-ingested {new_count} new/updated concepts from Concept Dictionary")
+                            await trigger_training()
+                        else:
+                            logger.debug("No new concepts to ingest")
+                    else:
+                        logger.warning(f"Failed to fetch concepts from Concept Dictionary: {resp.status_code} - {resp.text}")
+                except httpx.ConnectError as e:
+                    logger.warning(f"Cannot connect to Concept Dictionary at {DICT_URL}: {str(e)}")
+                except httpx.TimeoutException as e:
+                    logger.warning(f"Timeout connecting to Concept Dictionary at {DICT_URL}: {str(e)}")
+                except Exception as e:
+                    logger.error(f"Unexpected error during concept dictionary fetch: {str(e)}")
         except Exception as e:
-            logger.error(f"Auto-ingest error: {e}")
-        await asyncio.sleep(AUTO_INGEST_INTERVAL)
+            logger.error(f"Auto-ingest error: {str(e)}", exc_info=True)
+        
+        # Sleep before next attempt, with exponential backoff if there were errors
+        sleep_time = AUTO_INGEST_INTERVAL
+        if len(last_concept_updates) == 0:  # If we haven't successfully ingested anything yet
+            sleep_time = min(sleep_time * 2, 300)  # Double the interval up to 5 minutes
+        logger.debug(f"Sleeping for {sleep_time} seconds before next auto-ingest attempt")
+        await asyncio.sleep(sleep_time)
 
 async def trigger_training():
     global is_training
@@ -176,46 +210,80 @@ async def trigger_training():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Lifespan context started: initializing global state.")
-    global redis_client, qdrant_client, model
+    """Startup and shutdown events"""
+    global redis_client, qdrant_client, model, concept_client, embeddings, sync_manager, pipeline
     
-    # Initialize Redis client with optional password
-    redis_url = f"redis://{REDIS_HOST}:{REDIS_PORT}"
-    if REDIS_PASSWORD:
-        redis_url = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}"
-    redis_client = aioredis.from_url(redis_url, encoding="utf-8", decode_responses=True)
-    logger.info(f"Connected to Redis at {REDIS_HOST}:{REDIS_PORT}{' with password' if REDIS_PASSWORD else ''}")
+    # Initialize Redis client
+    redis_client = await aioredis.Redis(
+        host=REDIS_HOST,
+        port=REDIS_PORT,
+        password=REDIS_PASSWORD,
+        decode_responses=True
+    )
     
-    # Initialize Qdrant client with optional API key
-    if QDRANT_API_KEY:
-        qdrant_client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT, api_key=QDRANT_API_KEY)
-        logger.info(f"Connected to Qdrant at {QDRANT_HOST}:{QDRANT_PORT} with API key")
-    else:
-        qdrant_client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
-        logger.info(f"Connected to Qdrant at {QDRANT_HOST}:{QDRANT_PORT}")
+    # Initialize Qdrant client
+    qdrant_client = QdrantClient(
+        host=QDRANT_HOST,
+        port=QDRANT_PORT,
+        api_key=QDRANT_API_KEY
+    )
+    
+    # Initialize concept client
+    concept_client = ConceptClient(base_url=DICT_URL)
+    
+    # Initialize embeddings
+    embeddings = CustomOllamaEmbeddings()
     
     # Initialize model
     model = GrowableConceptNet(
         input_size=MODEL_INPUT_SIZE,
         hidden_sizes=[MODEL_INPUT_SIZE, MODEL_INPUT_SIZE // 2, MODEL_INPUT_SIZE // 4],
-        output_size=2,  # Binary classification
-        activation="relu",
+        output_size=2,  # Binary classification for now
         learning_rate=1e-4
     )
-    logger.info(f"Initialized model with input size {MODEL_INPUT_SIZE}")
     
-    # Start background tasks
-    asyncio.create_task(process_training_queue())
-    asyncio.create_task(monitor_concept_queue())
-    asyncio.create_task(auto_ingest_from_concept_dictionary())
+    # Load saved model if exists
+    try:
+        model.load_state_dict(torch.load("model_final.pth"))
+        logger.info("Loaded saved model state")
+    except:
+        logger.info("No saved model found, starting fresh")
+    
+    # Initialize sync manager
+    sync_manager = SyncManager(
+        concept_client=concept_client,
+        qdrant_client=qdrant_client,
+        sync_interval=3600.0  # 1 hour
+    )
+    
+    # Initialize and start pipeline
+    pipeline = GrowableConceptPipeline(
+        concept_client=concept_client,
+        embeddings=embeddings,
+        model=model,
+        sync_manager=sync_manager,
+        poll_interval=1.0,
+        growth_threshold=GROWTH_THRESHOLD
+    )
+    
+    # Start services
+    await sync_manager.start()
+    await pipeline.start()
+    
+    # Start metrics server
+    start_http_server(METRICS_PORT)
     
     yield
     
     # Cleanup
+    if pipeline:
+        await pipeline.stop()
+    if sync_manager:
+        await sync_manager.stop()
     if redis_client:
         await redis_client.close()
-    if qdrant_client:
-        qdrant_client.close()
+    if concept_client:
+        await concept_client.__aexit__(None, None, None)
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -234,34 +302,56 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Add Prometheus instrumentation
-Instrumentator().instrument(app).expose(app)
-
 # Mount routers
 app.include_router(model_router, prefix="/api/v1")
 
-# Health check endpoint
-@app.get("/health")
-async def health_check():
-    """Health check endpoint"""
-    if redis_client is None or qdrant_client is None:
-        logger.error("Health check failed: global state (redis_client or qdrant_client) is not initialized (lifespan context may not have run).")
-        raise HTTPException(status_code=503, detail="Service not fully initialized (global state (redis_client or qdrant_client) is None).")
-    try:
-        logger.info("[HEALTH] Checking Redis connection...")
-        await redis_client.ping()
-        logger.info("[HEALTH] Redis connection OK.")
-        logger.info("[HEALTH] Checking Qdrant connection...")
-        qdrant_client.get_collections()
-        logger.info("[HEALTH] Qdrant connection OK.")
-        return {"status": "healthy", "timestamp": datetime.now().isoformat()}
-    except Exception as e:
-        logger.error(f"[HEALTH] Health check failed: {e} (type: {type(e)})")
-        import traceback
-        logger.error(traceback.format_exc())
-        raise HTTPException(status_code=503, detail=str(e))
+# Setup Prometheus instrumentation if enabled
+if not os.getenv("DISABLE_METRICS", "").lower() in ("1", "true", "yes"):
+    instrumentator = Instrumentator()
+    instrumentator.instrument(app).expose(app)
 
-# Model endpoints
+@app.get("/health")
+async def health():
+    """Health check endpoint"""
+    return {
+        "status": "healthy",
+        "model_loaded": model is not None,
+        "pipeline_running": pipeline._running if pipeline else False,
+        "sync_manager_running": sync_manager._running if sync_manager else False,
+        "last_sync": sync_manager.last_sync_time.isoformat() if sync_manager and sync_manager.last_sync_time else None
+    }
+
+@app.get("/pipeline/status")
+async def pipeline_status():
+    """Get pipeline status and metrics"""
+    if not pipeline:
+        raise HTTPException(status_code=503, detail="Pipeline not initialized")
+        
+    return {
+        "running": pipeline._running,
+        "model_stats": model.get_network_stats() if model else None,
+        "last_sync": sync_manager.last_sync_time.isoformat() if sync_manager and sync_manager.last_sync_time else None,
+        "time_since_sync": sync_manager.time_since_last_sync.total_seconds() if sync_manager and sync_manager.time_since_last_sync else None
+    }
+
+@app.post("/pipeline/retry-failed")
+async def retry_failed():
+    """Retry failed concepts"""
+    if not pipeline:
+        raise HTTPException(status_code=503, detail="Pipeline not initialized")
+        
+    await pipeline.retry_failed_concepts()
+    return {"status": "retry_triggered"}
+
+@app.post("/pipeline/force-sync")
+async def force_sync():
+    """Force a sync between Redis and Qdrant"""
+    if not sync_manager:
+        raise HTTPException(status_code=503, detail="Sync manager not initialized")
+        
+    await sync_manager.force_sync()
+    return {"status": "sync_triggered"}
+
 @app.post("/model/train")
 async def train_model(batch: VectorBatch, background_tasks: BackgroundTasks):
     """Add a batch of vectors to the training queue"""
@@ -313,7 +403,6 @@ async def grow_model(request: GrowthRequest):
         logger.error(f"Error growing model: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-# Background tasks
 async def process_training_queue():
     """Process the training queue periodically"""
     global is_training
@@ -346,4 +435,8 @@ async def monitor_concept_queue():
                     pass
         except Exception as e:
             logger.error(f"Error monitoring concept queue: {str(e)}")
-        await asyncio.sleep(TRAINING_INTERVAL) 
+        await asyncio.sleep(TRAINING_INTERVAL)
+
+@app.on_event("startup")
+async def startup_event():
+    logger.info("Concept trainer growable startup event triggered. (The service will connect to qdrant and redis as soon as they are available.)") 

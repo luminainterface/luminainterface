@@ -19,15 +19,49 @@ from prometheus_client import Counter, Histogram
 from prometheus_fastapi_instrumentator import Instrumentator
 from output_types import GeneratedOutput, ConceptPayload, RewardUpdate, TrainerVectorBatch
 import redis
+import torch
+from transformers import AutoTokenizer
+from optimum.intel import OVModelForCausalLM
+from openvino.runtime import Core
 
 # Environment variables
 API_KEY = os.getenv("OUTPUT_ENGINE_API_KEY", "changeme")
-OLLAMA_URL = os.getenv("OLLAMA_URL", "http://ollama:11434")
 TEMP_DIR = os.getenv("TEMP_DIR", "/tmp/output-engine")
-DEBUG_NO_OLLAMA = os.getenv("DEBUG_NO_OLLAMA", "0") == "1"
 QDRANT_URL = os.getenv("QDRANT_URL", "http://qdrant:6333")
 REDIS_URL = os.getenv("REDIS_URL", "redis://:02211998@redis:6379")
 CONCEPT_DICT_URL = os.getenv("CONCEPT_DICT_URL", "http://concept-dictionary:8828")
+MODEL_PATH = os.getenv("MODEL_PATH", "/app/models/phi-2")
+DEVICE = os.getenv("DEVICE", "CPU")  # OpenVINO uses CPU, GPU, or NPU
+USE_NPU = os.getenv("USE_NPU", "0") == "1"
+
+# Initialize OpenVINO
+logger.info("Initializing OpenVINO...")
+ov_core = Core()
+available_devices = ov_core.available_devices
+logger.info(f"Available OpenVINO devices: {available_devices}")
+
+# Select device based on availability and preference
+if USE_NPU and "NPU" in available_devices:
+    DEVICE = "NPU"
+    logger.info("Using Intel NPU for inference")
+elif "GPU" in available_devices:
+    DEVICE = "GPU"
+    logger.info("Using Intel GPU for inference")
+else:
+    DEVICE = "CPU"
+    logger.info("Using CPU for inference")
+
+# Initialize model and tokenizer
+logger.info(f"Loading Phi-2 model on {DEVICE}...")
+tokenizer = AutoTokenizer.from_pretrained("microsoft/phi-2", trust_remote_code=True)
+
+# Load model with OpenVINO optimization
+model = OVModelForCausalLM.from_pretrained(
+    "microsoft/phi-2",
+    export=True,  # Export to OpenVINO format
+    device=DEVICE,
+    trust_remote_code=True
+)
 
 # Initialize clients
 qdrant_client = QdrantClient(url=QDRANT_URL)
@@ -122,42 +156,39 @@ async def update_concept_reward(term: str, increment: int = 1, reason: Optional[
         logger.error(f"Error updating reward for {term}: {e}")
         return False
 
-async def get_ollama_completion(prompt: str, max_retries: int = 2) -> str:
-    """Get completion from Ollama with retries."""
-    if DEBUG_NO_OLLAMA:
-        return "This is a stub narrative for testing."
-    
+async def get_model_completion(prompt: str, max_retries: int = 2) -> str:
+    """Get completion from Phi-2 model with OpenVINO optimization."""
     start_time = time.time()
     for attempt in range(max_retries):
         try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
-                response = await client.post(
-                    f"{OLLAMA_URL}/api/generate",
-                    json={
-                        "model": "mistral",
-                        "prompt": prompt,
-                        "stream": False,
-                        "options": {
-                            "num_predict": 5,
-                            "temperature": 0.7
-                        }
-                    }
-                )
-                response.raise_for_status()
-                result = response.json()
-                
-                # Calculate confidence based on response
-                confidence = min(1.0, max(0.0, result.get("confidence", 0.5)))
-                
-                # Log confidence level
-                if confidence >= 0.8:
-                    OUTPUT_GENERATED.labels(confidence_level="high").inc()
-                elif confidence >= 0.5:
-                    OUTPUT_GENERATED.labels(confidence_level="medium").inc()
-                else:
-                    OUTPUT_GENERATED.labels(confidence_level="low").inc()
-                
-                return result["response"]
+            inputs = tokenizer(prompt, return_tensors="pt")
+            
+            # Generate with OpenVINO optimized model
+            outputs = model.generate(
+                **inputs,
+                max_new_tokens=512,
+                temperature=0.7,
+                top_p=0.9,
+                do_sample=True,
+                pad_token_id=tokenizer.eos_token_id
+            )
+            
+            response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+            
+            # Calculate confidence based on response length and token probabilities
+            # Note: OpenVINO doesn't provide direct access to logits, so we use a simpler confidence metric
+            confidence = min(1.0, max(0.0, len(response) / 1000))  # Simple length-based confidence
+            
+            # Log confidence level
+            if confidence >= 0.8:
+                OUTPUT_GENERATED.labels(confidence_level="high").inc()
+            elif confidence >= 0.5:
+                OUTPUT_GENERATED.labels(confidence_level="medium").inc()
+            else:
+                OUTPUT_GENERATED.labels(confidence_level="low").inc()
+            
+            return response.replace(prompt, "").strip()
+            
         except Exception as e:
             logger.error(f"Failed to get completion (attempt {attempt+1}): {e}")
             if attempt == max_retries - 1:
@@ -180,9 +211,11 @@ async def generate_natural_language(analysis: ConceptAnalysis) -> tuple[str, flo
     3. Highlights key relationships and insights
     4. Concludes with a meaningful summary
     
-    Make the text engaging and easy to understand while maintaining accuracy."""
+    Make the text engaging and easy to understand while maintaining accuracy.
     
-    narrative = await get_ollama_completion(prompt)
+    Narrative:"""
+    
+    narrative = await get_model_completion(prompt)
     # Calculate confidence based on narrative length and content
     confidence = min(1.0, max(0.0, len(narrative) / 1000))  # Simple heuristic
     return narrative, confidence
@@ -226,7 +259,7 @@ async def process_analysis(analysis: ConceptAnalysis) -> GeneratedOutput:
         metadata = {
             "num_concepts": len(analysis.concepts),
             "concept_terms": [concept.term for concept in analysis.concepts],
-            "model": "mistral",
+            "model": "phi-2",
             "audio_format": "WAV",
             "audio_sample_rate": 44100,
             "audio_channels": 1,
@@ -376,14 +409,23 @@ async def health_check() -> Dict[str, Any]:
         # Check Qdrant connection
         qdrant_client.get_collections()
         qdrant_status = "healthy"
+        
+        # Check OpenVINO status
+        ov_status = "healthy"
+        if not model.is_loaded():
+            ov_status = "unhealthy"
+            logger.error("OpenVINO model not loaded")
     except Exception as e:
-        logger.error(f"Qdrant health check failed: {e}")
+        logger.error(f"Health check failed: {e}")
         qdrant_status = "unhealthy"
+        ov_status = "unhealthy"
     
     return {
         "status": "healthy",
         "dependencies": {
-            "qdrant": qdrant_status
+            "qdrant": qdrant_status,
+            "openvino": ov_status,
+            "device": DEVICE
         },
         "timestamp": datetime.datetime.utcnow().isoformat()
     }

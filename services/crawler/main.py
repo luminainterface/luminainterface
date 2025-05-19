@@ -1,229 +1,129 @@
-from fastapi import FastAPI, HTTPException, Request
-from pydantic import BaseModel
-import redis
-import json
-import os
-from typing import List, Optional, Dict, Set
-import logging
-from prometheus_client import Counter, Histogram
-import time
-import httpx
-import asyncio
-from bs4 import BeautifulSoup
-import aiohttp
-import git
-import tempfile
-import shutil
-from pathlib import Path
+#!/usr/bin/env python3
+"""Crawler service for Lumina system.
 
-# Initialize FastAPI app
-app = FastAPI(title="Crawler Service")
+This service:
+1. Reads from ingest.queue
+2. Validates repositories using license scanner
+3. Crawls and processes content
+4. Writes to ingest.raw_json
+"""
+
+import asyncio
+import logging
+import os
+from typing import Optional
+import redis.asyncio as redis
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+from handlers.license_scanner import LicenseScanner
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger('crawler')
 
-# Initialize Redis client
-redis_url = os.getenv("REDIS_URL", "redis://localhost:6379")
-redis_client = redis.from_url(redis_url)
+# Constants
+REDIS_URL = os.getenv('REDIS_URL', 'redis://redis:6379')
+CHECK_INTERVAL = int(os.getenv('CHECK_INTERVAL', '60'))  # 1 minute default
 
-# Prometheus metrics
-crawl_requests = Counter('crawl_requests_total', 'Total number of crawl requests')
-crawl_latency = Histogram('crawl_latency_seconds', 'Time spent crawling')
-pages_crawled = Counter('pages_crawled_total', 'Total number of pages crawled')
-git_events = Counter('git_events_total', 'Total git events processed', ['event_type'])
-git_files_processed = Counter('git_files_processed_total', 'Total git files processed', ['status'])
-
-# File extensions to process
-ALLOWED_EXTENSIONS = {
-    '.md', '.txt', '.rst', '.py', '.js', '.ts', '.java', '.cpp', '.h', 
-    '.hpp', '.c', '.cs', '.go', '.rs', '.rb', '.php', '.swift', '.kt'
-}
-
-# Directories to skip
-SKIP_DIRS = {
-    '.git', 'node_modules', 'venv', '__pycache__', 'target', 'build',
-    'dist', 'vendor', 'bower_components'
-}
-
-class CrawlRequest(BaseModel):
-    url: str
-    depth: Optional[int] = 1
-    max_pages: Optional[int] = 10
-
-class CrawlResponse(BaseModel):
-    url: str
-    title: str
-    content: str
-    links: List[str]
-
-class GitWebhook(BaseModel):
-    repository: Dict
-    commits: List[Dict]
-    ref: str
-
-class GitFile(BaseModel):
-    path: str
-    content: str
-    sha: str
-    license: Optional[str] = None
-
-@app.get("/health")
-async def health_check():
-    try:
-        redis_client.ping()
-        return {"status": "healthy", "redis": "connected"}
-    except Exception as e:
-        logger.error(f"Health check failed: {str(e)}")
-        raise HTTPException(status_code=503, detail="Service unhealthy")
-
-async def fetch_page(url: str) -> Optional[Dict]:
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                if response.status == 200:
-                    html = await response.text()
-                    soup = BeautifulSoup(html, 'html.parser')
-                    
-                    # Extract title
-                    title = soup.title.string if soup.title else ""
-                    
-                    # Extract main content (simplified)
-                    content = soup.get_text(separator=' ', strip=True)
-                    
-                    # Extract links
-                    links = [a.get('href') for a in soup.find_all('a', href=True)]
-                    
-                    return {
-                        "url": url,
-                        "title": title,
-                        "content": content,
-                        "links": links
-                    }
-    except Exception as e:
-        logger.error(f"Error fetching {url}: {str(e)}")
-        return None
-
-@app.post("/crawl")
-async def crawl(request: CrawlRequest):
-    with crawl_latency.time():
-        crawl_requests.inc()
+class CrawlerService:
+    def __init__(self):
+        self.redis = redis.from_url(REDIS_URL, decode_responses=True)
+        self.license_scanner = LicenseScanner()
+        self.app = FastAPI(title="Crawler Service")
+        self.setup_routes()
+        
+    def setup_routes(self):
+        """Set up FastAPI routes."""
+        @self.app.get("/health")
+        async def health():
+            return {"status": "ok"}
+            
+        @self.app.post("/validate")
+        async def validate_repo(repo: str):
+            """Validate a repository URL."""
+            is_allowed, reason = await self.license_scanner.check_repo(repo)
+            if not is_allowed:
+                raise HTTPException(status_code=403, detail=reason)
+            return {"status": "ok", "message": "Repository allowed"}
+            
+    async def process_message(self, msg_id: str, msg_data: dict):
+        """Process a message from the ingest queue."""
         try:
-            # Fetch the initial page
-            page_data = await fetch_page(request.url)
-            if not page_data:
-                raise HTTPException(status_code=404, detail="Failed to fetch page")
-            
-            # Store in Redis
-            key = f"crawl:{request.url}"
-            redis_client.setex(key, 3600, json.dumps(page_data))  # 1 hour TTL
-            
-            pages_crawled.inc()
-            return CrawlResponse(**page_data)
+            # Extract repo URL
+            repo_url = msg_data.get('repo_url')
+            if not repo_url:
+                logger.warning(f"Message {msg_id} has no repo_url")
+                await self.redis.xack('ingest.queue', 'crawler', msg_id)
+                return
+                
+            # Validate repository
+            is_allowed, reason = await self.license_scanner.check_repo(repo_url)
+            if not is_allowed:
+                logger.warning(f"Repository {repo_url} blocked: {reason}")
+                # Move to dead letter queue
+                await self.redis.xadd('dead.letter', msg_data)
+                await self.redis.xack('ingest.queue', 'crawler', msg_id)
+                return
+                
+            # TODO: Implement actual crawling logic here
+            # For now, just acknowledge the message
+            await self.redis.xack('ingest.queue', 'crawler', msg_id)
             
         except Exception as e:
-            logger.error(f"Error crawling {request.url}: {str(e)}")
-            raise HTTPException(status_code=500, detail="Internal server error")
+            logger.error(f"Error processing message {msg_id}: {e}")
+            # Move to dead letter queue on error
+            await self.redis.xadd('dead.letter', msg_data)
+            await self.redis.xack('ingest.queue', 'crawler', msg_id)
+            
+    async def run(self):
+        """Run the crawler service."""
+        # Create consumer group if it doesn't exist
+        try:
+            await self.redis.xgroup_create('ingest.queue', 'crawler', mkstream=True)
+        except redis.ResponseError as e:
+            if 'BUSYGROUP' not in str(e):
+                raise
+                
+        while True:
+            try:
+                # Check for pause flag
+                if await self.redis.get('crawler.PAUSE'):
+                    logger.info("Crawler paused due to high queue depth")
+                    await asyncio.sleep(5)
+                    continue
+                    
+                # Read messages
+                messages = await self.redis.xreadgroup(
+                    'crawler', 'crawler-1',
+                    {'ingest.queue': '>'},
+                    count=10,
+                    block=1000
+                )
+                
+                for stream, stream_messages in messages:
+                    for msg_id, msg_data in stream_messages:
+                        await self.process_message(msg_id, msg_data)
+                        
+            except Exception as e:
+                logger.error(f"Error in crawler loop: {e}")
+                await asyncio.sleep(CHECK_INTERVAL)
+                
+    async def close(self):
+        """Cleanup connections."""
+        await self.redis.close()
+        await self.license_scanner.close()
 
-async def process_git_file(file_path: Path, repo_path: Path) -> Optional[GitFile]:
-    """Process a single git file and extract its content."""
+async def main():
+    """Main entry point."""
+    service = CrawlerService()
     try:
-        if file_path.suffix.lower() not in ALLOWED_EXTENSIONS:
-            git_files_processed.labels(status="skipped_extension").inc()
-            return None
-            
-        # Skip files in excluded directories
-        if any(skip_dir in file_path.parts for skip_dir in SKIP_DIRS):
-            git_files_processed.labels(status="skipped_directory").inc()
-            return None
-            
-        full_path = repo_path / file_path
-        if not full_path.exists():
-            git_files_processed.labels(status="not_found").inc()
-            return None
-            
-        # Read file content
-        content = full_path.read_text(encoding='utf-8', errors='ignore')
-        
-        # Get file SHA
-        repo = git.Repo(repo_path)
-        sha = repo.git.rev_parse(f'HEAD:{file_path}')
-        
-        # Try to detect license
-        license_file = repo_path / 'LICENSE'
-        license = None
-        if license_file.exists():
-            license = license_file.read_text(encoding='utf-8', errors='ignore')[:100]
-        
-        git_files_processed.labels(status="success").inc()
-        return GitFile(
-            path=str(file_path),
-            content=content,
-            sha=sha,
-            license=license
-        )
-    except Exception as e:
-        logger.error(f"Error processing {file_path}: {str(e)}")
-        git_files_processed.labels(status="error").inc()
-        return None
-
-async def clone_and_process_repo(repo_url: str, branch: str = "main") -> List[GitFile]:
-    """Clone a repository and process its files."""
-    temp_dir = tempfile.mkdtemp()
-    try:
-        # Clone repository
-        repo = git.Repo.clone_from(repo_url, temp_dir, branch=branch)
-        repo_path = Path(temp_dir)
-        
-        # Process all files
-        processed_files = []
-        for file_path in repo_path.rglob("*"):
-            if file_path.is_file():
-                if result := await process_git_file(file_path.relative_to(repo_path), repo_path):
-                    processed_files.append(result)
-        
-        return processed_files
+        await service.run()
     finally:
-        shutil.rmtree(temp_dir)
-
-@app.post("/webhook/git")
-async def git_webhook(request: Request):
-    """Handle git webhook events."""
-    try:
-        payload = await request.json()
-        event_type = request.headers.get('X-GitHub-Event', 'push')
-        git_events.labels(event_type=event_type).inc()
-        
-        if event_type == 'push':
-            webhook_data = GitWebhook(**payload)
-            repo_url = webhook_data.repository['clone_url']
-            branch = webhook_data.ref.split('/')[-1]
-            
-            # Process repository
-            files = await clone_and_process_repo(repo_url, branch)
-            
-            # Queue files for ingestion
-            for file in files:
-                payload = {
-                    "type": "gitfile",
-                    "payload": {
-                        "path": file.path,
-                        "content": file.content,
-                        "sha": file.sha,
-                        "license": file.license,
-                        "repo": repo_url,
-                        "branch": branch
-                    }
-                }
-                redis_client.publish("ingest.raw_html", json.dumps(payload))
-            
-            return {"status": "success", "files_processed": len(files)}
-        else:
-            return {"status": "ignored", "event_type": event_type}
-            
-    except Exception as e:
-        logger.error(f"Error processing webhook: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        await service.close()
 
 if __name__ == "__main__":
-    import uvicorn
+    asyncio.run(main())

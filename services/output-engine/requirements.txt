@@ -5,8 +5,21 @@ pydantic==2.4.2
 python-dotenv==1.0.0
 gTTS==2.3.2
 soundfile==0.12.1
-numpy
-qdrant-client
-prometheus-client
-prometheus-fastapi-instrumentator
+numpy>=1.24.0
+qdrant-client>=1.6.0
+prometheus-client>=0.17.0
+prometheus-fastapi-instrumentator>=6.1.0
 redis==5.0.1
+accelerate>=0.25.0
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.1.0
+transformers>=4.36.0
+peft>=0.7.0
+sentencepiece>=0.1.99
+openvino>=2023.3.0
+openvino-dev[transformers]>=2023.3.0
+optimum-intel>=1.12.0
+intel-extension-for-transformers>=1.0.0
+intel-extension-for-pytorch>=2.1.0
+bitsandbytes>=0.41.0
+safetensors>=0.4.0

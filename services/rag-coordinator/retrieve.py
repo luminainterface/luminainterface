@@ -26,6 +26,7 @@ logger = logging.getLogger("rag-coordinator")
 # Initialize clients
 embedder = SentenceTransformer(os.getenv("EMBED_MODEL", "all-MiniLM-L6-v2"))
 qdrant = QdrantClient(os.getenv("QDRANT_URL", "http://qdrant:6333"))
+# NOTE: CONCEPT_DICT_URL should be the base URL only, do not include /concepts at the end
 CONCEPT_DICT_URL = os.getenv("CONCEPT_DICT_URL", "http://concept-dictionary:8500")
 
 class MetaRequest(BaseModel):

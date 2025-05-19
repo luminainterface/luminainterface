@@ -12,7 +12,7 @@ class VectorStore:
         self.client = QdrantClient(url=url)
         self.collection_name = collection_name
         
-    def init_collection(self, vector_size: int = 384):
+    def init_collection(self, vector_size: int = 768):
         """Initialize or recreate the collection with specified parameters"""
         try:
             # Check if collection exists
@@ -20,8 +20,17 @@ class VectorStore:
             exists = any(c.name == self.collection_name for c in collections)
             
             if exists:
-                logger.info(f"Collection {self.collection_name} already exists")
-                return
+                # Get collection info to check vector size
+                collection_info = self.client.get_collection(self.collection_name)
+                current_size = collection_info.config.params.vectors.size
+                
+                if current_size != vector_size:
+                    logger.info(f"Collection {self.collection_name} has wrong vector size ({current_size} vs {vector_size}). Deleting and recreating...")
+                    self.client.delete_collection(self.collection_name)
+                    exists = False
+                else:
+                    logger.info(f"Collection {self.collection_name} already exists with correct vector size")
+                    return
                 
             # Create new collection
             self.client.create_collection(

@@ -15,7 +15,7 @@ from .graph_client import GraphClient
 from .concept_client import ConceptClient
 from .redis_client import RedisClient
 from .file_processor import FileProcessor
-from langchain_community.embeddings import OllamaEmbeddings
+from .embeddings import CustomOllamaEmbeddings
 from ..models.file_item import FileProcessingConfig
 
 logger = logging.getLogger(__name__)
@@ -44,8 +44,8 @@ class Crawler:
         self.concept_client = ConceptClient(concept_dict_url)
         self.wiki_client = WikiClient()
         
-        # Initialize embedding model
-        self.embedding_model = OllamaEmbeddings(
+        # Initialize embedding model - use same model as TrainingCrawler
+        self.embedding_model = CustomOllamaEmbeddings(
             base_url=ollama_url,
             model=ollama_model
         )
@@ -85,11 +85,9 @@ class Crawler:
             self.adapter = None
             self.logger.warning(f"Failed to initialize graph concept adapter: {e}, continuing without it")
             
-        # Initialize vector store collection
+        # Initialize vector store collection with 768 dimensions
         try:
-            # OllamaEmbeddings does not expose embedding dimension; set manually for the model
-            embedding_dimension = 768  # nomic-embed-text uses 768-dim vectors
-            self.vector_store.init_collection(vector_size=embedding_dimension)
+            self.vector_store.init_collection(vector_size=768)
             self.logger.info("Vector store collection initialized successfully")
         except Exception as e:
             self.logger.error(f"Failed to initialize vector store collection: {e}")
@@ -317,7 +315,7 @@ class Crawler:
     GIT_PRIORITY = 1.0
     PDF_PRIORITY = 0.8
     GRAPH_PRIORITY = 0.4
-
+        
     def _generate_id(self, title: str) -> str:
         """Generate a consistent ID for a Wikipedia page"""
         # Use the title to seed the UUID generation for consistency
@@ -376,22 +374,27 @@ class Crawler:
         
         # Store in concept dictionary
         try:
-            await self.concept_client.add_concept(title, concept_data)
+            await self.redis.add_concept(title, concept_data)
         except Exception as e:
             logger.error(f"Failed to store concept {title}: {e}")
             return None
             
         # Publish to ingest.crawl stream
         try:
-            await self.redis.publish_crawl_result(title, {
+            self.logger.info(f"Calling publish_crawl_result for {title}")
+            result = await self.redis.publish_crawl_result(title, {
                 "url": page.fullurl,
                 "title": title,
                 "page_id": page_id,
                 "summary": summary,
                 "metadata": metadata
             })
+            if result:
+                self.logger.info(f"publish_crawl_result succeeded for {title}")
+            else:
+                self.logger.error(f"publish_crawl_result returned False for {title}")
         except Exception as e:
-            logger.error(f"Failed to publish crawl result for {title}: {e}")
+            self.logger.error(f"Failed to publish crawl result for {title}: {e}")
             
         # Cache the processed state
         await self.redis.set_cache(
@@ -566,6 +569,11 @@ class Crawler:
             raise
 
     def _extract_concepts(self, content: str) -> List[str]:
+        """Extract concepts from text content."""
+        # TODO: Implement more sophisticated concept extraction
+        # For now, just split on whitespace and filter out short words
+        words = content.split()
+        return [word for word in words if len(word) > 3] 
         """Extract concepts from text content."""
         # TODO: Implement more sophisticated concept extraction
         # For now, just split on whitespace and filter out short words

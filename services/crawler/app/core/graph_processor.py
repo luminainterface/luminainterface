@@ -162,38 +162,18 @@ class GraphProcessor:
     def _register_concepts(self, concepts: List[str]) -> None:
         """Register concepts in the concept dictionary."""
         try:
-            # Try using the adapter first
             for concept in concepts:
                 concept_data = {
                     "term": concept,
-                    "definition": "",  # Will be updated when crawled
+                    "definition": "",
                     "sources": ["wikipedia"],
                     "usage_count": 0
                 }
-                asyncio.run(self.adapter.process_and_send(concept_data))
-            
-            # Also try direct registration as backup
-            response = requests.post(
-                f"{self.concept_dict_url}/api/v1/concepts/batch",
-                json={"concepts": concepts},
-                headers={"X-API-Key": os.getenv("GRAPH_API_KEY", "changeme")}
-            )
-            response.raise_for_status()
-            logger.info(f"Registered {len(concepts)} concepts in dictionary")
+                # Use RedisClient directly instead of adapter or ConceptClient
+                asyncio.run(self.crawler.redis.add_concept(concept, concept_data))
+            logger.info(f"Registered {len(concepts)} concepts in dictionary via Redis")
         except Exception as e:
             logger.error(f"Error registering concepts: {e}")
-            # Try direct registration as fallback
-            try:
-                for concept in concepts:
-                    asyncio.run(self.concept_client.add_concept(concept, {
-                        "term": concept,
-                        "definition": "",
-                        "sources": ["wikipedia"],
-                        "usage_count": 0
-                    }))
-                logger.info(f"Registered {len(concepts)} concepts via direct client")
-            except Exception as e2:
-                logger.error(f"Fallback concept registration also failed: {e2}")
 
     def _store_in_neo4j(self, node: str, wiki_data: Dict, connections: List[str]) -> None:
         """Store node data and connections using the adapter."""

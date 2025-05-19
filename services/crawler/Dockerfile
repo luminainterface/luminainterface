@@ -1,49 +1,44 @@
 # Use Python 3.11 slim image as base
 FROM python:3.11-slim
 
-# Set working directory
+# Set up working directory
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies including libgomp1 for scancode-toolkit
 RUN apt-get update && apt-get install -y \
-    build-essential \
+    git \
     curl \
+    libgomp1 \
+    libarchive-dev \
+    p7zip-full \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy lumina-core first and install it
-COPY services/crawler/lumina-core /app/lumina-core
-WORKDIR /app/lumina-core
-RUN pip install -e .
+# Install scancode-toolkit and verify installation
+RUN pip install --no-cache-dir scancode-toolkit[full] && \
+    scancode --version
 
-# Go back to crawler directory and copy requirements
-WORKDIR /app/services/crawler
+# Copy requirements first to leverage Docker cache
 COPY services/crawler/requirements.txt .
-
-# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY services/crawler .
+# Copy setup.py and install the package in development mode
+COPY lumina_core/setup.py .
+COPY lumina_core/ /app/lumina_core/
+RUN pip install -e .
 
-# Create directory for training data
-RUN mkdir -p /app/training_data
+# Copy the crawler service code
+COPY services/crawler/app /app/services/crawler/app/
+COPY services/crawler/handlers /app/services/crawler/handlers/
+COPY services/crawler/main.py /app/services/crawler/
 
 # Set environment variables
 ENV PYTHONPATH=/app
-ENV REDIS_URL=redis://:02211998@redis:6379
-ENV QDRANT_URL=http://qdrant:6333
-ENV OLLAMA_URL=http://ollama:11434
-ENV OLLAMA_MODEL=nomic-embed-text
-ENV TRAINING_DATA_PATH=/app/training_data
-ENV CHUNK_SIZE=1000
-ENV CHUNK_OVERLAP=200
-ENV BATCH_SIZE=32
-ENV PROCESS_INTERVAL=3600
-ENV INQUIRY_CHECK_INTERVAL=300
-ENV RETRAIN_INTERVAL=100
+ENV PYTHONUNBUFFERED=1
 
-# Expose port
-EXPOSE 8400
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8400/health || exit 1
 
 # Run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8400"] 
+WORKDIR /app/services/crawler
+CMD ["python", "main.py"] 

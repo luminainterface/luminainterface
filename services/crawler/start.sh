@@ -21,4 +21,4 @@ fi
 /app/scripts/wait-for-it.sh graph-api:8200 -- echo "Graph API is up" || exit 1
 
 # Start the application
-exec uvicorn app.main:app --host 0.0.0.0 --port 8400 
+exec python -m services.crawler.app.main 

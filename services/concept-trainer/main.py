@@ -11,9 +11,35 @@ import os
 from prometheus_fastapi_instrumentator import Instrumentator
 from loguru import logger
 from qdrant_client import QdrantClient
-from batch_processor import BatchProcessor, TrainerVectorBatch
+from batch_processor import BatchProcessor
 import sys
+from output_engine.output_types import TrainerVectorBatch
+from concept_fetcher import ConceptFetcher
+import asyncio
+
+# Add necessary paths to Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output-engine')))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../concept-trainer-growable')))
+
+# Copy TrainerVectorBatch definition here to avoid import issues
+define_trainer_vector_batch = '''
+from dataclasses import dataclass
+from typing import Dict, List, Any
+from datetime import datetime
+
+@dataclass
+class TrainerVectorBatch:
+    """Batch of vectors for training, with chunking support."""
+    vectors: List[Dict[str, Any]]
+    batch_id: str
+    total_vectors: int
+    chunk_index: int
+    total_chunks: int
+    metadata: Dict[str, Any]
+    timestamp: datetime = datetime.utcnow()
+'''
+exec(define_trainer_vector_batch)
+
 from model import GrowableConceptNet
 
 app = FastAPI(title="Concept Trainer Service")
@@ -55,6 +81,15 @@ model = GrowableConceptNet(
 model = model.to(device)
 optimizer = torch.optim.Adam(model.parameters())
 batch_processor = BatchProcessor(model, device, REDIS_URL, QDRANT_URL)
+
+# Initialize concept fetcher
+concept_fetcher = ConceptFetcher(
+    concept_dict_url=os.getenv("CONCEPT_DICT_URL", "http://concept-dictionary:8000"),
+    batch_size=int(os.getenv("FETCH_BATCH_SIZE", "10")),
+    fetch_interval=int(os.getenv("FETCH_INTERVAL", "30")),
+    max_retries=int(os.getenv("MAX_RETRIES", "3")),
+    min_quality_score=float(os.getenv("MIN_QUALITY_SCORE", "0.0"))
+)
 
 class TrainingRequest(BaseModel):
     concept_id: str
@@ -161,6 +196,56 @@ async def health_check():
 
 # Add Prometheus metrics
 Instrumentator().instrument(app).expose(app)
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize services on startup."""
+    try:
+        # Start the concept fetcher
+        asyncio.create_task(concept_fetcher.run())
+        logger.info("Started concept fetcher")
+    except Exception as e:
+        logger.error(f"Error starting concept fetcher: {str(e)}")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Cleanup on shutdown."""
+    try:
+        # Stop the concept fetcher
+        concept_fetcher.stop()
+        logger.info("Stopped concept fetcher")
+    except Exception as e:
+        logger.error(f"Error stopping concept fetcher: {str(e)}")
+
+@app.get("/fetcher/stats")
+async def get_fetcher_stats():
+    """Get statistics about the concept fetcher."""
+    try:
+        stats = await concept_fetcher.get_stats()
+        return stats
+    except Exception as e:
+        logger.error(f"Error getting fetcher stats: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/fetcher/control")
+async def control_fetcher(action: str):
+    """Control the concept fetcher (start/stop)."""
+    try:
+        if action == "start":
+            if not concept_fetcher._running:
+                asyncio.create_task(concept_fetcher.run())
+                return {"status": "started"}
+            return {"status": "already_running"}
+        elif action == "stop":
+            if concept_fetcher._running:
+                concept_fetcher.stop()
+                return {"status": "stopped"}
+            return {"status": "already_stopped"}
+        else:
+            raise HTTPException(status_code=400, detail="Invalid action. Use 'start' or 'stop'")
+    except Exception as e:
+        logger.error(f"Error controlling fetcher: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8813) 

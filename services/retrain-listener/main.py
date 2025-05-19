@@ -8,7 +8,8 @@ import logging
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from pydantic import BaseModel, Field
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.security import APIKeyHeader
 from prometheus_fastapi_instrumentator import Instrumentator
 from prometheus_client import Counter, Histogram
 import aiohttp
@@ -28,6 +29,13 @@ logger = logging.getLogger("retrain-listener")
 app = FastAPI(title="Retrain Listener Service")
 Instrumentator().instrument(app).expose(app)
 
+# Environment variables
+CONCEPT_DICT_URL = os.getenv("CONCEPT_DICT_URL", "http://concept-dictionary:8000")
+CRAWLER_URL = os.getenv("CRAWLER_URL", "http://crawler:7000")
+DATA_ANALYZER_URL = os.getenv("DATA_ANALYZER_URL", "http://data-analyzer:8500")
+API_KEY = os.getenv("RETRAIN_API_KEY", "changeme")
+ADMIN_API_KEY = os.getenv("ADMIN_API_KEY", "admin_key_change_me")
+
 # Initialize metrics
 RETRAIN_TRIGGERED = Counter("retrain_triggered_total", "Number of retraining triggers", ["reason"])
 RETRAIN_BATCH_SIZE = Histogram("retrain_batch_size", "Size of retraining batches",
@@ -36,13 +44,23 @@ RETRAIN_CONFIDENCE = Histogram("retrain_confidence", "Confidence scores of retra
     buckets=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 RETRAIN_SECONDS = Histogram("retrain_seconds", "Time spent processing retraining requests",
     buckets=[0.1, 0.5, 1.0, 2.0, 5.0, 10.0])
+SYNC_TRIGGERED = Counter("sync_triggered_total", "Number of sync triggers", ["reason"])
+SYNC_DURATION = Histogram("sync_duration_seconds", "Time spent in sync operations",
+    buckets=[1.0, 5.0, 10.0, 30.0, 60.0, 120.0])
 
-# Initialize bus client and model
-bus = BusClient(redis_url=os.getenv("REDIS_URL", "redis://redis:6379"))
-BATCH_STREAM = os.getenv("SOURCE_STREAM", "output.generated")
-EMBEDDER = SentenceTransformer(os.getenv("EMBED_MODEL", "all-MiniLM-L6-v2"))
-BATCH_SIZE = int(os.getenv("BATCH_SIZE", "64"))
-TRAIN_ENDPOINT = os.getenv("TRAIN_URL", "http://concept-trainer-growable:8710/train_batch")
+# API key security
+api_key_header = APIKeyHeader(name="X-API-Key")
+admin_key_header = APIKeyHeader(name="X-Admin-Key")
+
+async def verify_api_key(api_key: str = Depends(api_key_header)):
+    if api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+    return api_key
+
+async def verify_admin_key(admin_key: str = Depends(admin_key_header)):
+    if admin_key != ADMIN_API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid admin key")
+    return admin_key
 
 class TurnMessage(StreamMessage):
     turn_id: str
@@ -65,6 +83,8 @@ class RetrainListener:
         self.batch_timeout = 60  # seconds
         self.current_batch: List[Dict[str, Any]] = []
         self.last_batch_time = datetime.now()
+        self.last_sync_time: Optional[datetime] = None
+        self.sync_cooldown = 300  # 5 minutes between syncs
         
     async def connect(self):
         """Connect to Redis and create consumer group"""
@@ -97,6 +117,51 @@ class RetrainListener:
             return True
             
         return False
+
+    async def should_trigger_sync(self) -> bool:
+        """Determine if a sync should be triggered"""
+        if not self.last_sync_time:
+            return True
+            
+        time_since_sync = (datetime.now() - self.last_sync_time).total_seconds()
+        return time_since_sync >= self.sync_cooldown
+
+    async def trigger_sync(self, reason: str) -> Optional[str]:
+        """Trigger a sync operation between services"""
+        if not await self.should_trigger_sync():
+            logger.info("Sync cooldown active, skipping sync")
+            return None
+
+        try:
+            SYNC_TRIGGERED.labels(reason=reason).inc()
+            start_time = time.time()
+            
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    f"{DATA_ANALYZER_URL}/sync/trigger",
+                    json={
+                        "force": False,
+                        "services": ["concept-dict", "crawler", "ollama"],
+                        "dry_run": False
+                    },
+                    headers={"X-Admin-Key": ADMIN_API_KEY}
+                )
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    sync_id = result.get("sync_id")
+                    if sync_id:
+                        self.last_sync_time = datetime.now()
+                        SYNC_DURATION.observe(time.time() - start_time)
+                        logger.info(f"Sync triggered successfully: {sync_id}")
+                        return sync_id
+                        
+            logger.error("Failed to trigger sync")
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error triggering sync: {e}")
+            return None
         
     async def process_batch(self):
         """Process the current batch of training data"""
@@ -104,6 +169,15 @@ class RetrainListener:
             return
             
         try:
+            start_time = time.time()
+            
+            # Check if we should trigger a sync
+            if await self.should_trigger_sync():
+                sync_id = await self.trigger_sync("batch_processing")
+                if sync_id:
+                    # Wait for sync to complete
+                    await self.wait_for_sync(sync_id)
+            
             # Prepare batch data
             batch_data = {
                 "concepts": [
@@ -135,6 +209,7 @@ class RetrainListener:
                 RETRAIN_BATCH_SIZE.observe(len(self.current_batch))
                 for msg in self.current_batch:
                     RETRAIN_CONFIDENCE.observe(msg.get("confidence", 0.0))
+                RETRAIN_SECONDS.observe(time.time() - start_time)
                     
         except Exception as e:
             logger.error(f"Error processing retraining batch: {e}")
@@ -143,54 +218,46 @@ class RetrainListener:
             # Clear batch
             self.current_batch = []
             self.last_batch_time = datetime.now()
-            
-    @with_retry("output.generated", max_attempts=3, dead_letter_stream="retrain.dlq")
-    async def process_output(self, msg: Dict[str, Any]):
-        """Process generated output with retry logic and DLQ support"""
-        start_time = datetime.now()
-        try:
-            # Check if we should trigger retraining
-            if not self.should_trigger_retrain(msg):
-                return
+
+    async def wait_for_sync(self, sync_id: str, timeout: int = 300) -> bool:
+        """Wait for a sync operation to complete"""
+        start_time = time.time()
+        while time.time() - start_time < timeout:
+            try:
+                async with httpx.AsyncClient() as client:
+                    response = await client.get(
+                        f"{DATA_ANALYZER_URL}/sync/status/{sync_id}",
+                        headers={"X-API-Key": API_KEY}
+                    )
+                    
+                    if response.status_code == 200:
+                        status = response.json()
+                        if status["status"] in ["completed", "failed"]:
+                            return status["status"] == "completed"
+                            
+            except Exception as e:
+                logger.error(f"Error checking sync status: {e}")
                 
-            # Add to current batch
-            self.current_batch.append(msg)
+            await asyncio.sleep(5)  # Check every 5 seconds
             
-            # Check if we should process the batch
-            now = datetime.now()
-            if (len(self.current_batch) >= self.batch_size or
-                (self.current_batch and
-                 (now - self.last_batch_time).total_seconds() >= self.batch_timeout)):
-                await self.process_batch()
-                
-            # Record metrics
-            RETRAIN_SECONDS.observe(
-                (datetime.now() - start_time).total_seconds()
-            )
-            
-        except Exception as e:
-            logger.error(f"Error processing output: {e}")
-            raise
-            
+        logger.error(f"Sync {sync_id} timed out after {timeout} seconds")
+        return False
+
     async def start(self):
-        """Start consuming from output.generated stream"""
+        """Start consuming messages"""
         while True:
             try:
-                # Process any pending batch
-                if self.current_batch:
-                    now = datetime.now()
-                    if (now - self.last_batch_time).total_seconds() >= self.batch_timeout:
-                        await self.process_batch()
+                messages = await self.bus.consume("output.generated", "retrain", count=10)
+                
+                for msg in messages:
+                    if self.should_trigger_retrain(msg):
+                        self.current_batch.append(msg)
                         
-                # Consume messages
-                await self.bus.consume(
-                    stream="output.generated",
-                    group="retrain",
-                    consumer="worker",
-                    handler=self.process_output,
-                    block_ms=1000,
-                    count=10
-                )
+                        # Process batch if full or timeout reached
+                        if len(self.current_batch) >= self.batch_size or \
+                           (datetime.now() - self.last_batch_time).total_seconds() >= self.batch_timeout:
+                            await self.process_batch()
+                            
             except Exception as e:
                 logger.error(f"Error in consumer loop: {e}")
                 await asyncio.sleep(1)
@@ -213,18 +280,44 @@ async def shutdown():
     if hasattr(app.state, "listener"):
         await app.state.listener.close()
 
-@app.get("/health")
-async def health():
-    """Health check endpoint"""
-    return {"status": "healthy"}
+@app.post("/sync/trigger")
+async def trigger_sync(
+    reason: str = "manual",
+    admin_key: str = Depends(verify_admin_key)
+) -> Dict[str, Any]:
+    """Manually trigger a sync operation"""
+    if not hasattr(app.state, "listener"):
+        raise HTTPException(status_code=503, detail="Service not ready")
+        
+    sync_id = await app.state.listener.trigger_sync(reason)
+    if not sync_id:
+        raise HTTPException(status_code=500, detail="Failed to trigger sync")
+        
+    return {
+        "status": "triggered",
+        "sync_id": sync_id,
+        "message": "Sync operation triggered"
+    }
 
-@app.get("/metrics")
-async def metrics():
-    """Expose Prometheus metrics"""
-    from prometheus_client import generate_latest
-    return Response(generate_latest(), media_type="text/plain")
+@app.get("/metrics/sync")
+async def get_sync_metrics(
+    api_key: str = Depends(verify_api_key)
+) -> Dict[str, Any]:
+    """Get sync-related metrics"""
+    return {
+        "last_sync_time": app.state.listener.last_sync_time.isoformat() if app.state.listener.last_sync_time else None,
+        "sync_cooldown": app.state.listener.sync_cooldown,
+        "sync_triggered_total": {
+            "low_confidence": SYNC_TRIGGERED.labels(reason="low_confidence")._value.get(),
+            "batch_processing": SYNC_TRIGGERED.labels(reason="batch_processing")._value.get(),
+            "manual": SYNC_TRIGGERED.labels(reason="manual")._value.get()
+        },
+        "sync_duration_seconds": {
+            "count": SYNC_DURATION._count.get(),
+            "sum": SYNC_DURATION._sum.get()
+        }
+    }
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.getenv("PORT", "8000"))
-    uvicorn.run(app, host="0.0.0.0", port=port) 
+    uvicorn.run(app, host="0.0.0.0", port=8680, log_level="info") 

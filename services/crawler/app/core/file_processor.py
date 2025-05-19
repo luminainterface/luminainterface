@@ -467,4 +467,4 @@ class FileProcessor:
             
         except Exception as e:
             self.logger.error(f"Error determining file type: {str(e)}")
-            return None 
+            return None

@@ -64,5 +64,5 @@ class FileProcessingConfig(BaseModel):
         "json": "json_embeddings",
         "jsonl": "jsonl_embeddings",
         "text": "text_embeddings",
-        "pdf": "pdf_embeddings"
+        "pdf": "pdf_vectors_768"
     } 

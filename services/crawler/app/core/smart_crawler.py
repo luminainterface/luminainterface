@@ -189,7 +189,7 @@ class SmartCrawler(Crawler):
             }
             
             try:
-                await self.concept_client.add_concept(title, concept_data)
+                await self.redis_client.add_concept(title, concept_data)
             except Exception as e:
                 logger.error(f"Failed to store concept {title}: {e}")
                 self.metrics.record_error("concept_store")

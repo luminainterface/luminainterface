@@ -12,18 +12,22 @@ import json
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
 import os
+from sentence_transformers import SentenceTransformer
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("concept-linker")
 
-# Load spaCy model
+# Load spaCy model for entity extraction
 try:
     nlp = spacy.load("en_core_web_lg")
 except OSError:
     logger.info("Downloading spaCy model...")
     spacy.cli.download("en_core_web_lg")
     nlp = spacy.load("en_core_web_lg")
+
+# Initialize sentence transformer for vector generation
+embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
 # Prometheus metrics
 LINK_CREATED = Counter("link_created_total", "Number of links created", ["type"])
@@ -47,7 +51,7 @@ class ConceptLinker:
         self.max_neighbors = 10
         self.processed_concepts: Set[str] = set()
         self.collection_name = "concepts"
-        self.vector_size = 768  # spaCy's en_core_web_lg dimension
+        self.vector_size = 384  # all-MiniLM-L6-v2 dimension
         
         # Initialize Qdrant collection if it doesn't exist
         self._init_collection()
@@ -82,12 +86,14 @@ class ConceptLinker:
         doc = nlp(text)
         entities = []
         for ent in doc.ents:
+            # Generate embedding using sentence transformer
+            entity_embedding = embedding_model.encode(ent.text).tolist()
             entities.append({
                 "text": ent.text,
                 "label": ent.label_,
                 "start": ent.start_char,
                 "end": ent.end_char,
-                "vector": ent.vector.tolist()  # Include vector for similarity search
+                "vector": entity_embedding  # Use sentence transformer embedding
             })
             ENTITY_TYPES.labels(type=ent.label_).inc()
         return entities

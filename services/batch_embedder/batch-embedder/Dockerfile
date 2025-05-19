@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Copy requirements first for better caching
-COPY services/batch-embedder/requirements.txt .
+COPY services/batch_embedder/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy lumina_core (the whole package) and install it
@@ -21,8 +21,8 @@ WORKDIR /app/lumina_core
 RUN pip install -e .
 WORKDIR /app
 
-# Copy batch-embedder service code (from services/batch-embedder) into /app
-COPY services/batch-embedder /app
+# Copy batch-embedder service code (from services/batch_embedder) into /app
+COPY services/batch_embedder /app
 
 # Copy wait-for-it.sh script
 COPY scripts/wait-for-it.sh /app/scripts/wait-for-it.sh

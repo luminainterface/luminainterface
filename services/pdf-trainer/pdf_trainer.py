@@ -46,7 +46,7 @@ class PDFTrainer:
         self.revectorize = True
         self.qdrant_client = QdrantClient(url=QDRANT_URL)
         self.model = SentenceTransformer(EMBEDDING_MODEL)
-        self.collection = os.getenv("QDRANT_COLLECTION", "pdf_embeddings")
+        self.collection = os.getenv("QDRANT_COLLECTION", "pdf_vectors_768")
         self.pdf_dir = Path(PDF_DIR)
         
         # Ensure PDF directory exists
