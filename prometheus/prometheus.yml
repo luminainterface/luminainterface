@@ -1,0 +1,114 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+
+rule_files:
+  - "rules/*.yml"
+
+scrape_configs:
+  - job_name: 'output-engine'
+    static_configs:
+      - targets: ['output-engine:9000']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'otel-collector'
+    static_configs:
+      - targets: ['otel-collector:8888']
+
+  - job_name: 'lumina'
+    static_configs:
+      - targets:
+        - 'concept-analyzer:8301'
+        - 'action-handler:8302'
+        - 'learning-graph:8303'
+        - 'trend-analyzer:8304'
+        - 'concept-dictionary:8305'
+        - 'dual-chat-router:8306'
+        - 'trainer:8307'
+    metrics_path: '/metrics'
+    scheme: 'http'
+
+  - job_name: 'graph-api'
+    static_configs:
+      - targets: ['graph-api:8200']
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+    scrape_timeout: 5s
+
+  - job_name: 'masterchat'
+    static_configs:
+      - targets: ['masterchat:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+    scrape_timeout: 5s
+
+  - job_name: 'crawler'
+    static_configs:
+      - targets: ['crawler:8400']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+    scrape_timeout: 3s
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: up
+        action: keep
+
+  - job_name: 'event-mux'
+    static_configs:
+      - targets: ['event-mux:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+    scrape_timeout: 5s
+
+  - job_name: 'learning-path-optimizer'
+    static_configs:
+      - targets: ['learning-path-optimizer:8130']
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+    scrape_timeout: 5s
+
+  - job_name: 'auditor'
+    static_configs:
+      - targets: ['auditor:9109']
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+    scrape_timeout: 5s
+
+  - job_name: 'retrain-loop'
+    static_configs:
+      - targets:
+        - 'retrain-listener:8733'
+        - 'batch-embedder:8709'
+        - 'concept-trainer-growable:8710'
+
+  - job_name: 'inference'
+    static_configs:
+      - targets:
+        - 'masterchat-core:8839'
+        - 'masterchat-llm:8840'
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+    scrape_timeout: 5s
+
+  - job_name: 'rag'
+    static_configs:
+      - targets:
+        - 'rag-coordinator:8711'
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+    scrape_timeout: 5s 

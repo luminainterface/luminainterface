@@ -1,0 +1,62 @@
+# Concept Planner Configuration
+
+# Service URLs
+graph_api_url: http://graph-api:8000
+
+# Planning Parameters
+min_confidence: 0.7
+max_actions: 10
+planning_interval: 3600  # seconds
+
+# Action Thresholds
+action_thresholds:
+  # Usage thresholds
+  low_usage: 0.3
+  high_importance: 0.8
+  
+  # Knowledge thresholds
+  min_relationships: 5
+  min_samples: 100
+  min_success_rate: 0.7
+  min_quality: 0.8
+  
+  # Action priorities
+  retrain_priority: 0.8
+  test_priority: 0.6
+  crawl_priority: 0.4
+
+# Action Types
+action_types:
+  retrain_concept:
+    description: "Retrain concept embeddings and relationships"
+    required_metrics:
+      - confidence
+      - sample_count
+  test_retrieval:
+    description: "Test concept retrieval effectiveness"
+    required_metrics:
+      - usage_score
+      - retrieval_success
+  crawl_concept:
+    description: "Crawl for additional concept data"
+    required_metrics:
+      - relationship_count
+      - coverage_score
+
+# Metrics
+metrics:
+  enabled: true
+  log_plans: true
+  log_actions: true
+  log_outcomes: true
+
+# Logging
+logging:
+  level: INFO
+  format: json
+  fields:
+    - service
+    - concept
+    - action
+    - priority
+    - reason 

@@ -1,0 +1,42 @@
+# Concept Retriever Configuration
+
+# Service URLs
+graph_api_url: http://graph-api:8000
+vector_api_url: http://vector-api:8000
+
+# Retrieval Parameters
+min_similarity: 0.6
+concept_weight: 0.4
+max_results: 10
+fallback_threshold: 0.3
+
+# Concept Matching
+concept_matching:
+  min_similarity: 0.7
+  max_distance: 2
+  use_semantic_similarity: true
+
+# Result Processing
+result_processing:
+  min_score: 0.5
+  max_concepts_per_result: 5
+  include_metadata: true
+  include_scores: true
+
+# Metrics
+metrics:
+  enabled: true
+  log_retrieval: true
+  log_concepts: true
+  log_scores: true
+
+# Logging
+logging:
+  level: INFO
+  format: json
+  fields:
+    - service
+    - query
+    - num_results
+    - avg_similarity
+    - avg_concept_score 

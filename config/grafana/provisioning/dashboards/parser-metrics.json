@@ -1,0 +1,10 @@
+{
+  "uid": "parser-metrics",
+  "title": "Parser Metrics",
+  "tags": ["parser", "metrics"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "15s",
+  "panels": []
+} 

@@ -1,0 +1,181 @@
+groups:
+  - name: lumina-alerts
+    rules:
+      # Service Health Alerts
+      - alert: ServiceDown
+        expr: up{job=~"ingest-gateway|crawler|batch-embedder|output-engine|concept-trainer|sync-checker"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+          description: "Service {{ $labels.job }} has been down for more than 1 minute."
+
+      # Queue Depth Alerts
+      - alert: HighQueueDepth
+        expr: redis_stream_pending_messages{stream=~"ingest.queue|thought.log|concept.new"} > 5000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High queue depth for {{ $labels.stream }}"
+          description: "Queue {{ $labels.stream }} has more than 5000 pending messages for 5 minutes."
+
+      # Processing Rate Alerts
+      - alert: LowProcessingRate
+        expr: rate(redis_stream_messages_processed_total{job=~"crawler|batch-embedder|output-engine"}[5m]) < 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low processing rate for {{ $labels.job }}"
+          description: "{{ $labels.job }} is processing less than 1 message per second for 10 minutes."
+
+      # Adapter Version Alerts
+      - alert: AdapterVersionMismatch
+        expr: lumina_adapter_version_match < 0.95
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Adapter version mismatch detected"
+          description: "Less than 95% of pods are running the same adapter version."
+
+      # Queue Latency Alerts
+      - alert: HighQueueLatency
+        expr: histogram_quantile(0.95, sum(rate(queue_lag_seconds_bucket{job=~"batch-embedder|concept-dictionary"}[5m])) by (le, job)) > 120
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High queue latency for {{ $labels.job }}"
+          description: "95th percentile queue latency for {{ $labels.job }} is above 120 seconds."
+
+      # License & Robots Block Alerts
+      - alert: HighLicenseBlocks
+        expr: rate(crawler_license_block_total[5m]) > 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High rate of license blocks"
+          description: "More than 10 license blocks per 5 minutes detected."
+
+      - alert: HighRobotsBlocks
+        expr: rate(crawler_robots_block_total[5m]) > 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High rate of robots.txt blocks"
+          description: "More than 10 robots.txt blocks per 5 minutes detected."
+
+      # Resource Usage Alerts
+      - alert: HighMemoryUsage
+        expr: container_memory_usage_bytes{container!=""} / container_spec_memory_limit_bytes{container!=""} > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage for {{ $labels.container }}"
+          description: "Container {{ $labels.container }} is using more than 90% of its memory limit."
+
+      - alert: HighCPUUsage
+        expr: rate(container_cpu_usage_seconds_total{container!=""}[5m]) / container_spec_cpu_quota{container!=""} > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage for {{ $labels.container }}"
+          description: "Container {{ $labels.container }} is using more than 90% of its CPU limit."
+
+      # Dead Letter Queue Alerts
+      - alert: DeadLetterQueueGrowing
+        expr: redis_stream_length{stream="dead.letter"} > 50
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "Dead letter queue is growing"
+          description: "Dead letter queue has more than 50 messages for 1 hour."
+
+      # Model Drift Alerts
+      - alert: HighModelDrift
+        expr: lumina_model_drift_score > 0.8
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High model drift detected"
+          description: "Model drift score is above 0.8 for 30 minutes."
+
+      # Training Progress Alerts
+      - alert: StalledTraining
+        expr: lumina_training_progress{job="concept-trainer"} == 0
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "Training appears stalled"
+          description: "No training progress detected for 1 hour."
+
+      # Response time alerts
+      - alert: HighResponseLatency
+        expr: |
+          histogram_quantile(0.95, rate(output_response_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High response latency detected"
+          description: "95th percentile response time is {{ $value }}s"
+
+      # Error rate alerts
+      - alert: HighErrorRate
+        expr: |
+          rate(output_errors_total[5m]) / rate(output_responses_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value | humanizePercentage }}"
+
+      # Redis stream lag alerts
+      - alert: RedisStreamLag
+        expr: |
+          redis_stream_pending_messages{stream="model.adapter.updated"} > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Redis stream lag detected"
+          description: "Stream 'model.adapter.updated' has {{ $value }} pending messages"
+
+      # Memory usage alerts
+      - alert: HighLatency
+        expr: histogram_quantile(0.95, rate(lumina_request_duration_seconds_bucket[5m])) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High latency detected"
+          description: "Service {{ $labels.job }} has 95th percentile latency above 5s"
+
+      - alert: TrainingStalled
+        expr: lumina_training_last_success_timestamp_seconds < time() - 3600
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "Training has stalled"
+          description: "No successful training runs in the last hour"
+
+      - alert: ConceptDriftHigh
+        expr: lumina_concept_drift_score > 0.8
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High concept drift detected"
+          description: "Concept {{ $labels.concept }} has drift score above 0.8" 

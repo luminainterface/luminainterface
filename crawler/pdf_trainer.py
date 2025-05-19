@@ -43,7 +43,7 @@ class PDFTrainer:
         self.revectorize = revectorize
         self.qdrant_client = QdrantClient(url=QDRANT_URL)
         self.redis_client = Redis.from_url(REDIS_URL)
-        self.collection = os.getenv("QDRANT_COLLECTION", "pdf_embeddings")
+        self.collection = os.getenv("QDRANT_COLLECTION", "pdf_vectors_768")
         self.pdf_dir = Path(os.getenv("PDF_DIR", "training_data/"))
 
         # Initialize TF-IDF vectorizer for section detection

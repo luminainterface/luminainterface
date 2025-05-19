@@ -1,0 +1,10 @@
+{
+  "uid": "graph-api-metrics",
+  "title": "Graph API Metrics",
+  "tags": ["graph-api", "metrics"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "15s",
+  "panels": []
+} 

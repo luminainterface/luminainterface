@@ -22,7 +22,7 @@ async function send () {
   if (!draft.value) return
   messages.value.push({ id: Date.now(), role: 'you', text: draft.value })
   try {
-    const base = import.meta.env.VITE_API_URL || 'http://localhost:8201'
+    const base = import.meta.env.VITE_CHAT_URL || 'http://localhost:8301'
     const resp = await fetch(`${base}/v1/chat/completions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -1,4 +1,11 @@
-# Use nginx alpine for minimal image size
+# Build stage
+FROM node:18-alpine AS build
+WORKDIR /app
+COPY . .
+RUN npm ci
+RUN npm run build
+
+# Production stage
 FROM nginx:1.25-alpine
 
 # Create necessary directories
@@ -17,6 +24,9 @@ COPY js/metrics.js /usr/share/nginx/html/js/
 # Set permissions
 RUN chown -R nginx:nginx /usr/share/nginx/html && \
     chmod -R 755 /usr/share/nginx/html
+
+# Copy built files from build stage
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # Expose port 80 (mapped to 3000 in docker-compose)
 EXPOSE 80

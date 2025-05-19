@@ -403,7 +403,7 @@ class TrainingDataCrawler:
         self.graph_training_path = os.getenv("GRAPH_TRAINING_PATH", os.path.join(self.training_data_path, "graph (1).json"))
         
         # Initialize PDF embeddings collection with 768 dimensions for nomic-embed-text
-        self.pdf_collection = "pdf_embeddings_768d"
+        self.pdf_collection = "pdf_vectors_768"
         self._initialized = False
         self.processed_files = set()
         self.failed_files = set()
@@ -419,10 +419,11 @@ class TrainingDataCrawler:
                 # Initialize Qdrant collection with 768 dimensions for nomic-embed-text
                 await self.qdrant.init_collection(
                     self.pdf_collection,
-                    vector_size=768
+                    vector_size=768,
+                    collection_name=self.pdf_collection  # Explicitly set collection name
                 )
                 self._initialized = True
-                self.logger.info("TrainingDataCrawler initialized successfully")
+                self.logger.info(f"TrainingDataCrawler initialized successfully with collection {self.pdf_collection}")
             except Exception as e:
                 self.logger.error(f"Failed to initialize TrainingDataCrawler: {str(e)}")
                 raise

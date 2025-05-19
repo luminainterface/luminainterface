@@ -1,0 +1,55 @@
+# Reflector Agent Configuration
+
+# Service URLs
+loki_url: http://loki:3100
+graph_api_url: http://graph-api:8000
+prometheus_url: http://prometheus:9090
+
+# Analysis Settings
+analysis_interval: 300  # 5 minutes between analyses
+history_retention: 86400  # 24 hours of insight history
+
+# Performance Thresholds
+vector_search:
+  p95_latency_ms: 500
+  error_rate_threshold: 0.05
+
+rag:
+  hit_rate_threshold: 0.7
+  miss_rate_threshold: 0.3
+  confidence_threshold: 0.8
+
+graph:
+  min_density: 0.1
+  max_isolated_nodes: 0.05
+  min_avg_degree: 2.0
+
+# Action Triggers
+actions:
+  critical:
+    - type: slack_notification
+      channel: "#lumina-alerts"
+      template: "🚨 Critical: {insight}\nRecommendation: {recommendation}"
+    
+    - type: retrain_trigger
+      conditions:
+        - rag_hit_rate < 0.5
+        - vector_error_rate > 0.1
+      action: schedule_retraining
+  
+  warning:
+    - type: slack_notification
+      channel: "#lumina-insights"
+      template: "⚠️ Warning: {insight}\nRecommendation: {recommendation}"
+    
+    - type: data_expansion
+      conditions:
+        - rag_hit_rate < 0.7
+        - graph_density < 0.1
+      action: schedule_crawl
+
+# Learning Settings
+learning:
+  insight_confidence_threshold: 0.7
+  min_data_points: 100
+  adaptation_rate: 0.1  # How quickly to adapt thresholds based on performance 

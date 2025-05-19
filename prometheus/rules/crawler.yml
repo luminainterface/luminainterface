@@ -1,0 +1,21 @@
+groups:
+  - name: crawler
+    rules:
+      - alert: CrawlerDown
+        expr: up{job="crawler"} == 0 or absent(up{job="crawler"})
+        for: 10s
+        labels:
+          severity: critical
+          service: crawler
+        annotations:
+          summary: "Crawler service is down"
+          description: "Crawler service has been down for more than 10 seconds"
+      
+      - alert: CrawlerHighMemory
+        expr: process_resident_memory_bytes{job="crawler"} > 500000000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Crawler high memory usage"
+          description: "Crawler is using more than 500MB of memory" 

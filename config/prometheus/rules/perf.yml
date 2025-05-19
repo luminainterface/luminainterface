@@ -1,0 +1,74 @@
+groups:
+  - name: performance.rules
+    rules:
+      - alert: EmbeddingLatencyHigh
+        expr: embedding_latency_ms > 300
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High embedding latency detected"
+          description: "Embedding service latency is {{ $value }}ms (threshold: 300ms)"
+
+      - alert: MemoryUsageHigh
+        expr: memory_rss_mb > 384
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is {{ $value }}MB (threshold: 384MB)"
+
+      - alert: LowFPS
+        expr: fps_current < 30
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low FPS detected"
+          description: "Current FPS is {{ $value }} (threshold: 30)"
+
+      - alert: ConceptThroughputLow
+        expr: concept_throughput < 50
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low concept throughput"
+          description: "Processing {{ $value }} concepts/s (threshold: 50)"
+
+      - alert: SearchLatencySpike
+        expr: rate(search_duration_seconds_sum[1m]) / rate(search_duration_seconds_count[1m]) > 0.150
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Vector search latency spike"
+          description: "Average search latency is {{ $value }}s (threshold: 150ms)"
+
+      - alert: InferenceLatencyHigh
+        expr: rate(inference_duration_seconds_sum[1m]) / rate(inference_duration_seconds_count[1m]) > 0.250
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High inference latency"
+          description: "Average inference latency is {{ $value }}s (threshold: 250ms)"
+
+      - alert: CrawlQueueGrowing
+        expr: rate(crawl_requests_total[5m]) > rate(concept_updates_total[5m])
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Crawl queue growing"
+          description: "Crawl requests outpacing concept updates"
+
+      - alert: ConceptUpdateStalled
+        expr: rate(concept_updates_total[5m]) == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Concept updates stalled"
+          description: "No concept updates detected in the last 5 minutes" 

@@ -1,0 +1,137 @@
+# Feedback Engine Configuration
+
+# Service URLs
+graph_api_url: http://graph-api:8201
+prometheus_url: http://prometheus:9090
+
+# Evaluation Settings
+evaluation_window: 86400  # 24 hours
+min_samples: 10
+adaptation_rate: 0.1
+min_effectiveness: 0.6
+target_effectiveness: 0.8
+
+# Metric Weights by Action Type
+metric_weights:
+  retrain_concept:
+    confidence: 0.4
+    usage_score: 0.3
+    retrieval_success: 0.3
+    
+  test_retrieval:
+    hit_rate: 0.4
+    latency: 0.3
+    coverage: 0.3
+    
+  crawl_concept:
+    new_relationships: 0.4
+    content_quality: 0.3
+    source_diversity: 0.3
+
+# Prometheus Metric Queries
+metric_queries:
+  # Concept health metrics
+  confidence: concept_confidence{concept_id="{concept_id}"}
+  usage_score: concept_usage_score{concept_id="{concept_id}"}
+  retrieval_success: concept_retrieval_success{concept_id="{concept_id}"}
+  
+  # Retrieval metrics
+  hit_rate: concept_hit_rate{concept_id="{concept_id}"}
+  latency: concept_retrieval_latency{concept_id="{concept_id}"}
+  coverage: concept_coverage_ratio{concept_id="{concept_id}"}
+  
+  # Knowledge metrics
+  new_relationships: concept_relationship_count{concept_id="{concept_id}"}
+  content_quality: concept_content_quality{concept_id="{concept_id}"}
+  source_diversity: concept_source_diversity{concept_id="{concept_id}"}
+
+# Adjustment Thresholds
+adjustment_thresholds:
+  min_confidence: 0.7
+  max_adaptation: 0.2
+  min_samples_ratio: 0.8
+
+# Result Storage
+result_storage:
+  store_outcomes: true
+  store_adjustments: true
+  retention_days: 30
+
+# Metrics
+metrics:
+  enabled: true
+  track_effectiveness: true
+  track_adjustments: true
+  track_outcomes: true
+
+# Logging
+logging:
+  level: INFO
+  format: json
+  fields:
+    - service
+    - action_type
+    - effectiveness
+    - adjustment
+    - reason
+
+# Action Effectiveness Metrics
+action_metrics:
+  crawl_boost:
+    primary: hit_rate
+    secondary: [latency, memory_usage]
+    success_threshold: 0.1  # 10% improvement
+    
+  fine_tune:
+    primary: accuracy
+    secondary: [error_rate, latency]
+    success_threshold: 0.05  # 5% improvement
+    
+  optimize_index:
+    primary: latency
+    secondary: [memory_usage, cpu_usage]
+    success_threshold: -0.2  # 20% reduction
+    
+  schedule_agent_task:
+    primary: accuracy
+    secondary: [latency, error_rate]
+    success_threshold: 0.1
+
+# Reward Model
+reward_model:
+  base_reward: 1.0
+  success_bonus: 0.5
+  failure_penalty: -0.3
+  confidence_multiplier: 1.2
+  
+  time_decay:
+    half_life: 86400  # 24 hours
+    min_weight: 0.1
+    
+  effectiveness_thresholds:
+    high: 0.8
+    medium: 0.5
+    low: 0.2
+
+# Parameter Adjustment
+parameter_adjustment:
+  weight:
+    max: 2.0
+    min: 0.5
+    step: 0.1
+    
+  threshold:
+    max: 0.9
+    min: 0.1
+    step: 0.05
+    
+  confidence:
+    max: 0.95
+    min: 0.3
+    step: 0.05
+
+# History Settings
+history:
+  retention_period: 604800  # 7 days
+  max_samples: 1000
+  compression_enabled: true 

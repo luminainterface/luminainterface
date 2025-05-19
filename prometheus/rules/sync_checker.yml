@@ -1,0 +1,67 @@
+groups:
+- name: sync-checker
+  rules:
+  - alert: ServiceHealthCheck
+    expr: lumina_service_health == 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Service {{ $labels.service }} is unhealthy"
+      description: "Service {{ $labels.service }} has been unhealthy for 5 minutes"
+
+  - alert: AdapterVersionMismatch
+    expr: |
+      max(lumina_adapter_version) - min(lumina_adapter_version) > 3600
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Adapter versions are out of sync"
+      description: "Adapter versions differ by more than 1 hour across services"
+
+  - alert: HighQueueDepth
+    expr: lumina_queue_depth > 5000
+    for: 15m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High queue depth in {{ $labels.stream }}"
+      description: "Queue {{ $labels.stream }} has more than 5000 pending messages for 15 minutes"
+
+  - alert: LowProcessingRate
+    expr: rate(lumina_processing_rate[5m]) < 1
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Low processing rate in {{ $labels.stream }}"
+      description: "Queue {{ $labels.stream }} is processing less than 1 message per minute"
+
+  - alert: HighModelDrift
+    expr: lumina_model_drift > 0.8
+    for: 1h
+    labels:
+      severity: warning
+    annotations:
+      summary: "High model drift detected"
+      description: "Model drift score is above 0.8 for 1 hour"
+
+  - alert: TrainingStalled
+    expr: lumina_training_progress == 0
+    for: 2h
+    labels:
+      severity: warning
+    annotations:
+      summary: "Training appears to be stalled"
+      description: "Training progress has been at 0% for 2 hours"
+
+  - alert: HighCheckLatency
+    expr: |
+      histogram_quantile(0.95, rate(lumina_check_latency_bucket[5m])) > 30
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High sync-checker latency"
+      description: "95th percentile of {{ $labels.operation }} check latency is above 30 seconds" 

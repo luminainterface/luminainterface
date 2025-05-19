@@ -1,0 +1,86 @@
+# PDF Trainer Configuration
+
+# Service URLs
+graph_api_url: http://graph-api:8200
+vector_api_url: http://qdrant:6333
+
+# Directory Settings
+training_dir: training_data
+scan_interval: 3600  # 1 hour
+
+# Document Processing
+document_processing:
+  min_section_length: 100  # Minimum characters for a section
+  max_section_length: 10000  # Maximum characters for a section
+  header_patterns:
+    - "^[A-Z][A-Z\\s]+$"  # ALL CAPS headers
+    - "^[0-9]+\\.\\s+[A-Z][a-z]+"  # Numbered sections
+    - "^[A-Z][a-z]+\\s+[0-9]+"  # Section names with numbers
+
+# Embedding Settings
+embedding:
+  chunk_size: 1000
+  chunk_overlap: 200
+  min_chunk_length: 100
+  max_chunk_length: 2000
+
+# Knowledge Graph Settings
+knowledge_graph:
+  node_types:
+    - training_document
+    - section
+    - concept
+  relationship_types:
+    - contains
+    - references
+    - relates_to
+  property_keys:
+    - title
+    - content
+    - source
+    - section
+    - processed_at
+    - confidence
+
+# Vector Store Settings
+vector_store:
+  collection_name: training_docs
+  metadata_fields:
+    - filename
+    - title
+    - section
+    - source
+    - processed_at
+  index_settings:
+    hnsw_m: 16
+    hnsw_ef_construction: 100
+    hnsw_ef_search: 50
+
+# Logging Settings
+logging:
+  level: INFO
+  format: json
+  fields:
+    - service
+    - filename
+    - section
+    - operation 
+
+# Concept Patterns
+concept_patterns:
+  technical_terms:
+    - "\\b[A-Z][a-z]+(?: [A-Z][a-z]+)*\\b"  # Capitalized phrases
+    - "\\bconcept_[0-9]+\\b"                # Matches 'concept_123'
+  abstract_concepts:
+    - "artificial intelligence"
+    - "machine learning"
+    - "neural network"
+    - "deep learning"
+    - "natural language processing"
+    - "computer vision"
+    - "reinforcement learning"
+    - "transfer learning"
+    - "knowledge representation"
+    - "semantic analysis"
+
+min_confidence: 0.5 

@@ -15,6 +15,7 @@ from shared.log_config import setup_logging
 logger = setup_logging('concept-extractor')
 
 CONCEPT_DICT_API_KEY = os.getenv("CONCEPT_DICT_API_KEY", "changeme")
+CONCEPT_DICT_URL = os.getenv("CONCEPT_DICT_URL", "http://concept-dictionary:8000")
 
 class Concept(BaseModel):
     """Represents an extracted concept with its metadata and relationships."""
@@ -149,7 +150,7 @@ class ConceptExtractor:
                     "nn_response": None,
                     "drift_score": 0.0
                 }
-                requests.post("http://concept-dictionary:8000/concepts", json=concept_dict, timeout=2, headers={"X-API-Key": CONCEPT_DICT_API_KEY})
+                requests.post(f"{CONCEPT_DICT_URL}/concepts", json=concept_dict, timeout=2, headers={"X-API-Key": CONCEPT_DICT_API_KEY})
             except Exception as e:
                 logger.warning(f"Could not post concept to dictionary: {e}")
             

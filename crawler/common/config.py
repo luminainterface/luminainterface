@@ -13,7 +13,7 @@ QDRANT_COLLECTION = os.getenv("QDRANT_COLLECTION", "crawl_results")
 GRAPH_API_URL = os.getenv("GRAPH_API_URL", "http://graph-api:8200")
 
 # Concept Dictionary settings
-CONCEPT_DICT_URL = os.getenv("CONCEPT_DICT_URL", "http://concept-dictionary:8526")
+CONCEPT_DICT_URL = os.getenv("CONCEPT_DICT_URL", "http://concept-dictionary:8828")
 
 # Ollama settings
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://ollama:11434")

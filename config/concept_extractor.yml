@@ -1,0 +1,87 @@
+# Concept Extractor Configuration
+
+# Service URLs
+graph_api_url: http://graph-api:8000
+
+# Extraction Settings
+min_confidence: 0.7
+min_similarity: 0.6
+max_concepts_per_chunk: 50
+
+# Concept Patterns
+concept_patterns:
+  technical_terms:
+    - r'\b[A-Z][a-z]+[A-Z][a-z]+\b'  # CamelCase
+    - r'\b[a-z]+_[a-z]+\b'  # snake_case
+    - r'\b[A-Z]{2,}\b'  # Acronyms
+    - r'\b[A-Z][a-z]+(?:[A-Z][a-z]+)*\b'  # PascalCase
+    - r'\b[a-z]+(?:\.[a-z]+)+\b'  # dot.notation
+    - r'\b[A-Za-z]+(?:-[A-Za-z]+)+\b'  # kebab-case
+  
+  abstract_concepts:
+    - Vector Search
+    - Knowledge Graph
+    - Semantic Understanding
+    - Self Learning
+    - Neural Networks
+    - Machine Learning
+    - Natural Language Processing
+    - Information Retrieval
+    - Distributed Systems
+    - Microservices
+    - Event-Driven Architecture
+    - Data Processing
+    - Model Training
+    - Feature Engineering
+    - System Architecture
+
+# Entity Types
+entity_types:
+  relevant:
+    - ORG
+    - PRODUCT
+    - WORK_OF_ART
+    - LAW
+    - LANGUAGE
+    - PERSON
+    - GPE
+    - EVENT
+  
+  confidence_thresholds:
+    ORG: 0.8
+    PRODUCT: 0.8
+    WORK_OF_ART: 0.7
+    LAW: 0.7
+    LANGUAGE: 0.9
+    PERSON: 0.8
+    GPE: 0.8
+    EVENT: 0.7
+
+# Relationship Settings
+relationships:
+  min_similarity: 0.6
+  max_relationships: 10
+  types:
+    - relates_to
+    - contains
+    - references
+    - implements
+    - extends
+    - uses
+    - depends_on
+
+# Caching
+cache:
+  enabled: true
+  ttl: 3600  # 1 hour
+  max_size: 10000
+
+# Logging
+logging:
+  level: INFO
+  format: json
+  fields:
+    - service
+    - concept_type
+    - confidence
+    - operation 

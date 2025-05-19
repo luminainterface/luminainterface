@@ -1,0 +1,135 @@
+groups:
+  - name: system_health
+    rules:
+      # Back-pressure alerts
+      - alert: IngestQueueBackpressure
+        expr: lumina_queue_depth{stream="ingest.queue"} > 5000
+        for: 5m
+        labels:
+          severity: warning
+          service: ingest
+        annotations:
+          summary: "Ingest queue depth is high"
+          description: "Queue depth is {{ $value }} messages for 5m"
+
+      - alert: ThoughtLogBackpressure
+        expr: lumina_queue_depth{stream="thought.log"} > 1000
+        for: 5m
+        labels:
+          severity: warning
+          service: thought
+        annotations:
+          summary: "Thought log queue depth is high"
+          description: "Queue depth is {{ $value }} messages for 5m"
+
+      # Queue lag alerts
+      - alert: HighQueueLag
+        expr: histogram_quantile(0.95, rate(lumina_queue_lag_seconds_bucket[5m])) > 120
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High queue processing lag"
+          description: "95th percentile lag is {{ $value }}s for 5m"
+
+      # Adapter version alerts
+      - alert: AdapterVersionMismatch
+        expr: count(count by (adapter_id) (adapter_version)) > 1
+        for: 1m
+        labels:
+          severity: critical
+          service: inference
+        annotations:
+          summary: "Multiple adapter versions detected"
+          description: "Found {{ $value }} different adapter versions running"
+
+      - alert: AdapterUpdateLag
+        expr: lumina_queue_depth{stream="model.adapter.updated"} > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: adapter
+        annotations:
+          summary: "Adapter updates are lagging"
+          description: "{{ $value }} adapter updates pending for 5m"
+
+      # Service health alerts
+      - alert: ServiceHealthCheck
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+          description: "Service has been down for more than 1m"
+
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate on {{ $labels.job }}"
+          description: "Error rate is {{ $value | humanizePercentage }} for 5m"
+
+      # Dead-letter queue alerts
+      - alert: DLQDepthHigh
+        expr: lumina_dlq_size > 50
+        for: 15m
+        labels:
+          severity: warning
+          service: dlq
+        annotations:
+          summary: "Dead-letter queue depth is high"
+          description: "DLQ {{ $labels.stream }} has {{ $value }} messages for 15m"
+
+      - alert: DLQAgeHigh
+        expr: histogram_quantile(0.95, rate(lumina_dlq_message_age_seconds_bucket[1h])) > 3600
+        for: 1h
+        labels:
+          severity: warning
+          service: dlq
+        annotations:
+          summary: "Messages in DLQ are aging"
+          description: "95th percentile age is {{ $value }}s for DLQ {{ $labels.stream }}"
+
+      - alert: DLQRetryFailures
+        expr: rate(lumina_dlq_retry_total{result="error"}[15m]) > 0
+        for: 15m
+        labels:
+          severity: warning
+          service: dlq
+        annotations:
+          summary: "DLQ retry failures detected"
+          description: "{{ $value }} retry failures per second for DLQ {{ $labels.stream }}"
+
+      # License and robots alerts
+      - alert: HighLicenseBlocks
+        expr: rate(lumina_license_block_total[1h]) > 0.1
+        for: 1h
+        labels:
+          severity: warning
+          service: license
+        annotations:
+          summary: "High rate of license blocks"
+          description: "{{ $value }} license blocks per second for license {{ $labels.license_type }}"
+
+      - alert: HighRobotsBlocks
+        expr: rate(lumina_robots_block_total[1h]) > 1
+        for: 1h
+        labels:
+          severity: warning
+          service: robots
+        annotations:
+          summary: "High rate of robots.txt blocks"
+          description: "{{ $value }} robots.txt blocks per second for domain {{ $labels.domain }}"
+
+      - alert: LicenseScanSlow
+        expr: histogram_quantile(0.95, rate(lumina_license_scan_seconds_bucket[1h])) > 30
+        for: 1h
+        labels:
+          severity: warning
+          service: license
+        annotations:
+          summary: "License scanning is slow"
+          description: "95th percentile scan time is {{ $value }}s" 

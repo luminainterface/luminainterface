@@ -1,0 +1,147 @@
+# Action Handler Configuration
+
+# Service URLs
+masterchat_url: http://masterchat:8301
+graph_api_url: http://graph-api:8201
+vector_api_url: http://vector-api:6333
+redis_url: http://redis:6381
+
+# Task Execution
+max_concurrent_tasks: 5
+task_timeout: 300  # seconds
+retry_interval: 5  # seconds
+
+# Task Templates
+task_templates:
+  retrain_concept:
+    description: "Retrain concept embeddings and update relationships"
+    template: |
+      Retrain concept embeddings for {concept_label}:
+      1. Gather all documents containing concept
+      2. Extract new training samples
+      3. Update embeddings with min_samples={min_samples}
+      4. Verify confidence >= {target_confidence}
+    required_params:
+      - min_samples
+      - target_confidence
+
+  test_retrieval:
+    description: "Test concept retrieval effectiveness"
+    template: |
+      Test retrieval for {concept_label}:
+      1. Generate {num_queries} test queries
+      2. Measure retrieval performance
+      3. Verify success rate >= {min_success_rate}
+    required_params:
+      - num_queries
+      - min_success_rate
+
+  crawl_concept:
+    description: "Crawl for additional concept data"
+    template: |
+      Crawl data for {concept_label}:
+      1. Search relevant sources
+      2. Collect up to {max_urls} URLs
+      3. Filter by quality >= {min_quality}
+      4. Extract and store content
+    required_params:
+      - max_urls
+      - min_quality
+
+# Result Storage
+result_storage:
+  store_in_graph: true
+  store_metrics: true
+  relationship_type: action_performed
+
+# Event Publishing
+events:
+  enabled: true
+  channel: actions
+  include_metrics: true
+
+# Metrics
+metrics:
+  enabled: true
+  track_execution_time: true
+  track_success_rate: true
+  track_retry_count: true
+
+# Logging
+logging:
+  level: INFO
+  format: json
+  fields:
+    - service
+    - task_id
+    - concept_id
+    - action_type
+    - status
+
+# Task Settings
+max_retries: 3
+queue_check_interval: 1  # seconds
+max_queue_size: 1000
+
+# Action Definitions
+actions:
+  crawl_boost:
+    description: "Boost crawling for specific topics"
+    parameters:
+      topics: []  # List of topics to crawl
+      depth: 3    # Crawl depth
+      priority: 1 # Crawl priority
+    timeout: 3600  # 1 hour timeout
+    
+  fine_tune:
+    description: "Fine-tune model on specific dataset"
+    parameters:
+      model: "default"  # Model to fine-tune
+      dataset: ""      # Dataset to use
+      epochs: 3        # Number of epochs
+    timeout: 7200  # 2 hour timeout
+    
+  optimize_index:
+    description: "Optimize vector index"
+    parameters:
+      method: "auto"  # Optimization method
+      target_latency: 100  # Target latency in ms
+    timeout: 1800  # 30 minute timeout
+    
+  schedule_agent_task:
+    description: "Schedule a task for an agent"
+    parameters:
+      agent_id: ""  # Target agent
+      task_yaml: "" # Task definition
+    timeout: 300  # 5 minute timeout
+
+# Task Priorities
+priorities:
+  critical: 5  # Highest priority
+  warning: 3   # Medium priority
+  info: 1      # Lowest priority
+
+# Action Triggers
+triggers:
+  knowledge:
+    low_hit_rate:
+      threshold: 0.7
+      action: crawl_boost
+    high_miss_rate:
+      threshold: 0.3
+      action: fine_tune
+      
+  performance:
+    high_latency:
+      threshold: 500  # ms
+      action: optimize_index
+    low_accuracy:
+      threshold: 0.8
+      action: fine_tune
+
+# Learning Settings
+learning:
+  action_effectiveness:
+    window: 86400  # 24 hours
+    min_samples: 10
+    adaptation_rate: 0.1 

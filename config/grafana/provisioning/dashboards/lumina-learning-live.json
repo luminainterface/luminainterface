@@ -1,0 +1,10 @@
+{
+  "uid": "lumina-learning-live",
+  "title": "Lumina Learning Evolution (Live)",
+  "tags": ["learning", "evolution", "live"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "15s",
+  "panels": []
+} 

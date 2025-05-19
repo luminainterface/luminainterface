@@ -5,6 +5,7 @@ import SubgraphView from '../components/SubgraphView.vue'
 import MetricsPanel from '../components/MetricsPanel.vue'
 import PlannerConsole from '../components/PlannerConsole.vue'
 import ChatPanel from '../components/ChatPanel.vue'
+import DualChatDashboard from '../views/DualChatDashboard.vue'
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: '/planner',
     name: 'planner',
     component: PlannerConsole
+  },
+  {
+    path: '/all-in-one',
+    name: 'dualchatdashboard',
+    component: DualChatDashboard
   }
 ]
 

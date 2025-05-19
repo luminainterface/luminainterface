@@ -1,0 +1,36 @@
+# Concept Scorer Configuration
+
+# Service URLs
+graph_api_url: http://graph-api:8000
+
+# Source Weights
+source_weights:
+  training_pdf: 1.0
+  crawled_article: 0.5
+  source_weight: 0.4
+  frequency_weight: 0.3
+  usage_weight: 0.3
+
+# Scoring Parameters
+frequency_weighting: true
+action_success_boost: 0.2
+min_importance_score: 0.1
+max_importance_score: 1.0
+
+# Caching
+score_cache_ttl: 30  # minutes
+max_cache_size: 10000
+
+# Update Settings
+update_interval: 3600  # seconds
+batch_size: 100
+
+# Logging
+logging:
+  level: INFO
+  format: json
+  fields:
+    - service
+    - concept_id
+    - importance_score
+    - operation 

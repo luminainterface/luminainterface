@@ -1,0 +1,55 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: varlogs
+          __path__: /var/log/*log
+
+  - job_name: services
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: lumina-services
+          __path__: /var/log/lumina/*.log
+
+  - job_name: containers
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: containers
+          __path__: /var/lib/docker/containers/*/*-json.log
+    pipeline_stages:
+      - regex:
+          expression: '(?P<secret>GITHUB_TOKEN|OPENAI_KEY|REDIS_URL)=[^&\s]+'
+          action: replace
+          replacement: '${secret}=[REDACTED]'
+      - regex:
+          expression: '(?P<secret>Bearer\s+)[A-Za-z0-9\-\._~\+/]+=*'
+          action: replace
+          replacement: '${secret}[REDACTED]'
+      - timestamp:
+          source: time
+          format: RFC3339Nano
+      - labels:
+          time:
+      - output:
+          source: message
+    relabel_configs:
+      - source_labels: ['__path__']
+        target_label: 'container_name'
+        regex: '/var/lib/docker/containers/([^/]+)/.*'
+        replacement: '${1}' 
