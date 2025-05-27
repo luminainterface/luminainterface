@@ -1,0 +1,43 @@
+{
+  "strategies": {
+    "hybrid_advanced": {
+      "enabled": true,
+      "dense_weight": 0.7,
+      "sparse_weight": 0.3,
+      "fusion_method": "reciprocal_rank_fusion",
+      "reranking": true
+    },
+    "query_expansion": {
+      "enabled": true,
+      "expansion_methods": [
+        "synonyms",
+        "related_terms",
+        "context_aware"
+      ],
+      "max_expansions": 3
+    },
+    "contextual_compression": {
+      "enabled": true,
+      "compression_ratio": 0.7,
+      "preserve_key_information": true
+    },
+    "adaptive_ensemble": {
+      "enabled": true,
+      "strategy_selection": "ml_based",
+      "performance_tracking": true
+    }
+  },
+  "quality_filters": {
+    "min_relevance_score": 0.6,
+    "content_quality_threshold": 0.7,
+    "source_credibility_weight": 0.2,
+    "recency_weight": 0.1
+  },
+  "performance_optimization": {
+    "caching_enabled": true,
+    "cache_ttl": 3600,
+    "batch_processing": true,
+    "parallel_retrieval": true,
+    "max_concurrent_requests": 10
+  }
+}

@@ -37,6 +37,7 @@ yarn-error.log*
 .vscode/
 *.swp
 *.swo
+.cursor/
 
 # OS
 .DS_Store
@@ -52,4 +53,116 @@ logs/
 # Backup files
 backups/
 *.tar
-*.md5 
+*.md5
+*.zip
+
+# Test results and logs
+test-results/
+*.xml
+*.html
+*.log
+
+# Model files and large data
+*.pth
+*.h5
+*.model
+*.bin
+training_data.zip
+model_final.pth
+
+# Coverage and test reports
+.coverage
+test_reports/
+test-report.html
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+
+# Cache directories
+.cache/
+__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Model files and large binaries
+models/
+output-engine/models/
+*.bin
+*.safetensors
+*.onnx
+*.ov
+*.xml
+*.mapping
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Log files
+*.out
+
+# Cache directories
+cache/
+.cache/
+*.cache
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# OS specific
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE specific
+.vscode/
+.idea/
+*.sublime-*
+
+# Docker volumes
+data/
+volumes/
+
+# Large datasets
+training_data/wikipedia/
+*.json.gz
+*.csv.gz
+
+# Embedded git repositories
+Search-R1/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Environment files
+.env.local
+.env.production
+
+# Test results
+test_results/
+*.test.json
+
+# Backup files
+*backup*
+*.bak
+
+# Large conversation exports
+conversation_exports/*.json
+extracted_conversations.json
+hybrid_meaningful_conversations.json 

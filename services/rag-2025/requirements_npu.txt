@@ -1,0 +1,36 @@
+# Core RAG dependencies
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.5.0
+httpx==0.25.2
+redis==5.0.1
+numpy==1.24.3
+qdrant-client==1.7.0
+rank-bm25==0.2.2
+
+# NPU/GPU Acceleration (GTX 1080 Optimized)
+torch>=2.1.0,<2.2.0  # Stable version for GTX 1080
+sentence-transformers>=2.3.0
+huggingface_hub>=0.20.0
+transformers>=4.36.0,<4.40.0  # Stable range
+intel-extension-for-pytorch>=2.1.0  # Intel NPU support
+cupy-cuda11x>=11.0.0  # GTX 1080 CUDA 11.x support
+
+# GTX 1080 Specific Optimizations
+nvidia-ml-py3>=7.352.0
+pynvml>=11.0.0
+
+# Optional: Additional acceleration libraries
+# onnxruntime-gpu>=1.16.0  # ONNX Runtime GPU
+# tensorrt>=8.6.0  # TensorRT for NVIDIA
+# openvino>=2023.2.0  # Intel OpenVINO
+
+# Enhanced performance libraries
+psutil==5.9.6
+prometheus-client==0.19.0
+accelerate>=0.24.0  # HuggingFace accelerate for better GPU management
+optimum>=1.14.0     # Model optimization
+
+# Streaming and async support
+aiofiles>=23.0.0
+asyncio-throttle>=1.0.0 

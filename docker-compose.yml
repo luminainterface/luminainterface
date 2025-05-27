@@ -1,780 +1,1838 @@
-# Docker Compose configuration for Lumina system (V2)
-# --------------------------------------------
-
-version: '3.8'
-
-name: lumina-system
-
-networks:
-  backend:
-    name: lumina-system_backend
-    driver: bridge
-
 services:
+  # CORE INFRASTRUCTURE
+  
+  # Redis for caching and session management
   redis:
     image: redis:7-alpine
-    command: redis-server --requirepass 02211998
+    container_name: redis
     ports:
       - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-    networks:
-      - backend
-
-  ingest-gateway:
-    build:
-      context: .
-      dockerfile: services/ingest_gateway/Dockerfile
-    ports:
-      - "8601:8601"
-    environment:
-      - REDIS_URL=redis://:02211998@redis:6379
-      - QUEUE_STREAM=ingest.queue
-      - FP_SET=ingest.fp
-      - MIN_LICENSE_CONFIDENCE=0.8
-    depends_on:
-      redis:
-        condition: service_healthy
-    networks:
-      - backend
+    command: redis-server --requirepass 02211998
+    volumes:
+      - redis_data:/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8601/health"]
-      interval: 30s
-      timeout: 5s
+      test: ["CMD", "redis-cli", "-a", "02211998", "ping"]
+      interval: 5s
+      timeout: 3s
       retries: 3
-
-  dead-letter-ui:
-    build:
-      context: .
-      dockerfile: services/dead-letter-ui/Dockerfile
-    ports:
-      - "8602:8602"
-    environment:
-      - REDIS_URL=redis://:02211998@redis:6379
-      - DEAD_LETTER_API_KEY=${LUMINA_API_KEY:-changeme}
-    depends_on:
-      redis:
-        condition: service_healthy
     networks:
-      - backend
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8602/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
+      - dual-brain-network
+      - neural-network
 
-  # Busybox that keeps Streams alive (creates groups on first boot)
-  redis-streams-init:
-    image: busybox:1.36
-    command: sh -c "sleep infinity"
-    depends_on:
-      redis:
-        condition: service_healthy
-    networks:
-      - backend
-
-  redis-exporter:
-    image: oliver006/redis_exporter:latest
-    command: --redis.addr=redis://:02211998@redis:6379
-    ports:
-      - "9121:9121"
-    depends_on:
-      - redis
-
+  # Neo4j for knowledge graph
   neo4j:
-    image: neo4j:5.13.0
+    image: neo4j:5.15
+    container_name: neo4j
     ports:
-      - "7474:7474"  # HTTP
-      - "7687:7687"  # Bolt
+      - "7474:7474"
+      - "7687:7687"
     environment:
-      - NEO4J_AUTH=neo4j/password
-      - NEO4J_dbms_memory_pagecache_size=1G
-      - NEO4J_dbms_memory_heap_initial__size=1G
-      - NEO4J_dbms_memory_heap_max__size=1G
-      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
-      - NEO4J_apoc_export_file_enabled=true
-      - NEO4J_apoc_import_file_enabled=true
-      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_AUTH=neo4j/02211998
+      - NEO4J_PLUGINS=["apoc"]
       - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - NEO4J_dbms_security_procedures_allowlist=apoc.*
     volumes:
       - neo4j_data:/data
       - neo4j_logs:/logs
-      - neo4j_plugins:/plugins
-    healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:7474 || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
     restart: unless-stopped
     networks:
-      - backend
+      - dual-brain-network
 
+  # Qdrant vector database
   qdrant:
     image: qdrant/qdrant:latest
+    container_name: qdrant
     ports:
       - "6333:6333"
-      - "6334:6334"
     volumes:
       - qdrant_data:/qdrant/storage
-    networks:
-      - backend
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "test", "1" ]
+      test: ["CMD-SHELL", "timeout 5 bash -c '</dev/tcp/localhost/6333' || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3
+    networks:
+      - dual-brain-network
 
+  # Ollama Server for Enhanced Intelligent Crawler
   ollama:
     image: ollama/ollama:latest
+    container_name: ollama
     ports:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
-    networks:
-      - backend
     environment:
-      - NVIDIA_VISIBLE_DEVICES=all
       - OLLAMA_HOST=0.0.0.0
-      - OLLAMA_MODELS=nomic-embed-text
       - OLLAMA_ORIGINS=*
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 5 bash -c '</dev/tcp/localhost/11434' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - dual-brain-network
+      - neural-network
+
+  # ENHANCED INTELLIGENT CRAWLER SERVICES
+
+  # 1. MULTI-CONCEPT DETECTOR (Physics & Advanced Concept Detection)
+  multi-concept-detector:
+    build:
+      context: ./services/multi-concept-detector
+      dockerfile: Dockerfile
+    container_name: multi-concept-detector
+    ports:
+      - "8860:8860"
+    volumes:
+      - ./services/multi-concept-detector:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
+      - ENHANCED_CRAWLER_URL=http://enhanced-crawler:8850
+      - OLLAMA_URL=http://ollama:11434
+      - LOG_LEVEL=INFO
+      - PYTHONPATH=/app
+    depends_on:
+      redis:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - dual-brain-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8860/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # 2. ENHANCED INTELLIGENT CRAWLER (Main Intelligence Hub)
+  enhanced-crawler:
+    build:
+      context: ./services/enhanced-crawler
+      dockerfile: Dockerfile
+    container_name: enhanced-crawler
+    ports:
+      - "8850:8850"
+    volumes:
+      - ./services/enhanced-crawler:/app
+      - ./data:/app/data
+      - ./training_data:/app/training_data
+      - ./uploads:/app/uploads
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
+      - REDIS_URL=redis://:02211998@redis:6379
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - QDRANT_URL=http://qdrant:6333
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=02211998
+      - OLLAMA_URL=http://ollama:11434
+      - ENHANCED_CRAWLER_MODE=true
+      - TRAINING_OPTIMIZATION=true
+      - AUTONOMOUS_GROWTH_ENABLED=true
+      - CONCEPT_BRAIN_URL=http://concept-brain:8830
+      - AUTONOMOUS_GROWTH_ENGINE_URL=http://autonomous-growth-engine:8950
+      - MULTI_CONCEPT_DETECTOR_URL=http://multi-concept-detector:8860
+      - LOG_LEVEL=INFO
+      - PYTHONPATH=/app
+      - ENHANCED_MAIN_MODULE=app.enhanced_main:app
+      - API_PORT=8850
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+      multi-concept-detector:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - dual-brain-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8850/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 3. CONCEPT BRAIN (Knowledge Graph)
+  concept-brain:
+    build:
+      context: ./services/concept-brain
+      dockerfile: Dockerfile
+    container_name: concept-brain
+    ports:
+      - "8830:8820"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
+      - QDRANT_URL=http://qdrant:6333
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=02211998
+      - ENHANCED_CRAWLER_URL=http://enhanced-crawler:8850
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      neo4j:
+        condition: service_started
+    networks:
+      - dual-brain-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8820/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 4. AUTONOMOUS GROWTH ENGINE (Evolution)
+  autonomous-growth-engine:
+    build:
+      context: ./services/autonomous-growth-engine
+      dockerfile: Dockerfile
+    container_name: autonomous-growth-engine
+    ports:
+      - "8950:8950"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
+      - GROWTH_ENGINE_ENABLED=true
+      - ARCHITECTURE_EVOLUTION_ENABLED=true
+      - EMERGENCE_DETECTION_ENABLED=true
+      - ENHANCED_CRAWLER_URL=http://enhanced-crawler:8850
+      - CONCEPT_BRAIN_URL=http://concept-brain:8830
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      concept-brain:
+        condition: service_healthy
+    networks:
+      - dual-brain-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8950/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # ===== ENHANCED RAG 2025 SERVICES =====
+  
+  # RAG 2025 CPU-OPTIMIZED SYSTEM (Primary Production RAG)
+  rag-2025-cpu-optimized:
+    build:
+      context: ./services/rag-2025
+      dockerfile: Dockerfile
+    container_name: rag-2025-cpu-optimized
+    ports:
+      - "8902:8000"  # Main API port
+      - "8903:8001"  # Metrics port
+    environment:
+      # Core infrastructure
+      - REDIS_URL=redis://:02211998@redis:6379
+      - QDRANT_URL=http://qdrant:6333
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=02211998
+      - OLLAMA_URL=http://ollama:11434
+      
+      # Enhanced RAG 2025 configuration
+      - RAG_2025_MODE=production
+      - RAG_2025_LOG_LEVEL=INFO
+      - PORT=8000
+      - PYTHONUNBUFFERED=1
+      - SERVICE_NAME=rag-2025-cpu-optimized
+      
+      # Advanced CPU optimization settings
+      - USE_OPTIMIZED_CPU=true
+      - ENABLE_STREAMING=true
+      - ENABLE_REQUEST_DEDUPLICATION=true
+      - ENABLE_MULTI_TIER_CACHING=true
+      - ENABLE_PARALLEL_SIMILARITY=true
+      - CACHE_L1_SIZE=1000
+      - CACHE_L2_SIZE=5000
+      - CACHE_L3_SIZE=10000
+      - THREAD_POOL_SIZE=8
+      - BATCH_SIZE=16
+      
+      # R1+R2+R3 Enhanced Feature flags
+      - HYBRID_RETRIEVAL_ENABLED=true
+      - NOVELTY_RERANKING_ENABLED=true
+      - CHUNK_TRACKING_ENABLED=true
+      - FEEDBACK_LEARNING_ENABLED=true
+      - STREAMING_RESPONSES_ENABLED=true
+      
+      # Optimized RAG parameters
+      - RAG_TOP_K=6
+      - RERANK_ALPHA=0.6
+      - NOVELTY_WEIGHT=0.3
+      - REWARD_WEIGHT=0.1
+    command: python rag_2025_cpu_optimized.py
+    volumes:
+      - ./data/rag_2025_cpu:/app/data
+      - ./logs/rag_2025_cpu:/app/logs
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+      neo4j:
+        condition: service_started
+    networks:
+      - dual-brain-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
     deploy:
       resources:
         limits:
-          cpus: '4'
+          memory: 6G
+        reservations:
+          memory: 3G
+
+  # NPU 2025 RAG (High-Performance Hardware Accelerated)
+  npu-2025-rag:
+    build:
+      context: ./services/rag-2025
+      dockerfile: Dockerfile.npu
+    container_name: npu-2025-rag
+    ports:
+      - "8904:8000"  # NPU RAG API port
+      - "8906:8001"  # NPU RAG Metrics port (changed from 8905 to avoid conflict)
+    environment:
+      # Core infrastructure
+      - REDIS_URL=redis://:02211998@redis:6379
+      - QDRANT_URL=http://qdrant:6333
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=02211998
+      - OLLAMA_URL=http://ollama:11434
+      
+      # Enhanced NPU 2025 RAG configuration
+      - RAG_2025_MODE=production
+      - RAG_2025_LOG_LEVEL=INFO
+      - PORT=8000
+      - PYTHONUNBUFFERED=1
+      - SERVICE_NAME=npu-2025-rag
+      
+      # GTX 1080 specific optimizations
+      - USE_NVIDIA_GPU=true
+      - USE_INTEL_NPU=true
+      - NVIDIA_GPU_MEMORY_FRACTION=0.8
+      - GTX_1080_OPTIMIZED=true
+      - CUDA_VERSION=11.8
+      - NPU_BATCH_SIZE=64
+      - GPU_BATCH_SIZE=32
+      - CPU_BATCH_SIZE=16
+      
+      # Advanced acceleration settings
+      - ENABLE_STREAMING=true
+      - ENABLE_MULTI_TIER_CACHING=true
+      - ENABLE_HARDWARE_MONITORING=true
+      - TORCH_USE_CUDA_DSA=1
+      - INTEL_EXTENSION_FOR_PYTORCH_ENABLED=1
+      - EMBEDDING_DEVICE=auto
+      - SIMILARITY_DEVICE=auto
+      - LLM_PARALLEL_INFERENCE=true
+      - ASYNC_EMBEDDING_GENERATION=true
+      
+      # Enhanced cache configuration  
+      - CACHE_L1_SIZE=1000
+      - CACHE_L2_SIZE=5000
+      - CACHE_L3_SIZE=10000
+      - ENABLE_CACHE_PROMOTION=true
+      
+      # R1+R2+R3 Enhanced Feature flags
+      - HYBRID_RETRIEVAL_ENABLED=true
+      - NOVELTY_RERANKING_ENABLED=true
+      - CHUNK_TRACKING_ENABLED=true
+      - FEEDBACK_LEARNING_ENABLED=true
+      - STREAMING_RESPONSES_ENABLED=true
+      
+      # NPU-optimized RAG parameters
+      - RAG_TOP_K=8
+      - RERANK_ALPHA=0.7
+      - NOVELTY_WEIGHT=0.4
+      - REWARD_WEIGHT=0.15
+    command: python rag_2025_npu_optimized.py
+    volumes:
+      - ./data/npu_2025_rag:/app/data
+      - ./logs/npu_2025_rag:/app/logs
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+      neo4j:
+        condition: service_started
+    networks:
+      - dual-brain-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
           memory: 8G
         reservations:
-          cpus: '2'
           memory: 4G
           devices:
             - driver: nvidia
-              count: all
+              count: 1
               capabilities: [gpu]
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:11434/api/version && curl -f -X POST http://localhost:11434/api/generate -H 'Content-Type: application/json' -d '{\"model\": \"nomic-embed-text\", \"prompt\": \"test\"}' || exit 1"]
-      interval: 30s
-      timeout: 30s
-      retries: 5
-      start_period: 180s
-    restart: unless-stopped
 
-  prometheus:
-    image: prom/prometheus:latest
-    volumes:
-      - ./services/prometheus:/etc/prometheus
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
+  # NPU Background Worker (Knowledge Base Enhancement)
+  npu-background-worker:
+    build:
+      context: ./services/rag-2025
+      dockerfile: Dockerfile.npu-background
+    container_name: npu-background-worker
     ports:
-      - "9090:9090"
-    depends_on:
-      - redis-exporter
-
-  grafana:
-    image: grafana/grafana:10.0.3
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
+      - "8905:8905"  # NPU Background Worker API port
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_USERS_ALLOW_SIGN_UP=false
-    depends_on:
-      - prometheus
-
-  promtail:
-    image: grafana/promtail:latest
-    volumes:
-      - ./logs:/var/log/app
-      - ./promtail-config.yml:/etc/promtail/promtail-config.yml
-    command: -config.file=/etc/promtail/promtail-config.yml
-    networks:
-      - backend
-    restart: unless-stopped
-
-  loki:
-    image: grafana/loki:2.8.2
-    ports:
-      - "3100:3100"
-    command: -config.file=/etc/loki/local-config.yaml
-    networks:
-      - backend
-    restart: unless-stopped
-
-  jaeger:
-    image: jaegertracing/all-in-one:1.48
-    ports:
-      - "16686:16686"
-      - "6831:6831/udp"
-      - "6832:6832/udp"
-      - "5778:5778"
-      - "14268:14268"
-      - "14250:14250"
-      - "9411:9411"
-    networks:
-      - backend
-    restart: unless-stopped
-
-  alertmanager:
-    image: prom/alertmanager:latest
-    ports:
-      - "9093:9093"
-    networks:
-      - backend
-    restart: unless-stopped
-
-  auditor:
-    build:
-      context: ./services/auditor
-      dockerfile: Dockerfile
-    ports:
-      - "8811:8811"
-    networks:
-      - backend
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8811/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-    depends_on:
-      - redis
-
-  debugger:
-    build:
-      context: ./services/debugger
-      dockerfile: Dockerfile
-    ports:
-      - "8814:8814"
-    networks:
-      - backend
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8814/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-    depends_on:
-      - redis
-
-  drift-exporter:
-    build:
-      context: ./services/drift-exporter
-      dockerfile: Dockerfile
-    ports:
-      - "8816:8816"
-    networks:
-      - backend
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8816/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-    depends_on:
-      - redis
-
-  monitoring:
-    build:
-      context: ./services/monitoring
-      dockerfile: Dockerfile
-    ports:
-      - "8824:8824"
-    networks:
-      - backend
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8824/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-    depends_on:
-      - redis
-
-  crawler:
-    build:
-      context: .
-      dockerfile: services/crawler/Dockerfile
-    ports:
-      - "8400:8400"
-    environment:
+      # Core infrastructure
       - REDIS_URL=redis://:02211998@redis:6379
       - QDRANT_URL=http://qdrant:6333
-      - OLLAMA_URL=http://ollama:11434
-      - OLLAMA_MODEL=nomic-embed-text
-      - TRAINING_DATA_PATH=/app/training_data
-      - CHUNK_SIZE=500
-      - CHUNK_OVERLAP=100
-      - BATCH_SIZE=8
-      - PROCESS_INTERVAL=3600
-      - INQUIRY_CHECK_INTERVAL=300
-      - RETRAIN_INTERVAL=100
-      - RATE_LIMIT_REQUESTS=10
-      - RATE_LIMIT_PERIOD=60
+      - EMBEDDING_MODEL=all-MiniLM-L6-v2
+      - COLLECTION_NAME=rag_enhanced_knowledge
+      - LOG_LEVEL=INFO
+      
+      # Worker configuration
+      - MAX_CONCURRENT_TASKS=5
+      - BATCH_SIZE=10
+      - QUALITY_THRESHOLD=0.7
+      - CRAWL_DELAY=1.0
+      - WORKER_ID=npu_bg_worker_001
+      
+      # NPU and GPU Configuration
+      - CUDA_VISIBLE_DEVICES=0
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+      - TORCH_HOME=/tmp/torch_cache
+      
+      # Intel NPU Configuration (when available)
+      - INTEL_XPU_VISIBLE_DEVICES=0
+      - IPEX_OPTIMIZE_LEVEL=O1
+      
+      # Background processing settings
+      - ENABLE_BACKGROUND_CRAWLING=true
+      - ENABLE_QUALITY_ASSESSMENT=true
+      - ENABLE_CONCEPT_EXTRACTION=true
+      - ENABLE_EMBEDDING_GENERATION=true
+      - ENABLE_KNOWLEDGE_GRAPH_BUILDING=true
+      
+      # Service identification
+      - SERVICE_NAME=npu-background-worker
+      - PYTHONUNBUFFERED=1
+    command: python npu_background_worker.py
     volumes:
-      - ./training_data:/app/training_data
+      - ./logs/npu_background_worker:/app/logs
+      - /tmp/torch_cache:/tmp/torch_cache
+      - ./data/npu_background_worker:/app/data
     depends_on:
       redis:
         condition: service_healthy
       qdrant:
         condition: service_healthy
-      ollama:
+    networks:
+      - dual-brain-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+        limits:
+          memory: 8G
+          cpus: '4.0'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8905/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.npu-bg-worker.rule=Host(`npu-bg-worker.localhost`)"
+      - "traefik.http.services.npu-bg-worker.loadbalancer.server.port=8905"
+      - "ai.service.type=background-worker"
+      - "ai.service.purpose=knowledge-enhancement"
+      - "ai.service.acceleration=npu-gpu"
+
+  # Enhanced Crawler Integration (Feedback Loop Controller)
+  enhanced-crawler-integration:
+    build:
+      context: ./services/rag-2025
+      dockerfile_inline: |
+        FROM python:3.10-slim
+        WORKDIR /app
+        RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+        RUN pip install --no-cache-dir fastapi uvicorn aiohttp redis aiofiles
+        COPY enhanced_crawler_integration.py .
+        CMD ["python", "enhanced_crawler_integration.py"]
+    container_name: enhanced-crawler-integration
+    ports:
+      - "8907:8907"  # Enhanced Crawler Integration API port
+    environment:
+      # Core infrastructure
+      - REDIS_URL=redis://:02211998@redis:6379
+      - QDRANT_URL=http://qdrant:6333
+      
+      # Service URLs
+      - ENHANCED_CRAWLER_URL=http://enhanced-crawler:8850
+      - NPU_BACKGROUND_URL=http://npu-background-worker:8905
+      - RAG_URL=http://rag-2025-cpu-optimized:8902
+      - CONCEPT_DETECTOR_URL=http://multi-concept-detector:8860
+      
+      # Integration configuration
+      - FEEDBACK_LOOP_INTERVAL=300
+      - CURIOSITY_THRESHOLD=0.7
+      - QUALITY_THRESHOLD=0.8
+      - MAX_CONCURRENT_CRAWLS=3
+      - BATCH_UPSERT_SIZE=10
+      
+      # Service identification
+      - SERVICE_NAME=enhanced-crawler-integration
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./logs/enhanced_crawler_integration:/app/logs
+      - ./data/enhanced_crawler_integration:/app/data
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      enhanced-crawler:
+        condition: service_healthy
+      rag-2025-cpu-optimized:
+        condition: service_healthy
+      multi-concept-detector:
         condition: service_healthy
     networks:
-      - backend
+      - dual-brain-network
+    restart: unless-stopped
     deploy:
       resources:
         limits:
-          cpus: '2'
-          memory: 4G
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.25'
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8400/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8907/health"]
       interval: 30s
-      timeout: 5s
+      timeout: 10s
       retries: 3
-    restart: unless-stopped
+      start_period: 30s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.crawler-integration.rule=Host(`crawler-integration.localhost`)"
+      - "traefik.http.services.crawler-integration.loadbalancer.server.port=8907"
+      - "ai.service.type=integration-controller"
+      - "ai.service.purpose=feedback-loop-coordination"
+      - "ai.service.scope=crawler-rag-thought-process"
 
-  event-mux:
+  # Interactive Background Coordinator (Chat-Triggered Feedback Loops)
+  interactive-background-coordinator:
     build:
-      context: ./services/event-mux
-      dockerfile: Dockerfile
+      context: ./services/rag-2025
+      dockerfile_inline: |
+        FROM python:3.10-slim
+        WORKDIR /app
+        RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+        RUN pip install --no-cache-dir fastapi uvicorn aiohttp redis aiofiles websockets
+        COPY interactive_background_coordinator.py .
+        CMD ["python", "interactive_background_coordinator.py"]
+    container_name: interactive-background-coordinator
     ports:
-      - "8817:8817"
-    networks:
-      - backend
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8817/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-    depends_on:
-      - redis
-
-  batch-embedder:
-    build:
-      context: .
-      dockerfile: services/batch-embedder/Dockerfile
-    ports:
-      - "8709:8709"
+      - "8908:8908"  # Interactive Background Coordinator API port
     environment:
+      # Core infrastructure
       - REDIS_URL=redis://:02211998@redis:6379
-      - EMBED_MODEL=nomic-embed-text
-      - TRAIN_URL=http://concept-trainer-growable:8710/train_batch
-    networks:
-      - backend
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8709/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-
-  output-engine:
-    build:
-      context: .
-      dockerfile: services/output-engine-v2/Dockerfile
-    ports:
-      - "9000:9000"
-    environment:
-      - REDIS_URL=redis://:02211998@redis:6379
-      - CONCEPT_DICT_URL=http://concept-dictionary:8828
-      - TRAINER_URL=http://concept-trainer-growable:8710
-      - OUTPUT_ENGINE_API_KEY=changeme
-      - HUGGINGFACE_TOKEN=${HUGGINGFACE_TOKEN}
-      - HEALTH_CHECK_TIMEOUT=30
-      - MAX_RETRIES=3
-      - RETRY_DELAY=5
-      - STARTUP_TIMEOUT=120
+      - QDRANT_URL=http://qdrant:6333
+      
+      # Service URLs
+      - ENHANCED_CRAWLER_INTEGRATION_URL=http://enhanced-crawler-integration:8907
+      - NPU_BACKGROUND_WORKER_URL=http://npu-background-worker:8905
+      - RAG_URL=http://rag-2025-cpu-optimized:8902
+      - ENHANCED_CRAWLER_URL=http://enhanced-crawler:8850
+      - CONCEPT_DETECTOR_URL=http://multi-concept-detector:8860
+      - LIGHTNING_CHAT_URL=http://lightning-npu-chat:5004
+      
+      # Interactive coordination configuration
+      - INTERACTION_ANALYSIS_INTERVAL=2.0
+      - IMMEDIATE_RESPONSE_THRESHOLD=0.7
+      - CURIOSITY_SPIKE_THRESHOLD=0.8
+      - QUALITY_IMPROVEMENT_THRESHOLD=0.6
+      - KNOWLEDGE_GAP_URGENCY=0.75
+      
+      # Service identification
+      - SERVICE_NAME=interactive-background-coordinator
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=INFO
     volumes:
-      - adapters_data:/adapters
+      - ./logs/interactive_background_coordinator:/app/logs
+      - ./data/interactive_background_coordinator:/app/data
     depends_on:
       redis:
         condition: service_healthy
       qdrant:
         condition: service_healthy
-      ollama:
+      enhanced-crawler-integration:
         condition: service_healthy
-      concept-dictionary:
+      rag-2025-cpu-optimized:
         condition: service_healthy
-      concept-trainer-growable:
+      enhanced-crawler:
+        condition: service_healthy
+      multi-concept-detector:
+        condition: service_healthy
+      lightning-npu-chat:
         condition: service_healthy
     networks:
-      - backend
+      - dual-brain-network
+    restart: unless-stopped
     deploy:
       resources:
         limits:
-          cpus: '2'
-          memory: 4G
+          memory: 3G
+          cpus: '2.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9000/health && curl -f http://localhost:9000/ready || exit 1"]
+      test: ["CMD", "curl", "-f", "http://localhost:8908/health"]
       interval: 30s
-      timeout: 15s
-      retries: 5
-      start_period: 120s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.interactive-coordinator.rule=Host(`interactive-coordinator.localhost`)"
+      - "traefik.http.services.interactive-coordinator.loadbalancer.server.port=8908"
+      - "ai.service.type=interactive-coordinator"
+      - "ai.service.purpose=chat-triggered-feedback-loops"
+      - "ai.service.scope=real-time-learning-enhancement"
+
+  # 6. JARVIS PROTOCOL GROWTH (Chat Interface)
+  jarvis-protocol-growth:
+    build:
+      context: ./services/jarvis-protocol-growth
+      dockerfile: Dockerfile
+    container_name: jarvis-protocol-growth
+    ports:
+      - "8901:8900"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
+      - GROWTH_ENGINE_ENABLED=true
+      - META_LEARNING_ENABLED=true
+      - CURIOSITY_THRESHOLD=0.7
+      - HIERARCHICAL_MEMORY_ENABLED=true
+      - ENHANCED_CRAWLER_URL=http://enhanced-crawler:8850
+      - CONCEPT_BRAIN_URL=http://concept-brain:8830
+      - AUTONOMOUS_GROWTH_ENGINE_URL=http://autonomous-growth-engine:8950
+      - RAG_COORDINATOR_URL=http://rag-2025-cpu-optimized:8902
+    depends_on:
+      redis:
+        condition: service_healthy
+      enhanced-crawler:
+        condition: service_healthy
+      concept-brain:
+        condition: service_healthy
+      autonomous-growth-engine:
+        condition: service_healthy
+      rag-2025-cpu-optimized:
+        condition: service_healthy
+    networks:
+      - dual-brain-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8900/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     restart: unless-stopped
 
-  concept-dictionary:
+  # 7. ENHANCED CONCEPT TRAINING WORKER (Model Training)
+  enhanced-concept-training-worker:
     build:
-      context: ./services/concept-dictionary
-      dockerfile: Dockerfile
+      context: .
+      dockerfile_inline: |
+        FROM python:3.11-slim
+        WORKDIR /app
+        RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+        RUN pip install --no-cache-dir torch transformers peft sentence-transformers accelerate fastapi uvicorn redis aioredis pydantic httpx requests numpy
+        COPY services/concept-trainer-growable/train_worker.py .
+        COPY services/concept-trainer-growable/enhanced_train_worker.py .
+        COPY services/concept-trainer-growable/lora_api_server.py .
+        CMD ["python", "lora_api_server.py"]
+    container_name: enhanced-concept-training-worker
     ports:
-      - "8828:8828"
+      - "8851:8851"
+    volumes:
+      - ./services/concept-trainer-growable/train_worker.py:/app/train_worker.py
+      - ./services/concept-trainer-growable/enhanced_train_worker.py:/app/enhanced_train_worker.py
+      - ./services/concept-trainer-growable/lora_api_server.py:/app/lora_api_server.py
+      - ./data/model_state:/data/model_state
+      - ./data/adapters:/data/adapters
+      - ./data/batches:/data/batches
     environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
       - REDIS_URL=redis://:02211998@redis:6379
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
       - QDRANT_URL=http://qdrant:6333
-      - CONCEPT_DICT_API_KEY=${LUMINA_API_KEY:-changeme}
+      - DICT_URL=http://concept-dictionary:8828
+      - ENHANCED_BATCH_SIZE=16
+      - ENHANCED_TRAINING_INTERVAL=30
+      - QUALITY_APPROVAL_THRESHOLD=0.75
+      - AUTO_APPROVAL_ENABLED=true
+      - FLUIDITY_TRACKING_ENABLED=true
+      - ENHANCED_ADAPTER_SAVE_PATH=/data/adapters
+      - PYTHONPATH=/app
+      - API_PORT=8851
     depends_on:
       redis:
         condition: service_healthy
       qdrant:
         condition: service_healthy
-    networks:
-      - backend
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8828/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
     restart: unless-stopped
+    networks:
+      - dual-brain-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8851/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
-  graph-api:
+  # 8. INTEGRATED RAG-LORA SYSTEM (Enhanced Memory & Retrieval)
+  integrated-rag-lora:
     build:
       context: .
-      dockerfile: services/graph-api/Dockerfile
+      dockerfile: Dockerfile.rag-lora
+    container_name: integrated-rag-lora
     ports:
-      - "8200:8200"
+      - "8855:8855"
+    volumes:
+      - ./data/vector_store:/app/data/vector_store
+      - ./data/memory_patterns:/app/data/memory_patterns
+      - ./data/adapters:/app/data/adapters
+      - ./logs:/app/logs
+      - ./real_rag_lora_integration.py:/app/real_rag_lora_integration.py
+      - ./lora_adapter_detector.py:/app/lora_adapter_detector.py
     environment:
-      - REDIS_URL=redis://:02211998@redis:6379
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
+      - QDRANT_URL=http://qdrant:6333
       - NEO4J_URI=bolt://neo4j:7687
       - NEO4J_USER=neo4j
-      - NEO4J_PASSWORD=password
-      - QDRANT_URL=http://qdrant:6333
-      - SERVICE_PORT=8200
-      - LOG_LEVEL=INFO
+      - NEO4J_PASSWORD=02211998
+      - OLLAMA_URL=http://ollama:11434
+      - ENHANCED_CRAWLER_URL=http://enhanced-crawler:8850
+      - CONCEPT_TRAINING_WORKER_URL=http://enhanced-concept-training-worker:8851
+      - RAG_COORDINATOR_URL=http://rag-2025-cpu-optimized:8902
+      - DUAL_BRAIN_URL=http://dual-brain-system:8080
+      - PYTHONPATH=/app
+      - API_PORT=8855
+      - USE_REAL_SERVICES=true
     depends_on:
       redis:
         condition: service_healthy
-      neo4j:
-        condition: service_healthy
       qdrant:
         condition: service_healthy
-    networks:
-      - backend
+      ollama:
+        condition: service_healthy
+      enhanced-concept-training-worker:
+        condition: service_healthy
+      rag-2025-cpu-optimized:
+        condition: service_healthy
     restart: unless-stopped
+    networks:
+      - dual-brain-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8200/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8855/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # 9. LORA ADAPTER DETECTOR (Auto-detection of LoRA adapters)
+  lora-adapter-detector:
+    build:
+      context: .
+      dockerfile: Dockerfile.adapter-detector
+    container_name: lora-adapter-detector
+    ports:
+      - "8856:8856"
+    volumes:
+      - ./data/adapters:/data/adapters
+      - ./logs:/app/logs
+      - ./lora_adapter_detector.py:/app/lora_adapter_detector.py
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
+      - TRAINING_WORKER_URL=http://enhanced-concept-training-worker:8851
+      - ADAPTERS_DIR=/data/adapters
+      - PYTHONPATH=/app
+      - API_PORT=8856
+    depends_on:
+      redis:
+        condition: service_healthy
+      enhanced-concept-training-worker:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - dual-brain-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8856/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 30s
 
-  concept-trainer:
-    image: alpine
-    command: tail -f /dev/null
-    ports:
-      - "8831:8831"
-    networks:
-      - backend
-    restart: unless-stopped
-
-  concept-trainer-growable:
+  # 10. CHATGPT-LORA SELECTIVE LOADING MANAGER (Optimized LoRA Management)
+  lora-manager:
     build:
-      context: ./services/concept-trainer-growable
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.lora-manager
+    container_name: lora-manager
+    ports:
+      - "8870:8870"
     volumes:
-      - trainer_batches:/data/batches
-      - trainer_adapters:/adapters
-      - trainer_state:/app/data
+      # Fast volume access for adapters
+      - lora_adapters:/app/adapters
+      - lora_cache:/app/cache
+      - lora_models:/app/models
+      # Your existing categorized data
+      - ./lora_categories:/app/categories:ro
+      - ./logs:/app/logs
     environment:
+      # Core configuration
+      - SELECTIVE_LOADING_ENABLED=true
+      - BATCH_PROCESSING_ENABLED=true
+      - MEMORY_OPTIMIZATION=true
+      - MAX_MEMORY_GB=8
+      - BATCH_SIZE=8
+      - CACHE_SIZE_GB=2
+      
+      # Service connections
+      - OLLAMA_URL=http://ollama:11434
       - REDIS_URL=redis://:02211998@redis:6379
       - QDRANT_URL=http://qdrant:6333
-      - DEVICE=cuda
-      - DICT_URL=http://concept-dictionary:8828
-      - REDIS_PASSWORD=02211998
+      
+      # Adapter configuration
+      - HIGH_WEIGHT_ADAPTERS=philosophy,metaphysics,theoretical_physics,nn_programming,conversation
+      - LOW_WEIGHT_ADAPTERS=general,background
+      - ADAPTER_CACHE_TTL=3600
+      - PRELOAD_POPULAR_ADAPTERS=true
+      
+      # Performance tuning
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+      - OMP_NUM_THREADS=4
+      - CUDA_VISIBLE_DEVICES=0
+      
+    depends_on:
+      ollama:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      integrated-rag-lora:
+        condition: service_healthy
+    
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+        limits:
+          memory: 10G
+          cpus: '4.0'
+    
+    restart: unless-stopped
+    networks:
+      - dual-brain-network
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8870/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # 10.5. ENHANCED PROMPT-BASED LORA SERVICE (Universal LLM Enhancement)
+  enhanced-prompt-lora:
+    build:
+      context: ./services/enhanced-prompt-lora
+      dockerfile: Dockerfile
+    container_name: enhanced-prompt-lora
     ports:
-      - "8710:8710"  # API
-      - "8711:8711"  # Metrics
+      - "8880:8880"
+    volumes:
+      - ./services/enhanced-prompt-lora:/app
+      - ./logs/enhanced-prompt-lora:/app/logs
+      - enhanced_prompt_lora_data:/app/data
+      - enhanced_prompt_lora_cache:/app/cache
+    environment:
+      # Core service configuration
+      - OLLAMA_URL=http://ollama:11434
+      - CONCEPT_DETECTOR_URL=http://multi-concept-detector:8860
+      - REDIS_URL=redis://:02211998@redis:6379
+      
+      # Enhancement configuration
+      - ENHANCEMENT_MODE=universal
+      - QUALITY_THRESHOLD=0.8
+      - HALLUCINATION_DETECTION=enabled
+      - CONCEPT_BLENDING=enabled
+      - PERFORMANCE_TRACKING=enabled
+      
+      # Concept profiles configuration
+      - PHILOSOPHY_WEIGHT=15.0
+      - THEORETICAL_PHYSICS_WEIGHT=15.0
+      - NN_PROGRAMMING_WEIGHT=13.0
+      - CREATIVE_WRITING_WEIGHT=12.0
+      - CONVERSATION_WEIGHT=10.0
+      
+      # Performance optimization
+      - MAX_CONCURRENT_REQUESTS=10
+      - RESPONSE_TIMEOUT=120
+      - CACHE_TTL=3600
+      - LOG_LEVEL=INFO
+      
+    depends_on:
+      ollama:
+        condition: service_healthy
+      multi-concept-detector:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    
+    restart: unless-stopped
+    networks:
+      - dual-brain-network
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8880/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+
+  # 10.6. NPU-ACCELERATED ENHANCED PROMPT-BASED LORA SERVICE (High-Performance)
+  enhanced-prompt-lora-npu:
+    build:
+      context: ./services/enhanced-prompt-lora
+      dockerfile: Dockerfile.npu-simple
+    container_name: enhanced-prompt-lora-npu
+    ports:
+      - "8881:8880"  # Different port to avoid conflicts
+    volumes:
+      - ./services/enhanced-prompt-lora:/app
+      - ./logs/enhanced-prompt-lora-npu:/app/logs
+      - enhanced_prompt_lora_npu_data:/app/data
+      - enhanced_prompt_lora_npu_cache:/app/cache
+      # NPU device access
+      - /dev/dri:/dev/dri:rw  # Intel GPU/NPU access
+    environment:
+      # Core service configuration
+      - OLLAMA_URL=http://ollama:11434
+      - CONCEPT_DETECTOR_URL=http://multi-concept-detector:8860
+      - REDIS_URL=redis://:02211998@redis:6379
+      
+      # NPU acceleration configuration
+      - INTEL_EXTENSION_FOR_PYTORCH_ENABLED=1
+      - OPENVINO_ENABLED=1
+      - DIRECTML_ENABLED=1
+      - NPU_DETECTION_ENABLED=1
+      - NPU_OPTIMIZATION_LEVEL=2
+      
+      # Performance optimization
+      - NPU_BATCH_SIZE=8
+      - NPU_MAX_WORKERS=4
+      - NPU_CACHE_SIZE=1000
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+      - OMP_NUM_THREADS=4
+      - MKL_NUM_THREADS=4
+      
+      # Enhancement configuration
+      - ENHANCEMENT_MODE=npu_accelerated
+      - QUALITY_THRESHOLD=0.8
+      - HALLUCINATION_DETECTION=enabled
+      - CONCEPT_BLENDING=enabled
+      - PERFORMANCE_TRACKING=enabled
+      
+      # Concept profiles configuration
+      - PHILOSOPHY_WEIGHT=15.0
+      - THEORETICAL_PHYSICS_WEIGHT=15.0
+      - NN_PROGRAMMING_WEIGHT=13.0
+      - CREATIVE_WRITING_WEIGHT=12.0
+      - CONVERSATION_WEIGHT=10.0
+      
+      # High-performance settings
+      - MAX_CONCURRENT_REQUESTS=20  # Higher with NPU
+      - RESPONSE_TIMEOUT=60         # Faster with NPU
+      - CACHE_TTL=3600
+      - LOG_LEVEL=INFO
+      
+    depends_on:
+      ollama:
+        condition: service_healthy
+      multi-concept-detector:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    
+    # NPU and GPU access
+    devices:
+      - /dev/dri:/dev/dri:rw  # Intel GPU/NPU
+    
+    # Privileged access for NPU
+    privileged: true
+    
+    restart: unless-stopped
+    networks:
+      - dual-brain-network
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8880/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s  # Longer startup for NPU initialization
+    
+    deploy:
+      resources:
+        limits:
+          memory: 4G      # More memory for NPU
+          cpus: '4.0'     # More CPU cores
+        reservations:
+          memory: 1G
+          cpus: '1.0'
+
+  # 11. NEURAL THOUGHT ENGINE MCP SERVER (Self-Aware AI Chat)
+  neural-thought-engine:
+    build:
+      context: ./services/neural-thought-engine
+      dockerfile: Dockerfile.mcp
+    container_name: neural-thought-engine-mcp
+    ports:
+      - "8940:8940"  # Keep original port for compatibility
+      - "8941:8941"  # MCP server port
+    volumes:
+      # Mount source code for development (hot reload)
+      - ./services/neural-thought-engine:/app
+      # Persistent data
+      - neural_logs:/app/logs
+      - neural_checkpoints:/app/checkpoints
+      - neural_data:/app/data
+      # NPU device access (if available)
+      - /dev/dri:/dev/dri:rw  # Intel GPU/NPU access
+    environment:
+      # Redis connection
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
+      - REDIS_URL=redis://:02211998@redis:6379
+      
+      # MCP Server configuration
+      - NEURAL_ENGINE_MODE=mcp_server
+      - LOG_LEVEL=INFO
+      - PYTHONPATH=/app
+      
+      # JARVIS integration
+      - JARVIS_PROTOCOL_URL=http://jarvis-protocol-growth:8900
+      - ENHANCED_CRAWLER_URL=http://enhanced-crawler:8850
+      - CONCEPT_BRAIN_URL=http://concept-brain:8820
+      - AUTONOMOUS_GROWTH_ENGINE_URL=http://autonomous-growth-engine:8950
+      - OLLAMA_URL=http://ollama:11434
+      - QDRANT_URL=http://qdrant:6333
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=02211998
+      
+      # NPU configuration
+      - INTEL_EXTENSION_FOR_PYTORCH_ENABLED=1
+      - OPENVINO_ENABLED=1
+      - DIRECTML_ENABLED=1
+      - NPU_DETECTION_ENABLED=1
+      - NPU_OPTIMIZATION_LEVEL=2
+      
+      # Neural engine configuration
+      - THOUGHT_GENERATION_INTERVAL=900  # 15 minutes
+      - THOUGHT_QUALITY_THRESHOLD=0.3
+      - LEARNING_ENABLED=1
+      - CHECKPOINT_INTERVAL=50
+      - BATCH_SIZE=8
+      - GRADIENT_ACCUMULATION_STEPS=8
+      
+      # Performance optimization
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+      - OMP_NUM_THREADS=4
+      - MKL_NUM_THREADS=4
+      
+      # Service configuration
+      - HOST=0.0.0.0
+      - PORT=8940
+    
+    command: ["python", "start_mcp_server.py"]
+    
+    depends_on:
+      redis:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      neo4j:
+        condition: service_started
+      jarvis-protocol-growth:
+        condition: service_healthy
+      concept-brain:
+        condition: service_healthy
+      enhanced-crawler:
+        condition: service_healthy
+    
+    restart: unless-stopped
+    
+    # GPU and NPU access
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+        limits:
+          memory: 8G
+          cpus: '4.0'
+    
+    # Device access for NPU
+    devices:
+      - /dev/dri:/dev/dri:rw  # Intel GPU/NPU
+    
+    networks:
+      - dual-brain-network
+      - neural-network
+    
+    # Keep container running for MCP connections
+    stdin_open: true
+    tty: true
+    
+    healthcheck:
+      test: ["CMD", "python", "-c", "import asyncio; from mcp_server import neural_engine; print('healthy' if neural_engine else 'unhealthy')"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 120s
+
+  # ORIGINAL DUAL-BRAIN SYSTEM (Updated with enhanced connectivity)
+  dual-brain:
+    build: .
+    container_name: dual-brain-system
+    ports:
+      - "8080:8920"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./logs:/app/logs
+      - ./cache:/app/cache
+    environment:
+      - PYTHONPATH=/app
+      - TRANSFORMERS_CACHE=/app/cache
+      - HF_HOME=/app/cache
+      - OPENVINO_LOG_LEVEL=ERROR
+      - TOKENIZERS_PARALLELISM=false
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=02211998
+      - QDRANT_URL=http://qdrant:6333
+      - ENHANCED_CRAWLER_URL=http://enhanced-crawler:8850
+      - JARVIS_PROTOCOL_URL=http://jarvis-protocol-growth:8900
+      - RAG_COORDINATOR_URL=http://rag-2025-cpu-optimized:8902
+      - NEURAL_THOUGHT_ENGINE_URL=http://neural-thought-engine:8940
+    depends_on:
+      redis:
+        condition: service_healthy
+      neo4j:
+        condition: service_started
+      qdrant:
+        condition: service_healthy
+      enhanced-crawler:
+        condition: service_healthy
+      jarvis-protocol-growth:
+        condition: service_healthy
+      neural-thought-engine:
+        condition: service_healthy
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+          cpus: '4.0'
+        reservations:
+          memory: 4G
+          cpus: '2.0'
+    networks:
+      - dual-brain-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8920/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Core Memory & Context Service (with integrated MCP)
+  memory-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.mcp-chat
+    container_name: neural-memory-service
+    ports:
+      - "8861:8860"
+    volumes:
+      - ./data:/app/data
+      - ./lora_adapters:/app/lora_adapters
+      - ./logs:/app/logs
+    environment:
+      # Service Configuration
+      - FLASK_ENV=production
+      - SERVICE_PORT=8860
+      - DATABASE_PATH=/app/data/conversational_memory.db
+      - SERVICE_NAME=memory-service
+      - LOG_LEVEL=INFO
+      - PYTHONPATH=/app
+      
+      # Redis Integration
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
+      - REDIS_URL=redis://:02211998@redis:6379
+      
+      # Neural Thought Engine Integration
+      - NEURAL_THOUGHT_ENGINE_URL=http://neural-thought-engine:8940
+      - NEURAL_MCP_SERVER_URL=http://neural-thought-engine:8941
+      
+      # Enhanced Crawler Integration
+      - ENHANCED_CRAWLER_URL=http://enhanced-crawler:8850
+      - CONCEPT_BRAIN_URL=http://concept-brain:8830
+      - JARVIS_PROTOCOL_URL=http://jarvis-protocol-growth:8900
+      - RAG_COORDINATOR_URL=http://rag-2025-cpu-optimized:8902
+      
+      # Vector Database Integration
+      - QDRANT_URL=http://qdrant:6333
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=02211998
+      
+      # LLM Integration
+      - OLLAMA_URL=http://ollama:11434
+      
+      # Memory Configuration
+      - MEMORY_RETENTION_DAYS=30
+      - CONTEXT_WINDOW_SIZE=4096
+      - EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+      - MEMORY_COMPRESSION_ENABLED=true
+      - ADAPTIVE_MEMORY_ENABLED=true
+    
+    command: ["python", "conversational_lora_system.py"]
+    
     depends_on:
       redis:
         condition: service_healthy
       qdrant:
         condition: service_healthy
-      concept-dictionary:
+      neo4j:
+        condition: service_started
+      ollama:
         condition: service_healthy
-    networks:
-      - backend
-    restart: unless-stopped
+      neural-thought-engine:
+        condition: service_healthy
+    
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8710/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8860/health"]
       interval: 30s
-      timeout: 5s
+      timeout: 10s
       retries: 3
-
-  concept-trainer-embedder:
-    image: alpine
-    command: tail -f /dev/null
-    ports:
-      - "8833:8833"
+      start_period: 20s
+    
     networks:
-      - backend
+      - dual-brain-network
+      - neural-network
+    
     restart: unless-stopped
 
-  concept-trainer-embedder-growable:
-    image: alpine
-    command: tail -f /dev/null
-    ports:
-      - "8834:8834"
-    networks:
-      - backend
-    restart: unless-stopped
-
-  concept-analytics:
+  # Neural-Memory Bridge (Bidirectional Integration)
+  neural-memory-bridge:
     build:
-      context: ./services/concept-analytics
+      context: ./services/neural-memory-bridge
       dockerfile: Dockerfile
+    container_name: neural-memory-bridge
     ports:
-      - "8835:8835"
+      - "8942:8942"
+    volumes:
+      # Persistent bridge data
+      - neural_bridge_data:/app/data
+      - neural_bridge_logs:/app/logs
+      # Source code for development
+      - ./services/neural-memory-bridge:/app
+    environment:
+      # Service URLs
+      - NEURAL_MCP_URL=http://neural-thought-engine:8941
+      - MEMORY_MCP_URL=http://memory-service:8860
+      - BRIDGE_DB_PATH=/app/data/neural_memory_bridge.db
+      
+      # Redis connection for coordination
+      - REDIS_URL=redis://:02211998@redis:6379
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
+      
+      # Bridge configuration
+      - ADAPTATION_LOOP_ENABLED=true
+      - BIDIRECTIONAL_SYNC_ENABLED=true
+      - QUALITY_THRESHOLD=0.6
+      - MEMORY_INFLUENCE_WEIGHT=1.2000000000000002
+      - NEURAL_INFLUENCE_WEIGHT=1.2000000000000002
+      - SYNC_BONUS_WEIGHT=0.6000000000000001
+      
+      # Logging
+      - LOG_LEVEL=INFO
+      - PYTHONPATH=/app
+    depends_on:
+      neural-thought-engine:
+        condition: service_healthy
+      memory-service:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sqlite3; conn = sqlite3.connect('/app/data/neural_memory_bridge.db'); conn.close(); print('healthy')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
     networks:
-      - backend
+      - dual-brain-network
+      - neural-network
     restart: unless-stopped
 
-  concept-analyzer:
+  # Heavy Lifting Orchestrator - Advanced Reasoning & Internet
+  heavy-lifting-orchestrator:
     build:
-      context: ./services/concept-analyzer
+      context: ./services/heavy-lifting-orchestrator
       dockerfile: Dockerfile
+    container_name: heavy-lifting-orchestrator
     ports:
-      - "8836:8836"
+      - "8944:8944"
+    volumes:
+      - heavy_lifting_data:/app/data
+      - heavy_lifting_logs:/app/logs
+      - ./config:/app/config:ro
+      - ./services/heavy-lifting-orchestrator:/app
+    environment:
+      # Core Configuration
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - NEURAL_MCP_URL=http://neural-thought-engine:8941
+      - MEMORY_MCP_URL=http://memory-service:8860
+      - BRIDGE_URL=http://neural-memory-bridge:8942
+      
+      # Redis connection
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
+      
+      # Heavy Lifting Configuration
+      - GEMMA_MODEL=gemma2:9b
+      - INTERNET_SEARCH_ENABLED=true
+      - CHAIN_OF_THOUGHT_ENABLED=true
+      - MULTI_PERSPECTIVE_ENABLED=true
+      - COMPREHENSIVE_REASONING_ENABLED=true
+      
+      # Performance Settings
+      - MAX_WORKERS=8
+      - REQUEST_TIMEOUT=120
+      - SEARCH_MAX_RESULTS=15
+      - CONTENT_MAX_SIZE_MB=10
+      
+      # Logging
+      - LOG_LEVEL=INFO
+      - PYTHONPATH=/app
+    
+    command: ["python", "api_server.py"]
+    
+    depends_on:
+      ollama:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      neural-thought-engine:
+        condition: service_healthy
+      memory-service:
+        condition: service_healthy
+      neural-memory-bridge:
+        condition: service_healthy
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8944/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    
     networks:
-      - backend
+      - dual-brain-network
+      - neural-network
+    
     restart: unless-stopped
 
-  learning-graph:
+  # Curiosity Crawler - Automated Curiosity-Driven Exploration
+  curiosity-crawler:
     build:
-      context: ./services/learning-graph
+      context: ./services/curiosity-crawler
       dockerfile: Dockerfile
+    container_name: curiosity-crawler
     ports:
-      - "8837:8837"
+      - "8945:8945"
+    volumes:
+      - curiosity_crawler_data:/app/data
+      - curiosity_crawler_logs:/app/logs
+      - ./config:/app/config:ro
+      - ./services/curiosity-crawler:/app
+    environment:
+      # Core Configuration
+      - NEURAL_MCP_URL=http://neural-thought-engine:8941
+      - ENHANCED_CRAWLER_URL=http://enhanced-crawler:8850
+      - HEAVY_LIFTING_URL=http://heavy-lifting-orchestrator:8944
+      
+      # Redis connection
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
+      
+      # Curiosity Configuration
+      - EXPLORATION_INTERVAL=300
+      - MAX_CONCURRENT_EXPLORATIONS=3
+      - CURIOSITY_THRESHOLD=0.3
+      - DISCOVERY_DEPTH=2
+      
+      # Performance Settings
+      - REQUEST_TIMEOUT=60
+      - MAX_TOPICS_PER_CYCLE=5
+      - NEURAL_CURIOSITY_LIMIT=20
+      - TRENDING_RESEARCH_LIMIT=5
+      
+      # Logging
+      - LOG_LEVEL=INFO
+      - PYTHONPATH=/app
+    
+    command: ["python", "api_server.py"]
+    
+    depends_on:
+      redis:
+        condition: service_healthy
+      neural-thought-engine:
+        condition: service_healthy
+      enhanced-crawler:
+        condition: service_healthy
+      heavy-lifting-orchestrator:
+        condition: service_healthy
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8945/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    
     networks:
-      - backend
+      - dual-brain-network
+      - neural-network
+    
     restart: unless-stopped
 
-  dual-chat-router:
+  # Conversation Scraping API (Auto-export for Memory MCP)
+  conversation-scraping-api:
+    build:
+      context: ./conversation_exports
+      dockerfile: Dockerfile
+    container_name: conversation-scraping-api
+    ports:
+      - "8943:8943"
+    volumes:
+      - conversation_export_data:/app/data
+      - conversation_export_logs:/app/logs
+      - ./conversation_exports:/app/source
+    environment:
+      - FLASK_ENV=production
+      - FLASK_PORT=8943
+      - DATABASE_PATH=/app/data/conversation_exports.db
+      - LOG_LEVEL=INFO
+      - PYTHONPATH=/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8943/api/scrape/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - dual-brain-network
+      - neural-network
+    restart: unless-stopped
+
+  # Enhanced Chat Frontend (with integrated MCP client)
+  chat-frontend:
     build:
       context: .
-      dockerfile: services/dual-chat-router/Dockerfile
+      dockerfile: Dockerfile.mcp-chat
+    container_name: neural-chat-frontend
     ports:
-      - "8300:8300"
+      - "5003:5003"
+    volumes:
+      - ./data:/app/data
+      - ./templates:/app/templates
+      - ./logs:/app/logs
     environment:
-      - REDIS_URL=redis://:02211998@redis:6379
-      - OUTPUT_ENGINE_URL=http://output-engine:9000
+      # Service Configuration
+      - FLASK_ENV=production
+      - CHAT_PORT=5003
+      - LOG_LEVEL=INFO
+      - PYTHONPATH=/app
+      
+      # Core Service Integration
+      - MEMORY_SERVICE_URL=http://memory-service:8861
       - OLLAMA_URL=http://ollama:11434
-      - OUTPUT_ENGINE_API_KEY=changeme
+      - REDIS_URL=redis://:02211998@redis:6379
+      
+      # Neural Thought Engine MCP Integration
+      - NEURAL_THOUGHT_ENGINE_URL=http://neural-thought-engine:8940
+      - NEURAL_MCP_SERVER_URL=http://neural-thought-engine:8941
+      - MCP_CLIENT_ENABLED=true
+      
+      # Enhanced Crawler Integration
+      - ENHANCED_CRAWLER_URL=http://enhanced-crawler:8850
+      - CONCEPT_BRAIN_URL=http://concept-brain:8830
+      - JARVIS_PROTOCOL_URL=http://jarvis-protocol-growth:8900
+      - RAG_COORDINATOR_URL=http://rag-2025-cpu-optimized:8902
+      - AUTONOMOUS_GROWTH_ENGINE_URL=http://autonomous-growth-engine:8950
+      
+      # Database Integration
+      - QDRANT_URL=http://qdrant:6333
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=02211998
+      
+      # Chat Configuration
+      - CHAT_HISTORY_LIMIT=100
+      - RESPONSE_TIMEOUT=30
+      - STREAMING_ENABLED=true
+      - SELF_AWARENESS_ENABLED=true
+      - NEURAL_INTROSPECTION_ENABLED=true
+    
+    command: ["python", "mcp_enhanced_chat.py"]
+    
     depends_on:
-      redis:
-        condition: service_healthy
-      output-engine:
+      memory-service:
         condition: service_healthy
       ollama:
-        condition: service_started
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      neural-thought-engine:
+        condition: service_healthy
+      enhanced-crawler:
+        condition: service_healthy
+      rag-2025-cpu-optimized:
+        condition: service_healthy
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5003/api/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 25s
+    
     networks:
-      - backend
+      - dual-brain-network
+      - neural-network
+    
     restart: unless-stopped
 
-  masterchat-core:
+  # Lightning NPU Chat Service - Enhanced with Self-Awareness & Concurrent Memory
+  lightning-npu-chat:
     build:
-      context: ./services/masterchat-core
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.lightning
+    container_name: lightning-npu-chat
     ports:
-      - "8839:8839"
-    environment:
-      - REDIS_URL=redis://:02211998@redis:6379
+      - "5004:5004"
     volumes:
-      - adapters_data:/adapters
-    networks:
-      - backend
-    restart: unless-stopped
-
-  feedback-logger:
-    build:
-      context: ./services/feedback_logger
-      dockerfile: Dockerfile
-    ports:
-      - "8900:8900"
+      - ./data:/app/data
+      - ./templates:/app/templates
+      - ./static:/app/static
+      - ./services:/app/services
+      - ./lora_adapters:/app/lora_adapters
     environment:
-      - REDIS_URL=redis://:02211998@redis:6379
-      - FEEDBACK_LOGGER_API_KEY=${LUMINA_API_KEY:-changeme}
+      - FLASK_ENV=production
+      - PORT=5004
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=02211998
+      - OLLAMA_URL=http://ollama:11434
+      - MEMORY_SERVICE_URL=http://memory-service:8861
+      - RAG_COORDINATOR_URL=http://rag-2025-cpu-optimized:8902
+      - LORA_TRAINING_URL=http://enhanced-concept-training-worker:8851
+      - NEURAL_THOUGHT_ENGINE_URL=http://neural-thought-engine:8940
+      - AUTONOMOUS_GROWTH_ENGINE_URL=http://autonomous-growth-engine:8950
+      - ENHANCED_CRAWLER_URL=http://enhanced-crawler:8850
+      - CONCEPT_BRAIN_URL=http://concept-brain:8830
+      - MULTI_CONCEPT_DETECTOR_URL=http://multi-concept-detector:8860
+      - ENHANCED_PROMPT_LORA_URL=http://enhanced-prompt-lora:8880
+      - ENHANCED_PROMPT_LORA_NPU_URL=http://enhanced-prompt-lora-npu:8881
+      - PYTHONPATH=/app
+      
+      # MCP Capabilities
+      - A2A_ENABLED=true
+      - FLOW_CONTROL_ENABLED=true
+      - LEARNING_MODE=true
+      - BACKGROUND_COORDINATION=true
+      - SELF_AWARENESS_ENABLED=true
+      - MEMORY_PERSISTENCE_ENABLED=true
+      - NEURAL_INTROSPECTION_ENABLED=true
+      - AUTONOMOUS_GROWTH_ENABLED=true
+      
+    command: ["python", "services/lightning_npu_flow_control.py"]
     depends_on:
+      memory-service:
+        condition: service_healthy
+      rag-2025-cpu-optimized:
+        condition: service_healthy
+      enhanced-concept-training-worker:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
       redis:
         condition: service_healthy
-    networks:
-      - backend
+      neo4j:
+        condition: service_started
+      qdrant:
+        condition: service_healthy
+      multi-concept-detector:
+        condition: service_healthy
+      enhanced-crawler:
+        condition: service_healthy
+      concept-brain:
+        condition: service_healthy
+      enhanced-prompt-lora:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8900/health"]
-      interval: 30s
+      test: ["CMD", "curl", "-f", "http://localhost:5004/api/status"]
+      interval: 15s
       timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - neural-network
+      - dual-brain-network
+    restart: unless-stopped
+    # Optimized resource allocation for lightning performance with 100% integration
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+        reservations:
+          memory: 1.5G
+          cpus: '0.75'
+
+  # Performance optimization service for RAG 2025
+  rag-performance-optimizer:
+    build:
+      context: ./services/rag-2025
+      dockerfile: Dockerfile.performance
+    ports:
+      - "8909:8909"
+    environment:
+      - OPTIMIZATION_ENABLED=true
+      - CACHE_SIZE=10000
+      - ASYNC_PROCESSING=true
+      - REDIS_URL=redis://:02211998@redis:6379
+    depends_on:
+      - redis
+      - qdrant
+    volumes:
+      - ./services/rag-2025:/app
+    networks:
+      - rag_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8909/health"]
+      interval: 30s
+      timeout: 10s
       retries: 3
     restart: unless-stopped
 
-# --- Disabled: No directory or Dockerfile found for masterchat-llm ---
-# masterchat-llm:
-#   build:
-#     context: ./services/masterchat-llm
-#     dockerfile: Dockerfile
-#   ports:
-#     - "8840:8840"
-#   networks:
-#     - backend
-#   restart: unless-stopped
+# Note: Using shared ollama and redis services from dual-brain-network
 
-# --- UI service intentionally disabled for now ---
-# ui:
-#   build:
-#     context: ./services/ui
-#     dockerfile: Dockerfile
-#   networks:
-#     - backend
-#   ports:
-#     - "80:80"
-#   restart: unless-stopped
+# System Monitor & Health Dashboard
+monitor-service:
+  build:
+    context: .
+    dockerfile: Dockerfile.mcp-chat
+  container_name: neural-monitor-service
+  ports:
+    - "8081:8080"
+  volumes:
+    - ./monitoring:/app/monitoring
+  environment:
+    - MONITOR_PORT=8080
+    - MEMORY_SERVICE_URL=http://memory-service:8861
+    - CHAT_SERVICE_URL=http://chat-frontend:5003
+    - LLM_SERVICE_URL=http://ollama:11434
+    - CACHE_SERVICE_URL=redis://:02211998@redis:6379
+  command: ["python", "monitoring/health_dashboard.py"]
+  depends_on:
+    memory-service:
+      condition: service_healthy
+    chat-frontend:
+      condition: service_healthy
+    ollama:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  networks:
+    - neural-network
+    - dual-brain-network
+  restart: unless-stopped
 
-  retrain-listener:
-    build:
-      context: ./retrain-listener
-      dockerfile: Dockerfile
-    environment:
-      - REDIS_URL=redis://:02211998@redis:6379
-      - TRAIN_URL=http://batch-embedder:8709/train_batch
-      - SOURCE_STREAM=output.generated
-      - BATCH_SIZE=64
-    ports:
-      - "8680:8680"
-    depends_on:
-      redis:
-        condition: service_healthy
-      batch-embedder:
-        condition: service_healthy
-    networks:
-      - backend
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8680/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-
-  graph-concept-adapter:
-    build:
-      context: ./services/graph-concept-adapter
-      dockerfile: Dockerfile
-    ports:
-      - "8842:8842"
-    networks:
-      - backend
-    restart: unless-stopped
-
-# --- Disabled: No directory or Dockerfile found for data-analyzer ---
-# data-analyzer:
-#   build:
-#     context: ./services/data-analyzer
-#     dockerfile: Dockerfile
-#   ports:
-#     - "8843:8843"
-#   networks:
-#     - backend
-#   restart: unless-stopped
-
-# --- Disabled: No directory or Dockerfile found for log-embedding-worker ---
-# log-embedding-worker:
-#   build:
-#     context: ./services/log-embedding-worker
-#     dockerfile: Dockerfile
-#   ports:
-#     - "8846:8846"
-#   networks:
-#     - backend
-#   restart: unless-stopped
-
-# --- Disabled: No directory or Dockerfile found for learning-path-optimizer ---
-# learning-path-optimizer:
-#   build:
-#     context: ./services/learning-path-optimizer
-#     dockerfile: Dockerfile
-#   ports:
-#     - "8844:8844"
-#   networks:
-#     - backend
-#   restart: unless-stopped
-
-# --- Disabled: No directory or Dockerfile found for trend-analyzer ---
-# trend-analyzer:
-#   build:
-#     context: ./services/trend-analyzer
-#     dockerfile: Dockerfile
-#   ports:
-#     - "8845:8845"
-#   networks:
-#     - backend
-#   restart: unless-stopped
-
-  rag-coordinator:
-    build:
-      context: ./services/rag-coordinator
-      dockerfile: Dockerfile
-    environment:
-      - REDIS_URL=redis://:02211998@redis:6379
-      - CONCEPT_DICT_URL=http://concept-dictionary:8828
-    depends_on:
-      concept-dictionary:
-        condition: service_healthy
-    networks:
-      - backend
-    restart: unless-stopped
+# Automated Test Runner
+test-runner:
+  build:
+    context: .
+    dockerfile: Dockerfile.mcp-chat
+  container_name: neural-test-runner
+  volumes:
+    - ./tests:/app/tests
+    - ./test_results:/app/test_results
+  environment:
+    - MEMORY_SERVICE_URL=http://memory-service:8861
+    - CHAT_SERVICE_URL=http://chat-frontend:5003
+    - LLM_SERVICE_URL=http://ollama:11434
+    - CACHE_SERVICE_URL=redis://:02211998@redis:6379
+  command: ["python", "-m", "pytest", "tests/", "-v", "--tb=short", "--json-report", "--json-report-file=/app/test_results/integration_results.json"]
+  depends_on:
+    memory-service:
+      condition: service_healthy
+    chat-frontend:
+      condition: service_healthy
+    ollama:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  networks:
+    - neural-network
+    - dual-brain-network
+  profiles:
+    - testing
 
 volumes:
   redis_data:
-    driver: local
   neo4j_data:
   neo4j_logs:
-  neo4j_plugins:
-  prometheus_data:
-    driver: local
-  grafana_data:
-    driver: local
   qdrant_data:
-    driver: local
   ollama_data:
-  output-engine-temp:
-  adapters_data:
-    driver: local
-  trainer_batches:
-  trainer_adapters:
-  trainer_state:
-  crawler_data:
-    driver: local
+  neural_logs:
+  neural_checkpoints:
+  neural_data:
+  neural_thought_logs:
+  neural_thought_checkpoints:
+  neural_thought_data:
+  neural_bridge_data:
+  neural_bridge_logs:
+  heavy_lifting_data:
+  heavy_lifting_logs:
+  curiosity_crawler_data:
+  curiosity_crawler_logs:
+  conversation_export_data:
+  conversation_export_logs:
+  lora_adapters:
+  lora_cache:
+  lora_models:
+  enhanced_prompt_lora_data:
+  enhanced_prompt_lora_cache:
+  enhanced_prompt_lora_npu_data:
+  enhanced_prompt_lora_npu_cache:
 
-# Remaining services (not yet added) in the stack:
-# --------------------------------------------
-# (Core Services)
-# – concept-dict
-# – graph-api
-# – concept-trainer (and its growable variants)
-# – concept-trainer-embedder (and its growable variants, including gpu variants)
-# – concept-trainer-embedder-growable-gpu-{1,…, 230} (if applicable)
-# – concept-analytics
-# – concept-analyzer
-# – learning-graph
-# (Chat & LLM)
-# – dual-chat-router
-# – masterchat-core
-# (UI)
-# – ui 
-# – ui 
+networks:
+  dual-brain-network:
+    driver: bridge 
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+  neural-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+  rag_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
