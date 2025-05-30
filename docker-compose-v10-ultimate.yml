@@ -977,6 +977,39 @@ services:
       retries: 3
     restart: unless-stopped
 
+  # 🤖 Phi-2 Ultrafast Engine - Advanced reasoning and coding
+  phi2-ultrafast-engine:
+    build:
+      context: ./services/phi2-ultrafast
+      dockerfile: Dockerfile
+    container_name: phi2-ultrafast-engine
+    ports:
+      - "8892:8892"
+    environment:
+      - MODEL_NAME=microsoft/phi-2
+      - INFERENCE_PORT=8892
+      - CUDA_VISIBLE_DEVICES=0
+      - TORCH_DEVICE=cuda
+    volumes:
+      - ./models:/app/models
+      - ./cache:/app/cache
+    networks:
+      - ultimate-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8892/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
   # ============================================================================
   # 📊 MONITORING & MANAGEMENT
   # ============================================================================
