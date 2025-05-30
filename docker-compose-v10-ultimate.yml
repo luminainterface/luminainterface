@@ -82,7 +82,7 @@ services:
       - REDIS_PASSWORD=02211998
       - NEURAL_ENGINE_HOST=neural-thought-engine
       - NEURAL_ENGINE_PORT=8890
-      - RAG_COORDINATION_HOST=rag-coordination-enhanced
+      - RAG_COORDINATION_HOST=rag-coordination-interface
       - RAG_COORDINATION_PORT=8952
       - MULTI_CONCEPT_DETECTOR_HOST=multi-concept-detector
       - MULTI_CONCEPT_DETECTOR_PORT=8860
@@ -96,7 +96,7 @@ services:
         condition: service_healthy
       neural-thought-engine:
         condition: service_healthy
-      rag-coordination-enhanced:
+      rag-coordination-interface:
         condition: service_healthy
     networks:
       - ultimate-network
@@ -137,7 +137,7 @@ services:
       - REDIS_PASSWORD=02211998
       - NEURAL_ENGINE_HOST=neural-thought-engine
       - NEURAL_ENGINE_PORT=8890
-      - RAG_COORDINATION_HOST=rag-coordination-enhanced
+      - RAG_COORDINATION_HOST=rag-coordination-interface
       - RAG_COORDINATION_PORT=8952
       - MULTI_CONCEPT_DETECTOR_HOST=multi-concept-detector
       - MULTI_CONCEPT_DETECTOR_PORT=8860
@@ -157,7 +157,7 @@ services:
         condition: service_healthy
       neural-thought-engine:
         condition: service_healthy
-      rag-coordination-enhanced:
+      rag-coordination-interface:
         condition: service_healthy
       multi-concept-detector:
         condition: service_healthy
@@ -346,18 +346,18 @@ services:
   # 📚 RAG² ENHANCED KNOWLEDGE ORCHESTRATION
   # ============================================================================
   
-  # 🎯 RAG Coordination Enhanced - WITH CONCEPT DETECTION
-  rag-coordination-enhanced:
+  # 🎯 RAG Coordination Interface - WITH CONCEPT DETECTION
+  rag-coordination-interface:
     build:
-      context: ./services/rag-coordination-enhanced
+      context: ./services/rag-coordination-interface
       dockerfile: Dockerfile
-    container_name: rag-coordination-enhanced
+    container_name: rag-coordination-interface
     ports:
       - "8952:8952"  # Enhanced with concept detection
     environment:
       - NEURAL_ENGINE_HOST=neural-thought-engine
       - NEURAL_ENGINE_PORT=8890
-      - RAG_ORCHESTRATOR_HOST=rag-orchestrator
+      - RAG_COORDINATION_HOST=rag-coordination-interface
       - RAG_ORCHESTRATOR_PORT=8953
       - MULTI_CONCEPT_DETECTOR_HOST=multi-concept-detector
       - MULTI_CONCEPT_DETECTOR_PORT=8860
@@ -393,13 +393,13 @@ services:
     ports:
       - "8951:8951"
     environment:
-      - RAG_COORDINATION_HOST=rag-coordination-enhanced
+      - RAG_COORDINATION_HOST=rag-coordination-interface
       - RAG_COORDINATION_PORT=8952
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_PASSWORD=02211998
     depends_on:
-      rag-coordination-enhanced:
+      rag-coordination-interface:
         condition: service_healthy
     networks:
       - ultimate-network
