@@ -1,0 +1,40 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    gcc \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install additional optimization dependencies
+RUN pip install --no-cache-dir \
+    numba \
+    cachetools \
+    psutil \
+    fastapi \
+    uvicorn
+
+# Copy application code
+COPY . .
+
+# Create performance optimizer API service
+COPY performance_optimizer_api.py .
+
+# Expose port
+EXPOSE 8909
+
+# Health check endpoint
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8909/health || exit 1
+
+# Run the performance optimizer API
+CMD ["uvicorn", "performance_optimizer_api:app", "--host", "0.0.0.0", "--port", "8909"] 

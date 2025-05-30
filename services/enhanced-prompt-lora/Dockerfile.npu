@@ -1,0 +1,84 @@
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies for NPU acceleration
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    git \
+    build-essential \
+    cmake \
+    pkg-config \
+    libopencv-dev \
+    libopenvino-dev \
+    intel-opencl-icd \
+    intel-level-zero-gpu \
+    intel-media-va-driver-non-free \
+    vainfo \
+    clinfo \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Intel NPU and acceleration libraries
+RUN pip install --no-cache-dir \
+    # Core dependencies
+    fastapi==0.104.1 \
+    uvicorn[standard]==0.24.0 \
+    pydantic==2.5.0 \
+    redis==5.0.1 \
+    requests==2.31.0 \
+    numpy==1.24.3 \
+    # NPU acceleration libraries
+    intel-extension-for-pytorch==2.1.0 \
+    openvino==2023.3.0 \
+    openvino-dev==2023.3.0 \
+    # PyTorch with Intel optimizations
+    torch==2.1.0 \
+    torchvision==0.16.0 \
+    torchaudio==2.1.0 \
+    # High-performance event loop
+    uvloop==0.19.0 \
+    # Additional optimization libraries
+    psutil==5.9.6 \
+    concurrent-futures==3.1.1
+
+# Set environment variables for NPU optimization
+ENV INTEL_EXTENSION_FOR_PYTORCH_ENABLED=1
+ENV OPENVINO_ENABLED=1
+ENV DIRECTML_ENABLED=1
+ENV NPU_DETECTION_ENABLED=1
+ENV NPU_OPTIMIZATION_LEVEL=2
+
+# Performance optimization environment variables
+ENV PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+ENV OMP_NUM_THREADS=4
+ENV MKL_NUM_THREADS=4
+ENV OPENVINO_LOG_LEVEL=ERROR
+
+# NPU-specific configuration
+ENV NPU_BATCH_SIZE=8
+ENV NPU_MAX_WORKERS=4
+ENV NPU_CACHE_SIZE=1000
+
+# Copy application code
+COPY . .
+
+# Copy system.md for system context awareness
+COPY system.md /app/system.md
+
+# Create directories for NPU optimization
+RUN mkdir -p /app/cache /app/data /app/logs
+
+# Set permissions
+RUN chmod +x /app/*.py
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8880/health || exit 1
+
+# Expose port
+EXPOSE 8880
+
+# Run NPU-accelerated service
+CMD ["python", "npu_accelerated_main.py"] 

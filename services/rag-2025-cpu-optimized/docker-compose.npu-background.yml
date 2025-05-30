@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  npu-background-worker:
+    container_name: npu-background-worker
+    build:
+      context: .
+      dockerfile: Dockerfile.npu-background
+    ports:
+      - "8905:8905"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - REDIS_PASSWORD=02211998
+      - QDRANT_URL=http://qdrant:6333
+      - EMBEDDING_MODEL=all-MiniLM-L6-v2
+      - COLLECTION_NAME=rag_enhanced_knowledge
+      - LOG_LEVEL=INFO
+      - MAX_CONCURRENT_TASKS=5
+      - BATCH_SIZE=10
+      - QUALITY_THRESHOLD=0.7
+      - CRAWL_DELAY=1.0
+      - WORKER_ID=npu_bg_worker_001
+      # NPU and GPU Configuration
+      - CUDA_VISIBLE_DEVICES=0
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+      - TORCH_HOME=/tmp/torch_cache
+      # Intel NPU Configuration (when available)
+      - INTEL_XPU_VISIBLE_DEVICES=0
+      - IPEX_OPTIMIZE_LEVEL=O1
+    depends_on:
+      - redis
+      - qdrant
+    volumes:
+      - ./logs:/app/logs
+      - /tmp/torch_cache:/tmp/torch_cache
+      - ./data:/app/data
+    networks:
+      - ai-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+        limits:
+          memory: 8G
+          cpus: '4.0'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8905/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.npu-bg-worker.rule=Host(`npu-bg-worker.localhost`)"
+      - "traefik.http.services.npu-bg-worker.loadbalancer.server.port=8905"
+      - "ai.service.type=background-worker"
+      - "ai.service.purpose=knowledge-enhancement"
+      - "ai.service.acceleration=npu-gpu"
+
+networks:
+  ai-network:
+    external: true 

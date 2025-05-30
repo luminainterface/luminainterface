@@ -41,8 +41,14 @@ class StrategicInsight:
 class HighRankAdapter:
     """🌟 High-Rank Adapter - Ultimate Strategic Steering"""
     
-    def __init__(self):
-        self.redis_client = self._setup_redis()
+    def __init__(self, offline_mode=False):
+        if offline_mode:
+            self.redis_client = None
+            logger.info("🔧 High-Rank Adapter running in OFFLINE MODE")
+        else:
+            self.redis_client = self._setup_redis()
+        
+        self.offline_mode = offline_mode
         self.meta_orchestration_host = os.getenv('META_ORCHESTRATION_HOST', 'localhost')
         self.meta_orchestration_port = int(os.getenv('META_ORCHESTRATION_PORT', 8999))
         self.enhanced_execution_host = os.getenv('ENHANCED_EXECUTION_HOST', 'localhost')
@@ -79,7 +85,9 @@ class HighRankAdapter:
             return client
         except Exception as e:
             logger.error(f"❌ Redis connection failed: {e}")
-            raise
+            if not self.offline_mode:
+                raise
+            return None
     
     async def analyze_conversation_transcripts(self) -> Dict[str, Any]:
         """🔍 Analyze conversation transcripts for strategic insights"""
@@ -302,6 +310,97 @@ class HighRankAdapter:
         except Exception as e:
             logger.error(f"❌ Strategic steering generation failed: {e}")
             return {"status": "error", "message": str(e)}
+
+    def analyze_conversation_patterns(self, transcript_data: List[Dict] = None) -> Dict[str, Any]:
+        """🔍 Analyze conversation patterns (works offline)"""
+        if self.offline_mode or transcript_data:
+            # Use provided data or generate mock data for testing
+            test_patterns = {
+                "user_satisfaction": 0.85,
+                "response_quality": 0.78,
+                "concept_detection_effectiveness": 0.82,
+                "orchestration_efficiency": 0.75,
+                "strategic_alignment": 0.88
+            }
+            
+            if transcript_data:
+                # Simple pattern analysis on provided data
+                satisfaction_keywords = ["good", "great", "excellent", "perfect", "thanks"]
+                total_score = 0
+                for entry in transcript_data:
+                    user_text = entry.get("user", "").lower()
+                    assistant_text = entry.get("assistant", "").lower()
+                    
+                    # Simple sentiment analysis
+                    if any(keyword in user_text for keyword in satisfaction_keywords):
+                        total_score += 0.9
+                    elif len(assistant_text) > 20:  # Detailed response
+                        total_score += 0.7
+                    else:
+                        total_score += 0.5
+                
+                avg_score = total_score / len(transcript_data) if transcript_data else 0.5
+                test_patterns["user_satisfaction"] = min(avg_score, 1.0)
+            
+            return test_patterns
+        else:
+            # Use Redis-based analysis (existing method)
+            return asyncio.run(self.analyze_conversation_transcripts())
+    
+    def generate_strategic_steering(self, transcript_data: List[Dict] = None, context: Dict = None) -> Dict[str, Any]:
+        """⚡ Generate strategic steering parameters (works offline)"""
+        if self.offline_mode or transcript_data is not None:
+            # Offline mode - generate strategic parameters based on context
+            patterns = self.analyze_conversation_patterns(transcript_data)
+            
+            # Generate strategic parameters based on patterns and context
+            complexity = context.get("complexity", "medium") if context else "medium"
+            domain = context.get("domain", "general") if context else "general"
+            
+            steering_params = {
+                "strategy_weights": {
+                    "speed_optimized": 0.3 if complexity == "low" else 0.2,
+                    "quality_maximized": 0.4 if complexity == "high" else 0.3,
+                    "concept_focused": 0.35 if domain == "technical" else 0.25,
+                    "research_intensive": 0.4 if complexity == "high" else 0.2,
+                    "creative_synthesis": 0.3,
+                    "verification_heavy": 0.35 if domain == "science" else 0.25,
+                    "adaptive_learning": 0.3
+                },
+                "orchestration_params": {
+                    "depth_multiplier": 1.5 if complexity == "high" else 1.0,
+                    "quality_threshold": 0.8 if patterns.get("response_quality", 0.5) < 0.7 else 0.7,
+                    "concept_detection_sensitivity": 0.85,
+                    "rag_coordination_weight": 0.7,
+                    "lora_enhancement_factor": 1.2
+                },
+                "meta_reasoning": {
+                    "self_reflection_enabled": True,
+                    "pattern_recognition_depth": 0.8,
+                    "strategic_evolution_rate": 0.6,
+                    "performance_optimization": True
+                },
+                "execution_directives": {
+                    "prioritize_accuracy": complexity == "high",
+                    "enable_deep_analysis": domain in ["science", "technical"],
+                    "activate_creative_mode": domain == "creative",
+                    "enforce_verification": True
+                }
+            }
+            
+            # Adjust based on performance patterns
+            if patterns.get("user_satisfaction", 0.5) < 0.7:
+                steering_params["strategy_weights"]["quality_maximized"] += 0.1
+                steering_params["orchestration_params"]["quality_threshold"] = 0.85
+            
+            if patterns.get("orchestration_efficiency", 0.5) < 0.7:
+                steering_params["strategy_weights"]["speed_optimized"] += 0.1
+                steering_params["orchestration_params"]["depth_multiplier"] *= 0.9
+            
+            return steering_params
+        else:
+            # Use Redis-based analysis (existing method)
+            return asyncio.run(self.generate_strategic_steering())
 
 # FastAPI app
 app = FastAPI(title="🌟 High-Rank Adapter", version="10.0.0")

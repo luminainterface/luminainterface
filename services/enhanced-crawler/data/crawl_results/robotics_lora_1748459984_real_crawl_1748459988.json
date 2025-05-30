@@ -1,0 +1,135 @@
+{
+  "query": "Advanced robotics and autonomous systems",
+  "concept": "robotics",
+  "lora_name": "robotics_lora_1748459984",
+  "extracted_content": [
+    {
+      "url": "https://arxiv.org/abs/1901.00758v1",
+      "title": "[1901.00758v1] Cooperation of Multiple Autonomous Robots and Analysis of their Swarm Behavior",
+      "content": "Computer Science > Robotics arXiv:1901.00758v1 (cs) [Submitted on 28 Dec 2018] Title: Cooperation of Multiple Autonomous Robots and Analysis of their Swarm Behavior Authors: Bogdan Czejdo , Wiktor B. Daszczuk , Waldemar Grabski , Sambit Bhattacharya View a PDF of the paper titled Cooperation of Multiple Autonomous Robots and Analysis of their Swarm Behavior, by Bogdan Czejdo and 3 other authors View PDF Abstract: In this paper, we extended previous studies of cooperating autonomous robots to include situations when environmental changes and changes in the number of robots in the swarm can affect the efficiency to execute tasks assigned to the swarm of robots. We have presented a novel approach based on partition of the robot behavior. The sub-diagrams describing sub-routs allowed us to model advanced interactions between autonomous robots using limited number of state combinations avoiding combinatorial explosion of reachability. We identified the systems for which we can ensure the correctness of robots interactions. New techniques were presented to verify and analyze combined robots' behavior. The partitioned diagrams allowed us to model advanced interactions between autonomous robots and detect irregularities such as deadlocks, lack of termination etc. The techniques were presented to verify and analyze combined robots' behavior using model checking approach. The described system, Dedan verifier, is still under development. In the near future, timed and probabilistic verification are planned. Comments: 8 pages, 10 figures. arXiv admin note: text overlap with arXiv:1705.04263 Subjects: Robotics (cs.RO) ; Multiagent Systems (cs.MA) MSC classes: 68T40 ACM classes: I.2.9 Cite as: arXiv:1901.00758 [cs.RO] (or arXiv:1901.00758v1 [cs.RO] for this version) https://doi.org/10.48550/arXiv.1901.00758 Focus to learn more arXiv-issued DOI via DataCite Journal reference: Autobusy-TEST Vol. 226, 2018, No. 12, pp.872-879 Related DOI : https://doi.org/10.24136/atest.2018.516 Focu",
+      "quality_score": 1.0,
+      "word_count": 684,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:19:44.925045",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2407.06118v1",
+      "title": "[2407.06118v1] Autonomous Mobile Robot Navigation: Tracking problem",
+      "content": "Computer Science > Robotics arXiv:2407.06118v1 (cs) [Submitted on 8 Jul 2024] Title: Autonomous Mobile Robot Navigation: Tracking problem Authors: Salem Ameen , Husan F. Vokhidov View a PDF of the paper titled Autonomous Mobile Robot Navigation: Tracking problem, by Salem Ameen and Husan F. Vokhidov View PDF Abstract: This paper presents a study on autonomous robot navigation, focusing on three key behaviors: Odometry, Target Tracking, and Obstacle Avoidance. Each behavior is described in detail, along with experimental setups for simulated and real-world environments. Odometry utilizes wheel encoder data for precise navigation along predefined paths, validated through experiments with a Pioneer robot. Target Tracking employs vision-based techniques for pursuing designated targets while avoiding obstacles, demonstrated on the same platform. Obstacle Avoidance utilizes ultrasonic sensors to navigate cluttered environments safely, validated in both simulated and real-world scenarios. Additionally, the paper extends the project to include an Elegoo robot car, leveraging its features for enhanced experimentation. Through advanced algorithms and experimental validations, this study provides insights into developing robust navigation systems for autonomous robots. Subjects: Robotics (cs.RO) Cite as: arXiv:2407.06118 [cs.RO] (or arXiv:2407.06118v1 [cs.RO] for this version) https://doi.org/10.48550/arXiv.2407.06118 Focus to learn more arXiv-issued DOI via DataCite Submission history From: Salem Ameen [ view email ] [v1] Mon, 8 Jul 2024 16:56:37 UTC (862 KB) Full-text links: Access Paper: View a PDF of the paper titled Autonomous Mobile Robot Navigation: Tracking problem, by Salem Ameen and Husan F. Vokhidov View PDF Other Formats view license Current browse context: cs.RO < prev | next > new | recent | 2024-07 Change to browse by: cs References & Citations NASA ADS Google Scholar Semantic Scholar a export BibTeX citation Loading... BibTeX formatted citation \u00d7 loading... Dat",
+      "quality_score": 1.0,
+      "word_count": 566,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:19:45.362143",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2405.01134v1",
+      "title": "[2405.01134v1] Leveraging Procedural Generation for Learning Autonomous Peg-in-Hole Assembly in Space",
+      "content": "Computer Science > Robotics arXiv:2405.01134v1 (cs) [Submitted on 2 May 2024] Title: Leveraging Procedural Generation for Learning Autonomous Peg-in-Hole Assembly in Space Authors: Andrej Orsula , Matthieu Geist , Miguel Olivares-Mendez , Carol Martinez View a PDF of the paper titled Leveraging Procedural Generation for Learning Autonomous Peg-in-Hole Assembly in Space, by Andrej Orsula and 3 other authors View PDF HTML (experimental) Abstract: The ability to autonomously assemble structures is crucial for the development of future space infrastructure. However, the unpredictable conditions of space pose significant challenges for robotic systems, necessitating the development of advanced learning techniques to enable autonomous assembly. In this study, we present a novel approach for learning autonomous peg-in-hole assembly in the context of space robotics. Our focus is on enhancing the generalization and adaptability of autonomous systems through deep reinforcement learning. By integrating procedural generation and domain randomization, we train agents in a highly parallelized simulation environment across a spectrum of diverse scenarios with the aim of acquiring a robust policy. The proposed approach is evaluated using three distinct reinforcement learning algorithms to investigate the trade-offs among various paradigms. We demonstrate the adaptability of our agents to novel scenarios and assembly sequences while emphasizing the potential of leveraging advanced simulation techniques for robot learning in space. Our findings set the stage for future advancements in intelligent robotic systems capable of supporting ambitious space missions and infrastructure development beyond Earth. Comments: Accepted for publication at the 2024 International Conference on Space Robotics (iSpaRo) | The source code is available at this https URL Subjects: Robotics (cs.RO) ; Artificial Intelligence (cs.AI); Machine Learning (cs.LG) Cite as: arXiv:2405.01134 [cs.RO] (or arXiv:2405.01",
+      "quality_score": 1.0,
+      "word_count": 669,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:19:45.803699",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2308.13972v1",
+      "title": "[2308.13972v1] Towards Autonomous Multi-Modal Mobility Morphobot (M4) Robot: Traversability Estimation and 3D Path Planning",
+      "content": "Computer Science > Robotics arXiv:2308.13972v1 (cs) [Submitted on 26 Aug 2023] Title: Towards Autonomous Multi-Modal Mobility Morphobot (M4) Robot: Traversability Estimation and 3D Path Planning Authors: Rohit Hiraman Rajput View a PDF of the paper titled Towards Autonomous Multi-Modal Mobility Morphobot (M4) Robot: Traversability Estimation and 3D Path Planning, by Rohit Hiraman Rajput View PDF Abstract: This thesis enhances the autonomy of the M4 (Multi-Modal Mobility Morphobot) robot, designed for Mars and rescue missions. The research enables the robot to autonomously select its locomotion mode and path in complex terrains. Focusing on walking and flying modes, a Gazebo simulation, and custom perception-navigations pipelines are developed. Leveraging deep learning, the robot determines optimal mode transitions based on a 2.5D map. Additionally, an energy efficient path planner based on 2.5D mapping is implemented and validated in simulations. The contributions demonstrate scalability for future mode integrations. The M4 robot showcases intelligent mode switching, efficient navigation, and reduced energy consumption, bringing us closer to fully autonomous multi-modal robots for exploration and rescue missions. This work paves the way for future advancements in autonomous robotics, with the ultimate vision of deploying the M4 robot for exploration and rescue tasks, making a significant impact in the quest for intelligent and versatile robotic systems. Comments: 61 pages, masters thesis Subjects: Robotics (cs.RO) ; Systems and Control (eess.SY) Cite as: arXiv:2308.13972 [cs.RO] (or arXiv:2308.13972v1 [cs.RO] for this version) https://doi.org/10.48550/arXiv.2308.13972 Focus to learn more arXiv-issued DOI via DataCite Submission history From: Rohit Hiraman Rajput [ view email ] [v1] Sat, 26 Aug 2023 23:27:27 UTC (26,790 KB) Full-text links: Access Paper: View a PDF of the paper titled Towards Autonomous Multi-Modal Mobility Morphobot (M4) Robot: Traversability Estima",
+      "quality_score": 1.0,
+      "word_count": 622,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:19:46.247802",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2412.18516v2",
+      "title": "[2412.18516v2] Generating Explanations for Autonomous Robots: a Systematic Review",
+      "content": "Computer Science > Robotics arXiv:2412.18516v2 (cs) [Submitted on 24 Dec 2024 ( v1 ), last revised 30 Jan 2025 (this version, v2)] Title: Generating Explanations for Autonomous Robots: a Systematic Review Authors: David Sobr\u00edn-Hidalgo , \u00c1ngel Manuel Guerrero-Higueras , Vicente Matell\u00e1n-Olivera View a PDF of the paper titled Generating Explanations for Autonomous Robots: a Systematic Review, by David Sobr\\'in-Hidalgo and 1 other authors View PDF HTML (experimental) Abstract: Building trust between humans and robots has long interested the robotics community. Various studies have aimed to clarify the factors that influence the development of user trust. In Human-Robot Interaction (HRI) environments, a critical aspect of trust development is the robot's ability to make its behavior understandable. The concept of an eXplainable Autonomous Robot (XAR) addresses this requirement. However, giving a robot self-explanatory abilities is a complex task. Robot behavior includes multiple skills and diverse subsystems. This complexity led to research into a wide range of methods for generating explanations about robot behavior. This paper presents a systematic literature review that analyzes existing strategies for generating explanations in robots and studies the current XAR trends. Results indicate promising advancements in explainability systems. However, these systems are still unable to fully cover the complex behavior of autonomous robots. Furthermore, we also identify a lack of consensus on the theoretical concept of explainability, and the need for a robust methodology to assess explainability methods and tools has been identified. Comments: 14 pages, 12 figures, 10 tables. This paper is a preprint of an article submitted to IEEE Access Subjects: Robotics (cs.RO) Cite as: arXiv:2412.18516 [cs.RO] (or arXiv:2412.18516v2 [cs.RO] for this version) https://doi.org/10.48550/arXiv.2412.18516 Focus to learn more arXiv-issued DOI via DataCite Journal reference: IEEE Access (2025)",
+      "quality_score": 1.0,
+      "word_count": 682,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:19:46.710976",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2504.19848v1",
+      "title": "[2504.19848v1] Human-Centered AI and Autonomy in Robotics: Insights from a Bibliometric Study",
+      "content": "Computer Science > Robotics arXiv:2504.19848v1 (cs) [Submitted on 28 Apr 2025] Title: Human-Centered AI and Autonomy in Robotics: Insights from a Bibliometric Study Authors: Simona Casini , Pietro Ducange , Francesco Marcelloni , Lorenzo Pollini View a PDF of the paper titled Human-Centered AI and Autonomy in Robotics: Insights from a Bibliometric Study, by Simona Casini and 3 other authors View PDF HTML (experimental) Abstract: The development of autonomous robotic systems offers significant potential for performing complex tasks with precision and consistency. Recent advances in Artificial Intelligence (AI) have enabled more capable intelligent automation systems, addressing increasingly complex challenges. However, this progress raises questions about human roles in such systems. Human-Centered AI (HCAI) aims to balance human control and automation, ensuring performance enhancement while maintaining creativity, mastery, and responsibility. For real-world applications, autonomous robots must balance task performance with reliability, safety, and trustworthiness. Integrating HCAI principles enhances human-robot collaboration and ensures responsible operation. This paper presents a bibliometric analysis of intelligent autonomous robotic systems, utilizing SciMAT and VOSViewer to examine data from the Scopus database. The findings highlight academic trends, emerging topics, and AI's role in self-adaptive robotic behaviour, with an emphasis on HCAI architecture. These insights are then projected onto the IBM MAPE-K architecture, with the goal of identifying how these research results map into actual robotic autonomous systems development efforts for real-world scenarios. Comments: International Joint Conference on Neural Network 2025 - Accepted Subjects: Robotics (cs.RO) ; Artificial Intelligence (cs.AI) Cite as: arXiv:2504.19848 [cs.RO] (or arXiv:2504.19848v1 [cs.RO] for this version) https://doi.org/10.48550/arXiv.2504.19848 Focus to learn more arXiv-issued DOI via ",
+      "quality_score": 1.0,
+      "word_count": 644,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:19:47.159393",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2104.10141v2",
+      "title": "[2104.10141v2] An Overview of Federated Learning at the Edge and Distributed Ledger Technologies for Robotic and Autonomous Systems",
+      "content": "Computer Science > Robotics arXiv:2104.10141v2 (cs) [Submitted on 20 Apr 2021 ( v1 ), last revised 21 Apr 2021 (this version, v2)] Title: An Overview of Federated Learning at the Edge and Distributed Ledger Technologies for Robotic and Autonomous Systems Authors: Yu Xianjia , Jorge Pe\u00f1a Queralta , Jukka Heikkonen , Tomi Westerlund View a PDF of the paper titled An Overview of Federated Learning at the Edge and Distributed Ledger Technologies for Robotic and Autonomous Systems, by Yu Xianjia and 3 other authors View PDF Abstract: Autonomous systems are becoming inherently ubiquitous with the advancements of computing and communication solutions enabling low-latency offloading and real-time collaboration of distributed devices. Decentralized technologies with blockchain and distributed ledger technologies (DLTs) are playing a key role. At the same time, advances in deep learning (DL) have significantly raised the degree of autonomy and level of intelligence of robotic and autonomous systems. While these technological revolutions were taking place, raising concerns in terms of data security and end-user privacy has become an inescapable research consideration. Federated learning (FL) is a promising solution to privacy-preserving DL at the edge, with an inherently distributed nature by learning on isolated data islands and communicating only model updates. However, FL by itself does not provide the levels of security and robustness required by today's standards in distributed autonomous systems. This survey covers applications of FL to autonomous robots, analyzes the role of DLT and FL for these systems, and introduces the key background concepts and considerations in current research. Subjects: Robotics (cs.RO) Cite as: arXiv:2104.10141 [cs.RO] (or arXiv:2104.10141v2 [cs.RO] for this version) https://doi.org/10.48550/arXiv.2104.10141 Focus to learn more arXiv-issued DOI via DataCite Related DOI : https://doi.org/10.1016/j.procs.2021.07.041 Focus to learn more DOI(s) li",
+      "quality_score": 1.0,
+      "word_count": 691,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:19:48.177105",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2408.07286v1",
+      "title": "[2408.07286v1] The Design of Autonomous UAV Prototypes for Inspecting Tunnel Construction Environment",
+      "content": "Computer Science > Robotics arXiv:2408.07286v1 (cs) [Submitted on 14 Aug 2024] Title: The Design of Autonomous UAV Prototypes for Inspecting Tunnel Construction Environment Authors: Yiping Dong View a PDF of the paper titled The Design of Autonomous UAV Prototypes for Inspecting Tunnel Construction Environment, by Yiping Dong View PDF Abstract: This article presents novel designs of autonomous UAV prototypes specifically developed for inspecting GPS-denied tunnel construction environments with dynamic human and robotic presence. Our UAVs integrate advanced sensor suites and robust motion planning algorithms to autonomously navigate and explore these complex environments. We validated our approach through comprehensive simulation experiments in PX4 Gazebo and Airsim Unreal Engine 4 environments. Real-world wind tests and exploration experiments demonstrate the UAVs' capability to operate stably under diverse environmental conditions without GPS assistance. This study highlights the practicality and resilience of our UAV prototypes in real-world applications. Comments: Autonomous UAV, Tunnel Inspection, GPS-Denied Environment, Safe Trajectory Planning, Real-World Testing Subjects: Robotics (cs.RO) ; Systems and Control (eess.SY) Cite as: arXiv:2408.07286 [cs.RO] (or arXiv:2408.07286v1 [cs.RO] for this version) https://doi.org/10.48550/arXiv.2408.07286 Focus to learn more arXiv-issued DOI via DataCite Submission history From: Yiping Dong [ view email ] [v1] Wed, 14 Aug 2024 04:34:20 UTC (1,371 KB) Full-text links: Access Paper: View a PDF of the paper titled The Design of Autonomous UAV Prototypes for Inspecting Tunnel Construction Environment, by Yiping Dong View PDF Other Formats view license Current browse context: cs.RO < prev | next > new | recent | 2024-08 Change to browse by: cs cs.SY eess eess.SY References & Citations NASA ADS Google Scholar Semantic Scholar a export BibTeX citation Loading... BibTeX formatted citation \u00d7 loading... Data provided by: Bookmark B",
+      "quality_score": 1.0,
+      "word_count": 559,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:19:48.642328",
+      "domain": "arxiv.org"
+    }
+  ],
+  "quality_scores": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "topics": [
+    "cooperation",
+    "multiple",
+    "autonomous",
+    "robots",
+    "their",
+    "swarm",
+    "behavior",
+    "cooperating",
+    "partition",
+    "describing",
+    "approach",
+    "model",
+    "mobile",
+    "robot",
+    "navigation",
+    "tracking",
+    "problem",
+    "leveraging",
+    "procedural",
+    "generation"
+  ],
+  "crawl_metadata": {
+    "timestamp": "2025-05-28T19:19:48.944865",
+    "total_urls_found": 24,
+    "total_urls_processed": 24,
+    "successful_extractions": 8,
+    "failed_extractions": 1,
+    "average_quality": 1.0,
+    "quality_threshold": 0.6,
+    "min_urls_required": 3,
+    "max_urls_limit": 8,
+    "requirements_met": {
+      "minimum_articles": true,
+      "quality_threshold": true
+    },
+    "crawling_mode": "REAL"
+  }
+}

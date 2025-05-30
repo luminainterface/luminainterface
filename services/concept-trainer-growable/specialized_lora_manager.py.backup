@@ -1,0 +1,639 @@
+#!/usr/bin/env python3
+"""
+Specialized LoRA Adapter Management System
+Manages multiple domain-specific LoRA adapters with intelligent routing
+"""
+
+import os
+import json
+import asyncio
+import logging
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional, Set, Tuple
+import uuid
+from enum import Enum
+from dataclasses import dataclass, asdict
+import redis.asyncio as aioredis
+import numpy as np
+from collections import defaultdict, Counter
+
+logger = logging.getLogger(__name__)
+
+class AdapterDomain(Enum):
+    """Different domains for specialized adapters"""
+    GENERAL = "general"          # General knowledge concepts
+    TECHNICAL = "technical"      # Programming, engineering, technical concepts
+    SCIENTIFIC = "scientific"    # Scientific concepts and research
+    BUSINESS = "business"        # Business and financial concepts
+    MEDICAL = "medical"          # Medical and health concepts
+    LEGAL = "legal"             # Legal and regulatory concepts
+    CREATIVE = "creative"        # Art, literature, creative concepts
+    HISTORICAL = "historical"   # Historical events and figures
+    GEOGRAPHICAL = "geographical" # Places, countries, geographical concepts
+    MATHEMATICAL = "mathematical" # Math and statistics concepts
+
+@dataclass
+class SpecializedAdapter:
+    """Represents a specialized LoRA adapter"""
+    adapter_id: str
+    domain: AdapterDomain
+    concepts: Set[str]
+    performance_score: float
+    created_at: str
+    last_updated: str
+    usage_count: int
+    file_path: str
+    metadata: Dict
+    
+    # Performance tracking
+    accuracy_scores: List[float]
+    training_losses: List[float]
+    inference_latency_ms: List[float]
+    
+    # Specialization metrics
+    domain_confidence: float  # How confident we are about the domain classification
+    concept_overlap: Dict[str, float]  # Overlap with other adapters
+    
+    def __post_init__(self):
+        if isinstance(self.concepts, list):
+            self.concepts = set(self.concepts)
+
+@dataclass
+class AdapterRoutingDecision:
+    """Decision about which adapter(s) to use for a query"""
+    primary_adapter: str
+    secondary_adapters: List[str]
+    confidence: float
+    reasoning: str
+    concept_matches: Dict[str, float]
+
+class SpecializedLoRAManager:
+    """Manages specialized LoRA adapters with intelligent routing"""
+    
+    def __init__(self, redis_client, base_adapter_path: str = "/data/adapters"):
+        self.redis_client = redis_client
+        self.base_adapter_path = base_adapter_path
+        
+        # Adapter storage
+        self.adapters: Dict[str, SpecializedAdapter] = {}
+        self.domain_adapters: Dict[AdapterDomain, List[str]] = defaultdict(list)
+        
+        # Domain classification patterns
+        self.domain_patterns = {
+            AdapterDomain.TECHNICAL: [
+                r'\b(?:programming|code|software|algorithm|api|database|server|framework)\b',
+                r'\b(?:python|javascript|java|sql|docker|kubernetes|git)\b',
+                r'\b(?:function|method|class|variable|array|loop|condition)\b'
+            ],
+            AdapterDomain.SCIENTIFIC: [
+                r'\b(?:research|study|experiment|hypothesis|theory|analysis|data)\b',
+                r'\b(?:chemistry|physics|biology|genetics|molecule|atom|cell)\b',
+                r'\b(?:methodology|statistical|correlation|regression|sample)\b'
+            ],
+            AdapterDomain.MEDICAL: [
+                r'\b(?:disease|treatment|diagnosis|symptom|therapy|patient|health)\b',
+                r'\b(?:medicine|drug|pharmaceutical|clinical|hospital|doctor)\b',
+                r'\b(?:syndrome|disorder|condition|infection|immune|genetic)\b'
+            ],
+            AdapterDomain.BUSINESS: [
+                r'\b(?:market|business|finance|revenue|profit|investment|strategy)\b',
+                r'\b(?:company|corporation|startup|entrepreneur|management|leadership)\b',
+                r'\b(?:sales|marketing|customer|product|service|brand)\b'
+            ],
+            AdapterDomain.LEGAL: [
+                r'\b(?:law|legal|court|judge|lawyer|attorney|litigation|contract)\b',
+                r'\b(?:regulation|compliance|statute|jurisdiction|liability|rights)\b',
+                r'\b(?:constitutional|criminal|civil|intellectual property|patent)\b'
+            ],
+            AdapterDomain.MATHEMATICAL: [
+                r'\b(?:equation|formula|theorem|proof|calculation|statistics|probability)\b',
+                r'\b(?:algebra|geometry|calculus|trigonometry|matrix|vector|derivative)\b',
+                r'\b(?:mathematical|numeric|quantitative|analytical|computational)\b'
+            ]
+        }
+        
+        # Performance tracking
+        self.adapter_performance_history: Dict[str, List[Dict]] = defaultdict(list)
+        self.routing_decisions: List[AdapterRoutingDecision] = []
+        
+    async def initialize(self):        """Initialize the specialized adapter manager"""        try:            # Load existing adapters            await self._load_existing_adapters()                        # Initialize domain tracking (create domain adapter mappings)            for adapter_id, adapter in self.adapters.items():                if adapter.domain not in self.domain_adapters:                    self.domain_adapters[adapter.domain] = []                if adapter_id not in self.domain_adapters[adapter.domain]:                    self.domain_adapters[adapter.domain].append(adapter_id)                        logger.info(f"✅ SpecializedLoRAManager initialized with {len(self.adapters)} adapters")            logger.info(f"   📊 Domain distribution: {dict([(d.value, len(adapters)) for d, adapters in self.domain_adapters.items()])}")                    except Exception as e:            logger.error(f"Failed to initialize SpecializedLoRAManager: {e}")            raise
+    
+    async def _load_existing_adapters(self):
+        """Load existing adapters and classify them by domain"""
+        if not os.path.exists(self.base_adapter_path):
+            os.makedirs(self.base_adapter_path, exist_ok=True)
+            return
+        
+        for adapter_dir in os.listdir(self.base_adapter_path):
+            adapter_path = os.path.join(self.base_adapter_path, adapter_dir)
+            
+            if os.path.isdir(adapter_path):
+                try:
+                    adapter = await self._load_adapter_from_disk(adapter_path)
+                    if adapter:
+                        self.adapters[adapter.adapter_id] = adapter
+                        self.domain_adapters[adapter.domain].append(adapter.adapter_id)
+                        
+                except Exception as e:
+                    logger.warning(f"Failed to load adapter from {adapter_path}: {e}")
+    
+    async def _load_adapter_from_disk(self, adapter_path: str) -> Optional[SpecializedAdapter]:
+        """Load an adapter from disk and classify its domain"""
+        try:
+            # Load adapter metadata
+            metadata_file = os.path.join(adapter_path, "specialized_metadata.json")
+            
+            if os.path.exists(metadata_file):
+                with open(metadata_file, 'r') as f:
+                    data = json.load(f)
+                    
+                adapter = SpecializedAdapter(**data)
+                adapter.concepts = set(adapter.concepts)  # Convert list back to set
+                return adapter
+            
+            else:
+                # Legacy adapter - classify it
+                return await self._classify_legacy_adapter(adapter_path)
+                
+        except Exception as e:
+            logger.error(f"Failed to load adapter from {adapter_path}: {e}")
+            return None
+    
+    async def _classify_legacy_adapter(self, adapter_path: str) -> Optional[SpecializedAdapter]:
+        """Classify a legacy adapter based on its training data"""
+        try:
+            adapter_id = os.path.basename(adapter_path)
+            
+            # Try to load concepts from various sources
+            concepts = await self._extract_concepts_from_adapter(adapter_path)
+            
+            # Classify domain based on concepts
+            domain = await self._classify_domain(concepts)
+            
+            # Create specialized adapter
+            adapter = SpecializedAdapter(
+                adapter_id=adapter_id,
+                domain=domain,
+                concepts=set(concepts),
+                performance_score=0.8,  # Default score
+                created_at=datetime.now().isoformat(),
+                last_updated=datetime.now().isoformat(),
+                usage_count=0,
+                file_path=adapter_path,
+                metadata={},
+                accuracy_scores=[],
+                training_losses=[],
+                inference_latency_ms=[],
+                domain_confidence=0.7,  # Default confidence
+                concept_overlap={}
+            )
+            
+            # Save specialized metadata
+            await self._save_adapter_metadata(adapter)
+            
+            return adapter
+            
+        except Exception as e:
+            logger.error(f"Failed to classify legacy adapter {adapter_path}: {e}")
+            return None
+    
+    async def _extract_concepts_from_adapter(self, adapter_path: str) -> List[str]:
+        """Extract concepts from adapter training data or metadata"""
+        concepts = []
+        
+        # Try to load from metrics.json
+        metrics_file = os.path.join(adapter_path, "metrics.json")
+        if os.path.exists(metrics_file):
+            try:
+                with open(metrics_file, 'r') as f:
+                    metrics = json.load(f)
+                    concepts.extend(metrics.get('concepts_trained', []))
+            except Exception:
+                pass
+        
+        # Try to load from training_data.json
+        training_file = os.path.join(adapter_path, "training_data.json")
+        if os.path.exists(training_file):
+            try:
+                with open(training_file, 'r') as f:
+                    training_data = json.load(f)
+                    for item in training_data[:10]:  # Sample first 10 items
+                        concepts.extend(item.get('concepts_used', []))
+            except Exception:
+                pass
+        
+        # If no concepts found, use adapter ID as a concept
+        if not concepts:
+            concepts = [adapter_path.split('_')[-1]]  # Use timestamp as concept
+        
+        return list(set(concepts))  # Remove duplicates
+    
+    async def _classify_domain(self, concepts: List[str]) -> AdapterDomain:
+        """Classify concepts into a domain"""
+        domain_scores = defaultdict(int)
+        
+        # Combine all concept text for pattern matching
+        concept_text = " ".join(concepts).lower()
+        
+        for domain, patterns in self.domain_patterns.items():
+            for pattern in patterns:
+                import re
+                matches = len(re.findall(pattern, concept_text, re.IGNORECASE))
+                domain_scores[domain] += matches
+        
+        # Return domain with highest score, or GENERAL if no matches
+        if domain_scores:
+            return max(domain_scores.keys(), key=lambda k: domain_scores[k])
+        else:
+            return AdapterDomain.GENERAL
+    
+    async def create_specialized_adapter(self, concepts: List[str], training_data: List[Dict], 
+                                       domain: Optional[AdapterDomain] = None) -> str:
+        """Create a new specialized adapter"""
+        try:
+            # Generate adapter ID
+            adapter_id = f"specialized_{domain.value if domain else 'auto'}_{int(datetime.now().timestamp())}"
+            
+            # Auto-classify domain if not provided
+            if domain is None:
+                domain = await self._classify_domain(concepts)
+            
+            # Create adapter directory
+            adapter_path = os.path.join(self.base_adapter_path, adapter_id)
+            os.makedirs(adapter_path, exist_ok=True)
+            
+            # Train the specialized adapter
+            performance_score = await self._train_specialized_adapter(
+                adapter_path, training_data, domain, concepts
+            )
+            
+            # Create adapter object
+            adapter = SpecializedAdapter(
+                adapter_id=adapter_id,
+                domain=domain,
+                concepts=set(concepts),
+                performance_score=performance_score,
+                created_at=datetime.now().isoformat(),
+                last_updated=datetime.now().isoformat(),
+                usage_count=0,
+                file_path=adapter_path,
+                metadata={
+                    'training_data_size': len(training_data),
+                    'auto_classified': domain is None
+                },
+                accuracy_scores=[performance_score],
+                training_losses=[],
+                inference_latency_ms=[],
+                domain_confidence=0.9 if domain else 0.7,
+                concept_overlap={}
+            )
+            
+            # Store adapter
+            self.adapters[adapter_id] = adapter
+            self.domain_adapters[domain].append(adapter_id)
+            
+            # Save metadata
+            await self._save_adapter_metadata(adapter)
+            
+            # Calculate concept overlaps with existing adapters
+            await self._update_concept_overlaps(adapter_id)
+            
+            logger.info(f"🎯 CREATED SPECIALIZED ADAPTER:")
+            logger.info(f"   🆔 ID: {adapter_id}")
+            logger.info(f"   🏷️  Domain: {domain.value}")
+            logger.info(f"   🧠 Concepts: {len(concepts)}")
+            logger.info(f"   📊 Performance: {performance_score:.3f}")
+            
+            return adapter_id
+            
+        except Exception as e:
+            logger.error(f"Failed to create specialized adapter: {e}")
+            raise
+    
+    async def _train_specialized_adapter(self, adapter_path: str, training_data: List[Dict], 
+                                       domain: AdapterDomain, concepts: List[str]) -> float:
+        """Train a specialized adapter (placeholder - integrate with actual training)"""
+        # This would integrate with the actual LoRA training logic
+        # For now, return a simulated performance score
+        
+        # Domain-specific training parameters
+        domain_params = {
+            AdapterDomain.TECHNICAL: {'learning_rate': 0.0001, 'rank': 16},
+            AdapterDomain.SCIENTIFIC: {'learning_rate': 0.00008, 'rank': 12},
+            AdapterDomain.MEDICAL: {'learning_rate': 0.00012, 'rank': 20},
+            AdapterDomain.GENERAL: {'learning_rate': 0.0001, 'rank': 8}
+        }
+        
+        params = domain_params.get(domain, domain_params[AdapterDomain.GENERAL])
+        
+        # Save training configuration
+        config = {
+            'domain': domain.value,
+            'concepts': concepts,
+            'training_params': params,
+            'training_data_size': len(training_data)
+        }
+        
+        with open(os.path.join(adapter_path, "specialized_config.json"), 'w') as f:
+            json.dump(config, f, indent=2)
+        
+        # Simulate performance based on training data quality
+        base_performance = 0.85
+        data_quality_bonus = min(len(training_data) / 100.0, 0.1)
+        domain_bonus = 0.05 if domain != AdapterDomain.GENERAL else 0.0
+        
+        return min(base_performance + data_quality_bonus + domain_bonus, 0.98)
+    
+    async def route_query_to_adapters(self, query: str, concepts: List[str] = None, 
+                                    max_adapters: int = 3) -> AdapterRoutingDecision:
+        """Route a query to the most appropriate specialized adapters"""
+        try:
+            # Classify query domain
+            query_domain = await self._classify_domain([query] + (concepts or []))
+            
+            # Find candidate adapters
+            candidates = await self._find_candidate_adapters(query, concepts, query_domain)
+            
+            # Score and rank candidates
+            scored_candidates = await self._score_adapter_candidates(query, concepts, candidates)
+            
+            # Select primary and secondary adapters
+            if not scored_candidates:
+                # Fallback to general domain
+                general_adapters = self.domain_adapters.get(AdapterDomain.GENERAL, [])
+                primary_adapter = general_adapters[0] if general_adapters else None
+                secondary_adapters = []
+                confidence = 0.3
+                reasoning = "No specialized adapters found, using general fallback"
+            else:
+                primary_adapter = scored_candidates[0][0]
+                secondary_adapters = [adapter_id for adapter_id, _ in scored_candidates[1:max_adapters]]
+                confidence = scored_candidates[0][1]
+                reasoning = f"Selected {query_domain.value} domain adapter based on concept matching"
+            
+            decision = AdapterRoutingDecision(
+                primary_adapter=primary_adapter,
+                secondary_adapters=secondary_adapters,
+                confidence=confidence,
+                reasoning=reasoning,
+                concept_matches=dict(scored_candidates) if scored_candidates else {}
+            )
+            
+            # Track routing decision
+            self.routing_decisions.append(decision)
+            if len(self.routing_decisions) > 1000:
+                self.routing_decisions = self.routing_decisions[-500:]  # Keep last 500
+            
+            logger.info(f"🎯 ADAPTER ROUTING:")
+            logger.info(f"   🥇 Primary: {primary_adapter}")
+            logger.info(f"   🥈 Secondary: {secondary_adapters}")
+            logger.info(f"   📊 Confidence: {confidence:.3f}")
+            logger.info(f"   💭 Reasoning: {reasoning}")
+            
+            return decision
+            
+        except Exception as e:
+            logger.error(f"Failed to route query to adapters: {e}")
+            # Return default routing
+            return AdapterRoutingDecision(
+                primary_adapter=None,
+                secondary_adapters=[],
+                confidence=0.0,
+                reasoning=f"Routing failed: {e}",
+                concept_matches={}
+            )
+    
+    async def _find_candidate_adapters(self, query: str, concepts: List[str], 
+                                     query_domain: AdapterDomain) -> List[str]:
+        """Find candidate adapters for a query"""
+        candidates = set()
+        
+        # Add adapters from the same domain
+        candidates.update(self.domain_adapters.get(query_domain, []))
+        
+        # Add adapters with concept overlap
+        if concepts:
+            for concept in concepts:
+                for adapter_id, adapter in self.adapters.items():
+                    if concept.lower() in [c.lower() for c in adapter.concepts]:
+                        candidates.add(adapter_id)
+        
+        # Add high-performing general adapters as fallback
+        general_adapters = self.domain_adapters.get(AdapterDomain.GENERAL, [])
+        for adapter_id in general_adapters:
+            adapter = self.adapters[adapter_id]
+            if adapter.performance_score > 0.9:
+                candidates.add(adapter_id)
+        
+        return list(candidates)
+    
+    async def _score_adapter_candidates(self, query: str, concepts: List[str], 
+                                      candidates: List[str]) -> List[Tuple[str, float]]:
+        """Score adapter candidates based on relevance"""
+        scored = []
+        
+        for adapter_id in candidates:
+            adapter = self.adapters[adapter_id]
+            score = 0.0
+            
+            # Base score from adapter performance
+            score += adapter.performance_score * 0.3
+            
+            # Concept overlap score
+            if concepts:
+                overlap = len(set(c.lower() for c in concepts) & 
+                            set(c.lower() for c in adapter.concepts))
+                score += (overlap / len(concepts)) * 0.4
+            
+            # Domain confidence score
+            score += adapter.domain_confidence * 0.2
+            
+            # Usage frequency score (popular adapters get small boost)
+            usage_boost = min(adapter.usage_count / 100.0, 0.1)
+            score += usage_boost
+            
+            # Recency score (newer adapters get small boost)
+            try:
+                days_old = (datetime.now() - datetime.fromisoformat(adapter.created_at)).days
+                recency_boost = max(0, (30 - days_old) / 30.0) * 0.05
+                score += recency_boost
+            except:
+                pass
+            
+            scored.append((adapter_id, min(score, 1.0)))
+        
+        # Sort by score descending
+        scored.sort(key=lambda x: x[1], reverse=True)
+        
+        return scored
+    
+    async def record_adapter_usage(self, adapter_id: str, performance_metrics: Dict):
+        """Record usage and performance metrics for an adapter"""
+        if adapter_id not in self.adapters:
+            logger.warning(f"Adapter {adapter_id} not found for usage recording")
+            return
+        
+        adapter = self.adapters[adapter_id]
+        
+        # Update usage count
+        adapter.usage_count += 1
+        adapter.last_updated = datetime.now().isoformat()
+        
+        # Record performance metrics
+        if 'accuracy' in performance_metrics:
+            adapter.accuracy_scores.append(performance_metrics['accuracy'])
+            if len(adapter.accuracy_scores) > 100:
+                adapter.accuracy_scores = adapter.accuracy_scores[-50:]  # Keep last 50
+        
+        if 'loss' in performance_metrics:
+            adapter.training_losses.append(performance_metrics['loss'])
+            if len(adapter.training_losses) > 100:
+                adapter.training_losses = adapter.training_losses[-50:]
+        
+        if 'latency_ms' in performance_metrics:
+            adapter.inference_latency_ms.append(performance_metrics['latency_ms'])
+            if len(adapter.inference_latency_ms) > 100:
+                adapter.inference_latency_ms = adapter.inference_latency_ms[-50:]
+        
+        # Update performance score (moving average)
+        if adapter.accuracy_scores:
+            recent_scores = adapter.accuracy_scores[-10:]  # Last 10 scores
+            adapter.performance_score = sum(recent_scores) / len(recent_scores)
+        
+        # Save updated metadata
+        await self._save_adapter_metadata(adapter)
+        
+        logger.debug(f"📊 Updated metrics for adapter {adapter_id}: score={adapter.performance_score:.3f}")
+    
+    async def _save_adapter_metadata(self, adapter: SpecializedAdapter):
+        """Save adapter metadata to disk"""
+        try:
+            metadata_file = os.path.join(adapter.file_path, "specialized_metadata.json")
+            
+            # Convert to serializable format
+            data = asdict(adapter)
+            data['concepts'] = list(adapter.concepts)  # Convert set to list
+            
+            with open(metadata_file, 'w') as f:
+                json.dump(data, f, indent=2)
+                
+        except Exception as e:
+            logger.error(f"Failed to save adapter metadata: {e}")
+    
+    async def _update_concept_overlaps(self, adapter_id: str):
+        """Update concept overlap metrics for an adapter"""
+        if adapter_id not in self.adapters:
+            return
+        
+        adapter = self.adapters[adapter_id]
+        overlaps = {}
+        
+        for other_id, other_adapter in self.adapters.items():
+            if other_id == adapter_id:
+                continue
+            
+            overlap = len(adapter.concepts & other_adapter.concepts)
+            total = len(adapter.concepts | other_adapter.concepts)
+            
+            if total > 0:
+                overlap_ratio = overlap / total
+                if overlap_ratio > 0.1:  # Only store significant overlaps
+                    overlaps[other_id] = overlap_ratio
+        
+        adapter.concept_overlap = overlaps
+    
+    async def get_adapter_status(self) -> Dict:
+        """Get comprehensive status of all specialized adapters"""
+        status = {
+            'total_adapters': len(self.adapters),
+            'domain_distribution': {},
+            'performance_summary': {},
+            'routing_stats': {},
+            'recent_decisions': []
+        }
+        
+        # Domain distribution
+        for domain in AdapterDomain:
+            count = len(self.domain_adapters.get(domain, []))
+            if count > 0:
+                status['domain_distribution'][domain.value] = count
+        
+        # Performance summary
+        if self.adapters:
+            scores = [a.performance_score for a in self.adapters.values()]
+            status['performance_summary'] = {
+                'average_score': sum(scores) / len(scores),
+                'best_score': max(scores),
+                'worst_score': min(scores)
+            }
+        
+        # Routing statistics
+        if self.routing_decisions:
+            recent_decisions = self.routing_decisions[-100:]  # Last 100 decisions
+            confidence_scores = [d.confidence for d in recent_decisions]
+            
+            status['routing_stats'] = {
+                'total_routes': len(self.routing_decisions),
+                'average_confidence': sum(confidence_scores) / len(confidence_scores),
+                'successful_routes': len([d for d in recent_decisions if d.primary_adapter])
+            }
+        
+        # Recent routing decisions
+        status['recent_decisions'] = [
+            {
+                'primary_adapter': d.primary_adapter,
+                'confidence': d.confidence,
+                'reasoning': d.reasoning
+            }
+            for d in self.routing_decisions[-5:]  # Last 5 decisions
+        ]
+        
+        return status
+    
+    async def optimize_adapter_selection(self):
+        """Optimize adapter selection based on usage patterns"""
+        try:
+            # Identify underperforming adapters
+            underperforming = []
+            for adapter_id, adapter in self.adapters.items():
+                if (adapter.performance_score < 0.7 or 
+                    adapter.usage_count == 0 and 
+                    (datetime.now() - datetime.fromisoformat(adapter.created_at)).days > 7):
+                    underperforming.append(adapter_id)
+            
+            # Identify overlapping adapters that could be merged
+            merge_candidates = await self._find_merge_candidates()
+            
+            # Log optimization recommendations
+            if underperforming:
+                logger.info(f"🔧 OPTIMIZATION: {len(underperforming)} underperforming adapters")
+            
+            if merge_candidates:
+                logger.info(f"🔗 OPTIMIZATION: {len(merge_candidates)} merge opportunities")
+            
+            return {
+                'underperforming_adapters': underperforming,
+                'merge_candidates': merge_candidates,
+                'optimization_date': datetime.now().isoformat()
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to optimize adapter selection: {e}")
+            return {}
+    
+    async def _find_merge_candidates(self) -> List[Tuple[str, str]]:
+        """Find adapters that could be merged due to high overlap"""
+        candidates = []
+        
+        for adapter_id, adapter in self.adapters.items():
+            for other_id, overlap_ratio in adapter.concept_overlap.items():
+                if (overlap_ratio > 0.8 and  # High concept overlap
+                    adapter.domain == self.adapters[other_id].domain and  # Same domain
+                    abs(adapter.performance_score - self.adapters[other_id].performance_score) < 0.1):  # Similar performance
+                    
+                    # Avoid duplicate pairs
+                    pair = tuple(sorted([adapter_id, other_id]))
+                    if pair not in candidates:
+                        candidates.append(pair)
+        
+        return candidates 

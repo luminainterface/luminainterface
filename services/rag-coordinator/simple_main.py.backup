@@ -1,0 +1,323 @@
+#!/usr/bin/env python3
+
+import os
+import asyncio
+import logging
+import time
+from typing import List, Dict, Any, Optional
+
+import httpx
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from prometheus_fastapi_instrumentator import Instrumentator
+from prometheus_client import Counter, Histogram, Gauge
+import aiohttp
+from datetime import datetime
+
+# ── Config ────────────────────────────────────────────────────────────────────
+RETRIEVER_URL = os.getenv("RETRIEVER_URL", "http://retriever:8001/retrieve")
+LLM_URL = os.getenv("LLM_URL", "http://masterchat-llm:8000/chat")
+QDRANT_URL = os.getenv("QDRANT_URL", "http://qdrant:6333")
+TOP_K = int(os.getenv("RAG_TOP_K", 5))
+RETRY_ATTEMPTS = int(os.getenv("RAG_RETRIES", 3))
+TIMEOUT_SEC = float(os.getenv("RAG_TIMEOUT", 30))
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
+
+logging.basicConfig(level=LOG_LEVEL,
+    format="%(asctime)s | RAG | %(levelname)s | %(message)s")
+log = logging.getLogger("RAG")
+
+# ── FastAPI app & metrics ─────────────────────────────────────────────────────
+app = FastAPI(title="RAG-Coordinator", version="0.3.0")
+Instrumentator().instrument(app).expose(app)
+
+REQ_LATENCY = Histogram(
+    "rag_request_seconds",
+    "RAG end-to-end latency",
+    buckets=(.2,.5,1,2,5,10,30))
+REQ_COUNTER = Counter(
+    "rag_requests_total",
+    "Total RAG queries",
+    ["status"])
+CONTEXT_TOK = Gauge(
+    "rag_context_tokens",
+    "Tokens passed to LLM per request")
+
+# ── Pydantic models ───────────────────────────────────────────────────────────
+class QueryRequest(BaseModel):
+    query: str
+    top_k: int = TOP_K
+    temperature: Optional[float] = 0.2
+    collection: Optional[str] = None
+    limit: Optional[int] = None
+
+class SynthesizeRequest(BaseModel):
+    query: str
+    contexts: List[str]
+    adapter_id: Optional[str] = None
+    temperature: Optional[float] = 0.2
+
+class SourceChunk(BaseModel):
+    id: str
+    score: float
+    payload: Dict[str, Any]
+
+class QueryResponse(BaseModel):
+    answer: Optional[str] = None
+    contexts: List[str] = []
+    sources: List[SourceChunk] = []
+    confidence: float = 0.0
+    latency: float = 0.0
+
+class SynthesizeResponse(BaseModel):
+    response: str
+    confidence: float
+    sources_used: List[str] = []
+    adapter_id: Optional[str] = None
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+_client = httpx.AsyncClient(timeout=TIMEOUT_SEC)
+
+async def _call_with_retry(method, url, **kwargs):
+    for attempt in range(1, RETRY_ATTEMPTS+1):
+        try:
+            resp = await _client.request(method, url, **kwargs)
+            resp.raise_for_status()
+            return resp
+        except Exception as e:
+            if attempt == RETRY_ATTEMPTS:
+                raise
+            await asyncio.sleep(1 * attempt)
+            log.warning(f"{url} attempt {attempt} failed: {e}")
+
+def _build_prompt(query: str, ctx: str) -> str:
+    return (f"Answer the question truthfully based on the context. Be concise.\n\n"
+            f"Context:\n{ctx}\n\nQuestion: {query}\nAnswer:")
+
+async def fetch_chunks_from_qdrant(query: str, limit: int = 5, collection: str = None) -> List[Dict[str, Any]]:
+    """Fetch relevant chunks from Qdrant"""
+    try:
+        # Enhanced mock chunks with different collections
+        if "dune" in query.lower() or "arrakis" in query.lower():
+            mock_chunks = [
+                {
+                    "id": "dune_1",
+                    "score": 0.95,
+                    "payload": {
+                        "content": "Dune is a science fiction novel by Frank Herbert about desert planet Arrakis, spice melange, and the Fremen people.",
+                        "title": "Dune Overview",
+                        "source": "dune_knowledge",
+                        "collection": "books"
+                    }
+                },
+                {
+                    "id": "dune_2", 
+                    "score": 0.87,
+                    "payload": {
+                        "content": "The spice melange is a precious substance that enables space travel and extends life. It's found only on planet Arrakis.",
+                        "title": "Spice Melange",
+                        "source": "dune_knowledge",
+                        "collection": "books"
+                    }
+                }
+            ]
+        else:
+            mock_chunks = [
+                {
+                    "id": "general_1",
+                    "score": 0.80,
+                    "payload": {
+                        "content": f"Information related to: {query}. This is placeholder content from the knowledge base.",
+                        "title": "General Knowledge",
+                        "source": "mock_knowledge",
+                        "collection": collection or "general"
+                    }
+                },
+                {
+                    "id": "general_2",
+                    "score": 0.70,
+                    "payload": {
+                        "content": f"Additional context about {query} from our knowledge sources.",
+                        "title": "Contextual Information",
+                        "source": "mock_knowledge",
+                        "collection": collection or "general"
+                    }
+                }
+            ]
+            
+        log.info(f"Retrieved {len(mock_chunks)} chunks for query: {query}")
+        return mock_chunks
+        
+    except Exception as e:
+        log.error(f"Error fetching chunks from Qdrant: {e}")
+        return []
+
+async def call_llm(prompt: str, temperature: float = 0.2) -> str:
+    """Call the LLM service for text generation"""
+    try:
+        llm_payload = {
+            "message": prompt,
+            "temperature": temperature,
+            "max_tokens": 500
+        }
+        
+        l_resp = await _call_with_retry("POST", LLM_URL, json=llm_payload)
+        response_data = l_resp.json()
+        answer = response_data.get("response") or response_data.get("content") or "I couldn't generate a response."
+        return answer.strip()
+        
+    except Exception as llm_error:
+        log.warning(f"LLM call failed: {llm_error}")
+        return "I'm having trouble connecting to the language model. Please try again later."
+
+# ── API endpoints ─────────────────────────────────────────────────────────────
+@app.post("/query", response_model=QueryResponse)
+async def query_rag(req: QueryRequest):
+    """Query knowledge base and return contexts and optional answer"""
+    tic = time.perf_counter()
+    
+    try:
+        # Use limit if provided, otherwise use top_k
+        limit = req.limit or req.top_k
+        
+        # 1. Retrieve top-k chunks
+        raw_chunks = await fetch_chunks_from_qdrant(req.query, limit, req.collection)
+        if not raw_chunks:
+            REQ_COUNTER.labels("no_context").inc()
+            return QueryResponse(
+                contexts=[],
+                sources=[],
+                confidence=0.0,
+                latency=round(time.perf_counter()-tic, 3)
+            )
+
+        chunks = [SourceChunk(**c) for c in raw_chunks]
+        contexts = [c.payload.get("content", str(c.payload)) for c in chunks]
+        CONTEXT_TOK.set(sum(len(ctx.split()) for ctx in contexts))
+
+        # 2. Generate answer using LLM
+        answer = None
+        confidence = 0.8 if raw_chunks else 0.0
+        
+        try:
+            # Build prompt with contexts
+            ctx_text = "\n\n".join(contexts)
+            prompt = _build_prompt(req.query, ctx_text)
+            
+            # Generate answer using LLM
+            answer = await call_llm(prompt, req.temperature or 0.2)
+            
+            # Adjust confidence based on answer quality
+            if answer and len(answer.strip()) > 10:
+                confidence = min(0.95, confidence + 0.1)
+            
+            log.info(f"Generated answer for query: {req.query[:50]}...")
+            
+        except Exception as llm_error:
+            log.warning(f"LLM answer generation failed: {llm_error}")
+            # Still return contexts even if LLM fails
+            answer = None
+        
+        REQ_COUNTER.labels("success").inc()
+        return QueryResponse(
+            answer=answer,
+            contexts=contexts,
+            sources=chunks,
+            confidence=confidence,
+            latency=round(time.perf_counter()-tic, 3))
+            
+    except Exception as e:
+        REQ_COUNTER.labels("error").inc()
+        log.error(f"RAG query failed: {e}")
+        raise HTTPException(500, f"Internal error: {str(e)}")
+
+@app.post("/synthesize", response_model=SynthesizeResponse)
+async def synthesize_response(req: SynthesizeRequest):
+    """Synthesize response using provided contexts"""
+    tic = time.perf_counter()
+    
+    try:
+        if not req.contexts:
+            return SynthesizeResponse(
+                response="I don't have enough context to answer that question.",
+                confidence=0.0,
+                sources_used=[],
+                adapter_id=req.adapter_id
+            )
+        
+        # Build prompt with contexts
+        ctx_text = "\n\n".join(req.contexts)
+        prompt = _build_prompt(req.query, ctx_text)
+        
+        # Generate response
+        response = await call_llm(prompt, req.temperature or 0.2)
+        
+        # Calculate confidence based on context quality
+        confidence = min(0.9, max(0.3, len(ctx_text) / 1000))
+        
+        REQ_COUNTER.labels("synthesize_success").inc()
+        return SynthesizeResponse(
+            response=response,
+            confidence=confidence,
+            sources_used=[f"context_{i}" for i in range(len(req.contexts))],
+            adapter_id=req.adapter_id
+        )
+        
+    except Exception as e:
+        REQ_COUNTER.labels("synthesize_error").inc()
+        log.error(f"Synthesis failed: {e}")
+        return SynthesizeResponse(
+            response=f"I encountered an error while processing your request: {str(e)}",
+            confidence=0.1,
+            sources_used=[],
+            adapter_id=req.adapter_id
+        )
+
+@app.get("/health")
+async def health():
+    try:
+        # Enhanced health check
+        qdrant_status = "unknown"
+        llm_status = "unknown"
+        
+        # Check Qdrant
+        try:
+            async with httpx.AsyncClient(timeout=5.0) as client:
+                resp = await client.get(f"{QDRANT_URL}")
+                qdrant_status = "healthy" if resp.status_code == 200 else "unhealthy"
+        except:
+            qdrant_status = "unhealthy"
+        
+        # Check LLM
+        try:
+            async with httpx.AsyncClient(timeout=5.0) as client:
+                resp = await client.get(f"{LLM_URL.replace('/chat', '/health')}")
+                llm_status = "healthy" if resp.status_code == 200 else "unhealthy"
+        except:
+            llm_status = "unhealthy"
+        
+        return {
+            "status": "ok", 
+            "service": "rag-coordinator", 
+            "timestamp": datetime.utcnow().isoformat(),
+            "dependencies": {
+                "qdrant": qdrant_status,
+                "llm": llm_status
+            },
+            "endpoints": ["/query", "/synthesize", "/health"]
+        }
+    except Exception as e:
+        raise HTTPException(503, detail=str(e))
+
+@app.get("/")
+async def root():
+    return {"message": "RAG Coordinator active", "version": "0.3.0", "endpoints": ["/query", "/synthesize", "/health"]}
+
+# ── graceful shutdown ─────────────────────────────────────────────────────────
+@app.on_event("shutdown")
+async def _shutdown():
+    await _client.aclose()
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8902) 

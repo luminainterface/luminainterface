@@ -1,0 +1,300 @@
+{
+  "query": "RAG LLM",
+  "concept": "technology",
+  "lora_name": "RAG",
+  "extracted_content": [
+    {
+      "url": "https://arxiv.org/abs/2409.01666v1",
+      "title": "[2409.01666v1] In Defense of RAG in the Era of Long-Context Language Models",
+      "content": "Computer Science > Computation and Language arXiv:2409.01666v1 (cs) [Submitted on 3 Sep 2024] Title: In Defense of RAG in the Era of Long-Context Language Models Authors: Tan Yu , Anbang Xu , Rama Akkiraju View a PDF of the paper titled In Defense of RAG in the Era of Long-Context Language Models, by Tan Yu and 2 other authors View PDF HTML (experimental) Abstract: Overcoming the limited context limitations in early-generation LLMs, retrieval-augmented generation (RAG) has been a reliable solution for context-based answer generation in the past. Recently, the emergence of long-context LLMs allows the models to incorporate much longer text sequences, making RAG less attractive. Recent studies show that long-context LLMs significantly outperform RAG in long-context applications. Unlike the existing works favoring the long-context LLM over RAG, we argue that the extremely long context in LLMs suffers from a diminished focus on relevant information and leads to potential degradation in answer quality. This paper revisits the RAG in long-context answer generation. We propose an order-preserve retrieval-augmented generation (OP-RAG) mechanism, which significantly improves the performance of RAG for long-context question-answer applications. With OP-RAG, as the number of retrieved chunks increases, the answer quality initially rises, and then declines, forming an inverted U-shaped curve. There exist sweet points where OP-RAG could achieve higher answer quality with much less tokens than long-context LLM taking the whole context as input. Extensive experiments on public benchmark demonstrate the superiority of our OP-RAG. Subjects: Computation and Language (cs.CL) Cite as: arXiv:2409.01666 [cs.CL] (or arXiv:2409.01666v1 [cs.CL] for this version) https://doi.org/10.48550/arXiv.2409.01666 Focus to learn more arXiv-issued DOI via DataCite Submission history From: Tan Yu [ view email ] [v1] Tue, 3 Sep 2024 07:17:41 UTC (343 KB) Full-text links: Access Paper: View a PDF of the p",
+      "quality_score": 1.0,
+      "word_count": 644,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:16.059252",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2501.00353v1",
+      "title": "[2501.00353v1] RAG-Instruct: Boosting LLMs with Diverse Retrieval-Augmented Instructions",
+      "content": "Computer Science > Computation and Language arXiv:2501.00353v1 (cs) [Submitted on 31 Dec 2024] Title: RAG-Instruct: Boosting LLMs with Diverse Retrieval-Augmented Instructions Authors: Wanlong Liu , Junying Chen , Ke Ji , Li Zhou , Wenyu Chen , Benyou Wang View a PDF of the paper titled RAG-Instruct: Boosting LLMs with Diverse Retrieval-Augmented Instructions, by Wanlong Liu and 5 other authors View PDF Abstract: Retrieval-Augmented Generation (RAG) has emerged as a key paradigm for enhancing large language models (LLMs) by incorporating external knowledge. However, current RAG methods face two limitations: (1) they only cover limited RAG scenarios. (2) They suffer from limited task diversity due to the lack of a general RAG dataset. To address these limitations, we propose RAG-Instruct, a general method for synthesizing diverse and high-quality RAG instruction data based on any source corpus. Our approach leverages (1) five RAG paradigms, which encompass diverse query-document relationships, and (2) instruction simulation, which enhances instruction diversity and quality by utilizing the strengths of existing instruction datasets. Using this method, we construct a 40K instruction dataset from Wikipedia, comprehensively covering diverse RAG scenarios and tasks. Experiments demonstrate that RAG-Instruct effectively enhances LLMs' RAG capabilities, achieving strong zero-shot performance and significantly outperforming various RAG baselines across a diverse set of tasks. RAG-Instruct is publicly available at this https URL . Subjects: Computation and Language (cs.CL) ; Artificial Intelligence (cs.AI); Machine Learning (cs.LG) Cite as: arXiv:2501.00353 [cs.CL] (or arXiv:2501.00353v1 [cs.CL] for this version) https://doi.org/10.48550/arXiv.2501.00353 Focus to learn more arXiv-issued DOI via DataCite Submission history From: Junying Chen [ view email ] [v1] Tue, 31 Dec 2024 09:00:51 UTC (5,206 KB) Full-text links: Access Paper: View a PDF of the paper titled RAG-Instruct:",
+      "quality_score": 1.0,
+      "word_count": 626,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:16.494663",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2407.21059v1",
+      "title": "[2407.21059v1] Modular RAG: Transforming RAG Systems into LEGO-like Reconfigurable Frameworks",
+      "content": "Computer Science > Computation and Language arXiv:2407.21059v1 (cs) [Submitted on 26 Jul 2024] Title: Modular RAG: Transforming RAG Systems into LEGO-like Reconfigurable Frameworks Authors: Yunfan Gao , Yun Xiong , Meng Wang , Haofen Wang View a PDF of the paper titled Modular RAG: Transforming RAG Systems into LEGO-like Reconfigurable Frameworks, by Yunfan Gao and 2 other authors View PDF HTML (experimental) Abstract: Retrieval-augmented Generation (RAG) has markedly enhanced the capabilities of Large Language Models (LLMs) in tackling knowledge-intensive tasks. The increasing demands of application scenarios have driven the evolution of RAG, leading to the integration of advanced retrievers, LLMs and other complementary technologies, which in turn has amplified the intricacy of RAG systems. However, the rapid advancements are outpacing the foundational RAG paradigm, with many methods struggling to be unified under the process of \"retrieve-then-generate\". In this context, this paper examines the limitations of the existing RAG paradigm and introduces the modular RAG framework. By decomposing complex RAG systems into independent modules and specialized operators, it facilitates a highly reconfigurable framework. Modular RAG transcends the traditional linear architecture, embracing a more advanced design that integrates routing, scheduling, and fusion mechanisms. Drawing on extensive research, this paper further identifies prevalent RAG patterns-linear, conditional, branching, and looping-and offers a comprehensive analysis of their respective implementation nuances. Modular RAG presents innovative opportunities for the conceptualization and deployment of RAG systems. Finally, the paper explores the potential emergence of new operators and paradigms, establishing a solid theoretical foundation and a practical roadmap for the continued evolution and practical deployment of RAG technologies. Subjects: Computation and Language (cs.CL) ; Artificial Intelligence (cs.AI); ",
+      "quality_score": 1.0,
+      "word_count": 680,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:16.939355",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2501.05249v1",
+      "title": "[2501.05249v1] RAG-WM: An Efficient Black-Box Watermarking Approach for Retrieval-Augmented Generation of Large Language Models",
+      "content": "Computer Science > Cryptography and Security arXiv:2501.05249v1 (cs) [Submitted on 9 Jan 2025] Title: RAG-WM: An Efficient Black-Box Watermarking Approach for Retrieval-Augmented Generation of Large Language Models Authors: Peizhuo Lv , Mengjie Sun , Hao Wang , Xiaofeng Wang , Shengzhi Zhang , Yuxuan Chen , Kai Chen , Limin Sun View a PDF of the paper titled RAG-WM: An Efficient Black-Box Watermarking Approach for Retrieval-Augmented Generation of Large Language Models, by Peizhuo Lv and 7 other authors View PDF Abstract: In recent years, tremendous success has been witnessed in Retrieval-Augmented Generation (RAG), widely used to enhance Large Language Models (LLMs) in domain-specific, knowledge-intensive, and privacy-sensitive tasks. However, attackers may steal those valuable RAGs and deploy or commercialize them, making it essential to detect Intellectual Property (IP) infringement. Most existing ownership protection solutions, such as watermarks, are designed for relational databases and texts. They cannot be directly applied to RAGs because relational database watermarks require white-box access to detect IP infringement, which is unrealistic for the knowledge base in RAGs. Meanwhile, post-processing by the adversary's deployed LLMs typically destructs text watermark information. To address those problems, we propose a novel black-box \"knowledge watermark\" approach, named RAG-WM, to detect IP infringement of RAGs. RAG-WM uses a multi-LLM interaction framework, comprising a Watermark Generator, Shadow LLM & RAG, and Watermark Discriminator, to create watermark texts based on watermark entity-relationship tuples and inject them into the target RAG. We evaluate RAG-WM across three domain-specific and two privacy-sensitive tasks on four benchmark LLMs. Experimental results show that RAG-WM effectively detects the stolen RAGs in various deployed LLMs. Furthermore, RAG-WM is robust against paraphrasing, unrelated content removal, knowledge insertion, and knowledge e",
+      "quality_score": 1.0,
+      "word_count": 708,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:17.386169",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2401.15391v1",
+      "title": "[2401.15391v1] MultiHop-RAG: Benchmarking Retrieval-Augmented Generation for Multi-Hop Queries",
+      "content": "Computer Science > Computation and Language arXiv:2401.15391v1 (cs) [Submitted on 27 Jan 2024] Title: MultiHop-RAG: Benchmarking Retrieval-Augmented Generation for Multi-Hop Queries Authors: Yixuan Tang , Yi Yang View a PDF of the paper titled MultiHop-RAG: Benchmarking Retrieval-Augmented Generation for Multi-Hop Queries, by Yixuan Tang and Yi Yang View PDF Abstract: Retrieval-augmented generation (RAG) augments large language models (LLM) by retrieving relevant knowledge, showing promising potential in mitigating LLM hallucinations and enhancing response quality, thereby facilitating the great adoption of LLMs in practice. However, we find that existing RAG systems are inadequate in answering multi-hop queries, which require retrieving and reasoning over multiple pieces of supporting evidence. Furthermore, to our knowledge, no existing RAG benchmarking dataset focuses on multi-hop queries. In this paper, we develop a novel dataset, MultiHop-RAG, which consists of a knowledge base, a large collection of multi-hop queries, their ground-truth answers, and the associated supporting evidence. We detail the procedure of building the dataset, utilizing an English news article dataset as the underlying RAG knowledge base. We demonstrate the benchmarking utility of MultiHop-RAG in two experiments. The first experiment compares different embedding models for retrieving evidence for multi-hop queries. In the second experiment, we examine the capabilities of various state-of-the-art LLMs, including GPT-4, PaLM, and Llama2-70B, in reasoning and answering multi-hop queries given the evidence. Both experiments reveal that existing RAG methods perform unsatisfactorily in retrieving and answering multi-hop queries. We hope MultiHop-RAG will be a valuable resource for the community in developing effective RAG systems, thereby facilitating greater adoption of LLMs in practice. The MultiHop-RAG and implemented RAG system is publicly available at this https URL . Comments: Link: this ",
+      "quality_score": 1.0,
+      "word_count": 682,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:17.851258",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2504.08758v1",
+      "title": "[2504.08758v1] Hyper-RAG: Combating LLM Hallucinations using Hypergraph-Driven Retrieval-Augmented Generation",
+      "content": "Computer Science > Information Retrieval arXiv:2504.08758v1 (cs) [Submitted on 30 Mar 2025] Title: Hyper-RAG: Combating LLM Hallucinations using Hypergraph-Driven Retrieval-Augmented Generation Authors: Yifan Feng , Hao Hu , Xingliang Hou , Shiquan Liu , Shihui Ying , Shaoyi Du , Han Hu , Yue Gao View a PDF of the paper titled Hyper-RAG: Combating LLM Hallucinations using Hypergraph-Driven Retrieval-Augmented Generation, by Yifan Feng and 7 other authors View PDF HTML (experimental) Abstract: Large language models (LLMs) have transformed various sectors, including education, finance, and medicine, by enhancing content generation and decision-making processes. However, their integration into the medical field is cautious due to hallucinations, instances where generated content deviates from factual accuracy, potentially leading to adverse outcomes. To address this, we introduce Hyper-RAG, a hypergraph-driven Retrieval-Augmented Generation method that comprehensively captures both pairwise and beyond-pairwise correlations in domain-specific knowledge, thereby mitigating hallucinations. Experiments on the NeurologyCrop dataset with six prominent LLMs demonstrated that Hyper-RAG improves accuracy by an average of 12.3% over direct LLM use and outperforms Graph RAG and Light RAG by 6.3% and 6.0%, respectively. Additionally, Hyper-RAG maintained stable performance with increasing query complexity, unlike existing methods which declined. Further validation across nine diverse datasets showed a 35.5% performance improvement over Light RAG using a selection-based assessment. The lightweight variant, Hyper-RAG-Lite, achieved twice the retrieval speed and a 3.3% performance boost compared with Light RAG. These results confirm Hyper-RAG's effectiveness in enhancing LLM reliability and reducing hallucinations, making it a robust solution for high-stakes applications like medical diagnostics. Subjects: Information Retrieval (cs.IR) ; Artificial Intelligence (cs.AI) Cite as: arXiv",
+      "quality_score": 1.0,
+      "word_count": 657,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:18.299709",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2504.18041v1",
+      "title": "[2504.18041v1] RAG LLMs are Not Safer: A Safety Analysis of Retrieval-Augmented Generation for Large Language Models",
+      "content": "Computer Science > Computation and Language arXiv:2504.18041v1 (cs) [Submitted on 25 Apr 2025] Title: RAG LLMs are Not Safer: A Safety Analysis of Retrieval-Augmented Generation for Large Language Models Authors: Bang An , Shiyue Zhang , Mark Dredze View a PDF of the paper titled RAG LLMs are Not Safer: A Safety Analysis of Retrieval-Augmented Generation for Large Language Models, by Bang An and 2 other authors View PDF HTML (experimental) Abstract: Efforts to ensure the safety of large language models (LLMs) include safety fine-tuning, evaluation, and red teaming. However, despite the widespread use of the Retrieval-Augmented Generation (RAG) framework, AI safety work focuses on standard LLMs, which means we know little about how RAG use cases change a model's safety profile. We conduct a detailed comparative analysis of RAG and non-RAG frameworks with eleven LLMs. We find that RAG can make models less safe and change their safety profile. We explore the causes of this change and find that even combinations of safe models with safe documents can cause unsafe generations. In addition, we evaluate some existing red teaming methods for RAG settings and show that they are less effective than when used for non-RAG settings. Our work highlights the need for safety research and red-teaming methods specifically tailored for RAG LLMs. Comments: NAACL 2025 Subjects: Computation and Language (cs.CL) ; Artificial Intelligence (cs.AI) Cite as: arXiv:2504.18041 [cs.CL] (or arXiv:2504.18041v1 [cs.CL] for this version) https://doi.org/10.48550/arXiv.2504.18041 Focus to learn more arXiv-issued DOI via DataCite Submission history From: Shiyue Zhang [ view email ] [v1] Fri, 25 Apr 2025 03:25:18 UTC (7,282 KB) Full-text links: Access Paper: View a PDF of the paper titled RAG LLMs are Not Safer: A Safety Analysis of Retrieval-Augmented Generation for Large Language Models, by Bang An and 2 other authors View PDF HTML (experimental) TeX Source Other Formats view license Current browse c",
+      "quality_score": 1.0,
+      "word_count": 631,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:18.759098",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2410.07176v1",
+      "title": "[2410.07176v1] Astute RAG: Overcoming Imperfect Retrieval Augmentation and Knowledge Conflicts for Large Language Models",
+      "content": "Computer Science > Computation and Language arXiv:2410.07176v1 (cs) [Submitted on 9 Oct 2024] Title: Astute RAG: Overcoming Imperfect Retrieval Augmentation and Knowledge Conflicts for Large Language Models Authors: Fei Wang , Xingchen Wan , Ruoxi Sun , Jiefeng Chen , Sercan \u00d6. Ar\u0131k View a PDF of the paper titled Astute RAG: Overcoming Imperfect Retrieval Augmentation and Knowledge Conflicts for Large Language Models, by Fei Wang and 4 other authors View PDF HTML (experimental) Abstract: Retrieval-Augmented Generation (RAG), while effective in integrating external knowledge to address the limitations of large language models (LLMs), can be undermined by imperfect retrieval, which may introduce irrelevant, misleading, or even malicious information. Despite its importance, previous studies have rarely explored the behavior of RAG through joint analysis on how errors from imperfect retrieval attribute and propagate, and how potential conflicts arise between the LLMs' internal knowledge and external sources. We find that imperfect retrieval augmentation might be inevitable and quite harmful, through controlled analysis under realistic conditions. We identify the knowledge conflicts between LLM-internal and external knowledge from retrieval as a bottleneck to overcome in the post-retrieval stage of RAG. To render LLMs resilient to imperfect retrieval, we propose Astute RAG, a novel RAG approach that adaptively elicits essential information from LLMs' internal knowledge, iteratively consolidates internal and external knowledge with source-awareness, and finalizes the answer according to information reliability. Our experiments using Gemini and Claude demonstrate that Astute RAG significantly outperforms previous robustness-enhanced RAG methods. Notably, Astute RAG is the only approach that matches or exceeds the performance of LLMs without RAG under worst-case scenarios. Further analysis reveals that Astute RAG effectively resolves knowledge conflicts, improving the relia",
+      "quality_score": 1.0,
+      "word_count": 699,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:19.243604",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2410.13509v2",
+      "title": "[2410.13509v2] RAG-DDR: Optimizing Retrieval-Augmented Generation Using Differentiable Data Rewards",
+      "content": "Computer Science > Computation and Language arXiv:2410.13509v2 (cs) [Submitted on 17 Oct 2024 ( v1 ), last revised 4 Mar 2025 (this version, v2)] Title: RAG-DDR: Optimizing Retrieval-Augmented Generation Using Differentiable Data Rewards Authors: Xinze Li , Sen Mei , Zhenghao Liu , Yukun Yan , Shuo Wang , Shi Yu , Zheni Zeng , Hao Chen , Ge Yu , Zhiyuan Liu , Maosong Sun , Chenyan Xiong View a PDF of the paper titled RAG-DDR: Optimizing Retrieval-Augmented Generation Using Differentiable Data Rewards, by Xinze Li and 11 other authors View PDF HTML (experimental) Abstract: Retrieval-Augmented Generation (RAG) has proven its effectiveness in mitigating hallucinations in Large Language Models (LLMs) by retrieving knowledge from external resources. To adapt LLMs for the RAG systems, current approaches use instruction tuning to optimize LLMs, improving their ability to utilize retrieved knowledge. This supervised fine-tuning (SFT) approach focuses on equipping LLMs to handle diverse RAG tasks using different instructions. However, it trains RAG modules to overfit training signals and overlooks the varying data preferences among agents within the RAG system. In this paper, we propose a Differentiable Data Rewards (DDR) method, which end-to-end trains RAG systems by aligning data preferences between different RAG modules. DDR works by collecting the rewards to optimize each agent in the RAG system with the rollout method, which prompts agents to sample some potential responses as perturbations, evaluates the impact of these perturbations on the whole RAG system, and subsequently optimizes the agent to produce outputs that improve the performance of the RAG system. Our experiments on various knowledge-intensive tasks demonstrate that DDR significantly outperforms the SFT method, particularly for LLMs with smaller-scale parameters that depend more on the retrieved knowledge. Additionally, DDR exhibits a stronger capability to align the data preference between RAG modules. Th",
+      "quality_score": 1.0,
+      "word_count": 742,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:19.679969",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2503.16071v1",
+      "title": "[2503.16071v1] Tuning LLMs by RAG Principles: Towards LLM-native Memory",
+      "content": "Computer Science > Computation and Language arXiv:2503.16071v1 (cs) [Submitted on 20 Mar 2025] Title: Tuning LLMs by RAG Principles: Towards LLM-native Memory Authors: Jiale Wei , Shuchi Wu , Ruochen Liu , Xiang Ying , Jingbo Shang , Fangbo Tao View a PDF of the paper titled Tuning LLMs by RAG Principles: Towards LLM-native Memory, by Jiale Wei and 5 other authors View PDF HTML (experimental) Abstract: Memory, additional information beyond the training of large language models (LLMs), is crucial to various real-world applications, such as personal assistant. The two mainstream solutions to incorporate memory into the generation process are long-context LLMs and retrieval-augmented generation (RAG). In this paper, we first systematically compare these two types of solutions on three renovated/new datasets and show that (1) long-context solutions, although more expensive, shall be easier to capture the big picture and better answer queries which require considering the memory as a whole; and (2) when the queries concern specific information, RAG solutions shall be more competitive especially when the keywords can be explicitly matched. Therefore, we propose a novel method RAG-Tuned-LLM which fine-tunes a relative small (e.g., 7B) LLM using the data generated following the RAG principles, so it can combine the advantages of both solutions. Extensive experiments on three datasets demonstrate that RAG-Tuned-LLM can beat long-context LLMs and RAG methods across a wide range of query types. Subjects: Computation and Language (cs.CL) ; Artificial Intelligence (cs.AI); Information Retrieval (cs.IR) Cite as: arXiv:2503.16071 [cs.CL] (or arXiv:2503.16071v1 [cs.CL] for this version) https://doi.org/10.48550/arXiv.2503.16071 Focus to learn more arXiv-issued DOI via DataCite Submission history From: Jiale Wei [ view email ] [v1] Thu, 20 Mar 2025 12:04:40 UTC (172 KB) Full-text links: Access Paper: View a PDF of the paper titled Tuning LLMs by RAG Principles: Towards LLM-native Me",
+      "quality_score": 1.0,
+      "word_count": 639,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:20.126789",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2401.05856v1",
+      "title": "[2401.05856v1] Seven Failure Points When Engineering a Retrieval Augmented Generation System",
+      "content": "Computer Science > Software Engineering arXiv:2401.05856v1 (cs) [Submitted on 11 Jan 2024] Title: Seven Failure Points When Engineering a Retrieval Augmented Generation System Authors: Scott Barnett , Stefanus Kurniawan , Srikanth Thudumu , Zach Brannelly , Mohamed Abdelrazek View a PDF of the paper titled Seven Failure Points When Engineering a Retrieval Augmented Generation System, by Scott Barnett and 4 other authors View PDF HTML (experimental) Abstract: Software engineers are increasingly adding semantic search capabilities to applications using a strategy known as Retrieval Augmented Generation (RAG). A RAG system involves finding documents that semantically match a query and then passing the documents to a large language model (LLM) such as ChatGPT to extract the right answer using an LLM. RAG systems aim to: a) reduce the problem of hallucinated responses from LLMs, b) link sources/references to generated responses, and c) remove the need for annotating documents with meta-data. However, RAG systems suffer from limitations inherent to information retrieval systems and from reliance on LLMs. In this paper, we present an experience report on the failure points of RAG systems from three case studies from separate domains: research, education, and biomedical. We share the lessons learned and present 7 failure points to consider when designing a RAG system. The two key takeaways arising from our work are: 1) validation of a RAG system is only feasible during operation, and 2) the robustness of a RAG system evolves rather than designed in at the start. We conclude with a list of potential research directions on RAG systems for the software engineering community. Subjects: Software Engineering (cs.SE) ; Artificial Intelligence (cs.AI) Cite as: arXiv:2401.05856 [cs.SE] (or arXiv:2401.05856v1 [cs.SE] for this version) https://doi.org/10.48550/arXiv.2401.05856 Focus to learn more arXiv-issued DOI via DataCite Submission history From: Scott Barnett [ view email ] [v1] ",
+      "quality_score": 1.0,
+      "word_count": 677,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:20.604656",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2402.16893v1",
+      "title": "[2402.16893v1] The Good and The Bad: Exploring Privacy Issues in Retrieval-Augmented Generation (RAG)",
+      "content": "Computer Science > Cryptography and Security arXiv:2402.16893v1 (cs) [Submitted on 23 Feb 2024] Title: The Good and The Bad: Exploring Privacy Issues in Retrieval-Augmented Generation (RAG) Authors: Shenglai Zeng , Jiankun Zhang , Pengfei He , Yue Xing , Yiding Liu , Han Xu , Jie Ren , Shuaiqiang Wang , Dawei Yin , Yi Chang , Jiliang Tang View a PDF of the paper titled The Good and The Bad: Exploring Privacy Issues in Retrieval-Augmented Generation (RAG), by Shenglai Zeng and 10 other authors View PDF HTML (experimental) Abstract: Retrieval-augmented generation (RAG) is a powerful technique to facilitate language model with proprietary and private data, where data privacy is a pivotal concern. Whereas extensive research has demonstrated the privacy risks of large language models (LLMs), the RAG technique could potentially reshape the inherent behaviors of LLM generation, posing new privacy issues that are currently under-explored. In this work, we conduct extensive empirical studies with novel attack methods, which demonstrate the vulnerability of RAG systems on leaking the private retrieval database. Despite the new risk brought by RAG on the retrieval data, we further reveal that RAG can mitigate the leakage of the LLMs' training data. Overall, we provide new insights in this paper for privacy protection of retrieval-augmented LLMs, which benefit both LLMs and RAG systems builders. Our code is available at this https URL . Subjects: Cryptography and Security (cs.CR) ; Artificial Intelligence (cs.AI); Computation and Language (cs.CL) Cite as: arXiv:2402.16893 [cs.CR] (or arXiv:2402.16893v1 [cs.CR] for this version) https://doi.org/10.48550/arXiv.2402.16893 Focus to learn more arXiv-issued DOI via DataCite Submission history From: Shenglai Zeng [ view email ] [v1] Fri, 23 Feb 2024 18:35:15 UTC (29,543 KB) Full-text links: Access Paper: View a PDF of the paper titled The Good and The Bad: Exploring Privacy Issues in Retrieval-Augmented Generation (RAG), by Shenglai Z",
+      "quality_score": 1.0,
+      "word_count": 644,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:21.069172",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2410.15438v1",
+      "title": "[2410.15438v1] Unveiling and Consulting Core Experts in Retrieval-Augmented MoE-based LLMs",
+      "content": "Computer Science > Artificial Intelligence arXiv:2410.15438v1 (cs) [Submitted on 20 Oct 2024] Title: Unveiling and Consulting Core Experts in Retrieval-Augmented MoE-based LLMs Authors: Xin Zhou , Ping Nie , Yiwen Guo , Haojie Wei , Zhanqiu Zhang , Pasquale Minervini , Ruotian Ma , Tao Gui , Qi Zhang , Xuanjing Huang View a PDF of the paper titled Unveiling and Consulting Core Experts in Retrieval-Augmented MoE-based LLMs, by Xin Zhou and 9 other authors View PDF HTML (experimental) Abstract: Retrieval-Augmented Generation (RAG) significantly improved the ability of Large Language Models (LLMs) to solve knowledge-intensive tasks. While existing research seeks to enhance RAG performance by retrieving higher-quality documents or designing RAG-specific LLMs, the internal mechanisms within LLMs that contribute to the effectiveness of RAG systems remain underexplored. In this paper, we aim to investigate these internal mechanisms within the popular Mixture-of-Expert (MoE)-based LLMs and demonstrate how to improve RAG by examining expert activations in these LLMs. Our controlled experiments reveal that several core groups of experts are primarily responsible for RAG-related behaviors. The activation of these core experts can signify the model's inclination towards external/internal knowledge and adjust its behavior. For instance, we identify core experts that can (1) indicate the sufficiency of the model's internal knowledge, (2) assess the quality of retrieved documents, and (3) enhance the model's ability to utilize context. Based on these findings, we propose several strategies to enhance RAG's efficiency and effectiveness through expert activation. Experimental results across various datasets and MoE-based LLMs show the effectiveness of our method. Subjects: Artificial Intelligence (cs.AI) Cite as: arXiv:2410.15438 [cs.AI] (or arXiv:2410.15438v1 [cs.AI] for this version) https://doi.org/10.48550/arXiv.2410.15438 Focus to learn more arXiv-issued DOI via DataCite Submis",
+      "quality_score": 1.0,
+      "word_count": 657,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:21.519733",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2407.16833v2",
+      "title": "[2407.16833v2] Retrieval Augmented Generation or Long-Context LLMs? A Comprehensive Study and Hybrid Approach",
+      "content": "Computer Science > Computation and Language arXiv:2407.16833v2 (cs) [Submitted on 23 Jul 2024 ( v1 ), last revised 17 Oct 2024 (this version, v2)] Title: Retrieval Augmented Generation or Long-Context LLMs? A Comprehensive Study and Hybrid Approach Authors: Zhuowan Li , Cheng Li , Mingyang Zhang , Qiaozhu Mei , Michael Bendersky View a PDF of the paper titled Retrieval Augmented Generation or Long-Context LLMs? A Comprehensive Study and Hybrid Approach, by Zhuowan Li and 4 other authors View PDF HTML (experimental) Abstract: Retrieval Augmented Generation (RAG) has been a powerful tool for Large Language Models (LLMs) to efficiently process overly lengthy contexts. However, recent LLMs like Gemini-1.5 and GPT-4 show exceptional capabilities to understand long contexts directly. We conduct a comprehensive comparison between RAG and long-context (LC) LLMs, aiming to leverage the strengths of both. We benchmark RAG and LC across various public datasets using three latest LLMs. Results reveal that when resourced sufficiently, LC consistently outperforms RAG in terms of average performance. However, RAG's significantly lower cost remains a distinct advantage. Based on this observation, we propose Self-Route, a simple yet effective method that routes queries to RAG or LC based on model self-reflection. Self-Route significantly reduces the computation cost while maintaining a comparable performance to LC. Our findings provide a guideline for long-context applications of LLMs using RAG and LC. Comments: Accepted to EMNLP 2024 industry track Subjects: Computation and Language (cs.CL) ; Artificial Intelligence (cs.AI); Machine Learning (cs.LG) Cite as: arXiv:2407.16833 [cs.CL] (or arXiv:2407.16833v2 [cs.CL] for this version) https://doi.org/10.48550/arXiv.2407.16833 Focus to learn more arXiv-issued DOI via DataCite Submission history From: Zhuowan Li [ view email ] [v1] Tue, 23 Jul 2024 20:51:52 UTC (425 KB) [v2] Thu, 17 Oct 2024 17:51:19 UTC (426 KB) Full-text links: Access ",
+      "quality_score": 1.0,
+      "word_count": 655,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:21.972129",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2503.00353v1",
+      "title": "[2503.00353v1] U-NIAH: Unified RAG and LLM Evaluation for Long Context Needle-In-A-Haystack",
+      "content": "Computer Science > Computation and Language arXiv:2503.00353v1 (cs) [Submitted on 1 Mar 2025] Title: U-NIAH: Unified RAG and LLM Evaluation for Long Context Needle-In-A-Haystack Authors: Yunfan Gao , Yun Xiong , Wenlong Wu , Zijing Huang , Bohan Li , Haofen Wang View a PDF of the paper titled U-NIAH: Unified RAG and LLM Evaluation for Long Context Needle-In-A-Haystack, by Yunfan Gao and 5 other authors View PDF HTML (experimental) Abstract: Recent advancements in Large Language Models (LLMs) have expanded their context windows to unprecedented lengths, sparking debates about the necessity of Retrieval-Augmented Generation (RAG). To address the fragmented evaluation paradigms and limited cases in existing Needle-in-a-Haystack (NIAH), this paper introduces U-NIAH, a unified framework that systematically compares LLMs and RAG methods in controlled long context settings. Our framework extends beyond traditional NIAH by incorporating multi-needle, long-needle, and needle-in-needle configurations, along with different retrieval settings, while leveraging the synthetic Starlight Academy dataset-a fictional magical universe-to eliminate biases from pre-trained knowledge. Through extensive experiments, we investigate three research questions: (1) performance trade-offs between LLMs and RAG, (2) error patterns in RAG, and (3) RAG's limitations in complex settings. Our findings show that RAG significantly enhances smaller LLMs by mitigating the \"lost-in-the-middle\" effect and improving robustness, achieving an 82.58% win-rate over LLMs. However, we observe that retrieval noise and reverse chunk ordering degrade performance, while surprisingly, advanced reasoning LLMs exhibit reduced RAG compatibility due to sensitivity to semantic distractors. We identify typical error patterns including omission due to noise, hallucination under high noise critical condition, and self-doubt behaviors. Our work not only highlights the complementary roles of RAG and LLMs, but also provides acti",
+      "quality_score": 1.0,
+      "word_count": 691,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:22.431534",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2504.04915v1",
+      "title": "[2504.04915v1] Collab-RAG: Boosting Retrieval-Augmented Generation for Complex Question Answering via White-Box and Black-Box LLM Collaboration",
+      "content": "Computer Science > Computation and Language arXiv:2504.04915v1 (cs) [Submitted on 7 Apr 2025] Title: Collab-RAG: Boosting Retrieval-Augmented Generation for Complex Question Answering via White-Box and Black-Box LLM Collaboration Authors: Ran Xu , Wenqi Shi , Yuchen Zhuang , Yue Yu , Joyce C. Ho , Haoyu Wang , Carl Yang View a PDF of the paper titled Collab-RAG: Boosting Retrieval-Augmented Generation for Complex Question Answering via White-Box and Black-Box LLM Collaboration, by Ran Xu and 6 other authors View PDF HTML (experimental) Abstract: Retrieval-Augmented Generation (RAG) systems often struggle to handle multi-hop question-answering tasks accurately due to irrelevant context retrieval and limited complex reasoning capabilities. We introduce Collab-RAG, a collaborative training framework that leverages mutual enhancement between a white-box small language model (SLM) and a blackbox large language model (LLM) for RAG. Specifically, the SLM decomposes complex queries into simpler sub-questions, thus enhancing the accuracy of the retrieval and facilitating more effective reasoning by the black-box LLM. Concurrently, the black-box LLM provides feedback signals to improve the SLM's decomposition capability. We observe that Collab-RAG relies solely on supervision from an affordable black-box LLM without additional distillation from frontier LLMs, yet demonstrates strong generalization across multiple black-box LLMs. Experimental evaluations across five multi-hop QA datasets demonstrate that Collab-RAG substantially outperforms existing black-box-only and SLM fine-tuning baselines by 1.8%-14.2% on average. In particular, our fine-tuned 3B SLM surpasses a frozen 32B LLM in question decomposition, highlighting the efficiency of Collab-RAG in improving reasoning and retrieval for complex questions. The code of Collab-RAG is available on this https URL . Comments: Work in progress. Code: this https URL Subjects: Computation and Language (cs.CL) ; Artificial Intelligen",
+      "quality_score": 1.0,
+      "word_count": 687,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:22.881722",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2406.00944v3",
+      "title": "[2406.00944v3] A Theory for Token-Level Harmonization in Retrieval-Augmented Generation",
+      "content": "Computer Science > Computation and Language arXiv:2406.00944v3 (cs) [Submitted on 3 Jun 2024 ( v1 ), last revised 28 Feb 2025 (this version, v3)] Title: A Theory for Token-Level Harmonization in Retrieval-Augmented Generation Authors: Shicheng Xu , Liang Pang , Huawei Shen , Xueqi Cheng View a PDF of the paper titled A Theory for Token-Level Harmonization in Retrieval-Augmented Generation, by Shicheng Xu and 3 other authors View PDF HTML (experimental) Abstract: Retrieval-augmented generation (RAG) utilizes retrieved texts to enhance large language models (LLMs). Studies show that while RAG provides valuable external information (benefit), it may also mislead LLMs (detriment) with noisy or incorrect retrieved texts. Although many existing methods attempt to preserve benefit and avoid detriment, they lack a theoretical explanation for RAG. The benefit and detriment in the next token prediction of RAG remain a black box that cannot be quantified or compared in an explainable manner, so existing methods are data-driven, need additional utility evaluators or post-hoc. This paper takes the first step towards providing a theory to explain and trade off the benefit and detriment in RAG. First, we model RAG as the fusion between distribution of LLMs knowledge and distribution of retrieved texts. Then, we formalize the trade-off between the value of external knowledge (benefit) and its potential risk of misleading LLMs (detriment) in next token prediction of RAG by distribution difference in this fusion. Finally, we prove that the actual effect of RAG on the token, which is the comparison between benefit and detriment, can be predicted without any training or accessing the utility of retrieval. Based on our theory, we propose a practical novel method, Tok-RAG, which achieves collaborative generation between the pure LLM and RAG at token level to preserve benefit and avoid detriment. Experiments in real-world tasks using LLMs such as OPT, LLaMA-2, and Mistral show the effecti",
+      "quality_score": 1.0,
+      "word_count": 748,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:23.401530",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2407.13193v3",
+      "title": "[2407.13193v3] Retrieval-Augmented Generation for Natural Language Processing: A Survey",
+      "content": "Computer Science > Computation and Language arXiv:2407.13193v3 (cs) [Submitted on 18 Jul 2024 ( v1 ), last revised 1 Mar 2025 (this version, v3)] Title: Retrieval-Augmented Generation for Natural Language Processing: A Survey Authors: Shangyu Wu , Ying Xiong , Yufei Cui , Haolun Wu , Can Chen , Ye Yuan , Lianming Huang , Xue Liu , Tei-Wei Kuo , Nan Guan , Chun Jason Xue View a PDF of the paper titled Retrieval-Augmented Generation for Natural Language Processing: A Survey, by Shangyu Wu and 10 other authors View PDF HTML (experimental) Abstract: Large language models (LLMs) have demonstrated great success in various fields, benefiting from their huge amount of parameters that store knowledge. However, LLMs still suffer from several key issues, such as hallucination problems, knowledge update issues, and lacking domain-specific expertise. The appearance of retrieval-augmented generation (RAG), which leverages an external knowledge database to augment LLMs, makes up those drawbacks of LLMs. This paper reviews all significant techniques of RAG, especially in the retriever and the retrieval fusions. Besides, tutorial codes are provided for implementing the representative techniques in RAG. This paper further discusses the RAG update, including RAG with/without knowledge update. Then, we introduce RAG evaluation and benchmarking, as well as the application of RAG in representative NLP tasks and industrial scenarios. Finally, this paper discusses RAG's future directions and challenges for promoting this field's development. Subjects: Computation and Language (cs.CL) Cite as: arXiv:2407.13193 [cs.CL] (or arXiv:2407.13193v3 [cs.CL] for this version) https://doi.org/10.48550/arXiv.2407.13193 Focus to learn more arXiv-issued DOI via DataCite Submission history From: Shangyu Wu [ view email ] [v1] Thu, 18 Jul 2024 06:06:53 UTC (597 KB) [v2] Fri, 19 Jul 2024 02:00:56 UTC (597 KB) [v3] Sat, 1 Mar 2025 20:23:07 UTC (1,151 KB) Full-text links: Access Paper: View a PDF of the paper",
+      "quality_score": 1.0,
+      "word_count": 651,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:23.846698",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2410.03537v2",
+      "title": "[2410.03537v2] Ward: Provable RAG Dataset Inference via LLM Watermarks",
+      "content": "Computer Science > Machine Learning arXiv:2410.03537v2 (cs) [Submitted on 4 Oct 2024 ( v1 ), last revised 25 Feb 2025 (this version, v2)] Title: Ward: Provable RAG Dataset Inference via LLM Watermarks Authors: Nikola Jovanovi\u0107 , Robin Staab , Maximilian Baader , Martin Vechev View a PDF of the paper titled Ward: Provable RAG Dataset Inference via LLM Watermarks, by Nikola Jovanovi\\'c and 3 other authors View PDF Abstract: RAG enables LLMs to easily incorporate external data, raising concerns for data owners regarding unauthorized usage of their content. The challenge of detecting such unauthorized usage remains underexplored, with datasets and methods from adjacent fields being ill-suited for its study. We take several steps to bridge this gap. First, we formalize this problem as (black-box) RAG Dataset Inference (RAG-DI). We then introduce a novel dataset designed for realistic benchmarking of RAG-DI methods, alongside a set of baselines. Finally, we propose Ward, a method for RAG-DI based on LLM watermarks that equips data owners with rigorous statistical guarantees regarding their dataset's misuse in RAG corpora. Ward consistently outperforms all baselines, achieving higher accuracy, superior query efficiency and robustness. Our work provides a foundation for future studies of RAG-DI and highlights LLM watermarks as a promising approach to this problem. Comments: ICLR 2025 Subjects: Machine Learning (cs.LG) ; Artificial Intelligence (cs.AI); Cryptography and Security (cs.CR) Cite as: arXiv:2410.03537 [cs.LG] (or arXiv:2410.03537v2 [cs.LG] for this version) https://doi.org/10.48550/arXiv.2410.03537 Focus to learn more arXiv-issued DOI via DataCite Submission history From: Nikola Jovanovi\u0107 [ view email ] [v1] Fri, 4 Oct 2024 15:54:49 UTC (3,424 KB) [v2] Tue, 25 Feb 2025 16:22:44 UTC (3,878 KB) Full-text links: Access Paper: View a PDF of the paper titled Ward: Provable RAG Dataset Inference via LLM Watermarks, by Nikola Jovanovi\\'c and 3 other authors View PDF TeX ",
+      "quality_score": 1.0,
+      "word_count": 639,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:24.302255",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://arxiv.org/abs/2411.19463v1",
+      "title": "[2411.19463v1] Towards Understanding Retrieval Accuracy and Prompt Quality in RAG Systems",
+      "content": "Computer Science > Software Engineering arXiv:2411.19463v1 (cs) [Submitted on 29 Nov 2024] Title: Towards Understanding Retrieval Accuracy and Prompt Quality in RAG Systems Authors: Shengming Zhao , Yuheng Huang , Jiayang Song , Zhijie Wang , Chengcheng Wan , Lei Ma View a PDF of the paper titled Towards Understanding Retrieval Accuracy and Prompt Quality in RAG Systems, by Shengming Zhao and 5 other authors View PDF HTML (experimental) Abstract: Retrieval-Augmented Generation (RAG) is a pivotal technique for enhancing the capability of large language models (LLMs) and has demonstrated promising efficacy across a diverse spectrum of tasks. While LLM-driven RAG systems show superior performance, they face unique challenges in stability and reliability. Their complexity hinders developers' efforts to design, maintain, and optimize effective RAG systems. Therefore, it is crucial to understand how RAG's performance is impacted by its design. In this work, we conduct an early exploratory study toward a better understanding of the mechanism of RAG systems, covering three code datasets, three QA datasets, and two LLMs. We focus on four design factors: retrieval document type, retrieval recall, document selection, and prompt techniques. Our study uncovers how each factor impacts system correctness and confidence, providing valuable insights for developing an accurate and reliable RAG system. Based on these findings, we present nine actionable guidelines for detecting defects and optimizing the performance of RAG systems. We hope our early exploration can inspire further advancements in engineering, improving and maintaining LLM-driven intelligent software systems for greater efficiency and reliability. Subjects: Software Engineering (cs.SE) ; Artificial Intelligence (cs.AI) Cite as: arXiv:2411.19463 [cs.SE] (or arXiv:2411.19463v1 [cs.SE] for this version) https://doi.org/10.48550/arXiv.2411.19463 Focus to learn more arXiv-issued DOI via DataCite Submission history From: She",
+      "quality_score": 1.0,
+      "word_count": 658,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:24.737996",
+      "domain": "arxiv.org"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Ra%C3%BAl_L._Mart%C3%ADnez",
+      "title": "Ra\u00fal L. Mart\u00ednez - Wikipedia",
+      "content": "From Wikipedia, the free encyclopedia American politician Ra\u00fal L. Mart\u00ednez Mayor of Hialeah In office 1981\u20132005 Succeeded by Julio Robaina Personal details Born ( 1949-03-06 ) March 6, 1949 (age 76) Santiago de Cuba , Cuba Political party Democratic Spouse \u00c1ngela Callava Relations 3 grandchildren:Ra\u00fal Leonides Mart\u00ednez III and Lucas Mart\u00ednez Children Aida Mart\u00ednez-Ru\u00edz and Ra\u00fal Leonides Mart\u00ednez Jr. Residence(s) Hialeah, Florida Alma mater Miami Senior High School Miami-Dade College ( AA ) Florida International University ( BS ) Profession Public Relations Ra\u00fal L. Mart\u00ednez (born March 6, 1949, in Santiago de Cuba , Cuba ) is a former mayor of Hialeah , Florida , United States. He is a Democrat and was mayor for 24 years, first elected in 1981 and was the Democratic congressional candidate for Florida's 21st congressional district in 2008. Family [ edit ] Mart\u00ednez has launched Mart\u00ednez & Fern\u00e1ndez Public Relations in Miami Lakes to provide counsel to a variety of clients in the field of public relations, media relations, government relations, brand management, crisis management and consulting. Martinez and his wife, \u00c1ngela Callava, have two children, Aida Mart\u00ednez-Ru\u00edz and Raul L. Martinez Jr. and three grandchildren, Isabella Sof\u00eda Ru\u00edz, Ra\u00fal Leonides Mart\u00ednez III, and Lucas Oliver Mart\u00ednez. Mart\u00ednez is the son of Leonides (Chin) Mart\u00ednez-Calder\u00edn (1925\u20132007). Chin Martinez was the head of the taxi drivers retirement fund in Cuba during the 1950s, and used his connections to prevent his brother's assassination, Alfredo Mart\u00ednez Calder\u00edn, who then joined Raul Castro in the II Frente Oriental Frank Pa\u00eds. Alfredo's son, Rub\u00e9n Mart\u00ednez Puente, is presently a general in the Cuban Army and responsible for the shooting down of American airplanes in international waters [ 1 ] [ 2 ] Early years and schooling [ edit ] Mart\u00ednez arrived in the United States in May 1960 and has been a resident of Hialeah since 1969. He graduated from Miami Senior High School . He received an Ass",
+      "quality_score": 0.98,
+      "word_count": 1927,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:25.548532",
+      "domain": "en.wikipedia.org"
+    },
+    {
+      "url": "https://scholar.google.com/",
+      "title": "Google Scholar",
+      "content": "Loading... The system can't perform the operation now. Try again later. Advanced search Find articles with all of the words with the exact phrase with at least one of the words without the words where my words occur anywhere in the article in the title of the article Return articles authored by e.g., \"PJ Hayes\" or McCarthy Return articles published in e.g., J Biol Chem or Nature Return articles dated between \u2014 e.g., 1996 Saved to My library Done Remove article My profile My library Alerts Metrics Advanced search Settings Sign in My profile My library Sign in Articles Case law Federal courts Vermont courts Select courts... Stand on the shoulders of giants Sorry, some features may not work when JavaScript is turned off. Please enable JavaScript in your browser for the best experience. EN Languages English Espa\u00f1ol Catal\u00e0 \u010ce\u0161tina Dansk Deutsch Filipino Fran\u00e7ais Hrvatski Indonesia Italiano Latvie\u0161u Lietuvi\u0173 Magyar Nederlands Norsk Polski Portugu\u00eas (Brasil) Portugu\u00eas (Portugal) Rom\u00e2n\u0103 Sloven\u010dina Sloven\u0161\u010dina Suomi Svenska Ti\u1ebfng Vi\u1ec7t T\u00fcrk\u00e7e \u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac \u0411\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438 \u0420\u0443\u0441\u0441\u043a\u0438\u0439 \u0421\u0440\u043f\u0441\u043a\u0438 \u0423\u043a\u0440\u0430\u0457\u043d\u0441\u044c\u043a\u0430 \u05e2\u05d1\u05e8\u05d9\u05ea \u200e \ufe8e\ufee0\ufecb\ufeae\ufe92\ufef3\ufe93 \u200e \ufed1\ufe8d\ufeae\ufeb3\u06cc \u200e \u0939\u093f\u0928\u094d\u0926\u0940 \u0e44\u0e17\u0e22 \ud55c\uad6d\uc5b4 \u4e2d\u6587 (\u7b80\u4f53) \u4e2d\u6587 (\u7e41\u9ad4) \u65e5\u672c\u8a9e Privacy Terms Help About Scholar Search help",
+      "quality_score": 0.8,
+      "word_count": 191,
+      "has_references": false,
+      "extracted_at": "2025-05-28T19:26:26.149563",
+      "domain": "scholar.google.com"
+    },
+    {
+      "url": "https://academia.edu/",
+      "title": "Academia.edu - Find Research Papers, Topics, Researchers",
+      "content": "Sign Up Login Download 55 million PDFs for free Sign Up Registered Users 289m+ Uploaded Papers 55m+ Daily Recommendations 20m Explore our top research interests Browse All Topics History 10.9 M Followers 883 K Papers 375 K Authors Medieval History 96 K papers Ancient History 94.9 K papers Cultural History 62.6 K papers Early Modern History 51.5 K papers Urban History 26.4 K papers Roman History 36.7 K papers Ancient Greek History 27.9 K papers Military History 36.3 K papers Engineering 3.06 M Followers 3.93 M Papers 1.29 M Authors Mechanical Engineering 909 K papers Materials Engineering 807 K papers Chemical Engineering 763 K papers Biomedical Engineering 503 K papers Civil Engineering 523 K papers Environmental Engineering 229 K papers Manufacturing Engineering 130 K papers Aerospace Engineering 122 K papers Economics 5.34 M Followers 1.08 M Papers 386 K Authors Applied Economics 401 K papers Econometrics 129 K papers Economic Development 51.3 K papers Development Economics 50.6 K papers Economic History 48.9 K papers Agricultural Economics 38.4 K papers Macroeconomics 25.8 K papers Economic policy 20.2 K papers Psychology 4.72 M Followers 3.8 M Papers 1.15 M Authors Social Psychology 149 K papers Clinical Psychology 111 K papers Cognitive Psychology 74.5 K papers Developmental Psychology 91.6 K papers Educational Psychology 35 K papers Health Psychology 30.6 K papers Child Psychology 6.73 K papers Abnormal Psychology 5.64 K papers Physics 2.98 M Followers 2.03 M Papers 726 K Authors Quantum Physics 275 K papers Condensed Matter Physics 497 K papers High Energy Physics 51 K papers Astrophysics 112 K papers Particle Physics 82.1 K papers Molecular Physics 11.6 K papers Aerodynamics 22.1 K papers Nuclear Physics 62.3 K papers Anthropology 3.55 M Followers 289 K Papers 115 K Authors Social and Cultural Anthropology 54.2 K papers Medical Anthropology 16 K papers Anthropology of Religion 22.8 K papers Forensic Anthropology 9.32 K papers Visual Anthropology 8.96 K paper",
+      "quality_score": 0.92,
+      "word_count": 1276,
+      "has_references": true,
+      "extracted_at": "2025-05-28T19:26:28.164625",
+      "domain": "academia.edu"
+    }
+  ],
+  "quality_scores": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.98,
+    0.8,
+    0.92
+  ],
+  "topics": [
+    "defense",
+    "long",
+    "context",
+    "language",
+    "models",
+    "computation",
+    "overcoming",
+    "generation",
+    "solution",
+    "instruct",
+    "boosting",
+    "llms",
+    "with",
+    "diverse",
+    "retrieval",
+    "augmented",
+    "instructions",
+    "junying",
+    "method",
+    "approach"
+  ],
+  "crawl_metadata": {
+    "timestamp": "2025-05-28T19:26:28.471356",
+    "total_urls_found": 25,
+    "total_urls_processed": 25,
+    "successful_extractions": 23,
+    "failed_extractions": 1,
+    "average_quality": 0.9869565217391305,
+    "quality_threshold": 0.7,
+    "min_urls_required": 10,
+    "max_urls_limit": 50,
+    "requirements_met": {
+      "minimum_articles": true,
+      "quality_threshold": true
+    },
+    "crawling_mode": "REAL"
+  }
+}

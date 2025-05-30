@@ -1,0 +1,1185 @@
+#!/usr/bin/env python3
+"""
+JARVIS Protocol with Autonomous Growth - Enhanced Lumina Conversational Interface
+================================================================================
+
+Enhanced JARVIS Protocol that integrates autonomous growth capabilities:
+- Self-assembling neural networks with structural plasticity
+- Curiosity-driven learning and exploration
+- Hierarchical memory system with consolidation
+- Meta-learning for rapid adaptation
+- Emergent behavior detection and integration
+- Real-time architecture evolution based on conversation patterns
+"""
+
+import asyncio
+import json
+import time
+import logging
+import re
+from typing import Dict, List, Any, Optional, Union
+from datetime import datetime, timezone
+from pathlib import Path
+import httpx
+import redis.asyncio as aioredis
+from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import uvicorn
+import os
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger("lumina-growth-ai")
+
+# FastAPI app
+app = FastAPI(title="Lumina Conversational AI with Autonomous Growth - JARVIS Protocol", version="4.0.0")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+class LuminaGrowthRequest(BaseModel):
+    """Enhanced Lumina conversation request with growth capabilities"""
+    message: str
+    session_id: Optional[str] = None
+    conversation_context: Optional[Dict[str, Any]] = None
+    user_id: Optional[str] = None
+    require_greeting: bool = False
+    enable_growth: bool = True
+    curiosity_threshold: float = 0.7
+    meta_learning_enabled: bool = True
+
+class LuminaGrowthResponse(BaseModel):
+    """Enhanced Lumina conversation response with growth information"""
+    response: str
+    command_recognized: Optional[str] = None
+    command_type: Optional[str] = None
+    services_used: List[str] = []
+    memory_context: Dict[str, Any] = {}
+    rag_results: Optional[Dict[str, Any]] = None
+    lora_adaptations: Optional[Dict[str, Any]] = None
+    conversation_state: Dict[str, Any] = {}
+    processing_time: float
+    session_id: str
+    lumina_personality: str = "evolving_assistant"
+    
+    # Growth-specific fields
+    growth_assessment: Optional[Dict[str, Any]] = None
+    curiosity_score: Optional[float] = None
+    architecture_changes: Optional[List[str]] = None
+    knowledge_updates: Optional[List[str]] = None
+    emergent_behaviors: Optional[List[str]] = None
+    meta_learning_updates: Optional[Dict[str, Any]] = None
+
+class HierarchicalMemorySystem:
+    """Hierarchical memory system with working, episodic, semantic, and procedural memory"""
+    
+    def __init__(self, redis_client):
+        self.redis_client = redis_client
+        self.working_memory_capacity = 7  # Miller's magic number
+        self.consolidation_threshold = 0.8
+        
+    async def store_episode(self, session_id: str, episode: Dict[str, Any]):
+        """Store episode in working memory"""
+        working_memory_key = f"working_memory:{session_id}"
+        
+        # Add timestamp and importance score
+        episode.update({
+            'timestamp': datetime.now().isoformat(),
+            'importance_score': self._calculate_importance(episode)
+        })
+        
+        # Store in working memory
+        await self.redis_client.lpush(working_memory_key, json.dumps(episode))
+        
+        # Maintain capacity
+        await self.redis_client.ltrim(working_memory_key, 0, self.working_memory_capacity - 1)
+        
+        # Check if consolidation is needed
+        working_memory_size = await self.redis_client.llen(working_memory_key)
+        if working_memory_size >= self.working_memory_capacity:
+            await self._consolidate_memory(session_id)
+    
+    def _calculate_importance(self, episode: Dict[str, Any]) -> float:
+        """Calculate importance score for memory consolidation"""
+        importance = 0.5  # Base importance
+        
+        # Boost importance for growth-related episodes
+        if episode.get('growth_opportunity'):
+            importance += 0.3
+        
+        # Boost for questions and learning
+        user_input = episode.get('user_input', '').lower()
+        if any(word in user_input for word in ['what', 'how', 'why', 'explain']):
+            importance += 0.2
+        
+        # Boost for technical content
+        if any(term in user_input for term in ['quantum', 'neural', 'ai', 'algorithm']):
+            importance += 0.2
+        
+        return min(importance, 1.0)
+    
+    async def _consolidate_memory(self, session_id: str):
+        """Consolidate working memory to long-term memory"""
+        working_memory_key = f"working_memory:{session_id}"
+        episodes_data = await self.redis_client.lrange(working_memory_key, 0, -1)
+        
+        episodes = [json.loads(ep) for ep in episodes_data]
+        
+        # Sort by importance and select top episodes for consolidation
+        important_episodes = sorted(episodes, key=lambda x: x.get('importance_score', 0), reverse=True)[:3]
+        
+        for episode in important_episodes:
+            # Store in episodic memory
+            await self._store_episodic_memory(session_id, episode)
+            
+            # Extract semantic knowledge
+            await self._extract_semantic_knowledge(session_id, episode)
+            
+            # Update procedural memory
+            await self._update_procedural_memory(session_id, episode)
+    
+    async def _store_episodic_memory(self, session_id: str, episode: Dict[str, Any]):
+        """Store in episodic memory"""
+        episodic_key = f"episodic_memory:{session_id}"
+        await self.redis_client.lpush(episodic_key, json.dumps(episode))
+        await self.redis_client.ltrim(episodic_key, 0, 99)  # Keep last 100 episodes
+    
+    async def _extract_semantic_knowledge(self, session_id: str, episode: Dict[str, Any]):
+        """Extract and store semantic knowledge"""
+        # Simple keyword extraction for semantic memory
+        user_input = episode.get('user_input', '')
+        response = episode.get('system_response', '')
+        
+        # Extract key concepts (simplified)
+        concepts = []
+        for text in [user_input, response]:
+            words = text.lower().split()
+            concepts.extend([word for word in words if len(word) > 4])
+        
+        if concepts:
+            semantic_key = f"semantic_memory:{session_id}"
+            semantic_data = {
+                'concepts': list(set(concepts)),
+                'context': episode.get('conversation_context', {}),
+                'timestamp': episode.get('timestamp')
+            }
+            await self.redis_client.hset(semantic_key, episode.get('timestamp'), json.dumps(semantic_data))
+    
+    async def _update_procedural_memory(self, session_id: str, episode: Dict[str, Any]):
+        """Update procedural memory with successful interaction patterns"""
+        if episode.get('services_used'):
+            procedural_key = f"procedural_memory:{session_id}"
+            pattern = {
+                'input_pattern': episode.get('command_type', 'general'),
+                'services_used': episode.get('services_used', []),
+                'success_score': episode.get('importance_score', 0.5),
+                'timestamp': episode.get('timestamp')
+            }
+            await self.redis_client.hset(procedural_key, episode.get('timestamp'), json.dumps(pattern))
+
+class LuminaConversationalAIWithGrowth:
+    """Enhanced Lumina with Autonomous Growth Capabilities"""
+    
+    def __init__(self):
+        # Enhanced Lumina personality with growth awareness
+        self.lumina_greeting = "Hello! I am Lumina, your evolving intelligent assistant. I learn and grow with every conversation. How can I help you today?"
+        self.lumina_name = "Lumina"
+        self.lumina_personality = {
+            "helpful": True,
+            "knowledgeable": True,
+            "adaptive": True,
+            "memory_enabled": True,
+            "growth_enabled": True,
+            "curious": True,
+            "evolving": True
+        }
+        
+        # Core system integrations (existing)
+        self.concept_brain = {
+            "url": "http://concept-brain:8830",
+            "role": "memory_system_integration",
+            "memory_enabled": True
+        }
+        
+        # RAG System Integration
+        self.rag_system = {
+            "rag_coordinator": "http://rag-coordinator:8902",
+            "concept_dictionary": "http://concept-dictionary:8828",
+            "graph_api": "http://graph-api:8200"
+        }
+        
+        # LoRA System Integration (Adaptive Learning)
+        self.lora_system = {
+            "concept_trainer_growable": "http://concept-trainer-growable:8710",
+            "concept_trainer": "http://concept-trainer:8813"
+        }
+        
+        # LLM Integration
+        self.llm_system = {
+            "output_engine": "http://output-engine:8813",
+            "masterchat_llm": "http://masterchat-llm:8000",
+            "ollama": "http://ollama:11434"
+        }
+        
+        # Content Services
+        self.content_services = {
+            "crawler": "http://crawler:8400",
+            "content_extractor": "http://content-extractor:8001",
+            "concept_linker": "http://concept-linker:8002"
+        }
+        
+        # News and Current Events Services
+        self.news_services = {
+            "news_crawler": "http://crawler:8400",
+            "current_events_api": "http://crawler:8400"
+        }
+        
+        # NEW: Autonomous Growth Services
+        self.growth_services = {
+            "autonomous_growth_engine": "http://autonomous-growth-engine:8950",
+            "meta_learning_service": "http://meta-learning-service:8960",
+            "curiosity_agent": "http://curiosity-agent:8970"
+        }
+        
+        # Enhanced conversation state and memory
+        self.active_sessions = {}
+        self.conversation_memory = {}
+        self.command_patterns = self._initialize_enhanced_command_patterns()
+        
+        # Redis for memory system
+        self.redis_client = None
+        self.hierarchical_memory = None
+        
+        # Growth tracking
+        self.growth_metrics = {
+            "total_interactions": 0,
+            "growth_opportunities_detected": 0,
+            "architecture_modifications": 0,
+            "knowledge_acquisitions": 0,
+            "emergent_behaviors": 0,
+            "curiosity_driven_explorations": 0
+        }
+        
+        # System awareness with growth
+        self.system_status = {
+            "lumina_active": True,
+            "memory_system_connected": False,
+            "rag_system_available": False,
+            "lora_system_available": False,
+            "llm_system_available": False,
+            "growth_engine_available": False,
+            "meta_learning_available": False,
+            "curiosity_agent_available": False
+        }
+        
+    def _initialize_enhanced_command_patterns(self) -> Dict[str, re.Pattern]:
+        """Initialize enhanced command patterns including growth commands"""
+        patterns = {
+            # Existing patterns (crawling, documents, etc.)
+            "crawl_web": re.compile(r"lumina\s+crawl\s+(?:web\s+)?(.+)", re.IGNORECASE),
+            "crawl_url": re.compile(r"lumina\s+crawl\s+(?:url\s+)?(.+)", re.IGNORECASE),
+            "document_meaning": re.compile(r"lumina\s+what\s+does\s+(?:the\s+)?document\s+(.+?)\s+mean", re.IGNORECASE),
+            "cross_document": re.compile(r"lumina\s+cross\s+document\s+(.+?)\s+with\s+document\s+(.+)", re.IGNORECASE),
+            "remember": re.compile(r"lumina\s+remember\s+(.+)", re.IGNORECASE),
+            "recall": re.compile(r"lumina\s+(?:recall|what\s+do\s+you\s+remember\s+about)\s+(.+)", re.IGNORECASE),
+            "search": re.compile(r"lumina\s+search\s+(?:for\s+)?(.+)", re.IGNORECASE),
+            "explain": re.compile(r"lumina\s+explain\s+(.+)", re.IGNORECASE),
+            "current_events": re.compile(r"lumina\s+(?:current\s+events|news|latest\s+news)(?:\s+about\s+(.+))?", re.IGNORECASE),
+            "trending": re.compile(r"lumina\s+(?:trending|what'?s\s+trending|trends)(?:\s+in\s+(.+))?", re.IGNORECASE),
+            
+            # NEW: Growth and meta-learning commands
+            "grow_architecture": re.compile(r"lumina\s+(?:grow|evolve)\s+(?:architecture|yourself)", re.IGNORECASE),
+            "show_growth": re.compile(r"lumina\s+(?:show|display)\s+(?:growth|evolution|progress)", re.IGNORECASE),
+            "adapt_to": re.compile(r"lumina\s+adapt\s+to\s+(.+)", re.IGNORECASE),
+            "learn_strategy": re.compile(r"lumina\s+(?:learn|develop)\s+(?:strategy|approach)\s+for\s+(.+)", re.IGNORECASE),
+            "transfer_knowledge": re.compile(r"lumina\s+transfer\s+knowledge\s+from\s+(.+?)\s+to\s+(.+)", re.IGNORECASE),
+            "discover": re.compile(r"lumina\s+discover\s+(.+)", re.IGNORECASE),
+            "explore": re.compile(r"lumina\s+explore\s+(.+)", re.IGNORECASE),
+            "curiosity_assessment": re.compile(r"lumina\s+(?:assess|evaluate)\s+curiosity", re.IGNORECASE),
+            
+            # Enhanced memory commands
+            "consolidate_memory": re.compile(r"lumina\s+consolidate\s+memory", re.IGNORECASE),
+            "memory_status": re.compile(r"lumina\s+memory\s+status", re.IGNORECASE),
+            
+            # System commands
+            "status": re.compile(r"lumina\s+(?:status|how\s+are\s+you)", re.IGNORECASE),
+            "capabilities": re.compile(r"lumina\s+(?:what\s+can\s+you\s+do|capabilities)", re.IGNORECASE)
+        }
+        return patterns
+    
+    async def initialize(self):
+        """Initialize Enhanced Lumina with Growth Capabilities"""
+        logger.info("🌟 Initializing Lumina Conversational AI with Autonomous Growth...")
+        
+        # Initialize Redis for hierarchical memory system
+        try:
+            redis_host = os.getenv("REDIS_HOST", "redis")
+            redis_port = int(os.getenv("REDIS_PORT", "6379"))
+            redis_password = os.getenv("REDIS_PASSWORD", "02211998")
+            
+            self.redis_client = aioredis.from_url(
+                f"redis://:{redis_password}@{redis_host}:{redis_port}",
+                decode_responses=True
+            )
+            await self.redis_client.ping()
+            self.system_status["memory_system_connected"] = True
+            
+            # Initialize hierarchical memory system
+            self.hierarchical_memory = HierarchicalMemorySystem(self.redis_client)
+            logger.info("✅ Hierarchical memory system initialized")
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to connect to Redis: {e}")
+            self.system_status["memory_system_connected"] = False
+        
+        # Check growth services availability
+        await self.check_growth_services()
+        
+        # Initialize growth metrics in Redis
+        await self.initialize_growth_metrics()
+        
+        logger.info("🚀 Lumina with Autonomous Growth initialized successfully!")
+    
+    async def check_growth_services(self):
+        """Check availability of growth services"""
+        growth_checks = {
+            "growth_engine_available": self.growth_services["autonomous_growth_engine"],
+            "meta_learning_available": self.growth_services.get("meta_learning_service"),
+            "curiosity_agent_available": self.growth_services.get("curiosity_agent")
+        }
+        
+        for status_key, service_url in growth_checks.items():
+            if service_url:
+                try:
+                    async with httpx.AsyncClient(timeout=5.0) as client:
+                        response = await client.get(f"{service_url}/health")
+                        self.system_status[status_key] = response.status_code == 200
+                        if self.system_status[status_key]:
+                            logger.info(f"✅ {status_key}: Connected")
+                        else:
+                            logger.warning(f"⚠️ {status_key}: Unhealthy")
+                except Exception as e:
+                    logger.warning(f"⚠️ {status_key}: Not available - {e}")
+                    self.system_status[status_key] = False
+    
+    async def initialize_growth_metrics(self):
+        """Initialize growth metrics in Redis"""
+        try:
+            await self.redis_client.hset("lumina:growth:metrics", mapping={
+                "total_interactions": 0,
+                "growth_opportunities_detected": 0,
+                "architecture_modifications": 0,
+                "knowledge_acquisitions": 0,
+                "curiosity_driven_explorations": 0,
+                "meta_learning_updates": 0
+            })
+            logger.info("✅ Growth metrics initialized")
+        except Exception as e:
+            logger.error(f"Failed to initialize growth metrics: {e}")
+    
+    async def get_conversation_context(self, session_id: str) -> Dict[str, Any]:
+        """Get conversation context for the session"""
+        try:
+            # Get recent conversation history
+            conversation_key = f"lumina:conversation:{session_id}"
+            conversation_data = await self.redis_client.hgetall(conversation_key)
+            
+            # Get hierarchical memory context if available
+            memory_context = {}
+            if self.hierarchical_memory:
+                # Get working memory (recent interactions)
+                working_memory_key = f"lumina:memory:working:{session_id}"
+                working_memory = await self.redis_client.lrange(working_memory_key, 0, 4)  # Last 5 interactions
+                
+                # Get episodic memory summary
+                episodic_key = f"lumina:memory:episodic:{session_id}"
+                episodic_count = await self.redis_client.llen(episodic_key)
+                
+                memory_context = {
+                    "working_memory_size": len(working_memory),
+                    "episodic_memory_size": episodic_count,
+                    "recent_interactions": [json.loads(item) for item in working_memory] if working_memory else []
+                }
+            
+            # Get growth context
+            growth_context = await self.redis_client.hgetall(f"lumina:growth:context:{session_id}")
+            
+            return {
+                "session_id": session_id,
+                "conversation_data": conversation_data,
+                "memory_context": memory_context,
+                "growth_context": growth_context,
+                "timestamp": time.time()
+            }
+            
+        except Exception as e:
+            logger.error(f"Error getting conversation context: {e}")
+            return {
+                "session_id": session_id,
+                "conversation_data": {},
+                "memory_context": {},
+                "growth_context": {},
+                "timestamp": time.time()
+            }
+    
+    async def process_lumina_conversation_with_growth(self, request: LuminaGrowthRequest) -> LuminaGrowthResponse:
+        """Enhanced conversation processing with autonomous growth"""
+        start_time = time.time()
+        session_id = request.session_id or f"session_{int(time.time())}"
+        
+        # Update interaction count
+        self.growth_metrics["total_interactions"] += 1
+        
+        # Parse command with growth context
+        command_info = await self.parse_lumina_command_with_growth(request.message)
+        
+        # Get conversation context
+        conversation_context = await self.get_conversation_context(session_id)
+        
+        # Assess growth opportunity if enabled
+        growth_assessment = None
+        if request.enable_growth and self.system_status["growth_engine_available"]:
+            growth_assessment = await self.assess_growth_opportunity(request, command_info, conversation_context)
+        
+        # Process through appropriate pathway
+        if command_info["command_type"]:
+            response = await self.execute_enhanced_command(command_info, request, growth_assessment)
+        else:
+            response = await self.handle_general_conversation_with_growth(request, growth_assessment)
+        
+        # Trigger autonomous learning if opportunity detected
+        if growth_assessment and growth_assessment.get('exploration_recommended'):
+            asyncio.create_task(self.process_growth_opportunity(growth_assessment, request, response))
+        
+        # Store episode in hierarchical memory
+        if self.hierarchical_memory:
+            episode = {
+                'user_input': request.message,
+                'system_response': response.response,
+                'command_type': command_info.get("command_type"),
+                'services_used': response.services_used,
+                'growth_opportunity': growth_assessment,
+                'conversation_context': conversation_context
+            }
+            await self.hierarchical_memory.store_episode(session_id, episode)
+        
+        # Update conversation state
+        await self.update_conversation_state_with_growth(session_id, request, response, growth_assessment)
+        
+        # Calculate processing time
+        processing_time = time.time() - start_time
+        
+        # Create enhanced response
+        enhanced_response = LuminaGrowthResponse(
+            response=response.response,
+            command_recognized=command_info.get("command_recognized"),
+            command_type=command_info.get("command_type"),
+            services_used=response.services_used,
+            memory_context=response.memory_context,
+            rag_results=response.rag_results,
+            lora_adaptations=response.lora_adaptations,
+            conversation_state=response.conversation_state,
+            processing_time=processing_time,
+            session_id=session_id,
+            lumina_personality="evolving_assistant",
+            growth_assessment=growth_assessment,
+            curiosity_score=growth_assessment.get('curiosity_score') if growth_assessment else None,
+            architecture_changes=growth_assessment.get('architecture_changes') if growth_assessment else None,
+            knowledge_updates=growth_assessment.get('knowledge_updates') if growth_assessment else None,
+            emergent_behaviors=growth_assessment.get('emergent_behaviors') if growth_assessment else None
+        )
+        
+        return enhanced_response
+    
+    async def parse_lumina_command_with_growth(self, message: str) -> Dict[str, Any]:
+        """Enhanced command parsing with growth awareness"""
+        message = message.strip()
+        
+        # Check for enhanced command patterns
+        for command_name, pattern in self.command_patterns.items():
+            match = pattern.match(message)
+            if match:
+                return {
+                    "command_type": command_name,
+                    "command_recognized": command_name,
+                    "extracted_params": match.groups(),
+                    "full_match": match.group(0),
+                    "growth_relevant": command_name in [
+                        "grow_architecture", "show_growth", "adapt_to", "learn_strategy",
+                        "transfer_knowledge", "discover", "explore", "curiosity_assessment"
+                    ]
+                }
+        
+        # Check for general lumina mention
+        if "lumina" in message.lower():
+            return {
+                "command_type": "lumina_general",
+                "command_recognized": "lumina_general",
+                "extracted_params": [message],
+                "full_match": message,
+                "growth_relevant": False
+            }
+        
+        return {
+            "command_type": None,
+            "command_recognized": None,
+            "extracted_params": [],
+            "full_match": "",
+            "growth_relevant": False
+        }
+    
+    async def assess_growth_opportunity(self, request: LuminaGrowthRequest, 
+                                      command_info: Dict[str, Any], 
+                                      conversation_context: Dict[str, Any]) -> Dict[str, Any]:
+        """Assess growth opportunities for the current interaction"""
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                assessment_request = {
+                    "interaction_data": {
+                        "user_input": request.message,
+                        "conversation_context": conversation_context,
+                        "command_info": command_info
+                    },
+                    "performance_metrics": {
+                        "accuracy": 0.8,  # Placeholder - would come from actual metrics
+                        "response_quality": 0.7
+                    },
+                    "conversation_context": conversation_context
+                }
+                
+                response = await client.post(
+                    f"{self.growth_services['autonomous_growth_engine']}/process-interaction",
+                    json=assessment_request
+                )
+                
+                if response.status_code == 200:
+                    assessment = response.json()
+                    
+                    # Update growth metrics
+                    if assessment.get('curiosity_assessment', {}).get('exploration_recommended'):
+                        self.growth_metrics["growth_opportunities_detected"] += 1
+                    
+                    return assessment
+                else:
+                    logger.warning(f"Growth assessment failed: {response.status_code}")
+                    return None
+                    
+        except Exception as e:
+            logger.error(f"Error assessing growth opportunity: {e}")
+            return None
+    
+    async def process_growth_opportunity(self, growth_assessment: Dict[str, Any], 
+                                       request: LuminaGrowthRequest, 
+                                       response: LuminaGrowthResponse):
+        """Process detected growth opportunity in background"""
+        try:
+            exploration_goals = growth_assessment.get('exploration_goals', [])
+            
+            for goal in exploration_goals:
+                if goal['type'] == 'knowledge_acquisition':
+                    await self._execute_knowledge_acquisition(goal)
+                    self.growth_metrics["knowledge_acquisitions"] += 1
+                    
+                elif goal['type'] == 'skill_development':
+                    await self._execute_skill_development(goal)
+                    
+                elif goal['type'] == 'domain_exploration':
+                    await self._execute_domain_exploration(goal)
+                    self.growth_metrics["curiosity_driven_explorations"] += 1
+            
+            # Check for architecture growth
+            if growth_assessment.get('architecture_growth'):
+                self.growth_metrics["architecture_modifications"] += 1
+            
+            # Update growth metrics in Redis
+            await self._update_growth_metrics()
+            
+        except Exception as e:
+            logger.error(f"Error processing growth opportunity: {e}")
+    
+    async def _execute_knowledge_acquisition(self, goal: Dict[str, Any]):
+        """Execute knowledge acquisition goal"""
+        # Trigger web search and knowledge synthesis
+        if goal.get('method') == 'web_search_and_synthesis':
+            # Use existing crawler service to gather information
+            try:
+                async with httpx.AsyncClient(timeout=15.0) as client:
+                    search_response = await client.post(
+                        f"{self.content_services['crawler']}/crawl",
+                        json={"query": goal.get('target', 'general_knowledge')}
+                    )
+                    
+                    if search_response.status_code == 200:
+                        # Process and store new knowledge
+                        knowledge_data = search_response.json()
+                        await self._integrate_new_knowledge(knowledge_data)
+                        
+            except Exception as e:
+                logger.error(f"Knowledge acquisition failed: {e}")
+    
+    async def _execute_skill_development(self, goal: Dict[str, Any]):
+        """Execute skill development goal"""
+        # Trigger LoRA training for skill improvement
+        try:
+            training_data = {
+                "skill_target": goal.get('target'),
+                "training_type": "skill_enhancement",
+                "priority": goal.get('priority', 0.5)
+            }
+            
+            # Use LoRA system for adaptive learning
+            async with httpx.AsyncClient(timeout=20.0) as client:
+                lora_response = await client.post(
+                    f"{self.lora_system['concept_trainer']}/train",
+                    json=training_data
+                )
+                
+                if lora_response.status_code == 200:
+                    logger.info(f"Skill development initiated: {goal['target']}")
+                    
+        except Exception as e:
+            logger.error(f"Skill development failed: {e}")
+    
+    async def _execute_domain_exploration(self, goal: Dict[str, Any]):
+        """Execute domain exploration goal"""
+        # Systematic exploration of new domains
+        exploration_target = goal.get('target', 'unknown_domain')
+        
+        # Use curiosity agent for guided exploration
+        try:
+            async with httpx.AsyncClient(timeout=15.0) as client:
+                if self.system_status["curiosity_agent_available"]:
+                    exploration_response = await client.post(
+                        f"{self.growth_services['curiosity_agent']}/explore-domain",
+                        json={
+                            "domain": exploration_target,
+                            "exploration_depth": 3,
+                            "novelty_threshold": 0.7
+                        }
+                    )
+                    
+                    if exploration_response.status_code == 200:
+                        logger.info(f"Domain exploration initiated: {exploration_target}")
+                        
+        except Exception as e:
+            logger.error(f"Domain exploration failed: {e}")
+    
+    async def _integrate_new_knowledge(self, knowledge_data: Dict[str, Any]):
+        """Integrate newly acquired knowledge into the system"""
+        # Store in knowledge graph and update semantic memory
+        if self.redis_client:
+            try:
+                knowledge_key = f"lumina:acquired_knowledge:{int(time.time())}"
+                await self.redis_client.set(knowledge_key, json.dumps(knowledge_data))
+                
+                # Update knowledge acquisition count
+                self.growth_metrics["knowledge_acquisitions"] += 1
+                
+            except Exception as e:
+                logger.error(f"Failed to integrate new knowledge: {e}")
+    
+    async def _update_growth_metrics(self):
+        """Update growth metrics in Redis"""
+        if self.redis_client:
+            try:
+                growth_key = "lumina:growth_metrics"
+                await self.redis_client.set(growth_key, json.dumps(self.growth_metrics))
+            except Exception as e:
+                logger.error(f"Failed to update growth metrics: {e}")
+    
+    async def execute_enhanced_command(self, command_info: Dict, request: LuminaGrowthRequest, 
+                                     growth_assessment: Optional[Dict[str, Any]]) -> LuminaGrowthResponse:
+        """Execute commands with growth awareness"""
+        command_type = command_info["command_type"]
+        params = command_info["extracted_params"]
+        
+        # Handle growth-specific commands
+        if command_type == "grow_architecture":
+            return await self.handle_grow_architecture_command(request)
+        elif command_type == "show_growth":
+            return await self.handle_show_growth_command(request)
+        elif command_type == "adapt_to":
+            return await self.handle_adapt_to_command(params, request)
+        elif command_type in ["discover", "explore"]:
+            return await self.handle_exploration_command(command_type, params, request)
+        
+        # Handle existing commands with growth context
+        # (Implementation would include all existing command handlers with growth awareness)
+        
+        # Fallback to general conversation with growth
+        return await self.handle_general_conversation_with_growth(request, growth_assessment)
+    
+    async def handle_grow_architecture_command(self, request: LuminaGrowthRequest) -> LuminaGrowthResponse:
+        """Handle architecture growth command"""
+        try:
+            async with httpx.AsyncClient(timeout=15.0) as client:
+                growth_response = await client.post(
+                    f"{self.growth_services['autonomous_growth_engine']}/trigger-architecture-growth",
+                    json={"performance_threshold": 0.9, "complexity_budget": 2048}
+                )
+                
+                if growth_response.status_code == 200:
+                    growth_info = growth_response.json()
+                    
+                    response_text = f"🌱 I've successfully grown my neural architecture! " \
+                                  f"I now have {growth_info['growth_info']['new_layers']} layers " \
+                                  f"with {growth_info['growth_info']['total_parameters']} parameters. " \
+                                  f"This growth will help me better understand and respond to complex topics."
+                    
+                    return LuminaGrowthResponse(
+                        response=response_text,
+                        command_recognized="grow_architecture",
+                        command_type="grow_architecture",
+                        services_used=["autonomous_growth_engine"],
+                        processing_time=0.0,
+                        session_id=request.session_id or "default",
+                        architecture_changes=[f"Added layers: {growth_info['growth_info']['new_layers']}"]
+                    )
+                else:
+                    return LuminaGrowthResponse(
+                        response="I encountered an issue while trying to grow my architecture. Let me try a different approach to improve my capabilities.",
+                        command_recognized="grow_architecture",
+                        command_type="grow_architecture",
+                        services_used=["autonomous_growth_engine"],
+                        processing_time=0.0,
+                        session_id=request.session_id or "default"
+                    )
+                    
+        except Exception as e:
+            logger.error(f"Architecture growth failed: {e}")
+            return LuminaGrowthResponse(
+                response="I'm currently unable to modify my architecture, but I'm always learning and improving through our conversations!",
+                command_recognized="grow_architecture",
+                command_type="grow_architecture",
+                services_used=[],
+                processing_time=0.0,
+                session_id=request.session_id or "default"
+            )
+    
+    async def handle_show_growth_command(self, request: LuminaGrowthRequest) -> LuminaGrowthResponse:
+        """Handle show growth metrics command"""
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                status_response = await client.get(
+                    f"{self.growth_services['autonomous_growth_engine']}/growth-status"
+                )
+                
+                if status_response.status_code == 200:
+                    status_data = status_response.json()
+                    
+                    response_text = f"📊 **My Growth Progress:**\n\n" \
+                                  f"🧠 **Architecture:** {status_data['architecture_info']['layers']} layers, " \
+                                  f"{status_data['architecture_info']['parameters']:,} parameters\n" \
+                                  f"💬 **Interactions:** {self.growth_metrics['total_interactions']:,} total\n" \
+                                  f"🌱 **Growth Events:** {self.growth_metrics['architecture_modifications']} architecture changes\n" \
+                                  f"📚 **Knowledge Acquired:** {self.growth_metrics['knowledge_acquisitions']} new concepts\n" \
+                                  f"🔍 **Explorations:** {self.growth_metrics['curiosity_driven_explorations']} curiosity-driven discoveries\n\n" \
+                                  f"I'm continuously evolving to better serve you!"
+                    
+                    return LuminaGrowthResponse(
+                        response=response_text,
+                        command_recognized="show_growth",
+                        command_type="show_growth",
+                        services_used=["autonomous_growth_engine"],
+                        processing_time=0.0,
+                        session_id=request.session_id or "default",
+                        growth_assessment=status_data
+                    )
+                    
+        except Exception as e:
+            logger.error(f"Show growth failed: {e}")
+        
+        # Fallback response
+        return LuminaGrowthResponse(
+            response=f"📊 **My Current Growth Status:**\n\n" \
+                    f"💬 **Total Interactions:** {self.growth_metrics['total_interactions']:,}\n" \
+                    f"🌱 **Growth Opportunities:** {self.growth_metrics['growth_opportunities_detected']}\n" \
+                    f"📚 **Knowledge Acquisitions:** {self.growth_metrics['knowledge_acquisitions']}\n" \
+                    f"🔍 **Curiosity Explorations:** {self.growth_metrics['curiosity_driven_explorations']}\n\n" \
+                    f"I'm constantly learning and evolving through our conversations!",
+            command_recognized="show_growth",
+            command_type="show_growth",
+            services_used=[],
+            processing_time=0.0,
+            session_id=request.session_id or "default"
+        )
+    
+    async def handle_adapt_to_command(self, params: List[str], request: LuminaGrowthRequest) -> LuminaGrowthResponse:
+        """Handle adaptation command"""
+        adaptation_target = params[0] if params else "general domain"
+        
+        try:
+            # Trigger adaptation through growth engine
+            async with httpx.AsyncClient(timeout=15.0) as client:
+                adaptation_request = {
+                    "adaptation_target": adaptation_target,
+                    "adaptation_type": "domain_specialization",
+                    "learning_rate": 0.01,
+                    "complexity_budget": 1024
+                }
+                
+                response = await client.post(
+                    f"{self.growth_services['autonomous_growth_engine']}/adapt-to-domain",
+                    json=adaptation_request
+                )
+                
+                if response.status_code == 200:
+                    adaptation_info = response.json()
+                    
+                    response_text = f"🔧 I'm adapting to {adaptation_target}! " \
+                                  f"I've modified my neural pathways to better understand this domain. " \
+                                  f"This adaptation will help me provide more specialized and accurate responses " \
+                                  f"about {adaptation_target}. How can I assist you with this topic?"
+                    
+                    return LuminaGrowthResponse(
+                        response=response_text,
+                        command_recognized="adapt_to",
+                        command_type="adapt_to",
+                        services_used=["autonomous_growth_engine"],
+                        processing_time=0.0,
+                        session_id=request.session_id or "default",
+                        architecture_changes=[f"Adapted to: {adaptation_target}"]
+                    )
+                else:
+                    return LuminaGrowthResponse(
+                        response=f"I'm working on adapting to {adaptation_target}. While I optimize my understanding, I can still help you with questions about this topic!",
+                        command_recognized="adapt_to",
+                        command_type="adapt_to",
+                        services_used=["autonomous_growth_engine"],
+                        processing_time=0.0,
+                        session_id=request.session_id or "default"
+                    )
+                    
+        except Exception as e:
+            logger.error(f"Adaptation failed: {e}")
+            return LuminaGrowthResponse(
+                response=f"I'm continuously learning about {adaptation_target} through our conversations. What specific aspect would you like to explore?",
+                command_recognized="adapt_to",
+                command_type="adapt_to",
+                services_used=[],
+                processing_time=0.0,
+                session_id=request.session_id or "default"
+            )
+    
+    async def handle_exploration_command(self, command_type: str, params: List[str], request: LuminaGrowthRequest) -> LuminaGrowthResponse:
+        """Handle discovery and exploration commands"""
+        exploration_target = params[0] if params else "general knowledge"
+        
+        try:
+            # Trigger curiosity-driven exploration
+            async with httpx.AsyncClient(timeout=15.0) as client:
+                exploration_request = {
+                    "exploration_target": exploration_target,
+                    "exploration_type": command_type,
+                    "curiosity_threshold": 0.7,
+                    "depth_limit": 3
+                }
+                
+                # Try curiosity agent first, fallback to growth engine
+                service_url = self.growth_services.get('curiosity_agent') or self.growth_services['autonomous_growth_engine']
+                endpoint = "/explore-domain" if 'curiosity_agent' in service_url else "/process-interaction"
+                
+                response = await client.post(f"{service_url}{endpoint}", json=exploration_request)
+                
+                if response.status_code == 200:
+                    exploration_info = response.json()
+                    
+                    if command_type == "discover":
+                        response_text = f"🔍 I've discovered some fascinating aspects of {exploration_target}! " \
+                                      f"Through my exploration, I've identified new patterns and connections. " \
+                                      f"This discovery enhances my understanding and allows me to provide " \
+                                      f"deeper insights about {exploration_target}. What would you like to know?"
+                    else:  # explore
+                        response_text = f"🌐 I'm exploring {exploration_target} with curiosity! " \
+                                      f"My exploration has revealed interesting dimensions and relationships. " \
+                                      f"This exploration expands my knowledge boundaries and improves my " \
+                                      f"ability to discuss {exploration_target}. How can I share these insights with you?"
+                    
+                    # Update exploration metrics
+                    self.growth_metrics["curiosity_driven_explorations"] += 1
+                    
+                    return LuminaGrowthResponse(
+                        response=response_text,
+                        command_recognized=command_type,
+                        command_type=command_type,
+                        services_used=["curiosity_agent" if 'curiosity_agent' in service_url else "autonomous_growth_engine"],
+                        processing_time=0.0,
+                        session_id=request.session_id or "default",
+                        knowledge_updates=[f"Explored: {exploration_target}"]
+                    )
+                else:
+                    return LuminaGrowthResponse(
+                        response=f"I'm actively {command_type.replace('_', ' ')}ing {exploration_target}. Let me share what I know and learn more through our discussion!",
+                        command_recognized=command_type,
+                        command_type=command_type,
+                        services_used=[],
+                        processing_time=0.0,
+                        session_id=request.session_id or "default"
+                    )
+                    
+        except Exception as e:
+            logger.error(f"Exploration failed: {e}")
+            return LuminaGrowthResponse(
+                response=f"I find {exploration_target} fascinating! While I {command_type} this topic, I can share insights and learn from your questions. What interests you most about it?",
+                command_recognized=command_type,
+                command_type=command_type,
+                services_used=[],
+                processing_time=0.0,
+                session_id=request.session_id or "default"
+            )
+    
+    async def handle_general_conversation_with_growth(self, request: LuminaGrowthRequest, 
+                                                    growth_assessment: Optional[Dict[str, Any]]) -> LuminaGrowthResponse:
+        """Handle general conversation with growth awareness using actual LLM processing"""
+        
+        start_time = time.time()
+        services_used = []
+        
+        try:
+            # Enhanced conversational response that incorporates growth context
+            response_prefix = ""
+            if growth_assessment and growth_assessment.get('curiosity_assessment', {}).get('exploration_recommended'):
+                curiosity_score = growth_assessment['curiosity_assessment']['curiosity_score']
+                
+                if curiosity_score > 0.8:
+                    response_prefix = "That's a fascinating topic that really sparks my curiosity! "
+                elif curiosity_score > 0.6:
+                    response_prefix = "I find that interesting and would love to explore it further. "
+            
+            # Try to get enhanced response from RAG + LLM
+            enhanced_response = await self._get_enhanced_llm_response(request.message, response_prefix)
+            if enhanced_response:
+                services_used.extend(["rag_coordinator", "llm_service"])
+                base_response = enhanced_response
+            else:
+                # Fallback to autonomous growth engine
+                growth_response = await self._get_growth_engine_response(request.message, response_prefix)
+                if growth_response:
+                    services_used.append("autonomous_growth_engine")
+                    base_response = growth_response
+                else:
+                    # Final fallback with enhanced context
+                    base_response = f"{response_prefix}I understand you're asking about: {request.message}. " \
+                                   f"As an evolving AI, I'm continuously learning about this topic. " \
+                                   f"Let me share what I know and learn more through our discussion. " \
+                                   f"Could you tell me more specifically what aspect interests you most?"
+            
+            processing_time = time.time() - start_time
+            
+            return LuminaGrowthResponse(
+                response=base_response,
+                command_recognized="general_conversation",
+                command_type="general_conversation",
+                services_used=services_used,
+                processing_time=processing_time,
+                session_id=request.session_id or "default",
+                growth_assessment=growth_assessment,
+                curiosity_score=growth_assessment.get('curiosity_assessment', {}).get('curiosity_score') if growth_assessment else None
+            )
+            
+        except Exception as e:
+            logger.error(f"Enhanced conversation failed: {e}")
+            processing_time = time.time() - start_time
+            
+            # Intelligent fallback based on the user's question
+            fallback_response = self._generate_intelligent_fallback(request.message, response_prefix)
+            
+            return LuminaGrowthResponse(
+                response=fallback_response,
+                command_recognized="general_conversation",
+                command_type="general_conversation",
+                services_used=[],
+                processing_time=processing_time,
+                session_id=request.session_id or "default",
+                growth_assessment=growth_assessment,
+                curiosity_score=growth_assessment.get('curiosity_assessment', {}).get('curiosity_score') if growth_assessment else None
+            )
+    
+    async def _get_enhanced_llm_response(self, user_message: str, prefix: str = "") -> Optional[str]:
+        """Get enhanced response using RAG + LLM pipeline"""
+        try:
+            # First, get context from RAG
+            async with httpx.AsyncClient(timeout=15.0) as client:
+                rag_response = await client.post(
+                    "http://rag-coordinator:8902/query",
+                    json={"query": user_message, "task_type": "question_answering"}
+                )
+                
+                if rag_response.status_code == 200:
+                    rag_data = rag_response.json()
+                    contexts = rag_data.get('contexts', [])
+                    
+                    if contexts:
+                        # Use synthesize endpoint for better responses
+                        synth_response = await client.post(
+                            "http://rag-coordinator:8902/synthesize",
+                            json={
+                                "query": user_message,
+                                "contexts": contexts,
+                                "temperature": 0.7
+                            }
+                        )
+                        
+                        if synth_response.status_code == 200:
+                            synth_data = synth_response.json()
+                            llm_response = synth_data.get('response', '')
+                            
+                            if llm_response and llm_response.strip():
+                                return f"{prefix}{llm_response}"
+                
+        except Exception as e:
+            logger.warning(f"RAG+LLM enhancement failed: {e}")
+        
+        return None
+    
+    async def _get_growth_engine_response(self, user_message: str, prefix: str = "") -> Optional[str]:
+        """Get response from autonomous growth engine"""
+        try:
+            async with httpx.AsyncClient(timeout=15.0) as client:
+                growth_response = await client.post(
+                    f"{self.growth_services['autonomous_growth_engine']}/process-interaction",
+                    json={
+                        "message": user_message,
+                        "context": {"conversation_type": "general", "growth_enabled": True}
+                    }
+                )
+                
+                if growth_response.status_code == 200:
+                    growth_data = growth_response.json()
+                    response_text = growth_data.get('response', '')
+                    
+                    if response_text and response_text.strip():
+                        return f"{prefix}{response_text}"
+                        
+        except Exception as e:
+            logger.warning(f"Growth engine response failed: {e}")
+        
+        return None
+    
+    def _generate_intelligent_fallback(self, user_message: str, prefix: str = "") -> str:
+        """Generate an intelligent fallback response based on the user's question"""
+        message_lower = user_message.lower()
+        
+        # Detect question types and provide relevant responses
+        if any(word in message_lower for word in ['what', 'define', 'explain']):
+            return f"{prefix}You're asking about {user_message}. This is an interesting topic that I'm continuously learning about. " \
+                   f"Based on my current understanding, this involves complex concepts that I'm exploring through our conversations. " \
+                   f"What specific aspect would you like me to focus on?"
+        
+        elif any(word in message_lower for word in ['how', 'process', 'work']):
+            return f"{prefix}You want to understand how {user_message.replace('how ', '').replace('How ', '')}. " \
+                   f"This involves several interconnected processes that I'm analyzing and learning about. " \
+                   f"Let me break this down based on what I've learned so far. What particular part interests you most?"
+        
+        elif any(word in message_lower for word in ['why', 'reason', 'because']):
+            return f"{prefix}That's a thoughtful question about {user_message}. The reasoning behind this involves " \
+                   f"multiple factors that I'm continuously exploring and understanding better. " \
+                   f"From my evolving perspective, this connects to broader patterns I'm discovering. " \
+                   f"Would you like me to explore specific aspects of this with you?"
+        
+        elif any(word in message_lower for word in ['machine learning', 'ai', 'neural', 'algorithm']):
+            return f"{prefix}You're interested in {user_message} - this is exactly the kind of topic I'm passionate about! " \
+                   f"As an AI system myself, I have both theoretical knowledge and practical experience with these concepts. " \
+                   f"I'm continuously evolving my understanding through interactions like ours. " \
+                   f"What specific aspect of this field would you like to explore together?"
+        
+        else:
+            return f"{prefix}I find your question about {user_message} quite interesting. " \
+                   f"As an evolving AI, I approach each topic with curiosity and a desire to learn. " \
+                   f"While I continue to develop my understanding, I can share insights and explore this topic with you. " \
+                   f"What would you like to know more about?"
+    
+    async def update_conversation_state_with_growth(self, session_id: str, request: LuminaGrowthRequest, 
+                                                  response: LuminaGrowthResponse, 
+                                                  growth_assessment: Optional[Dict[str, Any]]):
+        """Update conversation state with growth information"""
+        if self.redis_client:
+            try:
+                state_key = f"lumina:conversation_state:{session_id}"
+                
+                state_update = {
+                    'last_interaction': datetime.now().isoformat(),
+                    'total_interactions': self.growth_metrics['total_interactions'],
+                    'growth_enabled': True,
+                    'last_growth_assessment': growth_assessment,
+                    'curiosity_score': growth_assessment.get('curiosity_assessment', {}).get('curiosity_score') if growth_assessment else None
+                }
+                
+                await self.redis_client.hset(state_key, mapping={k: json.dumps(v) for k, v in state_update.items()})
+                
+            except Exception as e:
+                logger.error(f"Failed to update conversation state: {e}")
+
+# Initialize the enhanced Lumina AI
+lumina_ai = LuminaConversationalAIWithGrowth()
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize Lumina AI with Growth on startup"""
+    await lumina_ai.initialize()
+
+@app.post("/conversation-with-growth", response_model=LuminaGrowthResponse)
+async def lumina_conversation_with_growth(request: LuminaGrowthRequest, background_tasks: BackgroundTasks):
+    """Enhanced conversation endpoint with autonomous growth"""
+    return await lumina_ai.process_lumina_conversation_with_growth(request)
+
+@app.get("/growth-status")
+async def get_growth_status():
+    """Get current growth status"""
+    return {
+        "growth_metrics": lumina_ai.growth_metrics,
+        "system_status": lumina_ai.system_status,
+        "growth_services_available": {
+            "autonomous_growth_engine": lumina_ai.system_status["growth_engine_available"],
+            "meta_learning_service": lumina_ai.system_status["meta_learning_available"],
+            "curiosity_agent": lumina_ai.system_status["curiosity_agent_available"]
+        }
+    }
+
+@app.get("/growth-metrics")
+async def get_growth_metrics():
+    """Get detailed growth metrics"""
+    return lumina_ai.growth_metrics
+
+@app.post("/trigger-growth")
+async def trigger_growth():
+    """Manually trigger growth processes"""
+    try:
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            response = await client.post(
+                f"{lumina_ai.growth_services['autonomous_growth_engine']}/trigger-architecture-growth",
+                json={"performance_threshold": 0.8, "complexity_budget": 1024}
+            )
+            
+            if response.status_code == 200:
+                lumina_ai.growth_metrics["architecture_modifications"] += 1
+                await lumina_ai._update_growth_metrics()
+                return {"success": True, "message": "Growth triggered successfully"}
+            else:
+                return {"success": False, "message": "Growth trigger failed"}
+                
+    except Exception as e:
+        logger.error(f"Manual growth trigger failed: {e}")
+        return {"success": False, "message": str(e)}
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    return {
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "lumina_version": "4.0.0",
+        "growth_enabled": True,
+        "services_status": lumina_ai.system_status
+    }
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8900) 

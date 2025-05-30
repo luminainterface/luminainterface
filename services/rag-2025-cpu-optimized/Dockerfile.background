@@ -1,0 +1,34 @@
+# Interactive Background Coordinator Dockerfile for RAG 2025 Circular Growth
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies for circular growth system
+RUN pip install --no-cache-dir \
+    fastapi==0.104.1 \
+    uvicorn==0.24.0 \
+    aiohttp==3.9.1 \
+    aiofiles==23.2.1 \
+    redis==5.0.1 \
+    qdrant-client==1.7.0 \
+    requests==2.31.0 \
+    numpy==1.24.3 \
+    psutil==5.9.6 \
+    asyncio-throttle==1.0.2 \
+    python-multipart==0.0.6
+
+# Copy the interactive background coordinator
+COPY interactive_background_coordinator.py .
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8908/health || exit 1
+
+# Run the coordinator
+CMD ["python", "interactive_background_coordinator.py"] 

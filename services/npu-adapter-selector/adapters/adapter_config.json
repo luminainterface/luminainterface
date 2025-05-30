@@ -1,0 +1,58 @@
+{
+  "adapters": {
+    "programming_lora": {
+      "concept": "programming",
+      "quality_score": 0.92,
+      "response_time": 1.2,
+      "usage_count": 156,
+      "specialization": "Software development, debugging, algorithms",
+      "model_path": "/adapters/programming_lora.safetensors",
+      "enabled": true
+    },
+    "creative_writing_lora": {
+      "concept": "creative_writing", 
+      "quality_score": 0.88,
+      "response_time": 1.5,
+      "usage_count": 89,
+      "specialization": "Creative content, storytelling, poetry",
+      "model_path": "/adapters/creative_writing_lora.safetensors",
+      "enabled": true
+    },
+    "technical_analysis_lora": {
+      "concept": "technical_analysis",
+      "quality_score": 0.94,
+      "response_time": 1.1,
+      "usage_count": 203,
+      "specialization": "Technical documentation, system analysis",
+      "model_path": "/adapters/technical_analysis_lora.safetensors", 
+      "enabled": true
+    },
+    "scientific_research_lora": {
+      "concept": "scientific_research",
+      "quality_score": 0.90,
+      "response_time": 1.3,
+      "usage_count": 67,
+      "specialization": "Research methodology, data analysis",
+      "model_path": "/adapters/scientific_research_lora.safetensors",
+      "enabled": true
+    },
+    "business_strategy_lora": {
+      "concept": "business_strategy",
+      "quality_score": 0.86,
+      "response_time": 1.4,
+      "usage_count": 45,
+      "specialization": "Business planning, strategic analysis",
+      "model_path": "/adapters/business_strategy_lora.safetensors",
+      "enabled": true
+    }
+  },
+  "selection_weights": {
+    "quality_weight": 0.4,
+    "performance_weight": 0.3,
+    "specialization_weight": 0.3
+  },
+  "default_adapter": "technical_analysis_lora",
+  "max_concurrent_adapters": 3,
+  "cache_size": 1000,
+  "last_updated": "2025-05-29T20:00:00Z"
+} 
