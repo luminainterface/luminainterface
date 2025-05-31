@@ -1,0 +1,110 @@
+{
+  "results": {
+    "healthcare_ai": {
+      "quality_score": 94.75,
+      "target_score": 90.0,
+      "generation_time": 2.185194253921509,
+      "status": "\u2705 SUCCESS",
+      "achieved_target": true,
+      "excellence": false,
+      "paper_file": "healthcare_ai_paper.html"
+    },
+    "quantum_computing": {
+      "quality_score": 94.75,
+      "target_score": 90.0,
+      "generation_time": 2.1749184131622314,
+      "status": "\u2705 SUCCESS",
+      "achieved_target": true,
+      "excellence": false,
+      "paper_file": "quantum_computing_paper.html"
+    },
+    "artificial_intelligence": {
+      "quality_score": 94.75,
+      "target_score": 90.0,
+      "generation_time": 2.161403179168701,
+      "status": "\u2705 SUCCESS",
+      "achieved_target": true,
+      "excellence": false,
+      "paper_file": "artificial_intelligence_paper.html"
+    },
+    "renewable_energy": {
+      "quality_score": 96.25,
+      "target_score": 90.0,
+      "generation_time": 2.1645138263702393,
+      "status": "\u2705 SUCCESS",
+      "achieved_target": true,
+      "excellence": true,
+      "paper_file": "renewable_energy_paper.html"
+    },
+    "cybersecurity": {
+      "quality_score": 94.75,
+      "target_score": 90.0,
+      "generation_time": 2.1734583377838135,
+      "status": "\u2705 SUCCESS",
+      "achieved_target": true,
+      "excellence": false,
+      "paper_file": "cybersecurity_paper.html"
+    },
+    "biomedical_engineering": {
+      "quality_score": 96.25,
+      "target_score": 90.0,
+      "generation_time": 2.168996810913086,
+      "status": "\u2705 SUCCESS",
+      "achieved_target": true,
+      "excellence": true,
+      "paper_file": "biomedical_engineering_paper.html"
+    },
+    "criminal_justice_ai": {
+      "quality_score": 93.5,
+      "target_score": 90.0,
+      "generation_time": 2.195382833480835,
+      "status": "\u2705 SUCCESS",
+      "achieved_target": true,
+      "excellence": false,
+      "paper_file": "criminal_justice_ai_paper.html"
+    },
+    "educational_technology": {
+      "quality_score": 95.0,
+      "target_score": 90.0,
+      "generation_time": 2.1653265953063965,
+      "status": "\u2705 SUCCESS",
+      "achieved_target": true,
+      "excellence": true,
+      "paper_file": "educational_technology_paper.html"
+    },
+    "sustainable_architecture": {
+      "quality_score": 95.0,
+      "target_score": 90.0,
+      "generation_time": 2.171532392501831,
+      "status": "\u2705 SUCCESS",
+      "achieved_target": true,
+      "excellence": true,
+      "paper_file": "sustainable_architecture_paper.html"
+    }
+  },
+  "statistics": {
+    "total_fields": 9,
+    "successful_fields": 9,
+    "success_rate": 100.0,
+    "average_quality": 95.0,
+    "min_quality": 93.5,
+    "max_quality": 96.25,
+    "fields_above_90": 9,
+    "fields_above_95": 4,
+    "target_achievement_rate": 100.0,
+    "excellence_rate": 44.44444444444444,
+    "quality_scores": {
+      "healthcare_ai": 94.75,
+      "quantum_computing": 94.75,
+      "artificial_intelligence": 94.75,
+      "renewable_energy": 96.25,
+      "cybersecurity": 94.75,
+      "biomedical_engineering": 96.25,
+      "criminal_justice_ai": 93.5,
+      "educational_technology": 95.0,
+      "sustainable_architecture": 95.0
+    }
+  },
+  "total_time": 19.58119821548462,
+  "timestamp": "2025-05-30T22:23:56.323522"
+}
