@@ -1,0 +1,26 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install additional testing dependencies
+RUN pip install pytest pytest-asyncio aiohttp requests
+
+# Copy application code
+COPY test_confidence_driven_system.py .
+COPY confidence_demo.py .
+
+# Create directories
+RUN mkdir -p /app/test_results /app/reports /app/logs
+
+# Run the tester
+CMD ["python", "test_confidence_driven_system.py"] 

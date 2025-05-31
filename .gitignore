@@ -25,31 +25,264 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# Node
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Docker
+.dockerignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs and databases
+*.log
+*.db
+*.sqlite
+*.sqlite3
+
+# Model files and cache
+models/
+cache/
+*.pth
+*.gguf
+*.bin
+*.safetensors
+
+# Test results and reports
+test_results/
+reports/
+deployment_reports/
+demo_results/
+*_results_*.json
+*_report_*.json
+*_test_*.json
+
+# Generated papers and content
+papers_for_grading_*/
+*_papers_*/
+research_papers_generated/
+fact_checked_papers/
+*.md.bak
+
+# Training data and datasets
+training_data/
+datasets/
+data/
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+*.temp
+
+# Backup files
+backups_*/
+*_backup/
+*.backup
+*.bak
+
+# Node.js (for frontend)
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# IDE
-.idea/
-.vscode/
+# React build
+react-frontend/build/
+react-frontend/dist/
+
+# Docker volumes data
+redis-data/
+qdrant-data/
+neo4j-data/
+neo4j-logs/
+ollama-data/
+
+# Confidence-driven system data directories
+knowledge_gaps/
+confidence_patterns/
+lora_requests/
+conversations/
+confidence_sessions/
+user_analytics/
+elaboration_sessions/
+elaboration_logs/
+humanization_patterns/
+detection_analysis_logs/
+background_lora_tasks/
+llm_gap_logs/
+background_lora_logs/
+lora_training_cache/
+lora_gap_logs/
+gap_detection_papers/
+conversation_sessions/
+chat_interface_logs/
+
+# Logs directories
+logs/
+
+# Large files and archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Research and academic files (keep only the main system files)
+*research_paper_*.md
+*comprehensive_paper_*.md
+*publication_paper_*.md
+
+# System-specific temporary files
+*.png
+*.jpg
+*.jpeg
+*.gif
+Capture.PNG
+Screenshot*.png
+
+# Configuration overrides
+docker-compose.override.yml
+.env.local
+.env.production
+
+# OS-specific files
+*.lnk
+*.url
+
+# Development and testing artifacts
+.coverage
+pytest.xml
+.pytest_cache/
+.tox/
+
+# Jupyter notebooks (if any)
+*.ipynb_checkpoints/
+
+# macOS
+.AppleDouble
+.LSOverride
+
+# Windows
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+
+# Linux
+*~
+
+# vim
 *.swp
 *.swo
 
-# OS
-.DS_Store
-Thumbs.db
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
 
-# Logs
-logs/
-*.log
-
-# Docker
-.docker/
-
-# Backup files
-backups/
-*.tar
-*.md5 
+# Performance data
+optuna_studies.db
+growth_metrics.png
+memory_profiler_*.txt 
