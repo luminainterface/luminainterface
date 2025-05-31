@@ -1,0 +1,97 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install additional terminal interface dependencies
+RUN pip install colorama aiohttp requests fastapi uvicorn
+
+# Copy application code
+COPY terminal_chat_system_interface.py .
+COPY launch_terminal_chat.py .
+
+# Create directories
+RUN mkdir -p /app/logs /app/session_reports /app/test_results
+
+# Create a simple web wrapper for the terminal interface
+RUN echo 'from fastapi import FastAPI\n\
+from fastapi.responses import HTMLResponse\n\
+import uvicorn\n\
+import asyncio\n\
+import json\n\
+from terminal_chat_system_interface import TerminalChatInterface\n\
+\n\
+app = FastAPI(title="Terminal Chat Interface", version="1.0.0")\n\
+\n\
+@app.get("/health")\n\
+def health_check():\n\
+    return {"status": "healthy", "service": "terminal-chat-interface"}\n\
+\n\
+@app.get("/", response_class=HTMLResponse)\n\
+def web_interface():\n\
+    return """\n\
+    <html>\n\
+        <head><title>Confidence-Driven System Terminal</title></head>\n\
+        <body>\n\
+            <h1>🧠💡 Confidence-Driven LoRA System</h1>\n\
+            <h2>Terminal Chat Interface</h2>\n\
+            <p>This service provides terminal-based testing for the confidence-driven system.</p>\n\
+            <p>Use <code>docker exec -it terminal-chat-interface python terminal_chat_system_interface.py</code> to access the interactive terminal.</p>\n\
+            <h3>Available Endpoints:</h3>\n\
+            <ul>\n\
+                <li><a href="/health">/health</a> - Health check</li>\n\
+                <li><a href="/metrics">/metrics</a> - System metrics</li>\n\
+                <li><a href="/session-info">/session-info</a> - Current session info</li>\n\
+            </ul>\n\
+        </body>\n\
+    </html>\n\
+    """\n\
+\n\
+@app.get("/metrics")\n\
+async def get_metrics():\n\
+    # Return basic metrics\n\
+    return {\n\
+        "service": "terminal-chat-interface",\n\
+        "status": "running",\n\
+        "endpoints_configured": 12,\n\
+        "features": [\n\
+            "Real-time confidence monitoring",\n\
+            "HiRa steering integration", \n\
+            "Knowledge gap detection",\n\
+            "Live metrics dashboard",\n\
+            "System diagnostics"\n\
+        ]\n\
+    }\n\
+\n\
+@app.get("/session-info")\n\
+async def session_info():\n\
+    return {\n\
+        "service": "terminal-chat-interface",\n\
+        "interactive_mode": "Use docker exec for terminal access",\n\
+        "web_mode": "Available at port 8846",\n\
+        "commands": ["/metrics", "/diagnostics", "/quit"]\n\
+    }\n\
+\n\
+if __name__ == "__main__":\n\
+    uvicorn.run(app, host="0.0.0.0", port=8846)\n\
+' > web_wrapper.py
+
+# Expose port
+EXPOSE 8846
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8846/health || exit 1
+
+# Default command runs the web wrapper
+# For interactive mode: docker exec -it terminal-chat-interface python terminal_chat_system_interface.py
+CMD ["python", "web_wrapper.py"] 
