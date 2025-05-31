@@ -14,16 +14,17 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
-COPY app.py .
-COPY meta_orchestration_controller.py .
-COPY enhanced_real_world_benchmark.py .
+COPY enhanced_fact_checker_with_web_search.py .
+
+# Create directories
+RUN mkdir -p logs cache patterns
 
 # Expose port
-EXPOSE 8900
+EXPOSE 8886
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=45s --retries=5 \
-  CMD curl -f http://localhost:8900/health || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=45s --retries=3 \
+    CMD curl -f http://localhost:8886/health || exit 1
 
 # Run the application
-CMD ["python", "app.py"] 
+CMD ["python", "enhanced_fact_checker_with_web_search.py"] 

@@ -1,0 +1,60 @@
+# Enhanced Fact-Checker V4 - Partial Production Deployment
+# ========================================================
+# 
+# PRODUCTION DOMAINS: Technology, Medicine, Psychology, Geography
+# DEVELOPMENT DOMAINS: Chemistry, Engineering, Sports, Global Issues, Edge Cases
+# 
+# Build: docker build -f Dockerfile.v4 -t enhanced-fact-checker:v4-partial .
+
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies for V4 enhanced NLP
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy V4 requirements
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Download spaCy English model for enhanced NLP
+RUN python -m spacy download en_core_web_sm
+
+# Copy V4 enhanced fact-checking layer
+COPY ../../enhanced_fact_checking_layer_v4_production.py .
+
+# Copy V4 production service
+COPY enhanced_fact_checking_service_v4_partial.py .
+
+# Copy production database
+COPY ../../fact_checking_v4_production.db .
+
+# Copy health check
+COPY health_check.py .
+
+# Create logs directory
+RUN mkdir -p /app/logs
+
+# Set environment variables for V4
+ENV PYTHONPATH=/app
+ENV FLASK_APP=enhanced_fact_checking_service_v4_partial.py
+ENV FLASK_ENV=production
+ENV V4_PRODUCTION_MODE=true
+ENV V4_PARTIAL_DOMAINS="TECHNOLOGY,MEDICINE,PSYCHOLOGY,GEOGRAPHY"
+
+# Expose port
+EXPOSE 8885
+
+# Health check for V4 partial service
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8885/health || exit 1
+
+# Run V4 partial production service
+CMD ["python", "enhanced_fact_checking_service_v4_partial.py"] 

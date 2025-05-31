@@ -62,9 +62,9 @@ class MaximumSteeringOrchestrator:
         
         # Service URLs
         self.services = {
-            'phi2': f"http://{os.getenv('PHI2_HOST', 'localhost')}:{os.getenv('PHI2_PORT', 8892)}",
-            'rag_system': f"http://{os.getenv('RAG_HOST', 'localhost')}:{os.getenv('RAG_PORT', 8952)}",
-            'ollama': 'http://localhost:11434'
+            'phi2': f"http://{os.getenv('PHI2_HOST', 'phi2-ultrafast-engine')}:{os.getenv('PHI2_PORT', 8892)}",
+            'rag_system': f"http://{os.getenv('RAG_HOST', 'rag-coordination-interface')}:{os.getenv('RAG_PORT', 8952)}",
+            'ollama': f"http://{os.getenv('OLLAMA_HOST', 'godlike-ollama')}:{os.getenv('OLLAMA_PORT', 11434)}"
         }
         
         # Performance tracking

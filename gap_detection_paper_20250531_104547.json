@@ -1,0 +1,44 @@
+{
+  "status": "success",
+  "paper": {
+    "title": "Quantum Machine Learning for Drug Discovery: A Comprehensive Analysis Using Advanced LoRA Techniques",
+    "abstract": "This research presents a comprehensive analysis of Quantum Machine Learning for Drug Discovery in the context of quantum_computing, utilizing advanced LoRA (Low-Rank Adaptation) techniques for enhanced domain expertise.",
+    "introduction": "Introduction to Quantum Machine Learning for Drug Discovery with specialized knowledge from LoRA adapter new_lora_quantum_computing_1748702744",
+    "literature_review": "Comprehensive literature review of Quantum Machine Learning for Drug Discovery based on 50 training examples",
+    "methodology": "Advanced methodology for Quantum Machine Learning for Drug Discovery research enhanced by domain-specific LoRA capabilities",
+    "results": "Results and findings for Quantum Machine Learning for Drug Discovery with improved accuracy through LoRA-enhanced processing",
+    "discussion": "Discussion of Quantum Machine Learning for Drug Discovery implications with expert-level insights from LoRA training",
+    "conclusion": "Conclusions about Quantum Machine Learning for Drug Discovery demonstrating the effectiveness of LoRA-driven research",
+    "references": [
+      "Reference to LoRA training data sources",
+      "Academic sources for Quantum Machine Learning for Drug Discovery"
+    ],
+    "metadata": {
+      "field": "quantum_computing",
+      "topic": "Quantum Machine Learning for Drug Discovery",
+      "lora_adapter_used": "new_lora_quantum_computing_1748702744",
+      "lora_quality_score": 0.85,
+      "generation_approach": "lora_driven_with_gap_detection",
+      "quality_target": 9.2
+    }
+  },
+  "lora_used": "new_lora_quantum_computing_1748702744",
+  "gap_detection_results": {
+    "gap_detected": true,
+    "lora_created": true,
+    "training_data_gathered": 50,
+    "wait_time_seconds": 0
+  },
+  "quality_metrics": {
+    "overall_quality": 0.9713100000000001,
+    "lora_contribution": 0.85,
+    "content_depth": 0.016375,
+    "domain_expertise": 0.8075
+  },
+  "generation_time": 312.1506600379944,
+  "multi_source_crawl_summary": {
+    "total_articles": 50,
+    "avg_quality": 0.835,
+    "sources_count": 5
+  }
+}

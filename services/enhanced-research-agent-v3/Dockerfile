@@ -13,17 +13,19 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application files
+# Copy application code
 COPY app.py .
-COPY meta_orchestration_controller.py .
-COPY enhanced_real_world_benchmark.py .
+COPY enhanced_research_agent_v3.py .
+
+# Create logs directory
+RUN mkdir -p /app/logs
 
 # Expose port
-EXPOSE 8900
+EXPOSE 8999
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=45s --retries=5 \
-  CMD curl -f http://localhost:8900/health || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8999/health || exit 1
 
 # Run the application
 CMD ["python", "app.py"] 
